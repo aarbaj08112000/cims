@@ -140,6 +140,7 @@ return array(
 	'f4v'   =>	array('video/mp4', 'video/x-f4v'),
 	'flv'	=>	'video/x-flv',
 	'webm'	=>	'video/webm',
+	'webp'	=>	'image/webp',
 	'aac'   =>	array('audio/x-aac', 'audio/aac'),
 	'm4u'   =>	'application/vnd.mpegurl',
 	'm3u'   =>	'text/plain',

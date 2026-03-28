@@ -1,122 +1,655 @@
-div.dataTables_wrapper div.dataTables_paginate {
+/* ============================================================
+   CIMS — Premium DataTables UI
+   Fixed Header, Scrollable Body, Fixed Footer
+   ============================================================ */
+
+/* ── Table wrapper card ───────────────────────────────────── */
+.dataTables_wrapper {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.875rem;
+    color: #5d596c;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden !important;
+    /* Force children to stay within bounds */
+}
+
+/* ── Table base ───────────────────────────────────────────── */
+table.dataTable {
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    width: 100% !important;
     margin: 0 !important;
-    white-space: nowrap !important;
-    text-align: right !important;
-  }
-  div.dataTables_wrapper div.dataTables_paginate ul.pagination {
-      margin: 2px 0 !important;
-      white-space: nowrap !important;
-      justify-content: flex-end !important;
-  }
-  .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
-      color: #ffffff !important;
-      border: 1px solid  var(--bs-theme-color) !important;
-      background:  var(--bs-theme-color) !important;
-      border-radius: 5px !important;
-    }
-
-    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-      color: #ffffff !important;
-      border: 1px solid rgba(234, 28, 49, 0.3); !important;
-      background:  var(--bs-theme-color) !important;
-     opacity: 0.3 !important;
-    border-radius: 5px !important;
-
 }
 
-.dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
-    cursor: not-allowed !important;
-    background: #ccc5c3 !important;
-    color: #666 !important;
-}
-.dataTables_wrapper .dataTables_paginate .paginate_button{
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, .04), 0 4px 6px -2px rgba(0, 0, 0, .02);
-    background: #fff !important;
-    border: 1px solid rgba(49, 59, 73, .12);
-    border-radius: 0.5rem !important;
-    margin: 6px;
-}
-.dataTables_length {
-  /* display: none !important; */
-
-}
-.dataTables_length select {
-  /* display: none !important; */
-  padding: .4375rem 1.875rem .4375rem .875rem !important;
-    font-size: 0.9375rem !important;
-    font-weight: 400 !important;
-    line-height: 1.53 !important;
-    color: #697a8d !important;
-    appearance: none !important;
-    background-color: #fff !important;
-    margin-bottom: 10px !important;
-
-}
-.dataTables_filter {
-  /* display: none !important; */
-}
-.dataTables_filter input{
-  /* display: none !important; */
-  padding: .4375rem 1.875rem .4375rem .875rem !important;
-    font-size: 0.9375rem !important;
-    font-weight: 400 !important;
-    line-height: 1.53 !important;
-    color: #697a8d !important;
-    appearance: none !important;
-    background-color: #fff !important;
-    margin-bottom: 10px !important;
-}
-.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover,{
-  color: #666 !important;
+/* ── STICKY TABLE HEADER ──────────────────────────────────── */
+table.dataTable thead th,
+table.dataTable thead td {
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    color: #8c8a97 !important;
+    background-color: #f8f7fa !important;
+    padding: 0.875rem 1rem !important;
+    border-bottom: 2px solid #ebebed !important;
+    border-top: none !important;
+    white-space: nowrap;
+    vertical-align: middle !important;
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    top: 0 !important;
+    /* Sticks to the scrollable container top */
+    z-index: 105 !important;
+    background-color: #f8f7fa !important;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1) !important;
+    background-clip: padding-box;
 }
 
-thead, tbody, tfoot, tr, td, th {
-    border-color: #fff !important;
-    /*var(--bs-theme-light5-color)*/
-  }
-  .table-striped>tbody>tr:nth-of-type(odd)>* {
-    --bs-table-color-type: var(--bs-table-striped-color);
-      --bs-table-bg-type: #fff1f1c4;
-  }
-  table.dataTable thead th{
-    border-bottom: 1px solid var(--bs-theme-light4-color) !important;
-  }
-  .btn-seconday{
-    background: var(--bs-theme-light4-color) !important;
-    color:  var(--bs-theme-color) !important;
-  }
-  .btn-seconday:hover{
-    background:  var(--bs-theme-color) !important;
-    color: #ffffff !important;
-  }
-  .dt-top-btn {
-    position: absolute;
-    top: 90px;
-    right: 28px;
-  }
-  table.dataTable thead th, table.dataTable thead td {
-      font-size: 15px !important;
-      /* text-align: center !important; */
-  }
-
-@media (max-width: 767px) {
-  .dt-top-btn {
-      position: absolute;
-      top: 110px;
-      right: 75px;
-      display: flex !important;
-  }
+.layout-page,
+.content-wrapper,
+.container-xxl,
+.card-body {
+    overflow: visible;
+    /* Standard behavior */
 }
+
+/* Restore internal scrolling on the specific wrapper */
+.dt-scroll-body-wrapper {
+    display: block !important;
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+    /* Show scrollbar only when needed */
+    position: relative;
+    width: 100%;
+    max-height: 55vh !important;
+    border: none !important;
+}
+
+/* Ensure table doesn't have internal scroll that breaks viewport sticky */
+table.dataTable {
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    width: 100% !important;
+}
+
+/* First column header left-round */
+table.dataTable thead th:first-child {
+    border-radius: 0.5rem 0 0 0 !important;
+}
+
+table.dataTable thead th:last-child {
+    border-radius: 0 0.5rem 0 0 !important;
+}
+
+/* Sorting icons */
+table.dataTable thead th.sorting::after,
+table.dataTable thead th.sorting_asc::after,
+table.dataTable thead th.sorting_desc::after {
+    opacity: 0.5;
+}
+
+table.dataTable thead th.sorting_asc::after {
+    color: var(--primary-color, #1E88E5);
+    opacity: 1;
+}
+
+table.dataTable thead th.sorting_desc::after {
+    color: var(--primary-color, #1E88E5);
+    opacity: 1;
+}
+
+/* Body rows */
+table.dataTable tbody tr {
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+table.dataTable tbody td {
+    padding: 0.8rem 1rem !important;
+    vertical-align: middle !important;
+    border-bottom: 1px solid #f0eff2 !important;
+    border-top: none !important;
+    color: #5d596c;
+}
+
+/* Hover row highlight */
+table.dataTable tbody tr:hover>td {
+    background-color: #f0f6ff !important;
+}
+
+/* Stripe rows — subtle */
+table.dataTable.table-striped tbody tr:nth-of-type(odd)>td {
+    background-color: #fafafa;
+}
+
+table.dataTable.table-striped tbody tr:nth-of-type(odd):hover>td {
+    background-color: #f0f6ff !important;
+}
+
+/* Remove Bootstrap border-color override for tables */
+thead,
+tbody,
+tfoot,
+tr,
+td,
+th {
+    border-color: #f0eff2 !important;
+}
+
+/* No data / zero records visual */
+.dt-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 2.5rem 1rem;
+    color: #a5a3ae;
+}
+
+.dt-empty-state i {
+    font-size: 2.5rem;
+    opacity: 0.5;
+}
+
+.dt-empty-state span {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* ── SCROLLABLE TABLE BODY WRAPPER ────────────────────────── */
+.dt-scroll-body-wrapper {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overflow-x: auto;
+    max-height: 60vh;
+    min-height: 200px;
+    border: 1px solid #ebebed;
+    border-radius: 0.5rem;
+    position: relative;
+}
+
+/* Custom scrollbar for the table body - Slim & Premium */
+.dt-scroll-body-wrapper::-webkit-scrollbar {
+    width: 4px !important;
+    height: 4px !important;
+}
+
+.dt-scroll-body-wrapper::-webkit-scrollbar-track {
+    background: transparent !important;
+    border-radius: 10px !important;
+}
+
+.dt-scroll-body-wrapper::-webkit-scrollbar-thumb {
+    background: #dbdade !important;
+    border-radius: 10px !important;
+    transition: all 0.2s ease !important;
+}
+
+.dt-scroll-body-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #c9c8cc !important;
+}
+
+/* ── TOP TOOLBAR ──────────────────────────────────────────── */
+/* Buttons row (CSV/PDF hidden via class below) */
 .dataTables_wrapper .dt-buttons {
     display: none !important;
 }
 
-.DTFC_LeftHeadWrapper .table-striped ,.DTFC_LeftBodyLiner .table-striped {
-  border:none !important;
+/* Collapse the top toolbar row when buttons are hidden and search is not needed */
+.dataTables_wrapper>.row:first-child {
+    margin-bottom: 0 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
 }
+
+/* Hide built-in DataTable search when external filter input exists on the page */
+.dataTables_wrapper .dataTables_filter {
+    text-align: right;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.dataTables_wrapper .dataTables_filter label {
+    margin: 0 !important;
+}
+
+/* Search box */
+.dataTables_wrapper .dataTables_filter {
+    text-align: right;
+}
+
+.dataTables_wrapper .dataTables_filter label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: #a5a3ae;
+    font-weight: 400;
+    margin-bottom: 0;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    border: 1.5px solid #dbdade !important;
+    border-radius: 0.5rem !important;
+    padding: 0.35rem 0.75rem 0.35rem 2rem !important;
+    font-size: 0.8125rem !important;
+    font-weight: 400 !important;
+    color: #5d596c !important;
+    background-color: #fff !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='%23a5a3ae' viewBox='0 0 24 24'%3E%3Cpath stroke='%23a5a3ae' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: 0.5rem center !important;
+    background-size: 0.875rem !important;
+    transition: border-color 0.2s, box-shadow 0.2s !important;
+    min-width: 200px;
+    margin-bottom: 0 !important;
+    line-height: 1.4 !important;
+    height: 32px !important;
+}
+
+.dataTables_wrapper .dataTables_filter input:focus {
+    outline: none !important;
+    border-color: var(--primary-color, #1E88E5) !important;
+    box-shadow: 0 0 0 0.2rem rgba(30, 136, 229, 0.12) !important;
+}
+
+/* ── FIXED FOOTER ─────────────────────────────────────────── */
+.dt-fixed-footer {
+    background: #fff;
+    padding: 0.625rem 1rem !important;
+    border-top: 2px solid #ebebed !important;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    flex-shrink: 0;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 0.75rem;
+    margin: 0 !important;
+    min-height: 48px;
+}
+
+/* Override Bootstrap row behavior inside footer */
+.dt-fixed-footer.row {
+    --bs-gutter-x: 0 !important;
+    --bs-gutter-y: 0 !important;
+}
+
+/* Footer left column (info) */
+.dt-fixed-footer>[class*="col-md-5"] {
+    flex: 0 1 auto !important;
+    width: auto !important;
+    max-width: none !important;
+    padding: 0 !important;
+}
+
+/* Footer right column (pagination + length) */
+.dt-fixed-footer>[class*="col-md-7"] {
+    flex: 0 1 auto !important;
+    width: auto !important;
+    max-width: none !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 0.5rem !important;
+    flex-wrap: nowrap !important;
+}
+
+/* ── FOOTER LAYOUT ────────────────────────────────────────── */
+.dataTables_wrapper .dataTables_length {
+    display: inline-flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    flex-shrink: 0;
+}
+
+.dataTables_wrapper .dataTables_length label {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0 !important;
+    font-size: 0 !important;
+    color: #a5a3ae !important;
+    font-weight: 500 !important;
+    margin: 0 !important;
+    white-space: nowrap;
+    line-height: 1 !important;
+}
+
+/* Length dropdown rendered inline with pagination */
+.dataTables_wrapper .dataTables_length select {
+    appearance: auto !important;
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.8125rem !important;
+    font-weight: 600 !important;
+    color: #5d596c !important;
+    background-color: #fff !important;
+    border: 1.5px solid #e3e2e7 !important;
+    border-radius: 0.5rem !important;
+    line-height: 1.5 !important;
+    min-width: 64px !important;
+    max-width: 80px !important;
+    height: 34px !important;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    margin: 0 !important;
+    box-shadow: 0 1px 3px rgba(49, 59, 73, 0.06);
+}
+
+.dataTables_wrapper .dataTables_length select:focus {
+    border-color: var(--primary-color, #1E88E5) !important;
+    box-shadow: 0 0 0 0.2rem rgba(30, 136, 229, 0.12) !important;
+    outline: none !important;
+}
+
+/* Info text */
+.dataTables_wrapper .dataTables_info {
+    display: inline-flex !important;
+    align-items: center !important;
+    color: #a5a3ae !important;
+    font-size: 0.8125rem !important;
+    font-weight: 400 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    white-space: nowrap;
+    line-height: 1 !important;
+}
+
+/* ── PAGINATION ───────────────────────────────────────────── */
+.dataTables_wrapper .dataTables_paginate {
+    display: inline-flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    white-space: nowrap !important;
+    text-align: right !important;
+    flex-shrink: 0;
+}
+
+div.dataTables_wrapper div.dataTables_paginate ul.pagination {
+    margin: 0 !important;
+    padding: 0 !important;
+    white-space: nowrap !important;
+    justify-content: flex-end !important;
+    flex-wrap: nowrap !important;
+    gap: 0.15rem;
+    align-items: center !important;
+    list-style: none !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 34px !important;
+    height: 34px !important;
+    padding: 0 0.55rem !important;
+    font-size: 0.8125rem !important;
+    font-weight: 600 !important;
+    color: #6f6b7d !important;
+    background: #fff !important;
+    border: 1.5px solid #e3e2e7 !important;
+    border-radius: 0.5rem !important;
+    margin: 0 0.125rem !important;
+    cursor: pointer !important;
+    transition: all 0.18s ease !important;
+    box-shadow: 0 1px 3px rgba(49, 59, 73, 0.06) !important;
+    line-height: 1 !important;
+    text-decoration: none !important;
+}
+
+/* First/Previous/Next/Last text buttons — wider auto-width */
+.dataTables_wrapper .dataTables_paginate .paginate_button.first,
+.dataTables_wrapper .dataTables_paginate .paginate_button.previous,
+.dataTables_wrapper .dataTables_paginate .paginate_button.next,
+.dataTables_wrapper .dataTables_paginate .paginate_button.last,
+.dataTables_wrapper .dataTables_paginate .paginate_button:first-child,
+.dataTables_wrapper .dataTables_paginate .paginate_button:last-child {
+    min-width: auto !important;
+    padding: 0 0.75rem !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover:not(.disabled):not(.current) {
+    background: var(--primary-color, #1E88E5) !important;
+    border-color: var(--primary-color, #1E88E5) !important;
+    color: #fff !important;
+    opacity: 1 !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 10px rgba(30, 136, 229, 0.3) !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    background: var(--primary-color, #1E88E5) !important;
+    border-color: var(--primary-color, #1E88E5) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 10px rgba(30, 136, 229, 0.35) !important;
+    cursor: default !important;
+    opacity: 1 !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover {
+    color: #c8c7cc !important;
+    background: #fafafa !important;
+    border-color: #ebebed !important;
+    cursor: not-allowed !important;
+    box-shadow: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+}
+
+/* Tabler icons in pagination (chevrons) — if used */
+.dataTables_wrapper .dataTables_paginate .paginate_button i {
+    font-size: 1rem;
+    line-height: 1;
+}
+
+/* ── RESPONSIVE OVERRIDES ─────────────────────────────────── */
+@media (max-width: 767px) {
+    .dataTables_wrapper .dataTables_filter {
+        text-align: left;
+        margin-top: 0.5rem;
+    }
+
+    .dataTables_wrapper .dataTables_filter input {
+        min-width: 100%;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        min-width: 30px !important;
+        height: 30px !important;
+        font-size: 0.75rem !important;
+    }
+
+    .dt-scroll-body-wrapper {
+        max-height: 50vh;
+    }
+
+    .dt-fixed-footer {
+        padding: 0.5rem !important;
+    }
+
+    .dt-fixed-footer .col-sm-12 {
+        text-align: center !important;
+        margin-bottom: 0.5rem;
+    }
+
+    .dt-fixed-footer .d-flex {
+        justify-content: center !important;
+    }
+}
+
+/* ── MISC OVERRIDES ───────────────────────────────────────── */
+.dt-top-btn {
+    position: absolute;
+    top: 90px;
+    right: 28px;
+    margin-top: 0.5rem !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+}
+
+@media (max-width: 767px) {
+    .dt-top-btn {
+        position: absolute;
+        top: 110px;
+        right: 75px;
+        display: flex !important;
+    }
+}
+
+.btn-seconday {
+    background: var(--bs-theme-light4-color, #f0f6ff) !important;
+    color: var(--bs-theme-color, #1E88E5) !important;
+    border-color: #8592a3;
+}
+
+.search-filter-input {
+    width: 200px !important;
+    display: inline-block !important;
+    padding: 0.35rem 0.75rem !important;
+    font-size: 0.8125rem !important;
+    height: 32px !important;
+    line-height: 1.4 !important;
+}
+
+.dt-top-btn .btn {
+    padding: 0.35rem 0.75rem !important;
+    font-size: 0.8125rem !important;
+    height: 32px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.4rem !important;
+    font-weight: 500 !important;
+}
+
+.dt-top-btn .btn i {
+    font-size: 1rem !important;
+}
+
+.btn-seconday:hover {
+    background: var(--bs-theme-color, #1E88E5) !important;
+    color: #ffffff !important;
+    transform: translateY(-1px) !important;
+}
+
+/* FixedColumns */
+.DTFC_LeftHeadWrapper .table-striped,
+.DTFC_LeftBodyLiner .table-striped {
+    border: none !important;
+}
+
 .DTFC_LeftHeadWrapper thead th {
-      vertical-align: middle;
+    vertical-align: middle;
 }
-DTFC_LeftBodyLiner{
-  overflow: hidden !important;
+
+.DTFC_LeftBodyLiner {
+    overflow: hidden !important;
+}
+
+/* Select2 inside dataTables_length */
+.dataTables_length .select2-container {
+    min-width: 70px !important;
+}
+
+.dataTables_length .select2-selection--single {
+    height: 32px !important;
+    border-radius: 0.5rem !important;
+    border: 1.5px solid #dbdade !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.dataTables_length .select2-selection__rendered {
+    color: #5d596c !important;
+    font-weight: 600 !important;
+    font-size: 0.875rem !important;
+    padding-left: 0.6rem !important;
+    line-height: 30px !important;
+}
+
+.dataTables_length .select2-selection__arrow {
+    height: 30px !important;
+    top: 0 !important;
+}
+
+
+/* ── RT Table Fixes ───────────────────────────────────────── */
+/* Hide the duplicate header DataTables puts in the scroll body */
+.dataTables_scrollBody thead {
+    display: none !important;
+}
+
+/* Ensure the main table inside the wrapper has no extra margin */
+.dt-scroll-body-wrapper table {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    border-top: none !important;
+}
+
+.dt-scroll-body-wrapper .col-sm-12 {
+    padding: 0 !important;
+}
+
+/* When scrollY is NOT used (correct), ensure table shows properly */
+table.dataTable tbody tr.odd>td.sorting_1,
+table.dataTable tbody tr.even>td.sorting_1 {
+    background-color: transparent;
+}
+
+/* ── ROW SPACING OVERRIDE ─────────────────────────────────── */
+/* Remove excess margin added by bootstrap rows inside DT wrapper */
+.dataTables_wrapper .row {
+    --bs-gutter-x: 1rem;
+}
+
+.dataTables_wrapper .dt-fixed-footer.row {
+    --bs-gutter-x: 0;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+/* ── ENSURE CARD CONTAINS PROPERLY ────────────────────────── */
+.card .dataTables_wrapper {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 250px) !important;
+    max-height: calc(100vh - 250px) !important;
+    overflow: hidden !important;
+    border: none !important;
+}
+
+/* Hide any potential scrollbar on the wrapper and the card */
+.dataTables_wrapper::-webkit-scrollbar,
+.card::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+}
+
+.card .dt-scroll-body-wrapper {
+    flex: 1 1 auto;
+    overflow-y: auto !important;
+    overflow-x: auto !important;
+    max-height: 55vh !important;
+}
+
+/* ── PAGE-ITEM BOOTSTRAP OVERRIDES ────────────────────────── */
+/* Remove any bootstrap .page-item margin/padding conflicts */
+.dt-fixed-footer .page-item {
+    margin: 0 !important;
+}
+
+.dt-fixed-footer .page-link {
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    line-height: 1 !important;
 }

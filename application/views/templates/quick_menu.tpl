@@ -1,727 +1,414 @@
-<%assign var="role" value=trim($session_data['type'])%>
-<%assign var="Commodity" value=$session_data['Commodity']%>
-<%assign var="entitlements" value=$session_data['entitlements']%>
-<%assign var="base_url" value=base_url('')%>
 <div id="menu_overlay" class="menu_overlay home-page-boxes <%if $sitemap%>open site-map-contain<%/if%>">
    <div class="new_sitemap_items">
       <div class="headingfix">
-         <div class="heading" id="top_heading_fix" style="width: 1666px;">
-            <h3 style="padding-left: 40px; width: 97%;">
-               <%if $sitemap%>
-                  Welcome To ERP System
-               <%else%>
-                  Quick Menu
-               <%/if%>
-               
-               <div class="color-legend-block" >
-                  <span class="quick-menu">Quick</span>
-                  <span class="report-menu">Report</span>
-                  <span class="master-menu">Master</span>
-               </div>
-            </h3>
+         <div class="heading" id="top_heading_fix">
+            <div class="d-flex align-items-center justify-content-between px-4 pt-4">
+                <div class="d-flex align-items-center">
+                    <div class="avatar avatar-sm me-3">
+                        <span class="avatar-initial rounded bg-label-secondary"><i class="ti ti-layout-grid ti-md text-dark"></i></span>
+                    </div>
+                    <div>
+                        <h4 class="text-dark fw-bolder mb-0">Admin Quick Menu</h4>
+                    </div>
+                </div>
+                <div class="quick-menu-close-btn" style="cursor: pointer;">
+                    <i class="ti ti-x ti-md text-muted hover-danger"></i>
+                </div>
+            </div>
          </div>
       </div>
-      <div id="scrollable_content" class="scrollable-content">
-         <div class="sitemap-blocks pad-calc-container">
-            <div class="sitemap-items" style="position: relative; height: 1597px;">
-               <%if checkGroupAccess("new_po_sub","list","No") || checkGroupAccess("new_po_sub","list","No") || checkGroupAccess("new_po_list_supplier","list","No") || checkGroupAccess("approved_supplier","list","No") || checkGroupAccess("child_part_view","list","No") || checkGroupAccess("child_part_supplier_view","list","No") || checkGroupAccess("routing","list","No") || checkGroupAccess("reports_po_balance_qty","list","No") || checkGroupAccess("child_part_supplier_report","list","No") || checkGroupAccess("pending_po","list","No") || checkGroupAccess("expired_po","list","No") || checkGroupAccess("closed_po","list","No") || checkGroupAccess("rejected_po","list","No") %>
-               <div class="span3 box ag-col-1" style="width: 25%;">
-                  <div class="title">
-                     <h4><span class="icon14 "></span>Purchase</h4>
-                  </div>
-                  <div class="content ">
-                     <ul class="sitemap">
-                        <%if checkGroupAccess("new_po","list","No")%>
-                        <li>
-                           <a hijacked="yes"  href="<%base_url('new_po')%>"  class="nav-active-link" title="Purchase PO">
-                           Purchase PO
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("new_po_sub","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('new_po_sub')%>" target="_self" title="Subcon PO" class="nav-active-link">
-                           Subcon PO
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("new_po_list_supplier","list","No")%>
-                         <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('new_po_list_supplier')%>" target="_self" title="Supplierwise PO List" class="nav-active-link">
-                           Supplierwise PO List
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("reports_po_balance_qty","list","No") %>
-                         <li >
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('reports_po_balance_qty')%>" target="_self" title="PO Summary Report" class="nav-active-link report-menu">
-                           PO Summary Report
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("approved_supplier","list","No")%>
-                         <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('approved_supplier')%>" target="_self" title="Approved Suppliers" class="nav-active-link report-menu">
-                           Approved Suppliers
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("child_part_supplier_report","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('child_part_supplier_report')%>" target="_self" title="Approved Suppliers" class="nav-active-link report-menu">
-                           Purchase Price Report
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("child_part_view","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('child_part_view')%>" target="_self" title="Item Master" class="nav-active-link report-menu">
-                           Item Master
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("pending_po","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('pending_po')%>" target="_self" title="PO Under Approval" class="nav-active-link report-menu">
-                           PO Under Approval
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("expired_po","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('expired_po')%>" target="_self" title="Expired PO" class="nav-active-link report-menu">
-                           Expired PO
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("closed_po","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('closed_po')%>" target="_self" title="PO Under Approval" class="nav-active-link report-menu">
-                           Closed PO
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("rejected_po","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('rejected_po')%>" target="_self" title="Reject PO" class="nav-active-link report-menu">
-                           Reject PO
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("child_part_view","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('child_part_view')%>" target="_self" title="Item Master" class="nav-active-link master-menu">
-                           Item Master
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("approved_supplier","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('approved_supplier')%>" target="_self" title="Supplier" class="nav-active-link master-menu">
-                           Supplier
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("child_part_supplier_view","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('child_part_supplier_view')%>" target="_self" title="Purchase Parts Price" class="nav-active-link master-menu">
-                           Purchase Parts Price
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("routing","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('routing')%>" target="_self" title="Subcon routing" class="nav-active-link master-menu">
-                           Subcon routing
-                           </a>
-                        </li>
-                        <%/if%>
-                     </ul>
+      
+      <div id="scrollable_content" class="scrollable-content mt-2">
+         <div class="sitemap-blocks pad-calc-container px-4 pb-5">
+            <div class="row g-4">
+               <!-- Dashboards -->
+               <div class="col-md-4 col-lg-3">
+                  <div class="quick-menu-card card-dashboards h-100 border rounded-3 overflow-hidden">
+                     <div class="card-header-accent"></div>
+                     <div class="card-header border-bottom p-3">
+                         <div class="d-flex align-items-center">
+                            <i class="ti ti-smart-home text-info me-2 ti-sm"></i>
+                            <h6 class="mb-0 fw-bold">Dashboards</h6>
+                         </div>
+                     </div>
+                     <div class="card-body p-0">
+                        <ul class="list-unstyled mb-0">
+                           <li>
+                              <a hijacked="yes" href="dashboard" class="quick-link-item d-flex align-items-center border-bottom text-muted">
+                                 <i class="ti ti-chart-bar me-2 ti-xs"></i> Main Analytics
+                              </a>
+                           </li>
+                        </ul>
+                     </div>
                   </div>
                </div>
-               <%/if%>
-               <%if checkGroupAccess("inwarding","list","No") || checkGroupAccess("grn_validation","list","No") || checkGroupAccess("part_stocks","list","No") || checkGroupAccess("part_stocks_inhouse","list","No") || checkGroupAccess("fw_stock","list","No") || checkGroupAccess("view_add_challan_subcon","list","No") || checkGroupAccess("challan_inward","list","No") || checkGroupAccess("challan_part_return","list","No") || checkGroupAccess("stock_rejection","list","No") || checkGroupAccess("reports_grn","list","No") || checkGroupAccess("supplier_parts_stock_report","list","No") || checkGroupAccess("subcon_supplier_challan_part_report","list","No")%>
-               <div class="span3 box ag-col-2" style="width: 25%;">
-                  <div class="title">
-                     <h4><span class="icon14 "></span>Store</h4>
-                  </div>
-                  <div class="content ">
-                     <ul class="sitemap">
-                        <%if checkGroupAccess("inwarding","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('inwarding')%>" target="_self" title="GRN Entry" class="nav-active-link">
-                           GRN Entry
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("grn_validation","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('grn_validation')%>" target="_self" title="GRN Qty Validation" class="nav-active-link">
-                           GRN Qty Validation
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("part_stocks","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('part_stocks')%>" target="_self" title="Purchase Stock Transfer" class="nav-active-link">
-                           Purchase Stock Transfer
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("part_stocks_inhouse","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('part_stocks_inhouse')%>" target="_self" title="Inhouse Stock Transfer" class="nav-active-link">
-                           Inhouse Stock Transfer
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("fw_stock","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('fw_stock')%>" target="_self" title="FG Stock Transfer" class="nav-active-link">
-                           FG Stock Transfer
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("view_add_challan_subcon","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('view_add_challan_subcon')%>" target="_self" title="Subcon Challan" class="nav-active-link">
-                           Subcon Challan 
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("challan_inward","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('challan_inward')%>" target="_self" title="Customer Challan Inward" class="nav-active-link">
-                           Customer Challan Inward
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("challan_part_return","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('challan_part_return')%>" target="_self" title="Customer Challan Inward" class="nav-active-link">
-                           Customer Challan Outward
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("stock_rejection","list","No") %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('stock_rejection')%>" target="_self" title="Stock Rejection" class="nav-active-link">
-                           Stock Rejection
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("reports_grn","list","No") %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('reports_grn')%>" target="_self" title="GRN Report" class="nav-active-link report-menu">
-                           GRN Report
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("supplier_parts_stock_report","list","No") %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('supplier_parts_stock_report')%>" target="_self" title="Purchase Stock" class="nav-active-link report-menu">
-                           Purchase Stock
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("subcon_supplier_challan_part_report","list","No") %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('subcon_supplier_challan_part_report')%>" target="_self" title="Subcon Report" class="nav-active-link report-menu">
-                           Subcon Report
-                           </a>
-                        </li>
-                        <%/if%>
 
-                     </ul>
+               <!-- Product Catalog -->
+               <div class="col-md-4 col-lg-3">
+                  <div class="quick-menu-card card-products h-100 border rounded-3 overflow-hidden">
+                     <div class="card-header-accent"></div>
+                     <div class="card-header border-bottom p-3">
+                         <div class="d-flex align-items-center">
+                            <i class="ti ti-package text-primary me-2 ti-sm"></i>
+                            <h6 class="mb-0 fw-bold">Product Catalog</h6>
+                         </div>
+                     </div>
+                     <div class="card-body p-0">
+                        <ul class="list-unstyled mb-0">
+                           <li>
+                              <a hijacked="yes" href="product" class="quick-link-item d-flex align-items-center border-bottom text-muted">
+                                 <i class="ti ti-cube me-2 ti-xs"></i> Manage Products
+                              </a>
+                           </li>
+                           <li>
+                              <a hijacked="yes" href="category" class="quick-link-item d-flex align-items-center border-bottom text-muted">
+                                 <i class="ti ti-grid-dots me-2 ti-xs"></i> Categories
+                              </a>
+                           </li>
+                           <li>
+                              <a hijacked="yes" href="brand" class="quick-link-item d-flex align-items-center border-bottom text-muted">
+                                 <i class="ti ti-award me-2 ti-xs"></i> Brands
+                              </a>
+                           </li>
+                        </ul>
+                     </div>
                   </div>
                </div>
-               <%/if%>
-               <%if checkGroupAccess("new_sales","list","No") || checkGroupAccess("sales_invoice_released","list","No") || checkGroupAccess("customer_po_tracking_all","list","No") || checkGroupAccess("planning_year_page","list","No")  || checkGroupAccess("rejection_invoices","list","No") || checkGroupAccess("customer","list","No") || checkGroupAccess("customer_parts_master","list","No") || checkGroupAccess("customer_master","list","No") ||  checkGroupAccess("consignee","list","No") || checkGroupAccess("sales_report","list","No") || checkGroupAccess("sales_summary_report","list","No") || checkGroupAccess("planing_data_report","list","No") || checkGroupAccess("transporter","list","No") %>
-               <div class="span3 box ag-col-2" style="width: 25%;">
-                  <div class="title">
-                     <h4><span class="icon14 "></span>Planning & Sales</h4>
-                  </div>
-                  <div class="content ">
-                     <ul class="sitemap">
-                        <%if checkGroupAccess("new_sales","list","No") %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('new_sales')%>" target="_self" title="Create Sale Invoice" class="nav-active-link">
-                           Create Sale Invoice
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("sales_invoice_released","list","No") %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('sales_invoice_released')%>" target="_self" title="E-INVOICE & PDI" class="nav-active-link">
-                           E-INVOICE & PDI 
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("customer_po_tracking_all","list","No") %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('customer_po_tracking_all')%>" target="_self" title="Sales Order" class="nav-active-link">
-                           Sales Order
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("planning_year_page","list","No") %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('planning_year_page')%>" target="_self" title="Monthly Schedule" class="nav-active-link">
-                           Monthly Schedule
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("planning_shop_order_details","list","No") %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('planning_shop_order_details')%>" target="_self" title="Shop Order" class="nav-active-link">
-                           Shop Order
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("rejection_invoices","list","No") %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('rejection_invoices')%>" target="_self" title="CN-DN-PI" class="nav-active-link">
-                           CN-DN-PI
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("sales_report","list","No") %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('sales_report')%>" target="_self" title="Sales Report" class="nav-active-link report-menu">
-                           Sales Report
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("sales_summary_report","list","No") %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('sales_summary_report')%>" target="_self" title="Sales Summary Report" class="nav-active-link report-menu">
-                           Sales Summary Report</a>
-                        </li>
-                        <%/if%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="javascript:void(0);" target="_self" title="Hsn Report" class="nav-active-link report-menu">
-                           HSN Report 
-                           </a>
-                        </li>
-                        <%if checkGroupAccess("planing_data_report","list","No") %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('planing_data_report')%>" target="_self" title="Monthly Schedule Report" class="nav-active-link report-menu">
-                           Monthly Schedule Report 
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("customer","list","No") %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('customer')%>" target="_self" title="Customers" class="nav-active-link master-menu">
-                           Customers
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("customer_parts_master","list","No") %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('customer_parts_master')%>" target="_self" title="Part Master" class="nav-active-link master-menu">
-                           Part Master
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("customer_master","list","No") %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('customer_master')%>" target="_self" title="Customer Master" class="nav-active-link master-menu">
-                           Customer Master
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("consignee","list","No") %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('consignee')%>" target="_self" title="Consignee" class="nav-active-link master-menu">
-                           Consignee
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("transporter","list","No") %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('transporter')%>" target="_self" title="Transporter List" class="nav-active-link master-menu">
-                           Transporter List
-                           </a>
-                        </li>
-                        <%/IF%>
-                     </ul>
-                  </div>
-               </div>
-               <%/if%>
-               <%if ($entitlements['isPlastic']!=null && (checkGroupAccess("machine_request","list","No") || checkGroupAccess("p_q_molding_production","list","No") || checkGroupAccess("view_p_q_molding_production","list","No") || checkGroupAccess("report_prod_rejection","list","No") || checkGroupAccess("mold_maintenance_report","list","No") || checkGroupAccess("downtime_report","list","No") || checkGroupAccess("machine_request_completed","list","No") || checkGroupAccess("molding_stock_transfer","list","No") || checkGroupAccess("mold_maintenance","list","No")) ) || ($entitlements['isSheetMetal']!=null && (checkGroupAccess("downtime_report","list","No"))) || checkGroupAccess("operator","list","No") || checkGroupAccess("machine","list","No") || checkGroupAccess("downtime_master","list","No") || checkGroupAccess("shifts","list","No")%>
-               <div class="span3 box ag-col-3" style="width: 25%;">
-                  <div class="title">
-                     <h4><span class="icon14 "></span>Production</h4>
-                  </div>
-                  <div class="content ">
-                     <ul class="sitemap">
-                        <%if ($entitlements['isPlastic']!=null) %>
-                        <%if checkGroupAccess("machine_request","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('machine_request')%>" target="_self" title="Material Request" class="nav-active-link">
-                           Material Request
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if ( checkGroupAccess("p_q_molding_production","list","No")) %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('p_q_molding_production')%>" target="_self" title="Molding Production" class="nav-active-link">
-                           Molding Production
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if (checkGroupAccess("view_p_q_molding_production","list","No")) %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('view_p_q_molding_production')%>" target="_self" title="Molding Production Approval" class="nav-active-link report-menu">
-                           Molding Production Approval
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if (checkGroupAccess("report_prod_rejection","list","No")) %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('report_prod_rejection')%>" target="_self" title="Production Rejection Reason" class="nav-active-link report-menu">
-                           Production Rejection Reason
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if (checkGroupAccess("mold_maintenance_report","list","No")) %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('mold_maintenance_report')%>" target="_self" title="Mold Life Report" class="nav-active-link report-menu">
-                           Mold Life Report
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if (checkGroupAccess("downtime_report","list","No")) %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('downtime_report ')%>" target="_self" title="Downtime Rport" class="nav-active-link report-menu" >
-                           Downtime Report
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if (checkGroupAccess("machine_request_completed","list","No")) %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('machine_request_completed')%>" target="_self" title="Material Request Report" class="nav-active-link report-menu">
-                           Material Request Report
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if (checkGroupAccess("molding_stock_transfer","list","No")) %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('molding_stock_transfer')%>" target="_self" title="Molding Stock Transfer" class="nav-active-link report-menu">
-                          Molding Stock Transfer
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%/if%>
-                        <%if ($entitlements['isSheetMetal']!=null) %>
 
+               <!-- Orders & Sales -->
+               <div class="col-md-4 col-lg-3">
+                  <div class="quick-menu-card card-sales h-100 border rounded-3 overflow-hidden">
+                     <div class="card-header-accent"></div>
+                     <div class="card-header border-bottom p-3">
+                         <div class="d-flex align-items-center">
+                            <i class="ti ti-shopping-cart text-success me-2 ti-sm"></i>
+                            <h6 class="mb-0 fw-bold">Orders & Sales</h6>
+                         </div>
+                     </div>
+                     <div class="card-body p-0">
+                        <ul class="list-unstyled mb-0">
                            <li>
-                              <a hijacked="yes" aria-nav-code="shortcuts" href="javascript:void(0)" target="_self" title="Production Rport" class="nav-active-link report-menu">
-                           Production Report
-                              </a> 
-                           </li>
-                           <li>
-                              <a hijacked="yes" aria-nav-code="shortcuts" href="javascript:void(0)" target="_self" title="Shearing Production Rport" class="nav-active-link report-menu">
-                           Shearing Production Report
-                              </a> 
-                           </li>
-                           <%if (checkGroupAccess("downtime_report","list","No")) %>
-                           <li>
-                              <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('downtime_report ')%>" target="_self" title="Downtime Rport" class="nav-active-link report-menu">
-                              Downtime Report
-                              </a>
-                           </li>
-                           <%/if%>
-                           <li>
-                              <a hijacked="yes" aria-nav-code="shortcuts" href="javascript:void(0)" target="_self" title="OEE Rport" class="nav-active-link report-menu">
-                              OEE Report
+                              <a hijacked="yes" href="sales_list" class="quick-link-item d-flex align-items-center border-bottom text-muted">
+                                 <i class="ti ti-list me-2 ti-xs"></i> Sales List
                               </a>
                            </li>
                            <li>
-                              <a hijacked="yes" aria-nav-code="shortcuts" href="javascript:void(0)" target="_self" title="Production Rejection Rport" class="nav-active-link report-menu">
-                              Production Rejection Report
+                              <a hijacked="yes" href="create_sale" class="quick-link-item d-flex align-items-center border-bottom text-muted">
+                                 <i class="ti ti-plus me-2 ti-xs"></i> Create Sale
                               </a>
                            </li>
-                        <%/if%>
-                        <%if (checkGroupAccess("operator","list","No")) %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('operator')%>" target="_self" title="Operator List" class="nav-active-link master-menu">
-                          Operator List
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if (checkGroupAccess("machine","list","No")) %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('machine')%>" target="_self" title="Machine List" class="nav-active-link master-menu">
-                          Machine List
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if ($entitlements['isPlastic'] && checkGroupAccess("mold_maintenance","list","No")) %>
                            <li>
-                              <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('mold_maintenance')%>" target="_self" title="Mold Master" class="nav-active-link master-menu">
-                             Mold Master
+                              <a hijacked="yes" href="sales_return" class="quick-link-item d-flex align-items-center border-bottom text-muted">
+                                 <i class="ti ti-arrow-back-up me-2 ti-xs"></i> Sales Return
                               </a>
                            </li>
-                        <%/if%>
-                        <%if (checkGroupAccess("downtime_master","list","No")) %>
-                        <li>
-                              <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('downtime_master')%>" target="_self" title="Down Time Reason" class="nav-active-link master-menu">
-                             Down Time Reason
-                              </a>
-                        </li>
-                        <%/if%>
-                        <%if (checkGroupAccess("shifts","list","No")) %>
-                        <li>
-                              <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('shifts')%>" target="_self" title="Shift Master" class="nav-active-link master-menu">
-                             Shift Master
-                              </a>
-                        </li>
-                        <%/if%>
-                        
-                     </ul>
+                        </ul>
+                     </div>
                   </div>
                </div>
-               <%/if%>
-               <%if checkGroupAccess("accept_reject_validation","list","No") || ($entitlements['isPlastic']!=null && checkGroupAccess("final_inspection","list","No")) || ($entitlements['isSheetMetal']!=null && checkGroupAccess("final_inspection_qa","list","No")) || checkGroupAccess("remarks","list","No") || checkGroupAccess("stock_rejection","list","No") || checkGroupAccess("reports_incoming_quality","list","No") || checkGroupAccess("reports_inspection","list","No") || checkGroupAccess("grn_rejection","list","No")%>
-               <div class="span3 box ag-col-4" style="width: 25%;">
-                  <div class="title">
-                     <h4><span class="icon14 "></span>Quality</h4>
-                  </div>
-                  <div class="content ">
-                     <ul class="sitemap">
-                        <%if checkGroupAccess("accept_reject_validation","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('accept_reject_validation')%>" target="_self" title="Inward Inspection" class="nav-active-link">
-                           Inward Inspection
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if ($entitlements['isPlastic']!=null && checkGroupAccess("final_inspection","list","No")) %>
-                           <li>
-                              <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('final_inspection')%>" target="_self" title="Final Inspection" class="nav-active-link">
-                              Final Inspection
-                              </a>
-                           </li>
-                        <%/if%>
-                        <%if ($entitlements['isSheetMetal']!=null && checkGroupAccess("final_inspection_qa","list","No")) %>
-                           <li>
-                              <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('final_inspection_qa')%>" target="_self" title="FINAL INSPECTION SMF" class="nav-active-link">
-                              FINAL INSPECTION SMF
-                              </a>
-                           </li>
-                        <%/if%>
-                        <%if checkGroupAccess("remarks","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('remarks')%>" target="_self" title="Rejection Reasons" class="nav-active-link">
-                           Rejection Reasons
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("stock_rejection","list","No") %>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('stock_rejection')%>" target="_self" title="Stock Rejection" class="nav-active-link">
-                           Stock Rejection
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("reports_incoming_quality","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('reports_incoming_quality')%>" target="_self" title="Incoming Quality Report" class="nav-active-link report-menu">
-                           Incoming Quality Report
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("reports_inspection","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('reports_inspection')%>" target="_self" title="Under Inspection Parts" class="nav-active-link report-menu">
-                           Under Inspection Parts Report
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("grn_rejection","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('grn_rejection')%>" target="_self" title="GRN Rejection" class="nav-active-link report-menu">
-                           GRN Rejection
-                           </a>
-                        </li>
-                        <%/if%>
 
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="javascript:void(0)" target="_self" title="PPM REPORT" class="nav-active-link report-menu">
-                           PPM REPORT
-                           </a>
-                        </li>
-                        <%if checkGroupAccess("remarks","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('remarks')%>" target="_self" title="Rejection Reasons" class="nav-active-link master-menu">
-                           Rejection Reasons
-                           </a>
-                        </li>
-                        <%/if%>
-                     </ul>
+               <!-- Customer Management -->
+               <div class="col-md-4 col-lg-3">
+                  <div class="quick-menu-card card-customers h-100 border rounded-3 overflow-hidden">
+                     <div class="card-header-accent"></div>
+                     <div class="card-header border-bottom p-3">
+                         <div class="d-flex align-items-center">
+                            <i class="ti ti-user-circle text-primary me-2 ti-sm"></i>
+                            <h6 class="mb-0 fw-bold">Customer Management</h6>
+                         </div>
+                     </div>
+                     <div class="card-body p-0">
+                        <ul class="list-unstyled mb-0">
+                           <li>
+                              <a hijacked="yes" href="customer" class="quick-link-item d-flex align-items-center border-bottom text-muted">
+                                 <i class="ti ti-users me-2 ti-xs"></i> Customer List
+                              </a>
+                           </li>
+                        </ul>
+                     </div>
                   </div>
                </div>
-               <%/if%>
-               <%if checkGroupAccess("receivable_report","list","No") || checkGroupAccess("payable_report","list","No")%>
-               <div class="span3 box ag-col-1" style="width: 25%;">
-                  <div class="title">
-                     <h4><span class="icon14 "></span>Accounts</h4>
-                  </div>
-                  <div class="content ">
-                     <ul class="sitemap">
-                        <%if checkGroupAccess("receivable_report","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('receivable_report')%>" target="_self" title="Receivable" class="nav-active-link report-menu">
-                           Receivable 
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("payable_report","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('payable_report')%>" target="_self" title="Payable" class="nav-active-link report-menu">
-                           Payable
-                           </a>
-                        </li>
-                        <%/if%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="javascript:void(0);" target="_self" title="Cash Purchase" class="nav-active-link report-menu">
-                           Cash Purchase
-                           </a>
-                        </li>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="javascript:void(0);" target="_self" title="GST Report" class="nav-active-link">
-                           GST Report
-                           </a>
-                        </li>
-                     </ul>
+
+               <!-- Procurement -->
+               <div class="col-md-4 col-lg-3">
+                  <div class="quick-menu-card card-procurement h-100 border rounded-3 overflow-hidden">
+                     <div class="card-header-accent"></div>
+                     <div class="card-header border-bottom p-3">
+                         <div class="d-flex align-items-center">
+                            <i class="ti ti-truck-delivery text-warning me-2 ti-sm"></i>
+                            <h6 class="mb-0 fw-bold">Procurement</h6>
+                         </div>
+                     </div>
+                     <div class="card-body p-0">
+                        <ul class="list-unstyled mb-0">
+                           <li>
+                              <a hijacked="yes" href="purchase_list" class="quick-link-item d-flex align-items-center border-bottom text-muted">
+                                 <i class="ti ti-list me-2 ti-xs"></i> Purchase List
+                              </a>
+                           </li>
+                           <li>
+                              <a hijacked="yes" href="create_purchase" class="quick-link-item d-flex align-items-center border-bottom text-muted">
+                                 <i class="ti ti-plus me-2 ti-xs"></i> Create Purchase
+                              </a>
+                           </li>
+                           <li>
+                              <a hijacked="yes" href="supplier" class="quick-link-item d-flex align-items-center border-bottom text-muted">
+                                 <i class="ti ti-building-store me-2 ti-xs"></i> Suppliers
+                              </a>
+                           </li>
+                        </ul>
+                     </div>
                   </div>
                </div>
-               <%/if%>
-               <%if checkGroupAccess("approved_supplier","list","No") || checkGroupAccess("child_parts","list","No") || checkGroupAccess("customer_parts_admin","list","No") || checkGroupAccess("inhouse_parts_admin","list","No") || checkGroupAccess("child_part_supplier_admin","list","No") || checkGroupAccess("supplier","list","No") || checkGroupAccess("client","list","No") || checkGroupAccess("uom","list","No") || checkGroupAccess("gst","list","No") || checkGroupAccess("grades","list","No") || checkGroupAccess("part_family","list","No") || checkGroupAccess("process","list","No") || checkGroupAccess("operations","list","No") || checkGroupAccess("operations_data","list","No") || checkGroupAccess("asset","list","No")%>
-               <div class="span3 box ag-col-1" style="width: 25%;">
-                  <div class="title">
-                     <h4><span class="icon14 "></span>Admin</h4>
-                  </div>
-                  <div class="content ">
-                     <ul class="sitemap">
-                        <%if checkGroupAccess("approved_supplier","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('approved_supplier')%>" target="_self" title="Po Approval" class="nav-active-link">
-                           Po Approval
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("child_parts","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('child_parts')%>" target="_self" title="Purchase Stock Update" class="nav-active-link">
-                           Purchase Stock Update
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("customer_parts_admin","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('customer_parts_admin')%>" target="_self" title="Sales Stock Update" class="nav-active-link">
-                           Sales Stock Update
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("inhouse_parts_admin","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('inhouse_parts_admin')%>" target="_self" title="Inhouse Stock Update" class="nav-active-link">
-                           Inhouse Stock Update
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("child_part_supplier_admin","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('child_part_supplier_admin')%>" target="_self" title="Purchase Price Approval" class="nav-active-link">
-                          Purchase Price Approval
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("supplier","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('supplier')%>" target="_self" title="Supplier Approval" class="nav-active-link">
-                          Supplier Approval
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("client","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('client')%>" target="_self" title="Client Master" class="nav-active-link master-menu">
-                          Client Master
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("uom","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('uom')%>" target="_self" title="UOM Master" class="nav-active-link master-menu">
-                          UOM Master
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("gst","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('gst')%>" target="_self" title="Tax Structure Master" class="nav-active-link master-menu">
-                          Tax Structure Master
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("grades","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('grades')%>" target="_self" title="Grades Master" class="nav-active-link master-menu">
-                          Grades Master
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("part_family","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('part_family')%>" target="_self" title="Part Family" class="nav-active-link master-menu">
-                          Part Family
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("process","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('process')%>" target="_self" title="Process" class="nav-active-link master-menu">
-                          Process
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("operations","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('operations')%>" target="_self" title="Operation No." class="nav-active-link master-menu">
-                          Operation No.
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("operations_data","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('operations_data')%>" target="_self" title="Operations Data" class="nav-active-link master-menu">
-                          Operations Data
-                           </a>
-                        </li>
-                        <%/if%>
-                        <%if checkGroupAccess("asset","list","No")%>
-                        <li>
-                           <a hijacked="yes" aria-nav-code="shortcuts" href="<%base_url('asset')%>" target="_self" title="Operations Data" class="nav-active-link master-menu">
-                          Asset
-                           </a>
-                        </li>
-                        <%/if%>
-                     </ul>
+
+               <!-- Stock Management -->
+               <div class="col-md-4 col-lg-3">
+                  <div class="quick-menu-card card-stock h-100 border rounded-3 overflow-hidden">
+                     <div class="card-header-accent"></div>
+                     <div class="card-header border-bottom p-3">
+                         <div class="d-flex align-items-center">
+                            <i class="ti ti-box text-danger me-2 ti-sm"></i>
+                            <h6 class="mb-0 fw-bold">Stock & Inventory</h6>
+                         </div>
+                     </div>
+                     <div class="card-body p-0">
+                        <ul class="list-unstyled mb-0">
+                           <li>
+                              <a hijacked="yes" href="stock" class="quick-link-item d-flex align-items-center border-bottom text-muted">
+                                 <i class="ti ti-stack me-2 ti-xs"></i> Stock Management
+                              </a>
+                           </li>
+                           <li>
+                              <a hijacked="yes" href="purchase_return" class="quick-link-item d-flex align-items-center border-bottom text-muted">
+                                 <i class="ti ti-arrow-back-up me-2 ti-xs"></i> Purchase Return
+                              </a>
+                           </li>
+                        </ul>
+                     </div>
                   </div>
                </div>
-               <%/if%>
-               
-               
-              
-              
+
+               <!-- Reports & Marketing -->
+               <div class="col-md-4 col-lg-3">
+                  <div class="quick-menu-card card-reports h-100 border rounded-3 overflow-hidden">
+                     <div class="card-header-accent"></div>
+                     <div class="card-header border-bottom p-3">
+                         <div class="d-flex align-items-center">
+                            <i class="ti ti-report text-secondary me-2 ti-sm" style="color: #6366f1 !important;"></i>
+                            <h6 class="mb-0 fw-bold">Reports & Analytics</h6>
+                         </div>
+                     </div>
+                     <div class="card-body p-0">
+                        <ul class="list-unstyled mb-0">
+                           <li>
+                              <a hijacked="yes" href="reports" class="quick-link-item d-flex align-items-center border-bottom text-muted">
+                                 <i class="ti ti-chart-infographic me-2 ti-xs"></i> All Reports
+                              </a>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+
+               <!-- System Settings -->
+               <div class="col-md-4 col-lg-3">
+                  <div class="quick-menu-card card-settings h-100 border rounded-3 overflow-hidden">
+                     <div class="card-header-accent"></div>
+                     <div class="card-header border-bottom p-3">
+                         <div class="d-flex align-items-center">
+                            <i class="ti ti-settings text-secondary me-2 ti-sm"></i>
+                            <h6 class="mb-0 fw-bold">System Settings</h6>
+                         </div>
+                     </div>
+                     <div class="card-body p-0">
+                        <ul class="list-unstyled mb-0">
+                           <li>
+                              <a hijacked="yes" href="user_list" class="quick-link-item d-flex align-items-center border-bottom text-muted">
+                                 <i class="ti ti-user me-2 ti-xs"></i> User Management
+                              </a>
+                           </li>
+                           <li>
+                              <a hijacked="yes" href="group_master" class="quick-link-item d-flex align-items-center border-bottom text-muted">
+                                 <i class="ti ti-shield-lock me-2 ti-xs"></i> Group Master
+                              </a>
+                           </li>
+                           <li>
+                              <a hijacked="yes" href="company" class="quick-link-item d-flex align-items-center border-bottom text-muted">
+                                 <i class="ti ti-building me-2 ti-xs"></i> Company Details
+                              </a>
+                           </li>
+                           <li>
+                              <a hijacked="yes" href="settings" class="quick-link-item d-flex align-items-center border-bottom text-muted">
+                                 <i class="ti ti-adjustments me-2 ti-xs"></i> Application Settings
+                              </a>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+
             </div>
-            <div class="clear"></div>
          </div>
       </div>
    </div>
 </div>
+
+<style>
+#menu_overlay.menu_overlay {
+    background: rgba(248, 249, 250, 0.98);
+    z-index: 1000;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: fixed;
+    top: 64px;
+    height: calc(100vh - 64px);
+    width: 100%;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    pointer-events: none; /* Disable mouse interaction when hidden */
+}
+
+#menu_overlay.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto; /* Re-enable mouse interaction when visible */
+}
+
+#scrollable_content {
+    height: calc(100vh - 140px);
+    overflow-y: auto;
+    padding-top: 20px;
+}
+
+/* Glass Cards with Hover Effects */
+.quick-menu-card {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    border-radius: 1.25rem !important;
+    box-shadow: 0 4px 16px rgba(31, 38, 135, 0.05) !important;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+}
+
+.quick-menu-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 15px 45px rgba(31, 38, 135, 0.15) !important;
+    background: rgba(255, 255, 255, 1);
+    will-change: transform;
+}
+
+/* Category Accent Gradients */
+.card-header-accent {
+    height: 4px;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.card-dashboards .card-header-accent { background: linear-gradient(90deg, #48cae4, #0077b6); }
+.card-products .card-header-accent { background: linear-gradient(90deg, #a594f9, #6247aa); }
+.card-sales .card-header-accent { background: linear-gradient(90deg, #4ade80, #16a34a); }
+.card-customers .card-header-accent { background: linear-gradient(90deg, #1e88e5, #1565c0); }
+.card-procurement .card-header-accent { background: linear-gradient(90deg, #fb923c, #ea580c); }
+.card-stock .card-header-accent { background: linear-gradient(90deg, #fb7185, #e11d48); }
+.card-reports .card-header-accent { background: linear-gradient(90deg, #818cf8, #4f46e5); }
+.card-settings .card-header-accent { background: linear-gradient(90deg, #4b5563, #1f2937); }
+
+.quick-menu-card .card-header {
+    background: transparent;
+    padding: 1.25rem !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04) !important;
+}
+
+.quick-menu-card .card-header h6 {
+    font-size: 1rem;
+    letter-spacing: -0.01em;
+    color: #2f2b3d;
+}
+
+/* Enhanced Link Items */
+.quick-link-item {
+    padding: 12px 20px;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.03) !important;
+    display: flex;
+    align-items: center;
+    color: #5d596c !important;
+    font-weight: 500;
+}
+
+.quick-link-item:hover {
+    background-color: rgba(115, 103, 240, 0.05);
+    color: #7367f0 !important;
+    padding-left: 28px;
+}
+
+.quick-link-item i {
+    font-size: 1.1rem;
+    margin-right: 12px;
+    transition: transform 0.2s ease;
+}
+
+.quick-link-item:hover i {
+    transform: scale(1.2);
+    color: #7367f0 !important;
+}
+
+.avatar-initial.bg-label-primary {
+    background-color: #f0efff !important;
+    color: #7367f0 !important;
+}
+
+.hover-danger:hover {
+    color: #ea5455 !important;
+    transform: rotate(90deg);
+    transition: all 0.3s ease;
+}
+
+/* Animation for cards appearing */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#menu_overlay.open .quick-menu-card {
+    animation: fadeInUp 0.5s ease backwards;
+}
+
+#menu_overlay.open .col-md-4:nth-child(1) .quick-menu-card { animation-delay: 0.1s; }
+#menu_overlay.open .col-md-4:nth-child(2) .quick-menu-card { animation-delay: 0.15s; }
+#menu_overlay.open .col-md-4:nth-child(3) .quick-menu-card { animation-delay: 0.2s; }
+#menu_overlay.open .col-md-4:nth-child(4) .quick-menu-card { animation-delay: 0.25s; }
+#menu_overlay.open .col-md-4:nth-child(5) .quick-menu-card { animation-delay: 0.3s; }
+#menu_overlay.open .col-md-4:nth-child(6) .quick-menu-card { animation-delay: 0.35s; }
+#menu_overlay.open .col-md-4:nth-child(7) .quick-menu-card { animation-delay: 0.4s; }
+#menu_overlay.open .col-md-4:nth-child(8) .quick-menu-card { animation-delay: 0.45s; }
+
+@media (max-width: 1199.98px) {
+    #menu_overlay.menu_overlay {
+        left: 0;
+        width: 100%;
+        top: 64px;
+        height: calc(100vh - 64px);
+    }
+}
+</style>
+
+<script>
+$(document).ready(function() {
+    $('.quick-menu-close-btn').on('click', function() {
+        $('.quick-menu-bar').trigger('click');
+    });
+});
+</script>

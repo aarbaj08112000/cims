@@ -16,7 +16,7 @@ const page = {
     },
     dataTable: function(){
        table = $("#process").DataTable({
-        dom: "Bfrtilp",
+        dom: "<"row align-items-center mb-2"<"col-sm-12 col-md-6"B><"col-sm-12 col-md-6 text-end"f>><"dt-scroll-body-wrapper"<"col-sm-12"rt>><"dt-fixed-footer row align-items-center pt-3 mt-1 border-top"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7 d-flex align-items-center justify-content-end gap-2"pl>>",
         buttons: [
             {
                 extend: "csv",
@@ -104,14 +104,14 @@ const page = {
 	            var msg = responseObject.messages;
 	            var success = responseObject.success;
 	            if (success == 1) {
-	              toastr.success(msg);
+                toaster("success",msg);
 	              $(this).parents(".modal").modal("hide")
 	              setTimeout(function(){
 	                window.location.reload();
 	              },1000);
 
 	            } else {
-	              toastr.error(msg);
+                toaster("error",msg);
 	            }
 	          },
 	          error: function (error) {

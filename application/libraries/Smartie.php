@@ -1,4 +1,5 @@
-<?php  if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php  
+if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
  * Smartie Class
@@ -14,12 +15,19 @@ require_once( APPPATH.'/third_party/smarty/libs/Smarty.class.php' );
 class Smartie extends Smarty {
 
     var $debug = false;
+    public $CI = '';
+    public $router = '';
+    public $uri = '';
+    public $config = '';
     function __construct()
     {
         parent::__construct();
-
+        $this->CI =& get_instance();
         $this->template_dir = APPPATH . "views/templates";
         $this->compile_dir = APPPATH . "views/templates_c";
+        $this->router = $this->CI->router;
+        $this->uri = $this->CI->uri;
+        $this->config = $this->CI->config;
         if ( ! is_writable( $this->compile_dir ) )
         {
             // make sure the compile directory can be written to
@@ -60,8 +68,9 @@ class Smartie extends Smarty {
      * @param    bool
      * @return    string
      */
-    function view($template, $data = array(), $return = FALSE)
+    function view($template, $data = array(),$return = FALSE)
     {
+        
         if ( ! $this->debug )
         {
             $this->error_reporting = false;
@@ -91,76 +100,167 @@ class Smartie extends Smarty {
             return $this->fetch($template);
         }
     }
+
     function loadView($template, $data = array(), $header = 'No', $footer = 'No', $return = FALSE)
-{
-    $data['base_url'] = base_url();
-    if (! $this->debug)
     {
-        $this->error_reporting = false;
-    }
-    $this->error_unassigned = false;
+        
+        $data['config'] = $this->CI->config->config;
 
-    foreach ($data as $key => $val)
-    {
-        $this->assign($key, $val);
-    }
-    
-    // Initialize content
-    $content = '';
-
-    if(strtolower($header) == 'no' && strtolower($footer) == 'no'){
-        $content.= $this->fetch($template,$data);
-      }
-    // Add header if required
-    else{
-        if (strtolower($header) == 'yes')
+        $data['session_data'] = $this->CI->session->userdata();
+        if (! $this->debug)
         {
-            // $this->setHeaderFooterPath();
-            $content .= $this->fetch('header.tpl',$data['head_data']); // Adjust the header template name as needed
+            $this->error_reporting = false;
+        }
+
+        $this->error_unassigned = false;
+
+        foreach ($data as $key => $val)
+        {
+            $this->assign($key, $val);
+        }
+
+        
+        // Initialize content
+        $content = '';
+
+        if(strtolower($header) == 'no' && strtolower($footer) == 'no'){
+            $content.= $this->fetch($template,$data);
+        }
+
+        // Add header if required
+        else{
+            // 
+            if (strtolower($header) == 'yes')
+            {
+                $this->setHeaderFooterPath();
+
+                $content .= $this->fetch('header.tpl',$data); // Adjust the header template name as needed
+            }
+            
+        
+            // Add main template
+            $this->smartyDefaultPath();
+            $content .= $this->fetch($template);
+        
+            // Add footer if required
+            if (strtolower($footer) == 'yes')
+            {
+                $this->setHeaderFooterPath();
+                $content .= $this->fetch('footer.tpl',$data); // Adjust the footer template name as needed
+            }
         }
     
-        // Add main template
-        // $this->smartyDefaultPath();
-        $content .= $this->fetch($template);
-    
-        // Add footer if required
-        if (strtolower($footer) == 'yes')
-        {
-            // $this->setHeaderFooterPath();
-            $content .= $this->fetch('footer.tpl',$data); // Adjust the footer template name as needed
-        }
-    }
-   
 
-    if ($return == FALSE)
-    {
-        $CI =& get_instance();
-        if (method_exists($CI->output, 'set_output'))
+        if ($return == FALSE)
         {
-            $CI->output->set_output($content);
+            $CI =& get_instance();
+            if (method_exists($CI->output, 'set_output'))
+            {
+                $CI->output->set_output($content);
+            }
+            else
+            {
+                $CI->output->final_output = $content;
+            }
+            return;
         }
         else
         {
-            $CI->output->final_output = $content;
+            return $content;
         }
-        return;
     }
-    else
-    {
-        return $content;
-    }
-}
 
 function setHeaderFooterPath(){
     $this->setTemplateDir(APPPATH . "views/templates");
   } 
 
-function smartyDefaultPath(){
+  function smartyDefaultPath(){
+    $current_route = $this->uri->segment(1);
+    $routes = $this->router->routes;
+    foreach ($routes as $key => $value) {
+        $key_val = explode("/", $key);
+        $routes_arr[$key_val[0]] = $value;
+    }
+    $route_string = explode ('/',$routes_arr[$current_route]);
+    $current_folder = (isset($route_string[0])) ? $route_string[0] : 'user';
+    $this->setTemplateDir(APPPATH.'modules/'.$current_folder.'/views/');
+  }
+
+
+
+
+  // fornt view load 
+  function loadFrontView($template, $data = array(), $header = 'No', $footer = 'No', $return = FALSE)
+  {
+      $data['config'] = $this->CI->config->config;
+      $data['config']['current_route'] = $this->uri->segment(1);
+      $data['session_data'] = $this->CI->session->userdata();
+      if (! $this->debug)
+      {
+          $this->error_reporting = false;
+      }
+
+      $this->error_unassigned = false;
+
+      foreach ($data as $key => $val)
+      {
+          $this->assign($key, $val);
+      }
+
+      
+      // Initialize content
+      $content = '';
+
+      if(strtolower($header) == 'no' && strtolower($footer) == 'no'){
+          $content.= $this->fetch($template,$data);
+      }
+
+      // Add header if required
+      else{
+          // 
+          if (strtolower($header) == 'yes')
+          {
+              $content .= $this->fetch('common/header.tpl',$data); // Adjust the header template name as needed
+          }
+          
+      
+          // Add main template
+          $this->smartyDefaultFrontPath();
+          $content .= $this->fetch($template);
+      
+          // Add footer if required
+          if (strtolower($footer) == 'yes')
+          {
+              $content .= $this->fetch('common/footer.tpl',$data); // Adjust the footer template name as needed
+          }
+      }
+  
+
+      if ($return == FALSE)
+      {
+          $CI =& get_instance();
+          if (method_exists($CI->output, 'set_output'))
+          {
+              $CI->output->set_output($content);
+          }
+          else
+          {
+              $CI->output->final_output = $content;
+          }
+          return;
+      }
+      else
+      {
+          return $content;
+      }
+  }
+  function smartyDefaultFrontPath(){
     $current_route = $this->uri->segment(1);
     $routes = $this->router->routes;
     $route_string = explode ('/',$routes[$current_route]);
     $current_folder = $route_string[0];
-    $this->setTemplateDir(APPPATH.'modules/'.$current_folder.'/views/');
-  }
+    $this->setTemplateDir(APPPATH.'front/'.$current_folder.'/views/');
+}
+
 }
 // END Smartie Class

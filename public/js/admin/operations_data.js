@@ -2,22 +2,22 @@ var table = '';
 var file_name = "operations_data";
 var pdf_title = "Operations Data";
 
-$(document).ready(function() {
+$(document).ready(function () {
 
     // Initialize the DataTable
     table = new DataTable('#operations_data', {
-        dom: 'Bfrtip',
+        dom: '<"row align-items-center mb-2"<"col-sm-12 col-md-6"B><"col-sm-12 col-md-6 text-end"f>><"dt-scroll-body-wrapper"<"col-sm-12"rt>><"dt-fixed-footer row align-items-center pt-3 mt-1 border-top"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7 d-flex align-items-center justify-content-end gap-2"pl>>',
         scrollX: true,
         buttons: [
-            {     
+            {
                 extend: 'csv',
                 text: '<i class="ti ti-file-type-csv"></i>',
-                init: function(api, node, config) {
+                init: function (api, node, config) {
                     $(node).attr('title', 'Download CSV');
                 },
-                customize: function(csv) {
+                customize: function (csv) {
                     var lines = csv.split('\n');
-                    var modifiedLines = lines.map(function(line) {
+                    var modifiedLines = lines.map(function (line) {
                         var values = line.split(',');
                         values.splice(4, 4); // Make sure this logic is correct for your use case
                         return values.join(',');
@@ -29,19 +29,19 @@ $(document).ready(function() {
             {
                 extend: 'pdf',
                 text: '<i class="ti ti-file-type-pdf"></i>',
-                init: function(api, node, config) {
+                init: function (api, node, config) {
                     $(node).attr('title', 'Download Pdf');
                 },
                 filename: file_name,
-                customize: function(doc) {
+                customize: function (doc) {
                     doc.pageMargins = [15, 15, 15, 15];
                     doc.content[0].text = pdf_title;
                     doc.content[0].color = theme_color;
-                    doc.content[1].table.body[0].forEach(function(cell) {
+                    doc.content[1].table.body[0].forEach(function (cell) {
                         cell.fillColor = theme_color;
                     });
-                    doc.content[1].table.body.forEach(function(row) {
-                        row.forEach(function(cell) {
+                    doc.content[1].table.body.forEach(function (row) {
+                        row.forEach(function (cell) {
                             // Custom alignment logic
                             cell.alignment = 'left'; // Default to left, adjust based on your needs
                         });
@@ -50,16 +50,16 @@ $(document).ready(function() {
                 }
             },
         ],
-         searching: true,
+        searching: true,
         // scrollX: true,
         scrollY: true,
         bScrollCollapse: true,
         // columnDefs: [{ sortable: false, targets: 7 }],
         pagingType: "full_numbers",
     });
-    $('#serarch-filter-input').on('keyup', function() {
-            table.search(this.value).draw();
-        });
+    $('#serarch-filter-input').on('keyup', function () {
+        table.search(this.value).draw();
+    });
 
 
     $('#add_operations_data').validate({
@@ -103,14 +103,14 @@ $(document).ready(function() {
                 required: "Please enter the frequency."
             }
         },
-        submitHandler: function(form) {
+        submitHandler: function (form) {
             $.ajax({
                 url: $(form).attr('action'), // Form action URL
                 type: 'POST',
                 data: new FormData(form), // Form data
                 processData: false,
                 contentType: false,
-                success: function(response) {
+                success: function (response) {
                     // Handle the response here
                     let res = JSON.parse(response);
                     if (res.success == 1) {
@@ -125,7 +125,7 @@ $(document).ready(function() {
                     $(form)[0].reset();
                     $('#addPromo').modal('hide');
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
+                error: function (jqXHR, textStatus, errorThrown) {
                     // Handle errors here
                     alert('An error occurred: ' + errorThrown);
                 }
@@ -138,8 +138,8 @@ $(document).ready(function() {
 
 
     // Custom search filter event
-  
-   
+
+
 
 
 
