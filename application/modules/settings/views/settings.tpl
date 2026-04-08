@@ -26,6 +26,11 @@
                                     <i class="ti ti-shield-lock ti-sm me-2"></i> Security & Access
                                 </button>
                             </li>
+                            <li class="nav-item">
+                                <button type="button" class="nav-link py-3 border-0 rounded-0" role="tab" data-bs-toggle="tab" data-bs-target="#navs-tax" aria-controls="navs-tax" aria-selected="false">
+                                    <i class="ti ti-receipt-tax ti-sm me-2"></i> Tax Settings
+                                </button>
+                            </li>
                         </ul>
                         <div class="tab-content border-0 shadow-none p-4">
                             <!-- General Branding Tab -->
@@ -100,6 +105,39 @@
                                     <div class="d-flex justify-content-end">
                                         <button type="submit" class="btn btn-primary d-flex align-items-center">
                                             <i class="ti ti-device-floppy me-2"></i> Save Security Settings
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- Tax Settings Tab -->
+                            <div class="tab-pane fade" id="navs-tax" role="tabpanel">
+                                <form id="settingsFormTax">
+                                    <h5 class="mb-4 d-flex align-items-center"><i class="ti ti-receipt-tax me-2 text-primary"></i> POS Tax Configuration</h5>
+                                    
+                                    <div class="row mb-4">
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-bold small text-uppercase">Enable POS Tax</label>
+                                            <select name="pos_tax_enabled" class="form-select border-primary-light">
+                                                <option value="Yes" <%if $settings['pos_tax_enabled']['value']|default:'Yes' == 'Yes'%>selected<%/if%>>Yes (Apply Tax on Bill)</option>
+                                                <option value="No" <%if $settings['pos_tax_enabled']['value']|default:'' == 'No'%>selected<%/if%>>No (Tax-Free Billing)</option>
+                                            </select>
+                                            <small class="text-muted"><%$settings['pos_tax_enabled']['description']|default:'Choose if tax should be calculated on POS transactions.'%></small>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-bold small text-uppercase">Tax Percentage (%)</label>
+                                            <div class="input-group input-group-merge border-primary-light rounded">
+                                                <span class="input-group-text bg-light"><i class="ti ti-percentage text-primary"></i></span>
+                                                <input type="number" step="0.01" name="pos_tax_percentage" class="form-control" value="<%$settings['pos_tax_percentage']['value']|default:'2.5'%>" placeholder="e.g. 5.0">
+                                            </div>
+                                            <small class="text-muted"><%$settings['pos_tax_percentage']['description']|default:'Default tax percentage for all POS bills.'%></small>
+                                        </div>
+                                    </div>
+
+                                    <hr class="my-4">
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" class="btn btn-primary px-4 py-2 d-flex align-items-center shadow-sm">
+                                            <i class="ti ti-device-floppy me-2"></i> Save Tax Settings
                                         </button>
                                     </div>
                                 </form>

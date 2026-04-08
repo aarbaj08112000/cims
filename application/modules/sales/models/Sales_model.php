@@ -53,4 +53,27 @@ class Sales_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+
+    public function get_product_by_barcode($barcode) {
+        $this->db->select('product_id, name, price, qty, line_bar_code, product_code');
+        $this->db->from('product_master');
+        $this->db->where('line_bar_code', $barcode);
+        $this->db->where('is_delete', '0');
+        $query = $this->db->get();
+        return $query->row_array();
+    }
+
+    public function search_products($term) {
+        $this->db->select('product_id, name, price, qty, line_bar_code, product_code');
+        $this->db->from('product_master');
+        $this->db->group_start();
+        $this->db->like('name', $term);
+        $this->db->or_like('product_code', $term);
+        $this->db->or_like('line_bar_code', $term);
+        $this->db->group_end();
+        $this->db->where('is_delete', '0');
+        $this->db->limit(10);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }

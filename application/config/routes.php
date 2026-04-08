@@ -80,31 +80,39 @@ $route['sales_list'] = 'sales/sales/index';
 $route['sales'] = 'sales/sales/index';
 $route['create_sale'] = 'sales/sales/create_sale';
 $route['save_sale'] = 'sales/sales/save_sale';
-$route['sales_details_ajax']        = 'sales/Sales/sales_details_ajax';
+$route['sales_details_ajax'] = 'sales/Sales/sales_details_ajax';
+
+// POS Billing Routes
+$route['pos'] = 'sales/Pos/index';
+$route['save_pos_bill'] = 'sales/Pos/save_bill';
+$route['pos_product_search'] = 'sales/Pos/search_products_ajax';
+$route['pos_get_product'] = 'sales/Pos/get_product_ajax';
 
 // Sales Return Routes
-$route['sales_return']                  = 'sales/Sales_return/index';
-$route['sales_return_list']             = 'sales/Sales_return/index';
-$route['create_sales_return/(:num)']    = 'sales/Sales_return/create_sales_return/$1';
-$route['save_sales_return']             = 'sales/Sales_return/save_sales_return';
-$route['sales_return_details_ajax']     = 'sales/Sales_return/return_details_ajax';
+$route['sales_return'] = 'sales/Sales_return/index';
+$route['sales_return_list'] = 'sales/Sales_return/index';
+$route['create_sales_return/(:num)'] = 'sales/Sales_return/create_sales_return/$1';
+$route['save_sales_return'] = 'sales/Sales_return/save_sales_return';
+$route['sales_return_details_ajax'] = 'sales/Sales_return/return_details_ajax';
 
 // Stock Management Routes
-$route['stock']                    = 'stock/Stock';
-$route['stock_ledger_ajax']        = 'stock/Stock/stock_ledger_ajax';
+$route['stock'] = 'stock/Stock';
+$route['stock_ledger_ajax'] = 'stock/Stock/stock_ledger_ajax';
 
 // Reports Routes
-$route['reports']                   = 'reports/Reports';
-$route['sales_report']              = 'reports/Reports/sales_report';
-$route['purchase_report']           = 'reports/Reports/purchase_report';
-$route['stock_valuation_report']    = 'reports/Reports/stock_valuation_report';
-$route['get_sales_report_ajax']     = 'reports/Reports/get_sales_report_ajax';
-$route['get_purchase_report_ajax']  = 'reports/Reports/get_purchase_report_ajax';
-$route['get_stock_valuation_ajax']  = 'reports/Reports/get_stock_valuation_ajax';
+$route['reports'] = 'reports/Reports';
+$route['sales_report'] = 'reports/Reports/sales_report';
+$route['purchase_report'] = 'reports/Reports/purchase_report';
+$route['stock_valuation_report'] = 'reports/Reports/stock_valuation_report';
+$route['get_sales_report_ajax'] = 'reports/Reports/get_sales_report_ajax';
+$route['get_purchase_report_ajax'] = 'reports/Reports/get_purchase_report_ajax';
+$route['get_stock_valuation_ajax'] = 'reports/Reports/get_stock_valuation_ajax';
 
 // Settings Routes
 $route['settings'] = 'settings/Settings';
-$route['settings/update_settings'] = 'settings/Settings/update_settings';
+$route['update_settings'] = 'settings/Settings/update_settings';
+
+$route['documentation'] = 'documentation/Documentation';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

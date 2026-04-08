@@ -218,6 +218,14 @@ div:where(.swal2-icon) .swal2-icon-content {
                    </li>
                 </ul>
              </li>
+             
+             <!-- POS Billing -->
+             <li class="menu-item <%if strpos($current_uri, 'pos') !== false%>active<%/if%>">
+                <a href="pos" class="menu-link">
+                   <i class="menu-icon tf-icons bx bx-calculator"></i>
+                   <div data-i18n="POS Billing">POS Billing</div>
+                </a>
+             </li>
 
              <!-- Stock Management -->
              <li class="menu-item <%if strpos($current_uri, 'stock') !== false%>active<%/if%>">
@@ -290,6 +298,14 @@ div:where(.swal2-icon) .swal2-icon-content {
                 <a href="settings" class="menu-link">
                    <i class="menu-icon tf-icons bx bx-cog"></i>
                    <div data-i18n="Settings">Settings</div>
+                </a>
+             </li>
+
+             <!-- System Documentation -->
+             <li class="menu-item <%if strpos($current_uri, 'documentation') !== false%>active<%/if%>">
+                <a href="documentation" class="menu-link">
+                   <i class="menu-icon tf-icons bx bx-help-circle"></i>
+                   <div data-i18n="System Guide">System Guide</div>
                 </a>
              </li>
           </ul>

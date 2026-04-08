@@ -1,14 +1,17 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Settings extends MY_Controller {
+class Settings extends MY_Controller
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('Settings_model');
     }
 
-    public function index() {
+    public function index()
+    {
         $settings = $this->Settings_model->get_all_settings();
         $data['settings'] = [];
         foreach ($settings as $setting) {
@@ -18,13 +21,16 @@ class Settings extends MY_Controller {
         $this->smarty->loadView('settings.tpl', $data, 'Yes', 'Yes');
     }
 
-    public function update_settings() {
+    public function update_settings()
+    {
+        header('Content-Type: application/json');
+
         $post_data = $this->input->post();
-        
+
         // Handle File Uploads
         $upload_dir = 'public/uploads/settings/';
         $upload_path = FCPATH . $upload_dir;
-        
+
         if (!is_dir($upload_path)) {
             mkdir($upload_path, 0777, true);
         }
@@ -35,7 +41,7 @@ class Settings extends MY_Controller {
                 $config['upload_path'] = $upload_path;
                 $config['allowed_types'] = 'jpg|jpeg|png|ico|pdf';
                 $config['file_name'] = $file_name;
-                
+
                 $this->load->library('upload', $config);
                 $this->upload->initialize($config);
 
