@@ -1,66 +1,85 @@
+<link rel="stylesheet" href="<%$base_url%>public/css/category_ui.css" />
 <div class="content-wrapper">
   <div class="container-xxl flex-grow-1 container-p-y">
-    <nav aria-label="breadcrumb">
-      <div class="sub-header-left pull-left breadcrumb">
-        <h1>
-          Home
-          <a hijacked="yes" href="javascript:void(0)" class="backlisting-link">
-            <i class="ti ti-chevrons-right"></i>
-            <em>Reports</em>
-          </a>
-        </h1>
-        <br>
-        <span>Stock Valuation Report</span>
-      </div>
-    </nav>
 
-    <div class="dt-top-btn d-grid gap-2 d-md-flex justify-content-md-end mb-3">
-      <input type="text" id="search-filter-input" placeholder="Search Report..." class="form-control search-filter-input me-2">
-       <button class="btn btn-success me-2" onclick="exportTableToCSV('stockValuationTable', 'stock_valuation_report.csv')">
-        <i class="ti ti-file-type-csv me-1"></i> Export CSV
-      </button>
-      <button class="btn btn-danger" onclick="exportTableToPDF()">
-        <i class="ti ti-file-type-pdf me-1"></i> Export PDF
-      </button>
+    <!-- Page Header -->
+    <div class="cat-page-header">
+      <div class="cat-page-header-left">
+        <div class="cat-page-icon">
+          <i class="ti ti-chart-bar"></i>
+        </div>
+        <div>
+          <h1 class="cat-page-title">Stock Valuation Report</h1>
+          <nav class="cat-breadcrumb">
+            <a href="<%base_url()%>">Home</a>
+            <i class="ti ti-chevron-right"></i>
+            <span>Reports</span>
+            <i class="ti ti-chevron-right"></i>
+            <span>Stock Valuation Report</span>
+          </nav>
+        </div>
+      </div>
+      <div class="cat-page-header-right">
+        <div class="cat-search-box">
+          <i class="ti ti-search"></i>
+          <input type="text" id="search-filter-input" placeholder="Search report..." />
+        </div>
+        <button type="button" id="export-csv" class="cat-btn cat-btn-outline" title="Export CSV">
+          <i class="ti ti-file-spreadsheet"></i> Export CSV
+        </button>
+        <button type="button" id="export-pdf" class="cat-btn cat-btn-outline-red" title="Export PDF">
+          <i class="ti ti-file-type-pdf"></i> Export PDF
+        </button>
+        <button type="button" class="cat-btn cat-btn-primary" onclick="location.reload()" title="Refresh">
+          <i class="ti ti-refresh"></i> Refresh
+        </button>
+      </div>
     </div>
 
-    <div class="card p-0 mt-0 w-100">
-        <table class="table table-hover table-striped text-nowrap" id="stockValuationTable" width="100%">
+    <!-- Table Card -->
+    <div class="cat-table-card">
+        <table class="table table-hover mb-0 w-100" id="stockValuationTable">
           <thead>
             <tr>
-              <th>Product Code</th>
+              <th style="width: 150px; white-space: nowrap;">Product Code</th>
               <th>Product Name</th>
               <th>Category</th>
               <th>Brand</th>
-              <th>Current Qty</th>
+              <th class="text-center">Current Qty</th>
               <th>Purchase Price</th>
               <th>Total Value</th>
             </tr>
           </thead>
-          <tbody class="table-border-bottom-0">
+          <tbody>
             <%assign var="grand_total" value=0%>
             <%foreach from=$stock item=item%>
             <%assign var="item_value" value=$item.qty*$item.purchase_price%>
             <tr>
-              <td><%$item.product_code%></td>
-              <td><%$item.product_name%></td>
+              <td style="white-space: nowrap;"><%$item.product_code%></td>
+              <td class="cat-col-name"><%$item.product_name%></td>
               <td><%$item.category_name|default:'-'%></td>
               <td><%$item.brand_name|default:'-'%></td>
-              <td class="text-center"><%$item.qty%></td>
-              <td><%$settings.company_currency.value|default:'$'%><%$item.purchase_price|number_format:2%></td>
-              <td class="fw-bold"><%$settings.company_currency.value|default:'$'%><%$item_value|number_format:2%></td>
+              <td class="text-center"><span class="cat-badge cat-badge-active"><%$item.qty%></span></td>
+              <td><%$item.purchase_price|number_format:2%></td>
+              <td class="fw-bold"><%$item_value|number_format:2%></td>
             </tr>
             <%assign var="grand_total" value=$grand_total+$item_value%>
             <%/foreach%>
           </tbody>
           <tfoot>
             <tr>
-              <th colspan="6" class="text-end">Total Inventory Value:</th>
-              <th class="text-primary"><%$settings.company_currency.value|default:'$'%><%$grand_total|number_format:2%></th>
+              <th style="border-top: 1px solid var(--cat-border);"></th>
+              <th style="border-top: 1px solid var(--cat-border);"></th>
+              <th style="border-top: 1px solid var(--cat-border);"></th>
+              <th style="border-top: 1px solid var(--cat-border);"></th>
+              <th style="border-top: 1px solid var(--cat-border);"></th>
+              <th class="text-end" style="border-top: 1px solid var(--cat-border);">Total Inventory Value:</th>
+              <th class="text-primary" style="font-size: 1.1rem; color: #c0392b !important; border-top: 1px solid var(--cat-border);"><%$grand_total|number_format:2%></th>
             </tr>
           </tfoot>
         </table>
     </div>
+
   </div>
 </div>
 
@@ -70,56 +89,11 @@
 <script src="<%$base_url%>public/js/admin_panel/stock_valuation_report.js"></script>
 
 <style>
-/* Sticky Header for this specific table */
-#stockValuationTable thead th {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 62px !important; /* Align with navbar */
-  z-index: 110;
-  background-color: #f8f7fa !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08) !important;
-}
-
-/* Sticky Footer (Total Row) with slim, professional look */
-#stockValuationTable tfoot tr {
-  position: -webkit-sticky;
-  position: sticky;
-  bottom: 0px;
-  z-index: 105;
-}
-
+/* Custom Footer Styling specifically for Stock Valuation Report */
 #stockValuationTable tfoot th {
-  background-color: #fef2f2 !important; /* Very subtle light pink */
-  color: #c0392b !important; /* Professional dark red */
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08) !important;
-  background-clip: padding-box;
-  padding: 0.875rem 1rem !important; /* Matching header padding */
-  border-top: 1px solid #f8d7da !important;
-  font-weight: 700 !important;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-#stockValuationTable tfoot th.text-primary {
-  color: #c0392b !important;
-  font-size: 1.1rem;
-}
-
-/* Ensure report card doesn't force a large gap between data and footer */
-.content-wrapper:has(#stockValuationTable) .card .dataTables_wrapper {
-    max-height: none !important;
-    display: block !important;
-}
-
-.content-wrapper:has(#stockValuationTable) .card .dt-scroll-body-wrapper {
-    flex: none !important;
-    max-height: calc(100vh - 280px) !important;
-    overflow-y: auto !important;
-}
-
-@media print {
-  .btn, .dt-top-btn, .sidebar, .navbar, .breadcrumb { display: none !important; }
-  .card { border: none !important; box-shadow: none !important; }
-  .content-wrapper { padding: 0 !important; margin: 0 !important; }
+  background-color: var(--cat-gray-50) !important;
+  font-family: var(--cat-font);
+  font-weight: 600;
+  padding: 16px !important;
 }
 </style>

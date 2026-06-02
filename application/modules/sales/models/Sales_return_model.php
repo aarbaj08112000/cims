@@ -57,4 +57,31 @@ class Sales_return_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+
+    public function get_returnable_items($sales_id) {
+        // Get items from the sale with already-returned quantities subtracted
+        $this->db->select('sd.*, pm.name as product_name, pm.product_code,
+            sd.qty as sold_qty,
+            COALESCE((SELECT SUM(srd.qty) FROM sales_return_details srd 
+                      JOIN sales_return_master srm ON srd.return_id = srm.return_id 
+                      WHERE srm.sales_id = sd.sales_id AND srd.product_id = sd.product_id), 0) as returned_qty');
+        $this->db->from('sales_details sd');
+        $this->db->join('product_master pm', 'sd.product_id = pm.product_id', 'left');
+        $this->db->where('sd.sales_id', $sales_id);
+        $query = $this->db->get();
+        $items = $query->result_array();
+
+        // Calculate available quantity for return
+        $returnable = [];
+        foreach ($items as $item) {
+            $available = $item['sold_qty'] - $item['returned_qty'];
+            if ($available > 0) {
+                $item['available_qty'] = $available;
+                $returnable[] = $item;
+            }
+        }
+
+        return $returnable;
+    }
+
 }

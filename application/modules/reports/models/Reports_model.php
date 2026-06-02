@@ -49,14 +49,105 @@ class Reports_model extends CI_Model {
     /**
      * Get Stock Valuation Data
      */
+
+    /**
+     * Server-side DataTables for Stock Valuation Report
+     * Expects DataTables POST parameters.
+     */
+    public function get_stock_valuation_datatables($postData) {
+        // Columns mapping (index => db column)
+        $columns = [
+            0 => null, // # column (virtual)
+            1 => 'p.product_code',
+            2 => 'p.product_name',
+            3 => 'c.category_name',
+            4 => 'b.brand_name',
+            5 => 'p.qty',
+            6 => 'p.purchase_price',
+            7 => '(p.qty * p.purchase_price)'
+        ];
+
+        // Total records
+        $this->db->select('COUNT(*) as count');
+        $this->db->from('product_master p');
+        $this->db->join('categories c', 'p.category_id = c.category_id', 'left');
+        $this->db->join('brands b', 'p.brand_id = b.brand_id', 'left');
+        $totalResult = $this->db->get()->row();
+        $recordsTotal = $totalResult->count;
+
+        // Apply filtering
+        if (!empty($postData['search']['value'])) {
+            $search = $postData['search']['value'];
+            $this->db->group_start();
+            $this->db->like('p.product_code', $search);
+            $this->db->or_like('p.product_name', $search);
+            $this->db->or_like('c.category_name', $search);
+            $this->db->or_like('b.brand_name', $search);
+            $this->db->group_end();
+        }
+        // Records after filtering
+        $this->db->select('COUNT(*) as count');
+        $this->db->from('product_master p');
+        $this->db->join('categories c', 'p.category_id = c.category_id', 'left');
+        $this->db->join('brands b', 'p.brand_id = b.brand_id', 'left');
+        $recordsFiltered = $this->db->get()->row()->count;
+
+        // Ordering
+        if (isset($postData['order'][0]['column'])) {
+            $colIdx = (int)$postData['order'][0]['column'];
+            $dir = $postData['order'][0]['dir'] === 'asc' ? 'ASC' : 'DESC';
+            $orderCol = $columns[$colIdx] ?? 'p.product_code';
+            if ($orderCol) {
+                $this->db->order_by($orderCol, $dir);
+            }
+        }
+
+        // Pagination
+        $limit = intval($postData['length']);
+        $start = intval($postData['start']);
+        $this->db->limit($limit, $start);
+
+        // Fetch data
+        $this->db->select('p.product_code, p.product_name, c.category_name, b.brand_name, p.qty, p.purchase_price');
+        $this->db->from('product_master p');
+        $this->db->join('categories c', 'p.category_id = c.category_id', 'left');
+        $this->db->join('brands b', 'p.brand_id = b.brand_id', 'left');
+        $data = $this->db->get()->result_array();
+
+        // Prepare rows for DataTables
+        $rows = [];
+        $rowNumber = $start + 1;
+        foreach ($data as $row) {
+            $totalValue = $row['qty'] * $row['purchase_price'];
+            $rows[] = [
+                $rowNumber++,
+                $row['product_code'],
+                $row['product_name'],
+                $row['category_name'],
+                $row['brand_name'],
+                $row['qty'],
+                number_format($row['purchase_price'], 2),
+                number_format($totalValue, 2)
+            ];
+        }
+
+        return [
+            'draw' => intval($postData['draw']),
+            'recordsTotal' => $recordsTotal,
+            'recordsFiltered' => $recordsFiltered,
+            'data' => $rows
+        ];
+    }
+
     public function get_stock_valuation_report() {
-        $this->db->select('p.*, c.category_name, b.brand_name, (p.qty * p.purchase_price) as valuation');
+        $this->db->select('p.*, p.name as product_name, c.category_name, b.brand_name, (p.qty * p.purchase_price) as valuation');
         $this->db->from('product_master p');
         $this->db->join('categories c', 'p.category_id = c.category_id', 'left');
         $this->db->join('brands b', 'p.brand_id = b.brand_id', 'left');
         $this->db->order_by('valuation', 'DESC');
         return $this->db->get()->result_array();
     }
+
 
     /**
      * Get Summary Statistics for Dashboard

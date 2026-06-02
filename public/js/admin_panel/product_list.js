@@ -212,56 +212,60 @@ const page = {
   },
   dataTable: function () {
     table = $("#product_list").DataTable({
-      dom: '<"row align-items-center mb-2"<"col-sm-12 col-md-6"B><"col-sm-12 col-md-6 text-end"f>><"dt-scroll-body-wrapper"rt><"dt-fixed-footer row align-items-center pt-3 mt-1 border-top"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7 d-flex align-items-center justify-content-end gap-2"pl>>',
+      dom: 'Brt<"cat-dt-footer"<"cat-dt-info"i><"cat-dt-controls"<"cat-dt-length"l><"cat-dt-paging"p>>>',
       buttons: [
         {
           extend: "csv",
-          text: '<i class="ti ti-file-type-csv"></i>',
-          init: function (api, node, config) {
-            $(node).attr("title", "Download CSV");
-          },
-          customize: function (csv) {
-            var lines = csv.split('\n');
-            var modifiedLines = lines.map(function (line) {
-              var values = line.split(',');
-              // values.splice(7, 1);
-              return values.join(',');
-            });
-            return modifiedLines.join('\n');
-          },
-          filename: file_name
+          className: "d-none",
+          filename: file_name,
+          exportOptions: {
+            columns: [2, 3, 4, 5, 6] // Export barcode, product name, description, price, stock, status
+          }
         },
-
         {
           extend: "pdf",
-          text: '<i class="ti ti-file-type-pdf"></i>',
-          init: function (api, node, config) {
-            $(node).attr("title", "Download Pdf");
-          },
+          className: "d-none",
+          title: pdf_title,
           filename: file_name,
+          exportOptions: {
+            columns: [2, 3, 4, 5, 6]
+          },
           customize: function (doc) {
             doc.pageMargins = [15, 15, 15, 15];
-            doc.content[0].text = pdf_title;
-            doc.content[0].color = theme_color;
-            doc.content[1].table.widths = ["50%", "50%"];
-            doc.content[1].table.body[0].forEach(function (cell) {
-              cell.fillColor = theme_color;
-            });
-            doc.content[1].table.body.forEach(function (row, index) {
-              // row.splice(7, 1);
-              row.forEach(function (cell) {
-                // Set alignment for each cell
-                cell.alignment = "center"; // Change to 'left' or 'right' as needed
-              });
-            });
-          },
-        },
+            doc.styles.tableHeader.fillColor = '#f8f7fa';
+            doc.styles.tableHeader.color = '#333333';
+          }
+        }
       ],
+      language: {
+        emptyTable:   '<div class="cat-empty">No products found.</div>',
+        zeroRecords:  '<div class="cat-empty">No records match your search.</div>',
+        info:         'Showing _START_ to _END_ of _TOTAL_ entries',
+        infoEmpty:    'Showing 0 to 0 of 0 entries',
+        infoFiltered: '(filtered from _MAX_ total)',
+        lengthMenu:   'Show _MENU_ entries',
+        paginate: {
+          first:    '<i class="ti ti-chevrons-left"></i>',
+          last:     '<i class="ti ti-chevrons-right"></i>',
+          next:     '<i class="ti ti-chevron-right"></i>',
+          previous: '<i class="ti ti-chevron-left"></i>'
+        }
+      },
       searching: true,
-      // columnDefs: [{ sortable: false, targets: 7 }],
+      autoWidth: false,
       pagingType: "full_numbers",
+      initComplete: function () {
+        this.api().columns.adjust();
+      }
+    });
 
+    // Custom Export Buttons Integration
+    $('#export-csv').on('click', function () {
+        table.button('.buttons-csv').trigger();
+    });
 
+    $('#export-pdf').on('click', function () {
+        table.button('.buttons-pdf').trigger();
     });
     $('#search-filter-input').on('keyup', function () {
       table.search(this.value).draw();

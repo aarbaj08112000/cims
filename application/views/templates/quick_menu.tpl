@@ -2,7 +2,7 @@
    <div class="new_sitemap_items">
       <div class="headingfix">
          <div class="heading" id="top_heading_fix">
-            <div class="d-flex align-items-center justify-content-between px-4 pt-4">
+            <div class="d-flex align-items-center justify-content-between px-4 pt-4 mt-4">
                 <div class="d-flex align-items-center">
                     <div class="avatar avatar-sm me-3">
                         <span class="avatar-initial rounded bg-label-secondary"><i class="ti ti-layout-grid ti-md text-dark"></i></span>

@@ -96,7 +96,7 @@ const reportsPage = {
             $(selector).DataTable().destroy();
         }
 
-        $(selector).DataTable({
+        let table = $(selector).DataTable({
             dom: '<"row align-items-center mb-2"<"col-sm-12 col-md-6"B><"col-sm-12 col-md-6 text-end"f>><"dt-scroll-body-wrapper"<"col-sm-12"rt>><"dt-fixed-footer row align-items-center pt-3 mt-1 border-top"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7 d-flex align-items-center justify-content-end gap-2"pl>>',
             buttons: [
                 {
@@ -120,6 +120,12 @@ const reportsPage = {
             searching: true,
             order: [],
             pagingType: "full_numbers",
+            autoWidth: false
         });
+
+        // Ensure perfect alignment of headers and columns after rendering
+        setTimeout(function() {
+            table.columns.adjust().draw();
+        }, 150);
     }
 }

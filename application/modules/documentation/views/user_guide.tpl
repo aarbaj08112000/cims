@@ -13,16 +13,17 @@
                         <nav id="docs-nav" class="nav flex-column gap-2">
                             <a class="nav-link p-2 bg-light rounded text-primary" href="documentation#dashboard">1. Dashboard</a>
                             <a class="nav-link p-2" href="documentation#product">2. Product Management</a>
-                            <a class="nav-link p-2" href="documentation#supplier">3. Supplier Management</a>
-                            <a class="nav-link p-2" href="documentation#customer">4. Customer Management</a>
-                            <a class="nav-link p-2" href="documentation#purchase">5. Purchase Management</a>
-                            <a class="nav-link p-2" href="documentation#sales">6. Sales Management</a>
-                            <a class="nav-link p-2" href="documentation#pos">7. POS Billing</a>
-                            <a class="nav-link p-2" href="documentation#stock">8. Stock Management</a>
-                            <a class="nav-link p-2" href="documentation#reports">9. Reports</a>
-                            <a class="nav-link p-2" href="documentation#users">10. User Management</a>
-                            <a class="nav-link p-2" href="documentation#company">11. Company Details</a>
-                            <a class="nav-link p-2" href="documentation#settings">12. Settings</a>
+                            <a class="nav-link p-2" href="documentation#workflow">3. Workflow Execution Diagram</a>
+                            <a class="nav-link p-2" href="documentation#supplier">4. Supplier Management</a>
+                            <a class="nav-link p-2" href="documentation#customer">5. Customer Management</a>
+                            <a class="nav-link p-2" href="documentation#purchase">6. Purchase Management</a>
+                            <a class="nav-link p-2" href="documentation#sales">7. Sales Management</a>
+                            <a class="nav-link p-2" href="documentation#pos">8. POS Billing</a>
+                            <a class="nav-link p-2" href="documentation#stock">9. Stock Management</a>
+                            <a class="nav-link p-2" href="documentation#reports">10. Reports</a>
+                            <a class="nav-link p-2" href="documentation#users">11. User Management</a>
+                            <a class="nav-link p-2" href="documentation#company">12. Company Details</a>
+                            <a class="nav-link p-2" href="documentation#settings">13. Settings</a>
                         </nav>
                     </div>
                 </div>
@@ -69,9 +70,31 @@
                         </div>
                     </section>
 
+                    <!-- Workflow Execution Diagram Section -->
+                    <section id="workflow" class="mb-5 py-3">
+                        <h2 class="h4 border-bottom pb-2 mb-4 text-primary">3. Workflow Execution Diagram</h2>
+                        <div class="mb-3">
+                            <p><strong>Purpose:</strong> Visual representation of the complete CIMS operational workflow.</p>
+                            <div class="card bg-light border-0">
+                                <div class="card-body text-center p-4">
+                                    <div class="mermaid">
+                                    graph TD
+                                        A[Supplier] -->|Purchase Order| B(Inventory / Stock)
+                                        B -->|Stock Management| C{Warehouse}
+                                        C -->|Sale / POS| D[Customer]
+                                        C -.->|Purchase Return| A
+                                        D -.->|Sales Return| C
+                                        B --> E[Reports & Analytics]
+                                        D --> E
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
                     <!-- Supplier Management Section -->
                     <section id="supplier" class="mb-5 py-3">
-                        <h2 class="h4 border-bottom pb-2 mb-4 text-primary">3. Supplier Management</h2>
+                        <h2 class="h4 border-bottom pb-2 mb-4 text-primary">4. Supplier Management</h2>
                         <div class="mb-3">
                             <p><strong>Purpose:</strong> Managing vendor relationships and procurement contacts.</p>
                             <ul>
@@ -83,7 +106,7 @@
 
                     <!-- Customer Management Section -->
                     <section id="customer" class="mb-5 py-3">
-                        <h2 class="h4 border-bottom pb-2 mb-4 text-primary">4. Customer Management</h2>
+                        <h2 class="h4 border-bottom pb-2 mb-4 text-primary">5. Customer Management</h2>
                         <div class="mb-3">
                             <p><strong>Purpose:</strong> CRM to track shopper interaction and history.</p>
                             <ul>
@@ -95,7 +118,7 @@
 
                     <!-- Purchase Management Section -->
                     <section id="purchase" class="mb-5 py-3">
-                        <h2 class="h4 border-bottom pb-2 mb-4 text-primary">5. Purchase Management</h2>
+                        <h2 class="h4 border-bottom pb-2 mb-4 text-primary">6. Purchase Management</h2>
                         <div class="mb-3">
                             <p><strong>Purpose:</strong> Handling stock intake and vendor returns.</p>
                             <ul>
@@ -108,7 +131,7 @@
 
                     <!-- Sales Management Section -->
                     <section id="sales" class="mb-5 py-3">
-                        <h2 class="h4 border-bottom pb-2 mb-4 text-primary">6. Sales Management</h2>
+                        <h2 class="h4 border-bottom pb-2 mb-4 text-primary">7. Sales Management</h2>
                         <div class="mb-3">
                             <p><strong>Purpose:</strong> Full cycle management of standard customer orders.</p>
                             <ul>
@@ -121,7 +144,7 @@
 
                     <!-- POS Billing Section -->
                     <section id="pos" class="mb-5 py-3">
-                        <h2 class="h4 border-bottom pb-2 mb-4 text-primary">7. POS Billing</h2>
+                        <h2 class="h4 border-bottom pb-2 mb-4 text-primary">8. POS Billing</h2>
                         <div class="mb-4">
                             <p><strong>Purpose:</strong> High-speed retail checkout with scanning support.</p>
                             <div class="alert alert-success d-flex align-items-center mb-3">
@@ -137,7 +160,7 @@
 
                     <!-- Stock Management Section -->
                     <section id="stock" class="mb-5 py-3">
-                        <h2 class="h4 border-bottom pb-2 mb-4 text-primary">8. Stock Management</h2>
+                        <h2 class="h4 border-bottom pb-2 mb-4 text-primary">9. Stock Management</h2>
                         <div class="mb-3">
                             <p><strong>Purpose:</strong> Real-time inventory monitoring and audit.</p>
                             <ul>
@@ -149,7 +172,7 @@
 
                     <!-- Reports Section -->
                     <section id="reports" class="mb-5 py-3">
-                        <h2 class="h4 border-bottom pb-2 mb-4 text-primary">9. Reports</h2>
+                        <h2 class="h4 border-bottom pb-2 mb-4 text-primary">10. Reports</h2>
                         <div class="mb-3">
                             <p><strong>Purpose:</strong> Business intelligence and tax audits.</p>
                             <table class="table table-sm table-bordered mb-4">
@@ -170,7 +193,7 @@
 
                     <!-- User Management Section -->
                     <section id="users" class="mb-5 py-3">
-                        <h2 class="h4 border-bottom pb-2 mb-4 text-primary">10. User Management</h2>
+                        <h2 class="h4 border-bottom pb-2 mb-4 text-primary">11. User Management</h2>
                         <div class="mb-3">
                             <p><strong>Purpose:</strong> Secure access and permissions management.</p>
                             <ul>
@@ -182,7 +205,7 @@
 
                     <!-- Company Details Section -->
                     <section id="company" class="mb-5 py-3">
-                        <h2 class="h4 border-bottom pb-2 mb-4 text-primary">11. Company Details</h2>
+                        <h2 class="h4 border-bottom pb-2 mb-4 text-primary">12. Company Details</h2>
                         <div class="mb-3">
                             <p><strong>Purpose:</strong> Profile setup for your business identity.</p>
                             <ul>
@@ -194,7 +217,7 @@
 
                     <!-- Settings Section -->
                     <section id="settings" class="mb-5 py-3">
-                        <h2 class="h4 border-bottom pb-2 mb-4 text-primary">12. Settings</h2>
+                        <h2 class="h4 border-bottom pb-2 mb-4 text-primary">13. Settings</h2>
                         <div class="mb-3">
                             <p><strong>Purpose:</strong> Core system configuration and tax logic.</p>
                             <ul>
@@ -235,3 +258,6 @@ section p {
     line-height: 1.6;
 }
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:true});</script>

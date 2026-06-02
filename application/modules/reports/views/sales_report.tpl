@@ -1,88 +1,85 @@
+<link rel="stylesheet" href="<%$base_url%>public/css/category_ui.css" />
 <div class="content-wrapper">
   <div class="container-xxl flex-grow-1 container-p-y">
-    <nav aria-label="breadcrumb">
-      <div class="sub-header-left pull-left breadcrumb">
-        <h1>
-          Home
-          <a hijacked="yes" href="javascript:void(0)" class="backlisting-link">
-            <i class="ti ti-chevrons-right"></i>
-            <em>Reports</em>
-          </a>
-        </h1>
-        <br>
-        <span>Sales Report</span>
+    <!-- Page Header -->
+    <div class="cat-page-header">
+      <div class="cat-page-header-left">
+        <div class="cat-page-icon"><i class="ti ti-report-money"></i></div>
+        <div>
+          <h1 class="cat-page-title">Sales Report</h1>
+          <nav class="cat-breadcrumb">
+            <a href="<%$base_url%>">Home</a>
+            <i class="ti ti-chevron-right"></i>
+            <span>Reports</span>
+            <i class="ti ti-chevron-right"></i>
+            <span>Sales Report</span>
+          </nav>
+        </div>
       </div>
-    </nav>
+      <form method="POST" action="<%$base_url%>sales_report" class="cat-page-header-right m-0" id="filter-form" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+        <div class="cat-search-box">
+          <i class="ti ti-search"></i>
+          <input type="text" id="search-filter-input" placeholder="Search report..." />
+        </div>
 
-    <!-- Filter Card -->
-    <div class="card bg-white border-0 shadow-sm mb-4">
-      <div class="card-body">
-        <form method="GET" action="<%$base_url%>sales_report" class="row g-3">
-          <div class="col-md-4">
-            <label class="form-label">From Date</label>
-            <input type="date" name="from_date" class="form-control" value="<%$from_date%>" required>
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">To Date</label>
-            <input type="date" name="to_date" class="form-control" value="<%$to_date%>" required>
-          </div>
-          <div class="col-md-4 d-flex align-items-end">
-            <button type="submit" class="btn btn-primary me-2">Filter</button>
-            <a href="<%$base_url%>sales_report" class="btn btn-secondary">Reset</a>
-          </div>
-        </form>
-      </div>
+        <div class="d-flex align-items-center gap-2">
+            <input type="date" name="from_date" class="form-control form-control-sm" value="<%$from_date%>" required style="width: auto; height: 38px;" title="From Date" />
+            <span class="text-muted">to</span>
+            <input type="date" name="to_date" class="form-control form-control-sm" value="<%$to_date%>" required style="width: auto; height: 38px;" title="To Date" />
+            <button type="submit" class="cat-btn cat-btn-primary" style="padding: 0 12px;">Filter</button>
+        </div>
+
+        <button type="button" id="export-csv" class="cat-btn cat-btn-outline" title="Export CSV">
+          <i class="ti ti-file-type-csv"></i> Export CSV
+        </button>
+        <button type="button" id="export-pdf" class="cat-btn cat-btn-outline-red" title="Export PDF">
+          <i class="ti ti-file-type-pdf"></i> Export PDF
+        </button>
+        <button type="button" class="cat-btn cat-btn-primary" onclick="window.location.href='<%$base_url%>sales_report'" title="Refresh">
+          <i class="ti ti-refresh"></i> Refresh
+        </button>
+      </form>
     </div>
 
-    <div class="dt-top-btn d-grid gap-2 d-md-flex justify-content-md-end mb-5">
-      <input type="text" id="search-filter-input" placeholder="Search Report..." class="form-control search-filter-input me-2">
-      <button class="btn btn-success me-2" onclick="exportTableToCSV('salesReportTable', 'sales_report.csv')">
-        <i class="ti ti-file-type-csv me-1"></i> Export CSV
-      </button>
-      <button class="btn btn-danger" onclick="exportTableToPDF()">
-        <i class="ti ti-file-type-pdf me-1"></i> Export PDF
-      </button>
-    </div>
-
-    <!-- Sales Report Card -->
-    <div class="card bg-white border-0 shadow-sm">
-      <div class="card-header bg-white border-bottom py-3">
-        <h5 class="mb-0">Sales History (<%$from_date|date_format:"%d %b %Y"%> to <%$to_date|date_format:"%d %b %Y"%>)</h5>
-      </div>
-      <div class="table-responsive text-nowrap p-3">
-        <table class="table table-hover table-striped" id="salesReportTable" width="100%">
-          <thead class="bg-light">
-            <tr>
-              <th>Bill No</th>
-              <th>Date</th>
-              <th>Customer Name</th>
-              <th>Contact</th>
-              <th>Payment Mode</th>
-              <th>Total Amount</th>
-            </tr>
-          </thead>
-          <tbody class="table-border-bottom-0">
-            <%assign var="grand_total" value=0%>
-            <%foreach from=$sales item=sale%>
-            <tr>
-              <td>#<%$sale.bill_no%></td>
-              <td><%$sale.sales_date|date_format:"%d %b %Y"%></td>
-              <td><%$sale.customer_name|default:'Walk-in Customer'%></td>
-              <td><%$sale.mobile_number|default:'-'%></td>
-              <td><%$sale.payment_mode|default:'Cash'%></td>
-              <td class="fw-bold"><%$settings.company_currency.value|default:'$'%><%$sale.total_amount|number_format:2%></td>
-            </tr>
-            <%assign var="grand_total" value=$grand_total+$sale.total_amount%>
-            <%/foreach%>
-          </tbody>
-          <tfoot class="bg-light">
-            <tr>
-              <th colspan="5" class="text-end">Grand Total:</th>
-              <th class="text-primary"><%$settings.company_currency.value|default:'$'%><%$grand_total|number_format:2%></th>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
+    <!-- Sales Report Table -->
+    <div class="cat-table-card">
+      <table class="table table-hover mb-0 w-100" id="salesReportTable">
+        <thead>
+          <tr>
+            <th style="white-space: nowrap;">Sr No</th>
+            <th>Date</th>
+            <th>Customer Name</th>
+            <th>Contact</th>
+            <th>Payment Mode</th>
+            <th class="text-end">Total Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%assign var="grand_total" value=0%>
+          <%assign var="sr_no" value=1%>
+          <%foreach from=$sales item=sale%>
+          <tr>
+            <td style="white-space: nowrap;"><%$sr_no++%></td>
+            <td style="white-space: nowrap;"><%$sale.sales_date|date_format:"%d %b %Y"%></td>
+            <td><%$sale.customer_name|default:'Walk-in Customer'%></td>
+            <td><%$sale.mobile_number|default:'-'%></td>
+            <td><%$sale.payment_mode|default:'Cash'%></td>
+            <td class="text-end fw-bold"><%$sale.total_amount|number_format:2%></td>
+          </tr>
+          <%assign var="grand_total" value=$grand_total+$sale.total_amount%>
+          <%/foreach%>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th style="border-top: 1px solid var(--cat-border);"></th>
+            <th style="border-top: 1px solid var(--cat-border);"></th>
+            <th style="border-top: 1px solid var(--cat-border);"></th>
+            <th style="border-top: 1px solid var(--cat-border);"></th>
+            <th class="text-end" style="border-top: 1px solid var(--cat-border);">Grand Total:</th>
+            <th class="text-primary text-end" style="font-size: 1.1rem; color: #c0392b !important; border-top: 1px solid var(--cat-border);"><%$grand_total|number_format:2%></th>
+          </tr>
+        </tfoot>
+      </table>
     </div>
   </div>
 </div>
@@ -90,12 +87,17 @@
 <script type="text/javascript">
   var base_url = <%$base_url|@json_encode%>;
 </script>
-<script src="<%$base_url%>public/js/admin_panel/generic_reports.js"></script>
-
+<script src="<%$base_url%>public/js/admin_panel/sales_report.js"></script>
 <style>
-@media print {
-  .btn, .dt-top-btn, form, .sidebar, .navbar, .breadcrumb { display: none !important; }
-  .card { border: none !important; box-shadow: none !important; }
-  .content-wrapper { padding: 0 !important; margin: 0 !important; }
-}
+  #salesReportTable tfoot th {
+    background-color: var(--cat-gray-50) !important;
+    font-family: var(--cat-font);
+    font-weight: 600;
+    padding: 16px !important;
+  }
+  @media print {
+    .cat-btn, .cat-search-box, .cat-page-header-right, form, .sidebar, .navbar, .cat-breadcrumb { display: none !important; }
+    .cat-table-card { border: none !important; box-shadow: none !important; }
+    .content-wrapper { padding: 0 !important; margin: 0 !important; }
+  }
 </style>

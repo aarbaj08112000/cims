@@ -1,38 +1,46 @@
-
+<link rel="stylesheet" href="<%$base_url%>public/css/category_ui.css" />
 <div class="content-wrapper">
   <!-- Content -->
-
   <div class="container-xxl flex-grow-1 container-p-y">
- 
-
-    <nav aria-label="breadcrumb">
-      <div class="sub-header-left pull-left breadcrumb">
-        <h1>
-          Home
-          <a hijacked="yes" href="javascript:void(0)" class="backlisting-link" title="Back to Issue Request Listing" >
-            <i class="ti ti-chevrons-right" ></i>
-            <em >Product</em></a>
-          </h1>
-          <br>
-          <span >Product Listing</span>
+    <!-- Page Header -->
+    <div class="cat-page-header">
+      <div class="cat-page-header-left">
+        <div class="cat-page-icon"><i class="ti ti-box"></i></div>
+        <div>
+          <h1 class="cat-page-title">Products</h1>
+          <nav class="cat-breadcrumb">
+            <a href="<%$base_url%>">Home</a>
+            <i class="ti ti-chevron-right"></i>
+            <span>Products</span>
+            <i class="ti ti-chevron-right"></i>
+            <span>Product Listing</span>
+          </nav>
         </div>
-      </nav>
-
-      <div class="dt-top-btn d-grid gap-2 d-md-flex justify-content-md-end mb-3">
-        <input type="text" id="search-filter-input" placeholder="Filter Search" class="form-control search-filter-input me-2">
-        <a href="add_product" ><button type="button" class="btn btn-seconday"  title="Add Product">
-        <i class="ti ti-plus"></i></button></a>
       </div>
-      
+      <div class="cat-page-header-right">
+        <div class="cat-search-box">
+          <i class="ti ti-search"></i>
+          <input type="text" id="search-filter-input" placeholder="Filter Search" />
+        </div>
+        <button type="button" id="export-csv" class="cat-btn cat-btn-outline" title="Export CSV">
+          <i class="ti ti-file-type-csv"></i> Export CSV
+        </button>
+        <button type="button" id="export-pdf" class="cat-btn cat-btn-outline-red" title="Export PDF">
+          <i class="ti ti-file-type-pdf"></i> Export PDF
+        </button>
+        <a href="add_product" class="cat-btn cat-btn-primary text-white" title="Add Product">
+          <i class="ti ti-plus"></i> Add Product
+        </a>
+      </div>
+    </div>
 
-
-      <!-- Main content -->
-      <div class="card p-0 mt-0 w-100">
-        <table width="100%" border="1" cellspacing="0" cellpadding="0" class="table table-striped text-nowrap" border-color="#e1e1e1" id="product_list">
-              <thead>
-                 <tr>
-                    <!-- <th>Sr No</th> -->
-                    <th>Iamge</th>
+    <!-- Main content -->
+    <div class="cat-table-card">
+      <table class="table table-hover mb-0 w-100" id="product_list">
+        <thead class="bg-light">
+          <tr>
+            <th>Sr No</th>
+                    <th>Image</th>
                     <th>Barcode</th>
                     <th>Product Name</th>
                     <th>Description</th>
@@ -47,7 +55,7 @@
                       <%assign var='i' value= 1 %>
                       <%foreach from=$products item=u %>
                      <tr>
-                        <!-- <td><%$i %></td> -->
+                        <td><%$i%></td>
                        
                         <td>
                            <%if $u['image']%>
@@ -78,10 +86,13 @@
 
                         <td><%$u['price'] %></td>
                         <td><%$u['qty'] %></td>
-                        <td style="font-weight: bold; 
-                        <%if $u['status'] == 'Active' %>color: green;<%else %>color: red;<%/if %>">
-                        <%$u['status'] %>
-                    </td>
+                        <td>
+                          <%if $u['status'] == 'Active' %>
+                            <span class="cat-badge cat-badge-active">Active</span>
+                          <%else%>
+                            <span class="cat-badge cat-badge-inactive">Inactive</span>
+                          <%/if%>
+                        </td>
                         <td class="text-center">
                             <div class="dropdown">
                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">

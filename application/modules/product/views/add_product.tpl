@@ -19,47 +19,37 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 </style>
-    <div class="content-wrapper">
+<link rel="stylesheet" href="<%$base_url%>public/css/category_ui.css" />
+<div class="content-wrapper">
   <!-- Content -->
-
   <div class="container-xxl flex-grow-1 container-p-y">
- 
 
-    <nav aria-label="breadcrumb">
-      <div class="sub-header-left pull-left breadcrumb">
-        <h1>
-          Home
-          <a hijacked="yes" href="javascript:void(0)" class="backlisting-link" title="Back to Issue Request Listing" >
-            <i class="ti ti-chevrons-right" ></i>
-            <em >Product</em></a>
-          </h1>
-          <br>
-          <span ><%if isset($products) %>Update Product<%else%>Add Product<%/if%></span>
+    <!-- Page Header -->
+    <div class="cat-page-header">
+      <div class="cat-page-header-left">
+        <div class="cat-page-icon"><i class="ti ti-box"></i></div>
+        <div>
+          <h1 class="cat-page-title"><%if isset($products)%>Update Product<%else%>Add Product<%/if%></h1>
+          <nav class="cat-breadcrumb">
+            <a href="<%$base_url%>">Home</a>
+            <i class="ti ti-chevron-right"></i>
+            <span>Product</span>
+            <i class="ti ti-chevron-right"></i>
+            <span><%if isset($products)%>Update Product<%else%>Add Product<%/if%></span>
+          </nav>
         </div>
-      </nav>
-        <div class="dt-top-btn d-grid gap-2 d-md-flex justify-content-md-end mb-5">
-         <a href="<%base_url('product')%>"  class="btn btn-seconday" title="Back To College/School Master Listing">
-            <i class="ti ti-arrow-left"></i>
-        </a>
-        </div>
-      <div class="dt-top-btn d-grid gap-2 d-md-flex justify-content-md-end mb-5">
-        <%* <button class="btn btn-seconday" type="button" id="downloadCSVBtn" title="Download CSV"><i class="ti ti-file-type-csv"></i></button>
-        <button class="btn btn-seconday" type="button" id="downloadPDFBtn" title="Download PDF"><i class="ti ti-file-type-pdf"></i></button>
-        <button class="btn btn-seconday filter-icon" type="button"><i class="ti ti-filter" ></i></i></button>
-        <button class="btn btn-seconday" type="button"><i class="ti ti-refresh reset-filter"></i></button> *%>
-        
-       <!-- <button type="button" class="btn btn-seconday" data-bs-toggle="modal" data-bs-target="#addPromo" title="Add process">
-       <i class="ti ti-plus"></i>
-        </button> -->
-       
-
       </div>
-     
+      <div class="cat-page-header-right">
+        <a href="<%base_url('product')%>" class="cat-btn cat-btn-outline" title="Back to Product List">
+          <i class="ti ti-arrow-left"></i> Back
+        </a>
+      </div>
+    </div>
 
-      <!-- Main content -->
-      <div class="card p-0 mt-4 w-100">
-        <div class="p-3">
-          <form id="product_form" class="container mt-4" action="javascript:void(0)" method="POST" enctype="multipart/form-data">
+    <!-- Main content -->
+    <div class="card bg-white border-0 shadow-sm mb-4 w-100">
+      <div class="card-body">
+        <form id="product_form" action="javascript:void(0)" method="POST" enctype="multipart/form-data">
            <div class="row">
            <!-- Row 1 -->
             <%if isset($products)%>

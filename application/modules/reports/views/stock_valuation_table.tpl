@@ -1,8 +1,8 @@
-<table class="table table-striped table-hover" id="stockReportTable">
+<table class="table table-striped table-hover" id="stockReportTable" style="width: 100%">
     <thead>
         <tr>
             <th>Product</th>
-            <th>Category</th>
+            <th class="text-center">Category</th>
             <th class="text-center">Current Qty</th>
             <th class="text-end">Avg Purchase Price</th>
             <th class="text-end">Total Valuation</th>
@@ -18,12 +18,23 @@
                         <span class="d-block fw-bold text-primary"><%$row['name']%></span>
                         <small class="text-muted"><%$row['product_code']%></small>
                     </td>
-                    <td><span class="badge bg-label-secondary"><%$row['category_name']|default:'N/A'%></span></td>
+                    <td class="text-center">
+                        <span class="badge bg-label-secondary d-inline-flex align-items-center justify-content-center">
+                            <i class="ti ti-folder me-1"></i>
+                            <%$row['category_name']|default:'N/A'%>
+                        </span>
+                    </td>
                     <td class="text-center">
                         <%if $row['qty'] <= $row['alert_qty']%>
-                            <span class="badge bg-label-danger"><i class="ti ti-alert-triangle me-1"></i><%$row['qty']%> <%$row['unit']%></span>
+                            <span class="badge bg-label-danger d-inline-flex align-items-center justify-content-center">
+                                <i class="ti ti-alert-triangle me-1"></i>
+                                <%$row['qty']%> <%$row['unit']%>
+                            </span>
                         <%else%>
-                            <span class="badge bg-label-success"><%$row['qty']%> <%$row['unit']%></span>
+                            <span class="badge bg-label-success d-inline-flex align-items-center justify-content-center">
+                                <i class="ti ti-box me-1"></i>
+                                <%$row['qty']%> <%$row['unit']%>
+                            </span>
                         <%/if%>
                     </td>
                     <td class="text-end fw-medium"><%$row['purchase_price']|number_format:2%></td>

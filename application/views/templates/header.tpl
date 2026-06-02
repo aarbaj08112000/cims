@@ -161,6 +161,7 @@ div:where(.swal2-icon) .swal2-icon-content {
                 </a>
              </li>
 
+             <%*
              <!-- Customer Management -->
              <li class="menu-item <%if strpos($current_uri, 'customer') !== false%>active<%/if%>">
                 <a href="customer" class="menu-link">
@@ -168,6 +169,7 @@ div:where(.swal2-icon) .swal2-icon-content {
                    <div data-i18n="Customer Management">Customer Management</div>
                 </a>
              </li>
+             *%>
 
              <!-- Purchase Management -->
              <li class="menu-item <%if strpos($current_uri, 'purchase') !== false%>active open<%/if%>">

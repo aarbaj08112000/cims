@@ -1,5 +1,5 @@
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
     :root {
         --dash-primary: #7367f0;
@@ -8,133 +8,155 @@
         --dash-warning: #ff9f43;
         --dash-info: #00cfe8;
         --dash-secondary: #82868b;
-        
-        /* Gradients */
-        --grad-blue: linear-gradient(135deg, #7367f0 0%, #ce9ffc 100%);
-        --grad-green: linear-gradient(135deg, #28c76f 0%, #81fbb8 100%);
-        --grad-orange: linear-gradient(135deg, #ff9f43 0%, #feb019 100%);
-        --grad-red: linear-gradient(135deg, #ea5455 0%, #ff8a71 100%);
-        --grad-cyan: linear-gradient(135deg, #00cfe8 0%, #a2f9ff 100%);
-        --grad-indigo: linear-gradient(135deg, #1e2ad2 0%, #838aec 100%);
+        --dash-bg: #f8f7fa;
+        --card-shadow: 0 10px 30px 0 rgba(115, 103, 240, 0.08);
+        --card-shadow-hover: 0 15px 45px 0 rgba(115, 103, 240, 0.15);
     }
 
     body {
-        font-family: 'Inter', sans-serif !important;
-        background-color: #f8f7fa;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        background-color: var(--dash-bg);
+        color: #444050;
     }
 
     .dashboard-wrapper {
-        padding: 1.5rem;
+        padding: 2rem;
     }
 
     .header-section {
-        margin-bottom: 2rem;
+        margin-bottom: 2.5rem;
     }
 
     .header-section h2 {
-        font-weight: 700;
-        color: #444050;
-        letter-spacing: -0.02em;
+        font-weight: 800;
+        color: #2f2b3d;
+        letter-spacing: -0.04em;
+        margin-bottom: 0.25rem;
+    }
+
+    .header-section p {
+        font-size: 1.1rem;
+        opacity: 0.8;
     }
 
     /* Metric Cards Redesign */
     .metric-card-premium {
         background: #fff;
-        border-radius: 16px;
-        padding: 1.5rem;
-        border: 1px solid rgba(0,0,0,0.05);
-        box-shadow: 0 4px 24px 0 rgba(34, 41, 47, 0.05);
-        transition: all 0.3s ease;
+        border-radius: 20px;
+        padding: 1.75rem;
+        border: 1px solid rgba(115, 103, 240, 0.05);
+        box-shadow: var(--card-shadow);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         position: relative;
         overflow: hidden;
         height: 100%;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: space-between;
     }
 
     .metric-card-premium:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 32px 0 rgba(34, 41, 47, 0.1);
+        transform: translateY(-8px);
+        box-shadow: var(--card-shadow-hover);
+        border-color: rgba(115, 103, 240, 0.2);
     }
 
     .metric-icon-box {
-        width: 48px;
-        height: 48px;
-        border-radius: 12px;
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-bottom: 1rem;
-        font-size: 1.5rem;
+        margin-bottom: 1.25rem;
+        font-size: 1.75rem;
+        transition: transform 0.3s ease;
     }
 
-    .icon-blue { background: rgba(115, 103, 240, 0.12); color: #7367f0; }
-    .icon-green { background: rgba(40, 199, 111, 0.12); color: #28c76f; }
-    .icon-orange { background: rgba(255, 159, 67, 0.12); color: #ff9f43; }
-    .icon-red { background: rgba(234, 84, 85, 0.12); color: #ea5455; }
-    .icon-cyan { background: rgba(0, 207, 232, 0.12); color: #00cfe8; }
-    .icon-indigo { background: rgba(30, 42, 210, 0.12); color: #1e2ad2; }
+    .metric-card-premium:hover .metric-icon-box {
+        transform: scale(1.1) rotate(5deg);
+    }
+
+    .icon-blue { background: linear-gradient(135deg, rgba(115, 103, 240, 0.15), rgba(115, 103, 240, 0.05)); color: #7367f0; }
+    .icon-green { background: linear-gradient(135deg, rgba(40, 199, 111, 0.15), rgba(40, 199, 111, 0.05)); color: #28c76f; }
+    .icon-orange { background: linear-gradient(135deg, rgba(255, 159, 67, 0.15), rgba(255, 159, 67, 0.05)); color: #ff9f43; }
+    .icon-red { background: linear-gradient(135deg, rgba(234, 84, 85, 0.15), rgba(234, 84, 85, 0.05)); color: #ea5455; }
+    .icon-cyan { background: linear-gradient(135deg, rgba(0, 207, 232, 0.15), rgba(0, 207, 232, 0.05)); color: #00cfe8; }
+    .icon-indigo { background: linear-gradient(135deg, rgba(30, 42, 210, 0.15), rgba(30, 42, 210, 0.05)); color: #1e2ad2; }
 
     .metric-info h3 {
-        font-size: 1.75rem;
+        font-size: 2rem;
         font-weight: 800;
-        color: #444050;
+        color: #2f2b3d;
         margin: 0;
+        letter-spacing: -0.02em;
     }
 
     .metric-info span {
-        font-size: 0.875rem;
+        font-size: 0.95rem;
         color: #82868b;
-        font-weight: 500;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
     }
 
     /* Section Cards */
     .dashboard-card {
         background: #fff;
-        border-radius: 16px;
-        border: 1px solid rgba(0,0,0,0.05);
-        box-shadow: 0 4px 24px 0 rgba(34, 41, 47, 0.05);
+        border-radius: 24px;
+        border: 1px solid rgba(115, 103, 240, 0.05);
+        box-shadow: var(--card-shadow);
         height: 100%;
         overflow: hidden;
+        transition: box-shadow 0.3s ease;
+    }
+
+    .dashboard-card:hover {
+        box-shadow: var(--card-shadow-hover);
     }
 
     .card-title-box {
-        padding: 1.5rem;
+        padding: 1.75rem 2rem;
         border-bottom: 1px solid #f1f1f2;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        background: linear-gradient(to right, #ffffff, #fdfdff);
     }
 
     .card-title-box h5 {
         margin: 0;
         font-weight: 700;
-        color: #444050;
-        font-size: 1.1rem;
+        color: #2f2b3d;
+        font-size: 1.25rem;
     }
 
     .card-body-content {
-        padding: 1.5rem;
+        padding: 2rem;
     }
 
     /* Tiny Progress Bars/Stats */
     .mini-stat-item {
-        margin-bottom: 1.25rem;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background: #fdfdff;
+        border-radius: 12px;
+        border: 1px solid #f1f1f2;
     }
 
     .mini-stat-header {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 0.5rem;
-        font-size: 0.85rem;
-        font-weight: 600;
+        margin-bottom: 0.75rem;
+        font-size: 0.9rem;
+        font-weight: 700;
         color: #5d596c;
     }
 
     .progress-tiny {
-        height: 6px;
+        height: 8px;
         border-radius: 10px;
+        background-color: #f1f1f2;
     }
 
     /* Activity List */
@@ -147,36 +169,106 @@
     .activity-item {
         display: flex;
         align-items: center;
-        padding: 0.85rem 0;
+        padding: 1.15rem 0;
         border-bottom: 1px solid #f8f7fa;
+        transition: transform 0.2s ease;
+    }
+
+    .activity-item:hover {
+        transform: translateX(5px);
     }
 
     .activity-item:last-child { border-bottom: none; }
 
     .activity-point {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        margin-right: 1rem;
+        width: 12px;
+        height: 12px;
+        border-radius: 4px;
+        margin-right: 1.25rem;
         flex-shrink: 0;
+        box-shadow: 0 0 10px currentColor;
     }
 
     .activity-text {
-        font-size: 0.875rem;
+        font-size: 0.95rem;
         color: #5d596c;
+        font-weight: 500;
     }
 
     .activity-time {
         margin-left: auto;
-        font-size: 0.75rem;
+        font-size: 0.8rem;
         color: #b9b9c3;
+        font-weight: 600;
     }
 
     /* Badge Label Styling */
-    .badge-label-purple { background: rgba(115, 103, 240, 0.12); color: #7367f0; }
-    .badge-label-success { background: rgba(40, 199, 111, 0.12); color: #28c76f; }
-    .badge-label-danger { background: rgba(234, 84, 85, 0.12); color: #ea5455; }
-    .badge-label-warning { background: rgba(255, 159, 67, 0.12); color: #ff9f43; }
+    .badge-label-purple { background: rgba(115, 103, 240, 0.12); color: #7367f0; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 700; }
+    .badge-label-success { background: rgba(40, 199, 111, 0.12); color: #28c76f; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 700; }
+    .badge-label-danger { background: rgba(234, 84, 85, 0.12); color: #ea5455; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 700; }
+    .badge-label-warning { background: rgba(255, 159, 67, 0.12); color: #ff9f43; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 700; }
+
+    /* Table Styling */
+    .table thead th {
+        background-color: rgba(115, 103, 240, 0.03);
+        border: none;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.1em;
+        font-weight: 700;
+        color: #82868b;
+        padding: 1rem 1.5rem;
+    }
+
+    .table tbody td {
+        padding: 1.25rem 1.5rem;
+        vertical-align: middle;
+        border-color: #f8f7fa;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(115, 103, 240, 0.02);
+    }
+
+    /* Month Summary Widget */
+    .month-summary-box {
+        margin-top: 1.5rem;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, rgba(115, 103, 240, 0.03), rgba(115, 103, 240, 0.01));
+        border-radius: 16px;
+        border: 1px dashed rgba(115, 103, 240, 0.2);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .summary-item {
+        text-align: center;
+    }
+
+    .summary-item .label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #82868b;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+        letter-spacing: 0.05em;
+    }
+
+    .summary-item .value {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #2f2b3d;
+    }
+
+    .summary-divider {
+        width: 1px;
+        height: 40px;
+        background-color: rgba(115, 103, 240, 0.1);
+    }
+</style>
 
 </style>
 
@@ -187,11 +279,13 @@
     <!-- Header -->
     <div class="header-section d-flex justify-content-between align-items-center">
         <div>
-            <h2>Dashboard Overview</h2>
-            <p class="text-muted mb-0">Welcome back! Here's what's happening today.</p>
+            <h2>Dashboard Analytics</h2>
+            <p class="text-muted mb-0">Discover your business trends and performance at a glance.</p>
         </div>
-        <div class="d-flex gap-2">
-            <button class="btn btn-primary btn-sm px-3 shadow-sm rounded-pill"><i class="ti ti-download me-1"></i> Report</button>
+        <div class="d-flex gap-3">
+            <button class="btn btn-primary shadow-sm rounded-pill px-4 py-2 fw-bold" style="background: var(--dash-primary); border: none;">
+                <i class="ti ti-download me-2"></i>Export Report
+            </button>
         </div>
     </div>
 
@@ -281,7 +375,20 @@
                     <div class="badge badge-label-purple">Analytics</div>
                 </div>
                 <div class="card-body-content">
-                    <div id="salesOrdersChart" style="min-height: 380px;"></div>
+                    <div id="salesOrdersChart" style="min-height: 400px;"></div>
+                    
+                    <!-- New Current Month Stats Widget -->
+                    <div class="month-summary-box">
+                        <div class="summary-item">
+                            <span class="label"><i class="ti ti-calendar-event me-1"></i> This Month Sales</span>
+                            <span class="value text-primary"><%$settings.company_currency.value|default:"$"%><%$curr_month_stats.month_sales|default:0|number_format:2%></span>
+                        </div>
+                        <div class="summary-divider"></div>
+                        <div class="summary-item">
+                            <span class="label"><i class="ti ti-shopping-cart me-1"></i> This Month Orders</span>
+                            <span class="value text-success"><%$curr_month_stats.month_orders|default:0%></span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -441,30 +548,107 @@
                 data: mOrders
             }],
             chart: {
-                height: 380,
+                height: 400,
                 type: 'line',
                 toolbar: { show: false },
-                zoom: { enabled: false }
+                fontFamily: 'Plus Jakarta Sans, sans-serif',
+                dropShadow: {
+                    enabled: true,
+                    color: '#000',
+                    top: 18,
+                    left: 7,
+                    blur: 10,
+                    opacity: 0.1
+                }
             },
             stroke: {
                 width: [0, 4],
-                curve: 'smooth'
+                curve: 'smooth',
+                dashArray: [0, 0]
+            },
+            plotOptions: {
+                bar: {
+                    columnWidth: '45%',
+                    borderRadius: 8,
+                    borderRadiusApplication: 'around', // 'around', 'end'
+                    borderRadiusWhenStacked: 'last',
+                }
             },
             colors: ['#7367f0', '#28c76f'],
             dataLabels: {
                 enabled: false
             },
+            fill: {
+                opacity: [0.85, 1],
+                gradient: {
+                    inverseColors: false,
+                    shade: 'light',
+                    type: "vertical",
+                    opacityFrom: 1,
+                    opacityTo: 0.45,
+                    stops: [0, 100, 100, 100]
+                }
+            },
             labels: mLabels,
+            markers: {
+                size: 5,
+                colors: ['#fff'],
+                strokeColors: '#28c76f',
+                strokeWidth: 2,
+                hover: {
+                    size: 8,
+                }
+            },
             legend: {
                 position: 'top',
-                horizontalAlign: 'left'
+                horizontalAlign: 'right',
+                offsetY: -30,
+                fontWeight: 600,
+                fontSize: '14px',
+                markers: {
+                    radius: 12
+                }
+            },
+            xaxis: {
+                axisBorder: { show: false },
+                axisTicks: { show: false },
+                labels: {
+                    style: { colors: '#82868b', fontWeight: 600 }
+                }
+            },
+            grid: {
+                borderColor: '#f1f1f2',
+                strokeDashArray: 4,
+                padding: {
+                    bottom: 0
+                }
             },
             yaxis: [{
-                title: { text: 'Revenue (<%$settings.company_currency.value|default:"$"%>)', style: { color: '#7367f0' } },
+                title: { text: 'Monthly Revenue', style: { color: '#7367f0', fontWeight: 700, fontSize: '12px' } },
+                labels: {
+                    style: { colors: '#82868b', fontWeight: 600 },
+                    formatter: function(val) { return '<%$settings.company_currency.value|default:"$"%>' + val.toLocaleString(); }
+                }
             }, {
                 opposite: true,
-                title: { text: 'Orders', style: { color: '#28c76f' } }
-            }]
+                title: { text: 'Orders Count', style: { color: '#28c76f', fontWeight: 700, fontSize: '12px' } },
+                labels: {
+                    style: { colors: '#82868b', fontWeight: 600 }
+                }
+            }],
+            tooltip: {
+                shared: true,
+                intersect: false,
+                theme: 'light',
+                y: {
+                    formatter: function(y) {
+                        if (typeof y !== "undefined") {
+                            return y.toFixed(0);
+                        }
+                        return y;
+                    }
+                }
+            }
         };
         var salesOrdersChart = new ApexCharts(document.querySelector("#salesOrdersChart"), salesOrdersOptions);
         salesOrdersChart.render();
@@ -474,26 +658,38 @@
             series: catValues,
             chart: {
                 type: 'donut',
-                height: 300
+                height: 350,
+                fontFamily: 'Plus Jakarta Sans, sans-serif'
             },
             labels: catLabels,
             colors: ['#7367f0', '#28c76f', '#ff9f43', '#00cfe8', '#ea5455'],
             legend: {
-                position: 'bottom'
+                position: 'bottom',
+                fontSize: '14px',
+                fontWeight: 600
             },
+            dataLabels: { enabled: false },
             plotOptions: {
                 pie: {
                     donut: {
-                        size: '70%',
+                        size: '75%',
                         labels: {
                             show: true,
                             total: {
                                 show: true,
-                                label: 'Products',
-                                fontWeight: 700,
+                                label: 'Total Qty',
+                                fontSize: '15px',
+                                fontWeight: 600,
+                                color: '#82868b',
                                 formatter: function(w) {
                                     return w.globals.seriesTotals.reduce((a, b) => a + b, 0)
                                 }
+                            },
+                            value: {
+                                show: true,
+                                fontSize: '24px',
+                                fontWeight: 800,
+                                color: '#2f2b3d'
                             }
                         }
                     }
@@ -510,28 +706,60 @@
                 data: trendValues
             }],
             chart: {
-                height: 200,
+                height: 250,
                 type: 'area',
                 toolbar: { show: false },
-                sparkline: { enabled: false }
+                zoom: { enabled: false },
+                fontFamily: 'Plus Jakarta Sans, sans-serif'
             },
             colors: ['#7367f0'],
             dataLabels: { enabled: false },
-            stroke: { curve: 'smooth', width: 2 },
+            stroke: { curve: 'smooth', width: 3 },
+            grid: {
+                borderColor: '#f1f1f2',
+                strokeDashArray: 5,
+                xaxis: { lines: { show: true } },
+                yaxis: { lines: { show: true } },
+                padding: { top: 0, right: 0, bottom: 0, left: 0 }
+            },
             xaxis: {
                 categories: trendLabels,
-                labels: { show: false },
+                labels: { 
+                    style: { colors: '#82868b', fontWeight: 600 },
+                    rotate: -45,
+                    offsetY: 5
+                },
                 axisBorder: { show: false },
                 axisTicks: { show: false }
             },
-            yaxis: { show: false },
+            yaxis: {
+                labels: {
+                    style: { colors: '#82868b', fontWeight: 600 },
+                    formatter: function(val) { return val.toFixed(0); }
+                }
+            },
             fill: {
                 type: 'gradient',
                 gradient: {
                     shadeIntensity: 1,
-                    opacityFrom: 0.7,
-                    opacityTo: 0.3,
+                    opacityFrom: 0.5,
+                    opacityTo: 0.05,
                     stops: [0, 90, 100]
+                }
+            },
+            markers: {
+                size: 4,
+                colors: ['#7367f0'],
+                strokeColors: '#fff',
+                strokeWidth: 2,
+                hover: { size: 7 }
+            },
+            tooltip: {
+                theme: 'light',
+                y: {
+                    formatter: function(val) {
+                        return '<%$settings.company_currency.value|default:"$"%>' + val.toLocaleString();
+                    }
                 }
             }
         };

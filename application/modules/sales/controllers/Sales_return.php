@@ -15,22 +15,41 @@ class Sales_return extends MY_Controller {
         $this->smarty->loadView('sales_return_list.tpl', $data, 'Yes', 'Yes');
     }
 
-    public function create_sales_return() {
+    public function create_sales_return($sales_id = null) {
         $data['base_url'] = base_url();
-        $sales_id = $this->uri->segment(2); // sales_id passed in URL
-        
+
         if (empty($sales_id)) {
-            redirect('sales_list');
+            // No sales_id provided - show bill selection form (like Purchase Return)
+            $data['sales'] = $this->Sales_model->get_sales();
+            $this->smarty->loadView('create_sales_return.tpl', $data, 'Yes', 'Yes');
+        } else {
+            // sales_id provided - show pre-filled return form
+            $data['sale'] = $this->Sales_model->get_sale_master($sales_id);
+            $data['items'] = $this->Sales_model->get_sale_items($sales_id);
+
+            if (empty($data['sale'])) {
+                redirect('sales_list');
+            }
+
+            $this->smarty->loadView('create_sales_return.tpl', $data, 'Yes', 'Yes');
+        }
+    }
+
+    public function get_sale_items_for_return() {
+        $sales_id = $this->input->post('sales_id');
+
+        if (empty($sales_id)) {
+            echo json_encode(['success' => 0, 'msg' => 'Invalid sales ID.']);
+            return;
         }
 
-        $data['sale'] = $this->Sales_model->get_sale_master($sales_id);
-        $data['items'] = $this->Sales_model->get_sale_items($sales_id);
+        $items = $this->Sales_return_model->get_returnable_items($sales_id);
 
-        if (empty($data['sale'])) {
-            redirect('sales_list');
+        if (!empty($items)) {
+            echo json_encode(['success' => 1, 'items' => $items]);
+        } else {
+            echo json_encode(['success' => 0, 'msg' => 'No returnable items found for this bill or it might be fully returned.']);
         }
-
-        $this->smarty->loadView('create_sales_return.tpl', $data, 'Yes', 'Yes');
     }
 
     public function save_sales_return() {
@@ -42,7 +61,7 @@ class Sales_return extends MY_Controller {
         $remarks = $this->input->post('remarks');
         
         $products = $this->input->post('product_id');
-        $qtys = $this->input->post('qty');
+        $qtys = $this->input->post('return_qty') ? $this->input->post('return_qty') : $this->input->post('qty');
         $prices = $this->input->post('price');
         $item_totals = $this->input->post('total');
 

@@ -46,11 +46,13 @@ $route['save_product_payment'] = 'customer/customer/save_product_payment';
 
 
 $route['category'] = 'category/category/category';
+$route['get_categories_ajax'] = 'category/category/get_categories_ajax';
 $route['delete_category'] = 'category/category/delete_category';
 $route['update_categories'] = 'category/category/update_categories';
 $route['add_categories'] = 'category/category/add_categories';
 
 $route['brand'] = 'brand/brand/brand';
+$route['get_brands_ajax'] = 'brand/brand/get_brands_ajax';
 $route['delete_brand'] = 'brand/brand/delete_brand';
 $route['update_brands'] = 'brand/brand/update_brands';
 $route['add_brand'] = 'brand/brand/add_brand';
@@ -91,8 +93,10 @@ $route['pos_get_product'] = 'sales/Pos/get_product_ajax';
 // Sales Return Routes
 $route['sales_return'] = 'sales/Sales_return/index';
 $route['sales_return_list'] = 'sales/Sales_return/index';
+$route['create_sales_return'] = 'sales/Sales_return/create_sales_return';
 $route['create_sales_return/(:num)'] = 'sales/Sales_return/create_sales_return/$1';
 $route['save_sales_return'] = 'sales/Sales_return/save_sales_return';
+$route['get_sale_items_for_return'] = 'sales/Sales_return/get_sale_items_for_return';
 $route['sales_return_details_ajax'] = 'sales/Sales_return/return_details_ajax';
 
 // Stock Management Routes

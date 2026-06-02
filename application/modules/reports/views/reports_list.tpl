@@ -100,9 +100,9 @@
       <div class="row">
         <div class="col-12">
           <div class="card shadow-sm border-0 overflow-hidden">
-            <div class="card-header p-0">
+            <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0">
                <div class="nav-align-top">
-                <ul class="nav nav-tabs nav-fill border-bottom-0" role="tablist">
+                <ul class="nav nav-tabs nav-fill custom-tabs" role="tablist">
                   <li class="nav-item">
                     <button type="button" class="nav-link active py-3" role="tab" data-bs-toggle="tab" data-bs-target="#navs-sales" aria-controls="navs-sales" aria-selected="true" id="sales-report-tab">
                       <i class="tf-icons ti ti-trending-up ti-sm me-2"></i> SALES REPORT
@@ -239,22 +239,47 @@
     z-index: 1;
 }
 
-/* Tab & Table Styling */
-.nav-tabs .nav-link {
-    border-radius: 0;
+/* Custom Modern Tab Styling */
+.custom-tabs {
+    background: #f1f2f6;
+    padding: 8px;
+    border-radius: 12px;
+    border-bottom: none;
+    gap: 10px;
+}
+.custom-tabs .nav-item {
+    margin-bottom: 0;
+}
+.custom-tabs .nav-link {
+    border: none !important;
+    border-radius: 8px !important;
     font-weight: 600;
-    color: #5d596c;
+    color: #697a8d;
     letter-spacing: 0.5px;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
 }
-.nav-tabs .nav-link.active {
-    background-color: #fff !important;
-    border-bottom: 3px solid #7367f0 !important;
+.custom-tabs .nav-link.active {
+    background-color: #ffffff !important;
     color: #7367f0 !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+    transform: translateY(-2px);
 }
-.nav-tabs .nav-link:hover:not(.active) {
+.custom-tabs .nav-link:hover:not(.active) {
     color: #7367f0;
-    background-color: rgba(115, 103, 240, 0.05);
+    background-color: rgba(255, 255, 255, 0.5);
+}
+.custom-tabs .nav-link i {
+    transition: transform 0.3s ease;
+}
+.custom-tabs .nav-link.active i {
+    transform: scale(1.15);
+    color: #7367f0;
 }
 
 .min-h-300 {
@@ -271,14 +296,69 @@
 }
 
 /* Table Enhancements */
+.table-responsive {
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    border: 1px solid #e6e8eb;
+    background: #ffffff;
+    padding: 8px;
+    transition: all 0.3s ease;
+}
+
+.table {
+    margin-bottom: 0 !important;
+}
+
 .table thead th {
-    background-color: #f8f9fa;
+    background-color: #f8f9fb !important;
     text-transform: uppercase;
-    font-size: 0.75rem;
+    font-size: 0.8rem !important;
     letter-spacing: 1px;
-    font-weight: 700;
+    font-weight: 700 !important;
+    color: #4b465c !important;
+    border-bottom: 2px solid #eaecf0 !important;
+    border-top: none !important;
+    padding: 16px 20px !important;
+    vertical-align: middle !important;
+}
+
+.table tbody tr {
+    transition: all 0.2s ease-in-out;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(115, 103, 240, 0.04) !important;
+}
+
+.table tbody td {
+    padding: 16px 20px !important;
+    vertical-align: middle !important;
+    border-bottom: 1px solid #f0f2f5 !important;
     color: #5d596c;
-    border-top: none;
+}
+
+/* Force perfect centering of icons inside table cells and badges */
+.table td i, 
+.table th i,
+.table .badge i {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+    vertical-align: middle !important;
+    height: 1em;
+    width: 1em;
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+/* Footer styling */
+.table tfoot tr th {
+    padding: 16px 20px !important;
+    border-top: 2px solid #eaecf0 !important;
+    border-bottom: none !important;
 }
 </style>
   </div>

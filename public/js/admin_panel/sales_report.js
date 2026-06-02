@@ -1,31 +1,31 @@
 $(document).ready(function () {
-    stockValuationReport.init();
+    salesReport.init();
 });
 
-var stockValuationTable = '';
-var report_file_name = "stock_valuation_report_" + new Date().toISOString().slice(0, 10);
-var report_pdf_title = "Stock Valuation Report";
+var salesReportTable = '';
+var report_file_name = "sales_report_" + new Date().toISOString().slice(0, 10);
+var report_pdf_title = "Sales Report";
 
-const stockValuationReport = {
+const salesReport = {
     init: function () {
         this.dataTable();
     },
 
     dataTable: function () {
-        stockValuationTable = $('#stockValuationTable').DataTable({
-            order: [[0, 'asc']],
+        salesReportTable = $('#salesReportTable').DataTable({
+            order: [[1, 'desc']], // Order by Date descending
             pagingType: "full_numbers",
             pageLength: 25,
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
             autoWidth: false,
-            
-            // Match exactly with Category & Brand pages UI layout
+
+            // Match exactly with Category & Purchase Report UI layout
             dom: 'Brt<"cat-dt-footer"<"cat-dt-info"i><"cat-dt-controls"<"cat-dt-length"l><"cat-dt-paging"p>>>',
 
             buttons: [
                 {
                     extend: 'csv',
-                    className: 'd-none', // Hidden, triggered by custom external button
+                    className: 'd-none',
                     filename: report_file_name,
                     exportOptions: {
                         columns: ':visible'
@@ -33,7 +33,7 @@ const stockValuationReport = {
                 },
                 {
                     extend: 'pdf',
-                    className: 'd-none', // Hidden, triggered by custom external button
+                    className: 'd-none',
                     filename: report_file_name,
                     title: report_pdf_title,
                     exportOptions: {
@@ -48,7 +48,7 @@ const stockValuationReport = {
             ],
 
             language: {
-                emptyTable:   '<div class="cat-empty">No stock valuation records found.</div>',
+                emptyTable:   '<div class="cat-empty">No sales records found.</div>',
                 zeroRecords:  '<div class="cat-empty">No records match your search.</div>',
                 info:         'Showing _START_ to _END_ of _TOTAL_ entries',
                 infoEmpty:    'Showing 0 to 0 of 0 entries',
@@ -73,17 +73,17 @@ const stockValuationReport = {
             var val = this.value;
             clearTimeout(searchTimer);
             searchTimer = setTimeout(function () {
-                stockValuationTable.search(val).draw();
+                salesReportTable.search(val).draw();
             }, 350);
         });
 
         // --- Custom Export Buttons Integration ---
-        $('#export-csv').on('click', function () {
-            stockValuationTable.button('.buttons-csv').trigger();
+        $('#export-csv').removeAttr('onclick').off('click').on('click', function () {
+            salesReportTable.button('.buttons-csv').trigger();
         });
 
-        $('#export-pdf').on('click', function () {
-            stockValuationTable.button('.buttons-pdf').trigger();
+        $('#export-pdf').removeAttr('onclick').off('click').on('click', function () {
+            salesReportTable.button('.buttons-pdf').trigger();
         });
     }
 };

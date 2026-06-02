@@ -29,6 +29,9 @@ class Dashboard extends MY_Controller {
         $data['recent_products'] = $this->Dashboard_model->get_recently_added_products(5);
         $data['low_stock_alerts'] = $this->Dashboard_model->get_low_stock_details(5);
         
+        // Current Month Highlights
+        $data['curr_month_stats'] = $this->Dashboard_model->get_current_month_stats();
+        
 		$this->smarty->loadView('dashboard.tpl', $data,"Yes","Yes");
 	}
 }

@@ -19,14 +19,15 @@ class Reports extends MY_Controller {
      * Dedicated Sales Report Page
      */
     public function sales_report() {
-        $from_date = $this->input->get('from_date') ?: date('Y-m-01');
-        $to_date = $this->input->get('to_date') ?: date('Y-m-d');
-        
+        // Prefer POST values (clean URL) but fallback to GET for backward compatibility
+        $from_date = $this->input->post('from_date') ?: ($this->input->get('from_date') ?: date('Y-m-01'));
+        $to_date = $this->input->post('to_date') ?: ($this->input->get('to_date') ?: date('Y-m-d'));
+
         $data['sales'] = $this->Reports_model->get_sales_report($from_date, $to_date);
         $data['from_date'] = $from_date;
         $data['to_date'] = $to_date;
         $data['base_url'] = base_url();
-        
+
         $this->smarty->loadView('sales_report.tpl', $data, 'Yes', 'Yes');
     }
 
@@ -34,8 +35,8 @@ class Reports extends MY_Controller {
      * Dedicated Purchase Report Page
      */
     public function purchase_report() {
-        $from_date = $this->input->get('from_date') ?: date('Y-m-01');
-        $to_date = $this->input->get('to_date') ?: date('Y-m-d');
+        $from_date = $this->input->post('from_date') ?: ($this->input->get('from_date') ?: date('Y-m-01'));
+        $to_date = $this->input->post('to_date') ?: ($this->input->get('to_date') ?: date('Y-m-d'));
         
         $data['purchases'] = $this->Reports_model->get_purchase_report($from_date, $to_date);
         $data['from_date'] = $from_date;
@@ -89,5 +90,16 @@ class Reports extends MY_Controller {
         $html = $this->smarty->fetch('stock_valuation_table.tpl', $data);
         
         echo json_encode(['success' => 1, 'html' => $html]);
+    }
+
+    /**
+     * AJAX: Server-side DataTables for Stock Valuation Report
+     */
+    public function get_stock_valuation_datatables() {
+        // DataTables sends parameters via POST
+        $postData = $this->input->post();
+        $result = $this->Reports_model->get_stock_valuation_datatables($postData);
+        // Expected format from model: ['draw'=>..., 'recordsTotal'=>..., 'recordsFiltered'=>..., 'data'=>...]
+        echo json_encode($result);
     }
 }
