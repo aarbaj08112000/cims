@@ -14,12 +14,56 @@ const purchaseReturnPage = {
     },
     dataTable: function () {
         returnListTable = $("#returnListTable").DataTable({
+            dom: 'Brt<"cat-dt-footer"<"cat-dt-info"i><"cat-dt-controls"<"cat-dt-length"l><"cat-dt-paging"p>>>',
+            buttons: [
+                {
+                    extend: "csv",
+                    className: "d-none",
+                    filename: "purchase_return_history",
+                    exportOptions: { columns: [0, 1, 2, 3, 4, 5] }
+                },
+                {
+                    extend: "pdf",
+                    className: "d-none",
+                    filename: "purchase_return_history",
+                    customize: function (doc) {
+                        doc.pageMargins = [15, 15, 15, 15];
+                        doc.content[0].text = "Purchase Return History";
+                        doc.content[1].table.widths = ["15%", "15%", "25%", "15%", "15%", "15%"];
+                    },
+                    exportOptions: { columns: [0, 1, 2, 3, 4, 5] }
+                },
+            ],
             searching: true,
             order: [[5, "desc"]], // Sort by Added Date
+            pagingType: "full_numbers",
+            language: {
+                processing:   '<div class="cat-processing"><i class="ti ti-loader-2 cat-spin"></i>&nbsp;Loading...</div>',
+                emptyTable:   '<div class="cat-empty">No returns found.</div>',
+                zeroRecords:  '<div class="cat-empty">No records match your search.</div>',
+                info:         'Showing _START_ to _END_ of _TOTAL_ entries',
+                infoEmpty:    'Showing 0 to 0 of 0 entries',
+                infoFiltered: '(filtered from _MAX_ total)',
+                lengthMenu:   'Show _MENU_ entries',
+                paginate: {
+                    first:    '<i class="ti ti-chevrons-left"></i>',
+                    last:     '<i class="ti ti-chevrons-right"></i>',
+                    next:     '<i class="ti ti-chevron-right"></i>',
+                    previous: '<i class="ti ti-chevron-left"></i>'
+                }
+            }
         });
 
-        $('#search-filter-input').on('keyup', function () {
+        $('#search-filter-input').on('keyup input', function () {
             returnListTable.search(this.value).draw();
+        });
+
+        $('#export-csv').on('click', function () {
+            returnListTable.button('.buttons-csv').trigger();
+        });
+
+        $('#export-pdf').on('click', function () {
+            returnListTable.button('.buttons-pdf').trigger();
         });
     },
     bindEvents: function () {

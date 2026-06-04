@@ -84,34 +84,59 @@ const stockPage = {
     },
     dataTable: function () {
         var stockListTable = $("#stockListTable").DataTable({
-            dom: '<"row align-items-center mb-2"<"col-sm-12 col-md-6"B><"col-sm-12 col-md-6 text-end"f>><"dt-scroll-body-wrapper"rt><"dt-fixed-footer row align-items-center pt-3 mt-1 border-top"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7 d-flex align-items-center justify-content-end gap-2"pl>>',
+            dom: 'Brt<"cat-dt-footer"<"cat-dt-info"i><"cat-dt-controls"<"cat-dt-length"l><"cat-dt-paging"p>>>',
             buttons: [
                 {
                     extend: "csv",
-                    text: '<i class="ti ti-file-type-csv"></i>',
-                    titleAttr: "Download CSV",
-                    filename: "stock_report"
+                    className: "d-none",
+                    filename: "stock_report",
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    }
                 },
                 {
                     extend: "pdf",
-                    text: '<i class="ti ti-file-type-pdf"></i>',
-                    titleAttr: "Download Pdf",
+                    className: "d-none",
                     filename: "stock_report",
                     customize: function (doc) {
                         doc.pageMargins = [15, 15, 15, 15];
                         doc.content[0].text = "Current Stock Inventory Report";
                     },
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    }
                 },
             ],
             searching: true,
             order: [[3, "asc"]], // Sort by Current Stock (Lowest first)
             pagingType: "full_numbers",
+            language: {
+                processing:   '<div class="cat-processing"><i class="ti ti-loader-2 cat-spin"></i>&nbsp;Loading...</div>',
+                emptyTable:   '<div class="cat-empty">No stock records found.</div>',
+                zeroRecords:  '<div class="cat-empty">No records match your search.</div>',
+                info:         'Showing _START_ to _END_ of _TOTAL_ entries',
+                infoEmpty:    'Showing 0 to 0 of 0 entries',
+                infoFiltered: '(filtered from _MAX_ total)',
+                lengthMenu:   'Show _MENU_ entries',
+                paginate: {
+                  first:    '<i class="ti ti-chevrons-left"></i>',
+                  last:     '<i class="ti ti-chevrons-right"></i>',
+                  next:     '<i class="ti ti-chevron-right"></i>',
+                  previous: '<i class="ti ti-chevron-left"></i>'
+                }
+            },
         });
 
-        $('#search-filter-input').on('keyup', function () {
+        $('#search-filter-input').on('keyup input', function () {
             stockListTable.search(this.value).draw();
         });
 
+        $('#export-csv').on('click', function () {
+            stockListTable.button('.buttons-csv').trigger();
+        });
 
+        $('#export-pdf').on('click', function () {
+            stockListTable.button('.buttons-pdf').trigger();
+        });
     },
 }

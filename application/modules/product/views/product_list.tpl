@@ -9,7 +9,7 @@
         <div>
           <h1 class="cat-page-title">Products</h1>
           <nav class="cat-breadcrumb">
-            <a href="<%$base_url%>">Home</a>
+            <a href="<%base_url('dashboard')%>">Home</a>
             <i class="ti ti-chevron-right"></i>
             <span>Products</span>
             <i class="ti ti-chevron-right"></i>
@@ -39,15 +39,15 @@
       <table class="table table-hover mb-0 w-100" id="product_list">
         <thead class="bg-light">
           <tr>
-            <th>Sr No</th>
-                    <th>Image</th>
+            <th class="text-center" style="width: 60px;">Sr No</th>
+                    <th class="text-center" style="width: 80px;">Image</th>
                     <th>Barcode</th>
                     <th>Product Name</th>
                     <th>Description</th>
                     <th>Price</th>
                     <th>Stock</th>
                     <th>Status</th>
-                    <th class="text-center">Action</th>
+                    <th class="text-center" style="width: 100px;">Action</th>
                  </tr>
               </thead>
               <tbody>
@@ -55,9 +55,9 @@
                       <%assign var='i' value= 1 %>
                       <%foreach from=$products item=u %>
                      <tr>
-                        <td><%$i%></td>
+                        <td class="text-center"><%$i%></td>
                        
-                        <td>
+                        <td class="text-center">
                            <%if $u['image']%>
                                <img src="public/uploads/product/product_image/<%$u['product_id']%>/<%$u['image']%>" 
                                      onerror="this.src='public/assets/images/no_image.jpg';"

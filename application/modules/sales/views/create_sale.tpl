@@ -1,41 +1,52 @@
+<link rel="stylesheet" href="<%$base_url%>public/css/category_ui.css" />
 <div class="content-wrapper">
   <div class="container-xxl flex-grow-1 container-p-y">
-    <nav aria-label="breadcrumb">
-      <div class="sub-header-left pull-left breadcrumb">
-        <h1>
-           Home
-          <a hijacked="yes" href="javascript:void(0)" class="backlisting-link" >
-            <i class="ti ti-chevrons-right" ></i>
-            <em >Sales</em></a>
-          </h1>
-          <br>
-          <span >Create Sales Bill</span>
-        </div>
-      </nav>
 
-      <div class="dt-top-btn d-grid gap-2 d-md-flex justify-content-md-end mb-5">
-        <a href="<%base_url('sales_list')%>" class="btn btn-seconday" title="Sales List">
-           <i class="ti ti-list"></i> Sales List
+    <!-- Page Header -->
+    <div class="cat-page-header mb-4">
+      <div class="cat-page-header-left d-flex align-items-center">
+        <div class="cat-page-icon me-3">
+          <i class="ti ti-shopping-cart fs-3 text-primary"></i>
+        </div>
+        <div>
+          <h1 class="cat-page-title mb-1">Create Sales Bill</h1>
+          <nav class="cat-breadcrumb">
+            <a href="<%$base_url%>">Home</a>
+            <i class="ti ti-chevron-right mx-1"></i>
+            <a href="<%$base_url%>sales_list">Sales History</a>
+            <i class="ti ti-chevron-right mx-1"></i>
+            <span>Create</span>
+          </nav>
+        </div>
+      </div>
+      <div class="cat-page-header-right d-flex align-items-center">
+        <a href="<%$base_url%>sales_list" class="cat-btn cat-btn-outline" title="Sales List">
+          <i class="ti ti-list"></i> Sales List
         </a>
       </div>
+    </div>
 
-    <form id="salesForm" action="<%base_url('save_sale')%>" method="POST">
-      <div class="card mb-4">
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-3 mb-3">
+    <form id="salesForm" action="<%$base_url%>save_sale" method="POST">
+      <!-- Master Form Card -->
+      <div class="cat-card mb-4">
+        <div class="cat-card-header d-flex justify-content-between align-items-center border-bottom pb-3 mb-3">
+          <h5 class="mb-0 fw-bold"><i class="ti ti-file-info me-2 text-primary fs-4"></i> Sales Details</h5>
+        </div>
+        <div class="cat-card-body">
+          <div class="row g-3">
+            <div class="col-md-3">
               <label class="form-label">Customer Mobile Number <span class="text-danger">*</span></label>
               <input type="text" name="customer_mobile" class="form-control required-input" placeholder="Enter Mobile No" maxlength="15">
             </div>
-            <div class="col-md-3 mb-3">
+            <div class="col-md-3">
               <label class="form-label">Bill Number <span class="text-danger">*</span></label>
               <input type="text" name="bill_no" class="form-control required-input" value="INV-<%rand(1000,9999)%>">
             </div>
-            <div class="col-md-3 mb-3">
+            <div class="col-md-3">
               <label class="form-label">Sales Date <span class="text-danger">*</span></label>
               <input type="date" name="sales_date" class="form-control required-input" value="<%$smarty.now|date_format:'%Y-%m-%d'%>">
             </div>
-            <div class="col-md-3 mb-3">
+            <div class="col-md-3">
               <label class="form-label">Payment Mode</label>
               <select name="payment_mode" class="form-control select2">
                 <option value="Cash">Cash</option>
@@ -48,24 +59,25 @@
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center border-bottom">
-          <h5 class="mb-0">Ordered Items</h5>
-          <button type="button" class="btn btn-primary btn-sm" id="addSaleRow">
-            <i class="ti ti-plus"></i> Add Item
-          </button>
-        </div>
-        <div class="card-body">
+      <!-- Items Table Card -->
+      <div class="cat-table-card mb-4">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center bg-light">
+            <h5 class="mb-0 fw-bold"><i class="ti ti-packages me-2 text-primary fs-4"></i> Ordered Items</h5>
+            <button type="button" class="cat-btn cat-btn-primary btn-sm" id="addSaleRow">
+              <i class="ti ti-plus"></i> Add Item
+            </button>
+          </div>
           <div class="table-responsive">
-            <table class="table table-bordered" id="salesTable">
-              <thead>
+            <table class="table table-hover mb-0" id="salesTable">
+              <thead class="bg-light">
                 <tr>
-                  <th style="width: 40%;">Product <span class="text-danger">*</span></th>
-                  <th>Stock Available</th>
-                  <th>Quantity <span class="text-danger">*</span></th>
-                  <th>Sale Price <span class="text-danger">*</span></th>
-                  <th>Total</th>
-                  <th style="width: 50px;">Action</th>
+                  <th style="width: 35%;">Product <span class="text-danger">*</span></th>
+                  <th style="width: 15%;">Stock Available</th>
+                  <th style="width: 15%;">Quantity <span class="text-danger">*</span></th>
+                  <th style="width: 15%;">Sale Price <span class="text-danger">*</span></th>
+                  <th style="width: 15%;">Total</th>
+                  <th style="width: 50px;" class="text-center">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -79,35 +91,37 @@
                     </select>
                   </td>
                   <td>
-                    <input type="text" class="form-control stock-display" readonly value="0">
+                    <input type="text" class="form-control stock-display bg-light text-center" readonly value="0">
                   </td>
                   <td>
-                    <input type="number" name="qty[]" class="form-control qty-input required-input" min="1" value="1">
+                    <input type="number" name="qty[]" class="form-control qty-input required-input text-center" min="1" value="1">
                   </td>
                   <td>
-                    <input type="number" name="price[]" class="form-control price-input required-input" step="0.01" value="0">
+                    <input type="number" name="price[]" class="form-control price-input required-input text-end" step="0.01" value="0">
                   </td>
                   <td>
-                    <input type="number" name="total[]" class="form-control total-input" readonly value="0">
+                    <input type="number" name="total[]" class="form-control total-input bg-light text-end fw-bold" readonly value="0">
                   </td>
-                  <td>
-                    <button type="button" class="btn btn-label-danger btn-icon remove-sale-row"><i class="ti ti-trash"></i></button>
+                  <td class="text-center">
+                    <button type="button" class="cat-btn cat-btn-outline-red btn-icon remove-sale-row" style="padding: 0 8px;"><i class="ti ti-trash"></i></button>
                   </td>
                 </tr>
               </tbody>
-              <tfoot>
+              <tfoot class="bg-light border-top">
                 <tr>
-                  <th colspan="4" class="text-end">Grand Total:</th>
-                  <th>
-                    <input type="number" name="grand_total" id="grand_total" class="form-control" readonly value="0">
+                  <th colspan="4" class="text-end h5 fw-bold pt-3 pb-3">Grand Total:</th>
+                  <th class="pt-3 pb-3">
+                    <input type="number" name="grand_total" id="grand_total" class="form-control bg-white text-end text-primary h5 fw-bold mb-0 border-0 shadow-none" readonly value="0">
                   </th>
                   <th></th>
                 </tr>
               </tfoot>
             </table>
           </div>
-          <div class="mt-4 text-end">
-            <button type="submit" class="btn btn-success btn-lg">Generate Sales Bill</button>
+          <div class="card-footer text-end mt-3 pb-4">
+            <button type="submit" class="cat-btn cat-btn-primary" style="height: 44px; padding: 0 24px; font-size: 15px;">
+              <i class="ti ti-check me-2"></i> Generate Sales Bill
+            </button>
           </div>
         </div>
       </div>
@@ -126,19 +140,19 @@
       </select>
     </td>
     <td>
-       <input type="text" class="form-control stock-display" readonly value="0">
+       <input type="text" class="form-control stock-display bg-light text-center" readonly value="0">
     </td>
     <td>
-      <input type="number" name="qty[]" class="form-control qty-input required-input" min="1" value="1">
+      <input type="number" name="qty[]" class="form-control qty-input required-input text-center" min="1" value="1">
     </td>
     <td>
-      <input type="number" name="price[]" class="form-control price-input required-input" step="0.01" value="0">
+      <input type="number" name="price[]" class="form-control price-input required-input text-end" step="0.01" value="0">
     </td>
     <td>
-      <input type="number" name="total[]" class="form-control total-input" readonly value="0">
+      <input type="number" name="total[]" class="form-control total-input bg-light text-end fw-bold" readonly value="0">
     </td>
-    <td>
-      <button type="button" class="btn btn-label-danger btn-icon remove-sale-row"><i class="ti ti-trash"></i></button>
+    <td class="text-center">
+      <button type="button" class="cat-btn cat-btn-outline-red btn-icon remove-sale-row" style="padding: 0 8px;"><i class="ti ti-trash"></i></button>
     </td>
   </tr>
 </script>

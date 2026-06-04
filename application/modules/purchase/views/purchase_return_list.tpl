@@ -1,69 +1,76 @@
+<link rel="stylesheet" href="<%$base_url%>public/css/category_ui.css" />
 <div class="content-wrapper">
   <div class="container-xxl flex-grow-1 container-p-y">
-    <nav aria-label="breadcrumb">
-      <div class="sub-header-left pull-left breadcrumb">
-        <h1>
-           Home
-          <a hijacked="yes" href="javascript:void(0)" class="backlisting-link" >
-            <i class="ti ti-chevrons-right" ></i>
-            <em >Purchase Return</em></a>
-          </h1>
-          <br>
-          <span >Return History</span>
+    
+    <!-- Page Header -->
+    <div class="cat-page-header mb-4">
+      <div class="cat-page-header-left">
+        <div class="cat-page-icon">
+          <i class="ti ti-receipt-refund"></i>
         </div>
-      </nav>
-
-      <div class="dt-top-btn d-grid gap-2 d-md-flex justify-content-md-end mb-3">
-        <input type="text" id="search-filter-input" placeholder="Search Returns..." class="form-control search-filter-input me-2">
-        <button class="btn btn-success me-2" onclick="exportTableToCSV('returnListTable', 'purchase_return_history.csv')">
-          <i class="ti ti-file-type-csv me-1"></i> Export CSV
+        <div>
+          <h1 class="cat-page-title">Purchase Return History</h1>
+          <nav class="cat-breadcrumb">
+            <a href="<%$base_url%>">Home</a>
+            <i class="ti ti-chevron-right"></i>
+            <span>Return History</span>
+          </nav>
+        </div>
+      </div>
+      <div class="cat-page-header-right">
+        <div class="cat-search-box">
+          <i class="ti ti-search"></i>
+          <input type="text" id="search-filter-input" placeholder="Search Returns..." />
+        </div>
+        <button type="button" id="export-csv" class="cat-btn cat-btn-outline" title="Export CSV">
+          <i class="ti ti-file-type-csv"></i> Export CSV
         </button>
-        <button class="btn btn-danger me-2" onclick="exportTableToPDF()">
-          <i class="ti ti-file-type-pdf me-1"></i> Export PDF
+        <button type="button" id="export-pdf" class="cat-btn cat-btn-outline-red" title="Export PDF">
+          <i class="ti ti-file-type-pdf"></i> Export PDF
         </button>
-        <a href="<%base_url('create_purchase_return')%>" class="btn btn-seconday" title="Initiate Return">
-           <i class="ti ti-plus me-2"></i> Initiate Return
+        <a href="<%base_url('create_purchase_return')%>" class="cat-btn cat-btn-primary text-white" title="Initiate Return">
+           <i class="ti ti-plus"></i> Initiate Return
         </a>
       </div>
+    </div>
 
-
-
-      <div class="card p-0 mt-0 w-100">
-          <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-striped text-nowrap" id="returnListTable">
-            <thead>
-               <tr>
-                  <th>Return No</th>
-                  <th>Original Bill</th>
-                  <th>Supplier</th>
-                  <th>Return Date</th>
-                  <th>Total Return</th>
-                  <th>Added Date</th>
-                  <th>Action</th>
-               </tr>
-            </thead>
-            <tbody>
-            <%if ($returns) %>
-              <%foreach from=$returns item=val %>
-               <tr>
-                  <td><%$val['return_no'] %></td>
-                  <td><%$val['original_bill_no'] %></td>
-                  <td><%$val['supplier_name'] %></td>
-                  <td><%$val['return_date']|date_format:'%d-%m-%Y' %></td>
-                  <td><strong class="text-danger">₹<%$val['total_return_amount']|number_format:2 %></strong></td>
-                  <td><%$val['added_date']|date_format:'%d-%m-%Y %H:%M' %></td>
-                  <td>
-                    <div class="d-flex align-items-center">
-                      <a href="javascript:void(0)" class="me-2 view-return-details" data-id="<%$val['return_id']%>" title="View Details">
-                        <i class="ti ti-eye text-info"></i>
-                      </a>
-                    </div>
-                  </td>
-               </tr>
-              <%/foreach%>
-            <%/if%>
-            </tbody>
-          </table>
-      </div>
+    <!-- Main Table -->
+    <div class="cat-table-card">
+      <table class="table table-hover mb-0 w-100" id="returnListTable">
+        <thead class="bg-light">
+           <tr>
+              <th>Return No</th>
+              <th>Original Bill</th>
+              <th>Supplier</th>
+              <th>Return Date</th>
+              <th>Total Return</th>
+              <th>Added Date</th>
+              <th class="text-center">Action</th>
+           </tr>
+        </thead>
+        <tbody>
+        <%if ($returns) %>
+          <%foreach from=$returns item=val %>
+           <tr>
+              <td class="fw-medium text-dark"><%$val['return_no'] %></td>
+              <td><%$val['original_bill_no'] %></td>
+              <td><%$val['supplier_name'] %></td>
+              <td><%$val['return_date']|date_format:'%d-%m-%Y' %></td>
+              <td class="fw-bold text-danger">₹<%$val['total_return_amount']|number_format:2 %></td>
+              <td><%$val['added_date']|date_format:'%d-%m-%Y %H:%M' %></td>
+              <td class="text-center cat-col-action">
+                <div class="d-flex align-items-center justify-content-center">
+                  <a href="javascript:void(0)" class="view-return-details" data-id="<%$val['return_id']%>" title="View Details">
+                    <i class="ti ti-eye text-primary"></i>
+                  </a>
+                </div>
+              </td>
+           </tr>
+          <%/foreach%>
+        <%/if%>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 

@@ -1,31 +1,44 @@
+<link rel="stylesheet" href="<%$base_url%>public/css/category_ui.css" />
 <div class="content-wrapper">
   <div class="container-xxl flex-grow-1 container-p-y">
-    <nav aria-label="breadcrumb">
-      <div class="sub-header-left pull-left breadcrumb">
-        <h1>
-           Home
-          <a hijacked="yes" href="javascript:void(0)" class="backlisting-link" >
-            <i class="ti ti-chevrons-right" ></i>
-            <em >Stock Management</em></a>
-          </h1>
-          <br>
-          <span >Inventory Status</span>
+    <!-- Page Header -->
+    <div class="cat-page-header">
+      <div class="cat-page-header-left">
+        <div class="cat-page-icon">
+          <i class="ti ti-packages"></i>
         </div>
-      </nav>
-
-      <div class="dt-top-btn d-grid gap-2 d-md-flex justify-content-md-end mb-3">
-         <input type="text" id="search-filter-input" placeholder="Search Stock..." class="form-control search-filter-input me-2">
-         <!-- Manual adjustment modal can be triggered from here if needed -->
-         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#manualAdjustmentModal">
-            <i class="ti ti-adjustments me-2"></i> Manual Adjustment
-         </button>
+        <div>
+          <h1 class="cat-page-title">Stock Management</h1>
+          <nav class="cat-breadcrumb">
+            <a href="<%$base_url%>">Home</a>
+            <i class="ti ti-chevron-right"></i>
+            <span>Stock Management</span>
+          </nav>
+        </div>
       </div>
+      <div class="cat-page-header-right">
+        <div class="cat-search-box">
+          <i class="ti ti-search"></i>
+          <input type="text" id="search-filter-input" placeholder="Search Stock..." />
+        </div>
+        <button type="button" id="export-csv" class="cat-btn cat-btn-outline" title="Export CSV">
+          <i class="ti ti-file-type-csv"></i> Export CSV
+        </button>
+        <button type="button" id="export-pdf" class="cat-btn cat-btn-outline-red" title="Export PDF">
+          <i class="ti ti-file-type-pdf"></i> Export PDF
+        </button>
+        <button type="button" class="cat-btn cat-btn-primary text-white" data-bs-toggle="modal" data-bs-target="#manualAdjustmentModal" title="Manual Adjustment">
+          <i class="ti ti-adjustments"></i> Manual Adjustment
+        </button>
+      </div>
+    </div>
 
 
 
-      <div class="card p-0 mt-0 w-100">
-          <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-striped text-nowrap" id="stockListTable">
-            <thead>
+    <!-- Table Card -->
+    <div class="cat-table-card">
+      <table class="table table-hover mb-0 w-100" id="stockListTable">
+        <thead class="bg-light">
                <tr>
                   <th>Product</th>
                   <th>Category</th>
@@ -34,7 +47,7 @@
                   <th class="text-center">Alert Qty</th>
                   <th>Unit</th>
                   <th>Status</th>
-                  <th>Action</th>
+                  <th class="text-center">Action</th>
                </tr>
             </thead>
             <tbody>
@@ -56,11 +69,11 @@
                   <td><%$val['unit']%></td>
                   <td>
                     <%if $val['current_stock'] <= 0%>
-                        <span class="badge bg-danger">Out of Stock</span>
+                        <span class="cat-badge cat-badge-inactive">Out of Stock</span>
                     <%elseif $val['current_stock'] <= $val['alert_qty']%>
-                        <span class="badge bg-warning">Low Stock</span>
+                        <span class="cat-badge" style="background: rgba(255, 152, 0, 0.1); color: #ff9800; border: 1px solid rgba(255, 152, 0, 0.2);">Low Stock</span>
                     <%else%>
-                        <span class="badge bg-success">In Stock</span>
+                        <span class="cat-badge cat-badge-active">In Stock</span>
                     <%/if%>
                   </td>
                   <td class="text-center">

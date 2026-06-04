@@ -11,7 +11,7 @@
         <div>
           <h1 class="cat-page-title">Brands</h1>
           <nav class="cat-breadcrumb">
-            <a href="<%base_url()%>">Home</a>
+            <a href="<%base_url('dashboard')%>">Home</a>
             <i class="ti ti-chevron-right"></i>
             <span>Brands</span>
           </nav>
@@ -63,7 +63,7 @@
       <table id="brandsTable" class="table table-hover mb-0 w-100">
         <thead>
           <tr>
-            <th class="cat-col-num" width="50">#</th>
+            <th class="cat-col-num text-center" width="50">#</th>
             <th>Brand Name</th>
             <th width="140">Status</th>
             <th width="160" class="text-center">Action</th>

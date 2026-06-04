@@ -2,8 +2,8 @@
     <thead>
         <tr>
             <th>Product</th>
-            <th class="text-center">Category</th>
-            <th class="text-center">Current Qty</th>
+            <th>Category</th>
+            <th>Current Qty</th>
             <th class="text-end">Avg Purchase Price</th>
             <th class="text-end">Total Valuation</th>
         </tr>
@@ -15,30 +15,13 @@
             <%foreach from=$stock item=row%>
                 <tr>
                     <td>
-                        <span class="d-block fw-bold text-primary"><%$row['name']%></span>
-                        <small class="text-muted"><%$row['product_code']%></small>
+                        <%$row['name']%>
+                        <span class="text-muted">(<%$row['product_code']%>)</span>
                     </td>
-                    <td class="text-center">
-                        <span class="badge bg-label-secondary d-inline-flex align-items-center justify-content-center">
-                            <i class="ti ti-folder me-1"></i>
-                            <%$row['category_name']|default:'N/A'%>
-                        </span>
-                    </td>
-                    <td class="text-center">
-                        <%if $row['qty'] <= $row['alert_qty']%>
-                            <span class="badge bg-label-danger d-inline-flex align-items-center justify-content-center">
-                                <i class="ti ti-alert-triangle me-1"></i>
-                                <%$row['qty']%> <%$row['unit']%>
-                            </span>
-                        <%else%>
-                            <span class="badge bg-label-success d-inline-flex align-items-center justify-content-center">
-                                <i class="ti ti-box me-1"></i>
-                                <%$row['qty']%> <%$row['unit']%>
-                            </span>
-                        <%/if%>
-                    </td>
-                    <td class="text-end fw-medium"><%$row['purchase_price']|number_format:2%></td>
-                    <td class="text-end fw-bold text-primary"><%$row['valuation']|number_format:2%></td>
+                    <td><%$row['category_name']|default:'N/A'%></td>
+                    <td><%$row['qty']%> <%$row['unit']%></td>
+                    <td class="text-end"><%$row['purchase_price']|number_format:2%></td>
+                    <td class="text-end"><%$row['valuation']|number_format:2%></td>
                 </tr>
                 <%assign var="total_val" value=$total_val + $row['valuation']%>
             <%/foreach%>
@@ -46,9 +29,9 @@
     </tbody>
     <%if $stock%>
     <tfoot>
-        <tr class="table-success border-top-2">
-            <th colspan="4" class="text-end h5 mb-0 py-3 text-dark">TOTAL INVENTORY VALUE:</th>
-            <th class="text-end h5 mb-0 py-3 text-success"><%$total_val|number_format:2%></th>
+        <tr>
+            <th colspan="4" class="text-end fw-bold">TOTAL INVENTORY VALUE:</th>
+            <th class="text-end fw-bold"><%$total_val|number_format:2%></th>
         </tr>
     </tfoot>
     <%/if%>

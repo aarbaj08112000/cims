@@ -583,6 +583,24 @@
 }
 
 /* ====================================================
+   COLUMN ALIGNMENT UTILITIES
+   Center-align: SR No (#), Image, Action columns
+   Left-align: All other columns (default)
+   ==================================================== */
+.cat-table-card table.dataTable thead th,
+.cat-table-card table.dataTable tbody td {
+  text-align: left;
+}
+.cat-table-card table.dataTable thead th.text-center,
+.cat-table-card table.dataTable tbody td.text-center {
+  text-align: center !important;
+}
+.cat-table-card table.dataTable thead th.text-end,
+.cat-table-card table.dataTable tbody td.text-end {
+  text-align: right !important;
+}
+
+/* ====================================================
    RESPONSIVE
    ==================================================== */
 @media (max-width: 992px) {

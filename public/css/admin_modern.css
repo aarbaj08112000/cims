@@ -1,8 +1,8 @@
 /* Admin Modern Design System - Violet Theme */
 :root {
-    --primary-color: #1E88E5;
-    --primary-hover: #1565C0;
-    --primary-light: #F57C00;
+    --primary-color: #5b5fc7;
+    --primary-hover: #4a4eb5;
+    --primary-light: #ededfa;
     --bg-color: #f8f7fa;
     --card-bg: #ffffff;
     --text-main: #5d596c;
@@ -461,9 +461,13 @@ body.modern-login-body {
 
 /* Ensure active submenu link has background even without icon */
 .bg-menu-theme .menu-sub .menu-item.active>.menu-link {
-    background: linear-gradient(270deg, rgba(30, 136, 229, 1) 0%, rgba(30, 136, 229, 0.8) 100%) !important;
+    background: linear-gradient(270deg,
+            rgba(91, 95, 199, 1) 0%,
+            rgba(91, 95, 199, 0.8) 100%) !important;
+
     color: #ffffff !important;
-    box-shadow: 0 0.25rem 0.75rem rgba(30, 136, 229, 0.4) !important;
+
+    box-shadow: 0 0.25rem 0.75rem rgba(91, 95, 199, 0.4) !important;
     display: flex;
     align-items: center;
 }

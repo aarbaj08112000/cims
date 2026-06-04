@@ -21,7 +21,7 @@ class Reports extends MY_Controller {
     public function sales_report() {
         // Prefer POST values (clean URL) but fallback to GET for backward compatibility
         $from_date = $this->input->post('from_date') ?: ($this->input->get('from_date') ?: date('Y-m-01'));
-        $to_date = $this->input->post('to_date') ?: ($this->input->get('to_date') ?: date('Y-m-d'));
+        $to_date = $this->input->post('to_date') ?: ($this->input->get('to_date') ?: date('Y-m-t'));
 
         $data['sales'] = $this->Reports_model->get_sales_report($from_date, $to_date);
         $data['from_date'] = $from_date;
@@ -36,7 +36,7 @@ class Reports extends MY_Controller {
      */
     public function purchase_report() {
         $from_date = $this->input->post('from_date') ?: ($this->input->get('from_date') ?: date('Y-m-01'));
-        $to_date = $this->input->post('to_date') ?: ($this->input->get('to_date') ?: date('Y-m-d'));
+        $to_date = $this->input->post('to_date') ?: ($this->input->get('to_date') ?: date('Y-m-t'));
         
         $data['purchases'] = $this->Reports_model->get_purchase_report($from_date, $to_date);
         $data['from_date'] = $from_date;
@@ -60,8 +60,8 @@ class Reports extends MY_Controller {
      * AJAX: Get Sales Report
      */
     public function get_sales_report_ajax() {
-        $from_date = $this->input->post('from_date');
-        $to_date = $this->input->post('to_date');
+        $from_date = $this->input->post('from_date') ?: date('Y-m-01');
+        $to_date = $this->input->post('to_date') ?: date('Y-m-t');
         
         $data['sales'] = $this->Reports_model->get_sales_report($from_date, $to_date);
         $html = $this->smarty->fetch('sales_report_table.tpl', $data);
@@ -73,8 +73,8 @@ class Reports extends MY_Controller {
      * AJAX: Get Purchase Report
      */
     public function get_purchase_report_ajax() {
-        $from_date = $this->input->post('from_date');
-        $to_date = $this->input->post('to_date');
+        $from_date = $this->input->post('from_date') ?: date('Y-m-01');
+        $to_date = $this->input->post('to_date') ?: date('Y-m-t');
         
         $data['purchases'] = $this->Reports_model->get_purchase_report($from_date, $to_date);
         $html = $this->smarty->fetch('purchase_report_table.tpl', $data);

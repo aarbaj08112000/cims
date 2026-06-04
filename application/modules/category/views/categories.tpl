@@ -11,7 +11,7 @@
         <div>
           <h1 class="cat-page-title">Categories</h1>
           <nav class="cat-breadcrumb">
-            <a href="<%base_url()%>">Home</a>
+            <a href="<%base_url('dashboard')%>">Home</a>
             <i class="ti ti-chevron-right"></i>
             <span>Categories</span>
           </nav>
@@ -77,7 +77,7 @@
       <table id="categoriesTable" class="table table-hover mb-0 w-100">
         <thead>
           <tr>
-            <th class="cat-col-num">#</th>
+            <th class="cat-col-num text-center">#</th>
             <th>Category Name</th>
             <th>Status</th>
             <th class="text-center">Action</th>

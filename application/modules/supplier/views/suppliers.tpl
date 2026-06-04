@@ -1,25 +1,38 @@
+<link rel="stylesheet" href="<%$base_url%>public/css/category_ui.css" />
 <div class="content-wrapper">
   <!-- Content -->
   <div class="container-xxl flex-grow-1 container-p-y">
-    <nav aria-label="breadcrumb">
-      <div class="sub-header-left pull-left breadcrumb">
-        <h1>
-           Home
-          <a hijacked="yes" href="javascript:void(0)" class="backlisting-link" >
-            <i class="ti ti-chevrons-right" ></i>
-            <em >Suppliers</em></a>
-          </h1>
-          <br>
-          <span >Manage Suppliers</span>
+    <!-- Page Header -->
+    <div class="cat-page-header">
+      <div class="cat-page-header-left">
+        <div class="cat-page-icon">
+          <i class="ti ti-truck"></i>
         </div>
-      </nav>
-
-      <div class="dt-top-btn d-grid gap-2 d-md-flex justify-content-md-end mb-3">
-        <input type="text" id="search-filter-input" placeholder="Search Suppliers..." class="form-control search-filter-input me-2">
-        <button type="button" class="btn btn-seconday" data-bs-toggle="modal" data-bs-target="#addSupplier" title="Add Supplier">
-           <i class="ti ti-plus"></i> Add Supplier
+        <div>
+          <h1 class="cat-page-title">Suppliers</h1>
+          <nav class="cat-breadcrumb">
+            <a href="<%base_url()%>">Home</a>
+            <i class="ti ti-chevron-right"></i>
+            <span>Suppliers</span>
+          </nav>
+        </div>
+      </div>
+      <div class="cat-page-header-right">
+        <div class="cat-search-box">
+          <i class="ti ti-search"></i>
+          <input type="text" id="search-filter-input" placeholder="Search suppliers..." />
+        </div>
+        <button type="button" id="export-csv" class="cat-btn cat-btn-outline" title="Export CSV">
+          <i class="ti ti-file-spreadsheet"></i> Export CSV
+        </button>
+        <button type="button" id="export-pdf" class="cat-btn cat-btn-outline-red" title="Export PDF">
+          <i class="ti ti-file-type-pdf"></i> Export PDF
+        </button>
+        <button type="button" class="cat-btn cat-btn-primary" data-bs-toggle="modal" data-bs-target="#addSupplier" title="Add Supplier">
+          <i class="ti ti-plus"></i> Add Supplier
         </button>
       </div>
+    </div>
 
       <!-- Add Supplier Modal -->
       <div class="modal fade" id="addSupplier" tabindex="-1" role="dialog" aria-labelledby="addSupplierLabel" aria-hidden="true">
@@ -92,16 +105,18 @@
 
 
 
-      <div class="card p-0 mt-0 w-100">
-          <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-striped text-nowrap" id="suppliersTable">
+      <!-- Table Card -->
+      <div class="cat-table-card">
+          <table id="suppliersTable" class="table table-hover mb-0 w-100">
             <thead>
                <tr>
+                  <th class="cat-col-num">#</th>
                   <th>Supplier Name</th>
                   <th>Contact Person</th>
                   <th>Phone</th>
                   <th>GST Number</th>
                   <th>Status</th>
-                  <th>Action</th>
+                  <th class="text-center">Action</th>
                </tr>
             </thead>
             <tbody>
@@ -109,17 +124,20 @@
               <%assign var='i' value= 1 %>
               <%foreach from=$suppliers item=val %>
                <tr>
+                  <td class="text-center cat-row-num"><span class="cat-row-num"><%$i %></span></td>
                   <td><%$val['supplier_name'] %></td>
                   <td><%$val['contact_person']|default:'N/A' %></td>
                   <td><%$val['phone']|default:'N/A' %></td>
                   <td><%$val['gst_number']|default:'N/A' %></td>
-                  <td>
-                    <span class="badge <%if $val['status'] == 'Active' %>bg-label-success<%else %>bg-label-danger<%/if %>">
-                      <%$val['status'] %>
-                    </span>
+                  <td class="cat-col-status">
+                    <%if $val['status'] == 'Active' %>
+                      <span class="cat-badge cat-badge-active"><span class="cat-badge-dot"></span>Active</span>
+                    <%else %>
+                      <span class="cat-badge cat-badge-inactive"><span class="cat-badge-dot"></span>Inactive</span>
+                    <%/if %>
                   </td>
-                  <td>
-                    <div class="d-flex align-items-center">
+                  <td class="text-center cat-col-action">
+                    <div class="d-flex align-items-center justify-content-center">
                       <a href="javascript:void(0)" class="me-2" data-bs-toggle="modal" data-bs-target="#editSupplier<%$i %>" title="Edit">
                         <i class="ti ti-edit text-primary"></i>
                       </a>

@@ -23,16 +23,16 @@ const reportsPage = {
             that.loadStockReport();
         });
 
-        // Filters
-        $('#filter-sales-btn').on('click', function () {
-            that.loadSalesReport();
-        });
-        $('#filter-purchase-btn').on('click', function () {
-            that.loadPurchaseReport();
-        });
-        $('#refresh-stock-btn').on('click', function () {
-            that.loadStockReport();
-        });
+        // Filter button bindings removed as filters are hidden
+        // $('#filter-sales-btn').on('click', function () {
+        //     that.loadSalesReport();
+        // });
+        // $('#filter-purchase-btn').on('click', function () {
+        //     that.loadPurchaseReport();
+        // });
+        // $('#refresh-stock-btn').on('click', function () {
+        //     that.loadStockReport();
+        // });
     },
     loadSalesReport: function () {
         let from_date = $('#sales_from_date').val();

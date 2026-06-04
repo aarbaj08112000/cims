@@ -1,17 +1,27 @@
+<link rel="stylesheet" href="<%$base_url%>public/css/category_ui.css" />
 <div class="content-wrapper">
   <div class="container-xxl flex-grow-1 container-p-y">
-    <nav aria-label="breadcrumb">
-      <div class="sub-header-left pull-left breadcrumb">
-        <h1>
-           Home
-          <a hijacked="yes" href="javascript:void(0)" class="backlisting-link" >
-            <i class="ti ti-chevrons-right" ></i>
-            <em >Reports</em></a>
-          </h1>
-          <br>
-          <span >Analytics & Insights</span>
+    <!-- Page Header -->
+    <div class="cat-page-header">
+      <div class="cat-page-header-left">
+        <div class="cat-page-icon">
+          <i class="ti ti-chart-pie"></i>
         </div>
-      <div class="row mb-5 g-4 card-stats-row">
+        <div>
+          <h1 class="cat-page-title">Reports</h1>
+          <nav class="cat-breadcrumb">
+            <a href="<%base_url('dashboard')%>">Home</a>
+            <i class="ti ti-chevron-right"></i>
+            <span>Reports</span>
+            <i class="ti ti-chevron-right"></i>
+            <span>Analytics & Insights</span>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="row mb-5 g-4 card-stats-row">
         <!-- Total Sales Card -->
         <div class="col-lg-3 col-md-6">
           <div class="card card-stat-item border-0 shadow-lg h-100 overflow-hidden bg-primary-gradient">
@@ -97,9 +107,9 @@
         </div>
       </div>
 
-      <div class="row">
+    <div class="row">
         <div class="col-12">
-          <div class="card shadow-sm border-0 overflow-hidden">
+          <div class="cat-table-card shadow-sm border-0 overflow-hidden">
             <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0">
                <div class="nav-align-top">
                 <ul class="nav nav-tabs nav-fill custom-tabs" role="tablist">
@@ -124,68 +134,24 @@
             <div class="tab-content border-0 shadow-none">
               <!-- Sales Report Tab -->
               <div class="tab-pane fade show active" id="navs-sales" role="tabpanel">
-                <div class="row mb-4 align-items-end g-3 bg-light p-3 rounded-3">
-                  <div class="col-md-4">
-                    <label class="form-label fw-bold">From Date</label>
-                    <div class="input-group input-group-merge">
-                        <span class="input-group-text"><i class="ti ti-calendar"></i></span>
-                        <input type="date" id="sales_from_date" class="form-control" value="<%$smarty.now|date_format:'%Y-%m-01'%>">
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <label class="form-label fw-bold">To Date</label>
-                    <div class="input-group input-group-merge">
-                        <span class="input-group-text"><i class="ti ti-calendar"></i></span>
-                        <input type="date" id="sales_to_date" class="form-control" value="<%$smarty.now|date_format:'%Y-%m-%d'%>">
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <button type="button" class="btn btn-primary d-flex align-items-center justify-content-center w-100 py-2" id="filter-sales-btn">
-                      <i class="ti ti-filter me-2 ti-xs"></i> GENERATE REPORT
-                    </button>
-                  </div>
-                </div>
-                <div id="sales-report-container" class="table-responsive text-nowrap mt-3 min-h-300">
+                <!-- Filter removed as per requirement -->
+                <div id="sales-report-container" class="mt-3">
                     <!-- AJAX Table Load -->
                 </div>
               </div>
 
               <!-- Purchase Report Tab -->
               <div class="tab-pane fade" id="navs-purchase" role="tabpanel">
-                 <div class="row mb-4 align-items-end g-3 bg-light p-3 rounded-3">
-                  <div class="col-md-4">
-                    <label class="form-label fw-bold">From Date</label>
-                    <div class="input-group input-group-merge">
-                        <span class="input-group-text"><i class="ti ti-calendar"></i></span>
-                        <input type="date" id="purchase_from_date" class="form-control" value="<%$smarty.now|date_format:'%Y-%m-01'%>">
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <label class="form-label fw-bold">To Date</label>
-                    <div class="input-group input-group-merge">
-                        <span class="input-group-text"><i class="ti ti-calendar"></i></span>
-                        <input type="date" id="purchase_to_date" class="form-control" value="<%$smarty.now|date_format:'%Y-%m-%d'%>">
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <button type="button" class="btn btn-primary d-flex align-items-center justify-content-center w-100 py-2" id="filter-purchase-btn">
-                      <i class="ti ti-filter me-2 ti-xs"></i> GENERATE REPORT
-                    </button>
-                  </div>
-                </div>
-                <div id="purchase-report-container" class="table-responsive text-nowrap mt-3 min-h-300">
+                 <!-- Filter removed as per requirement -->
+                <div id="purchase-report-container" class="mt-3">
                     <!-- AJAX Table Load -->
                 </div>
               </div>
 
               <!-- Stock Valuation Tab -->
               <div class="tab-pane fade" id="navs-stock" role="tabpanel">
-                <div class="text-end mb-4 bg-light p-3 rounded-3">
-                    <button type="button" class="btn btn-primary d-inline-flex align-items-center" id="refresh-stock-btn">
-                        <i class="ti ti-refresh me-2 ti-xs"></i> REFRESH VALUATION
-                    </button>
-                </div>
-                <div id="stock-report-container" class="table-responsive text-nowrap mt-3 min-h-300">
+                <!-- Filter removed as per requirement -->
+                <div id="stock-report-container" class="mt-3">
                     <!-- AJAX Table Load -->
                 </div>
               </div>
@@ -303,6 +269,8 @@
     background: #ffffff;
     padding: 8px;
     transition: all 0.3s ease;
+    max-height: 500px;
+    overflow-y: auto;
 }
 
 .table {
@@ -320,6 +288,9 @@
     border-top: none !important;
     padding: 16px 20px !important;
     vertical-align: middle !important;
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
 
 .table tbody tr {

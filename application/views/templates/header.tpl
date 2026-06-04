@@ -69,6 +69,7 @@
       <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
       <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/3.3.3/css/fixedColumns.dataTables.min.css">
       <link rel="stylesheet" type="text/css" href="<%$base_url%>public/css/data_table/datatable.css">
+      <link rel="stylesheet" type="text/css" href="<%$base_url%>public/css/datatable-standard.css">
       <script src="<%$base_url%>public/js/admin_panel/global_datatable_setup.js"></script>
       <!-- select2 -->
       <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -353,8 +354,8 @@ div:where(.swal2-icon) .swal2-icon-content {
 
             <!-- vertical menu bar -->
             <%if $config['menu_type'] eq 'vertical'%>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span> <label>Menu</label>
+            <button class="navbar-toggler top-sidebar-toggle-btn" type="button" aria-label="Toggle navigation" style="border: none; background: transparent;">
+               <i class="ti ti-x text-primary" style="font-size: 1.5rem;"></i>
             </button>
             <%/if%>
             <%if !(strpos($smarty.server.PATH_INFO, "/sitemap") !== false) %>

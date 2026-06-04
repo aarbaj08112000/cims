@@ -7,6 +7,10 @@ $(document).ready(function () {
     }
 });
 
+var returnListTable = '';
+var return_file_name = "sales_return_history";
+var return_pdf_title = "Sales Return History Report";
+
 const salesReturnPage = {
     initList: function () {
         this.dataTable();
@@ -169,13 +173,61 @@ const salesReturnPage = {
         $("#total_return_amount").val(grandTotal.toFixed(2));
     },
     dataTable: function () {
-        var returnListTable = $("#returnListTable").DataTable({
+        returnListTable = $("#returnListTable").DataTable({
+            dom: 'Brt<"cat-dt-footer"<"cat-dt-info"i><"cat-dt-controls"<"cat-dt-length"l><"cat-dt-paging"p>>>',
+            buttons: [
+                {
+                    extend: "csv",
+                    className: "d-none",
+                    filename: return_file_name,
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4]
+                    }
+                },
+                {
+                    extend: "pdf",
+                    className: "d-none",
+                    filename: return_file_name,
+                    customize: function (doc) {
+                        doc.pageMargins = [15, 15, 15, 15];
+                        doc.content[0].text = return_pdf_title;
+                        doc.content[1].table.widths = ["15%", "20%", "30%", "20%", "15%"];
+                    },
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4]
+                    }
+                },
+            ],
             searching: true,
             order: [[3, "desc"]], // Sort by Date
+            pagingType: "full_numbers",
+            language: {
+                processing:   '<div class="cat-processing"><i class="ti ti-loader-2 cat-spin"></i>&nbsp;Loading...</div>',
+                emptyTable:   '<div class="cat-empty">No returns found.</div>',
+                zeroRecords:  '<div class="cat-empty">No records match your search.</div>',
+                info:         'Showing _START_ to _END_ of _TOTAL_ entries',
+                infoEmpty:    'Showing 0 to 0 of 0 entries',
+                infoFiltered: '(filtered from _MAX_ total)',
+                lengthMenu:   'Show _MENU_ entries',
+                paginate: {
+                    first:    '<i class="ti ti-chevrons-left"></i>',
+                    last:     '<i class="ti ti-chevrons-right"></i>',
+                    next:     '<i class="ti ti-chevron-right"></i>',
+                    previous: '<i class="ti ti-chevron-left"></i>'
+                }
+            }
         });
 
-        $('#search-filter-input').on('keyup', function () {
+        $('#search-filter-input').on('keyup input', function () {
             returnListTable.search(this.value).draw();
+        });
+
+        $('#export-csv').on('click', function () {
+            returnListTable.button('.buttons-csv').trigger();
+        });
+
+        $('#export-pdf').on('click', function () {
+            returnListTable.button('.buttons-pdf').trigger();
         });
     },
 }

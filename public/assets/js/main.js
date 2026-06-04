@@ -34,6 +34,19 @@ const app = {
 
       // $(this).find('i').removeClass("bx-chevron-left").addClass("bx-chevron-right")
     });
+    
+    $('.top-sidebar-toggle-btn').on('click', function (e) {
+      e.preventDefault();
+      $("html").toggleClass("layout-menu-collapsed");
+      
+      // Optionally toggle the icon between menu and close
+      var icon = $(this).find('i');
+      if($("html").hasClass("layout-menu-collapsed")) {
+          icon.removeClass("ti-x").addClass("ti-menu-2");
+      } else {
+          icon.removeClass("ti-menu-2").addClass("ti-x");
+      }
+    });
     $(".menu-item").on("click", function () {
 
       if (!$(this).hasClass("open-menu")) {
