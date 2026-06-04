@@ -21,8 +21,9 @@
     --bs-gray-dark: rgba(67, 89, 113, 0.8);
     --bs-gray-25: rgba(67, 89, 113, 0.025);
     --bs-gray-50: rgba(67, 89, 113, 0.05);
-    --bs-primary: #ea1c31;
-    --bs-secondary: #8592a3;
+    --bs-primary: #5b5fc7;
+    --bs-primary-light: #ededfa;
+    --bs-secondary: #4a4eb5;
     --bs-success: #71dd37;
     --bs-info: #03c3ec;
     --bs-warning: #ffab00;
@@ -25831,13 +25832,13 @@ html:not(.layout-footer-fixed) .content-wrapper {
 
 #toggle-horizontal-menu-bar:hover {
     transition: all 0.3s ease-in-out;
-    background-color: #ECF2FF;
+    background-color: var(--bs-primary-light);
 
 
 }
 
 #toggle-horizontal-menu-bar:hover span {
-    color: var(--bs-opposite-color);
+    color: var(--bs-primary);
 
 
 }

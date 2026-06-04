@@ -24,9 +24,10 @@ class Purchase_return extends MY_Controller {
     public function get_purchase_items_for_return() {
         $purchase_id = $this->input->post('purchase_id');
         $items = $this->Purchase_return_model->get_returnable_items($purchase_id);
+        $purchase = $this->Purchase_model->get_purchase_master($purchase_id);
         
         if (!empty($items)) {
-            echo json_encode(['success' => 1, 'items' => $items]);
+            echo json_encode(['success' => 1, 'items' => $items, 'purchase' => $purchase]);
         } else {
             echo json_encode(['success' => 0, 'msg' => 'No returnable items found for this bill or it might be fully returned.']);
         }

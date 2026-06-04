@@ -21,7 +21,9 @@ const salesReturnPage = {
         this.bindCreateEvents();
     },
     initSelect2: function (selector = ".select2") {
-        $(selector).select2();
+        $(selector).select2({
+            width: '100%'
+        });
     },
     bindListEvents: function () {
         let that = this;
@@ -56,15 +58,38 @@ const salesReturnPage = {
                     success: function (response) {
                         if (response.success == 1) {
                             that.renderReturnItems(response.items);
+                            if (response.sale) {
+                                let customer = response.sale.customer_mobile || response.sale.customer_phone_number || 'Walk-in';
+                                $("#billCustomer").text(customer);
+                                $("#billDate").text(response.sale.sales_date);
+                                $("#billAmount").text("₹" + parseFloat(response.sale.grand_total).toFixed(2));
+                                $("#billItems").text(response.items.length);
+                                $("#billInfoPanel").fadeIn(300);
+                            }
+                            $("#returnItemsCard").fadeIn(300);
                         } else {
                             $("#returnItemsTable tbody").html('<tr><td colspan="7" class="text-center text-danger">' + response.msg + '</td></tr>');
                             that.calculateGrandTotal();
+                            $("#returnItemsCard").fadeIn(300);
+                            $("#billInfoPanel").hide();
                         }
                     }
                 });
             } else {
-                $("#returnItemsTable tbody").html('<tr><td colspan="7" class="text-center text-muted">Select an original bill to load items.</td></tr>');
+                $("#returnItemsTable tbody").html(`
+                    <tr class="empty-state-row">
+                        <td colspan="7">
+                            <div class="empty-state">
+                                <div class="empty-state-icon"><i class="ti ti-receipt-off"></i></div>
+                                <span class="empty-state-text">No items to display</span>
+                                <span class="empty-state-sub">Select an original sales bill above to load returnable items</span>
+                            </div>
+                        </td>
+                    </tr>
+                `);
                 that.calculateGrandTotal();
+                $("#returnItemsCard").hide();
+                $("#billInfoPanel").hide();
             }
         });
 
@@ -146,31 +171,57 @@ const salesReturnPage = {
                     <small class="text-muted">${item.product_code}</small>
                     <input type="hidden" name="product_id[]" value="${item.product_id}">
                 </td>
-                <td>${item.qty}</td>
-                <td>${item.qty - item.available_qty}</td>
-                <td class="available-qty fw-bold">${item.available_qty}</td>
+                <td class="text-center">${item.qty}</td>
+                <td class="text-center">${item.qty - item.available_qty}</td>
+                <td class="text-center available-qty fw-bold text-primary">${item.available_qty}</td>
                 <td>
-                    <input type="number" name="return_qty[]" class="form-control return-qty" min="0" max="${item.available_qty}" value="0">
+                    <input type="number" name="return_qty[]" class="form-control return-qty text-center" min="0" max="${item.available_qty}" value="0">
                 </td>
-                <td>
+                <td class="text-end">
                     ₹${parseFloat(item.sale_price).toFixed(2)}
                     <input type="hidden" name="price[]" class="price-text" value="${item.sale_price}">
                 </td>
-                <td>
-                    <input type="text" name="total[]" class="form-control row-total" value="0.00" readonly>
+                <td class="text-end">
+                    <input type="text" name="total[]" class="form-control row-total text-end bg-light fw-bold" value="0.00" readonly>
                 </td>
             </tr>`;
         });
+        
+        if (items.length === 0) {
+            html = `<tr class="empty-state-row">
+                        <td colspan="7">
+                            <div class="empty-state">
+                                <div class="empty-state-icon"><i class="ti ti-alert-circle text-danger"></i></div>
+                                <span class="empty-state-text text-danger">All items have been fully returned for this bill.</span>
+                            </div>
+                        </td>
+                    </tr>`;
+        }
+        
         $("#returnItemsTable tbody").html(html);
+        
+        // Update stats
+        $("#totalItemsCount").text(items.length);
+        $("#returningCount").text('0');
+        
         this.calculateGrandTotal();
     },
     calculateGrandTotal: function () {
         let grandTotal = 0;
+        let returningCount = 0;
+        
         $(".row-total").each(function () {
             grandTotal += parseFloat($(this).val()) || 0;
         });
+        
+        $(".return-qty").each(function () {
+            let val = parseFloat($(this).val()) || 0;
+            if (val > 0) returningCount++;
+        });
+        
         $("#grand_total_display").text("₹" + grandTotal.toFixed(2));
         $("#total_return_amount").val(grandTotal.toFixed(2));
+        $("#returningCount").text(returningCount);
     },
     dataTable: function () {
         returnListTable = $("#returnListTable").DataTable({

@@ -44,7 +44,16 @@ $(document).ready(function () {
     });
 
     // 6. Discount & Received Amount Change Event
-    $('#discount_input, #received_amount_input').on('input', function () {
+    $('#discount_input').on('input', function () {
+        calculateFinalTotal();
+    });
+
+    $('#received_amount_input').on('input', function () {
+        if ($(this).val() === '') {
+            $(this).data('manual', false);
+        } else {
+            $(this).data('manual', true);
+        }
         calculateFinalTotal();
     });
 
@@ -175,6 +184,12 @@ $(document).ready(function () {
             $('#tax_label').text('Tax (' + taxPercentage + '%)');
         } else {
             $('#tax_label').text('Tax (0%)');
+        }
+        
+        // Auto-calculate Received Amount
+        var isManual = $('#received_amount_input').data('manual');
+        if (!isManual) {
+            $('#received_amount_input').val(grandTotal.toFixed(2));
         }
         
         var received = parseFloat($('#received_amount_input').val()) || 0;

@@ -34,7 +34,7 @@
             <!-- Login Content -->
             <div id="login_div">
                <div class="login-header">
-                  <h2>Welcome to Cloth Inventory Management System</h2>
+                  <h2 class="text-center">Welcome to <br><span style="color: var(--primary-color);"><b><%$config['company_name']%></b></span> <br>Inventory Management System</h2>
                   <p>Please log in to your account to continue</p>
                </div>
 

@@ -10,7 +10,9 @@ const purchaseReturnPage = {
         this.dataTable();
     },
     initSelect2: function (selector = ".select2") {
-        $(selector).select2();
+        $(selector).select2({
+            width: '100%'
+        });
     },
     dataTable: function () {
         returnListTable = $("#returnListTable").DataTable({
@@ -81,17 +83,35 @@ const purchaseReturnPage = {
                     success: function (response) {
                         if (response.success == 1) {
                             that.renderReturnItems(response.items);
-                            $("#returnItemsCard").show();
-                            $("#noItemsMsg").hide();
+                            if (response.purchase) {
+                                let supplier = response.purchase.supplier_name || 'Walk-in';
+                                $("#billSupplier").text(supplier);
+                                $("#billDate").text(response.purchase.purchase_date);
+                                $("#billAmount").text("₹" + parseFloat(response.purchase.grand_total).toFixed(2));
+                                $("#billItems").text(response.items.length);
+                                $("#billInfoPanel").fadeIn(300);
+                            }
                         } else {
-                            $("#returnItemsCard").hide();
-                            $("#noItemsMsg").show().text(response.msg);
+                            $("#returnItemBody").html('<tr><td colspan="7" class="text-center text-danger">' + response.msg + '</td></tr>');
+                            that.calculateGrandTotal();
+                            $("#billInfoPanel").hide();
                         }
                     }
                 });
             } else {
-                $("#returnItemsCard").hide();
-                $("#noItemsMsg").hide();
+                $("#returnItemBody").html(`
+                    <tr class="empty-state-row">
+                        <td colspan="7">
+                            <div class="empty-state">
+                                <div class="empty-state-icon"><i class="ti ti-receipt-off"></i></div>
+                                <span class="empty-state-text">No items to display</span>
+                                <span class="empty-state-sub">Select an original purchase bill above to load returnable items</span>
+                            </div>
+                        </td>
+                    </tr>
+                `);
+                that.calculateGrandTotal();
+                $("#billInfoPanel").hide();
             }
         });
 
@@ -169,34 +189,63 @@ const purchaseReturnPage = {
     renderReturnItems: function (items) {
         let html = '';
         items.forEach(item => {
+            let alreadyReturned = item.qty - item.available_qty;
             html += `<tr>
                 <td>
                     <strong>${item.product_name}</strong><br>
                     <small class="text-muted">${item.product_code}</small>
                     <input type="hidden" name="product_id[]" value="${item.product_id}">
                 </td>
-                <td>${item.qty}</td>
-                <td class="available-qty font-weight-bold text-success">${item.available_qty}</td>
+                <td class="text-center">${item.qty}</td>
+                <td class="text-center">${alreadyReturned}</td>
+                <td class="text-center available-qty font-weight-bold text-primary">${item.available_qty}</td>
                 <td>
-                    <input type="number" name="return_qty[]" class="form-control return-qty-input" min="0" max="${item.available_qty}" value="0">
+                    <input type="number" name="return_qty[]" class="form-control return-qty-input text-center" min="0" max="${item.available_qty}" value="0">
                 </td>
-                <td>
-                    ₹${item.purchase_price}
+                <td class="text-end">
+                    ₹${parseFloat(item.purchase_price).toFixed(2)}
                     <input type="hidden" name="price[]" class="price-text" value="${item.purchase_price}">
                 </td>
-                <td>
-                    <input type="number" name="total[]" class="form-control row-total-input" readonly value="0">
+                <td class="text-end">
+                    <input type="text" name="total[]" class="form-control row-total-input text-end bg-light fw-bold" readonly value="0.00">
                 </td>
             </tr>`;
         });
+        
+        if (items.length === 0) {
+            html = `<tr class="empty-state-row">
+                        <td colspan="7">
+                            <div class="empty-state">
+                                <div class="empty-state-icon"><i class="ti ti-alert-circle text-danger"></i></div>
+                                <span class="empty-state-text text-danger">All items have been fully returned for this bill.</span>
+                            </div>
+                        </td>
+                    </tr>`;
+        }
+        
         $("#returnItemBody").html(html);
+        
+        // Update stats
+        $("#totalItemsCount").text(items.length);
+        $("#returningCount").text('0');
+        
         this.calculateGrandTotal();
     },
     calculateGrandTotal: function () {
         let grandTotal = 0;
+        let returningCount = 0;
+        
         $(".row-total-input").each(function () {
             grandTotal += parseFloat($(this).val()) || 0;
         });
-        $("#grand_total").val(grandTotal.toFixed(2));
+        
+        $(".return-qty-input").each(function () {
+            let val = parseFloat($(this).val()) || 0;
+            if (val > 0) returningCount++;
+        });
+        
+        $("#grand_total_display").text("₹" + grandTotal.toFixed(2));
+        $("#total_return_amount").val(grandTotal.toFixed(2));
+        $("#returningCount").text(returningCount);
     }
 }

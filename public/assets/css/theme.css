@@ -350,7 +350,7 @@ table .ti-edit {
 
 table .ti {
     font-size: 30px;
-    color: var(--bs-theme-color);
+    /* color: var(--bs-theme-color); */
     cursor: pointer;
 }
 

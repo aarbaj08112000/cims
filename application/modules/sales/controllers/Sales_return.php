@@ -44,9 +44,10 @@ class Sales_return extends MY_Controller {
         }
 
         $items = $this->Sales_return_model->get_returnable_items($sales_id);
+        $sale = $this->Sales_model->get_sale_master($sales_id);
 
         if (!empty($items)) {
-            echo json_encode(['success' => 1, 'items' => $items]);
+            echo json_encode(['success' => 1, 'items' => $items, 'sale' => $sale]);
         } else {
             echo json_encode(['success' => 0, 'msg' => 'No returnable items found for this bill or it might be fully returned.']);
         }

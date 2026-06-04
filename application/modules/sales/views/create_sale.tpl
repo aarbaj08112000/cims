@@ -1,4 +1,26 @@
 <link rel="stylesheet" href="<%$base_url%>public/css/category_ui.css" />
+<style>
+.btn-icon-danger {
+    color: #ff3e1d;
+    background-color: rgba(255, 62, 29, 0.1);
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+.btn-icon-danger:hover {
+    background-color: #ff3e1d;
+    color: #fff;
+}
+.btn-icon-danger:hover .ti-trash {
+    background-color: #ff3e1d;
+    color: #fff;
+}
+</style>
 <div class="content-wrapper">
   <div class="container-xxl flex-grow-1 container-p-y">
 
@@ -103,7 +125,7 @@
                     <input type="number" name="total[]" class="form-control total-input bg-light text-end fw-bold" readonly value="0">
                   </td>
                   <td class="text-center">
-                    <button type="button" class="cat-btn cat-btn-outline-red btn-icon remove-sale-row" style="padding: 0 8px;"><i class="ti ti-trash"></i></button>
+                    <button type="button" class="btn-icon-danger remove-sale-row" title="Remove"><i class="ti ti-trash"></i></button>
                   </td>
                 </tr>
               </tbody>
@@ -152,7 +174,7 @@
       <input type="number" name="total[]" class="form-control total-input bg-light text-end fw-bold" readonly value="0">
     </td>
     <td class="text-center">
-      <button type="button" class="cat-btn cat-btn-outline-red btn-icon remove-sale-row" style="padding: 0 8px;"><i class="ti ti-trash"></i></button>
+      <button type="button" class="btn-icon-danger  remove-sale-row" title="Remove"><i class="ti ti-trash"></i></button>
     </td>
   </tr>
 </script>

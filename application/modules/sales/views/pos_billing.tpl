@@ -98,11 +98,11 @@
                             <span class="text-muted" id="tax_label">Tax (<%if $settings['pos_tax_enabled']['value']|default:'Yes' == 'Yes'%><%$settings['pos_tax_percentage']['value']|default:'2.5'%><%else%>0<%/if%>%)</span>
                             <span id="tax_display" class="fw-bold">₹0.00</span>
                         </div>
-                        <div class="d-flex justify-content-between mb-4">
-                            <span class="text-muted">Discount</span>
-                            <div class="input-group input-group-sm w-50">
-                                <span class="input-group-text bg-transparent">₹</span>
-                                <input type="number" id="discount_input" class="form-control text-end" value="0">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <span class="text-muted fw-bold">Discount</span>
+                            <div class="input-group w-60 shadow-sm">
+                                <span class="input-group-text bg-light fw-bold text-primary">₹</span>
+                                <input type="number" id="discount_input" class="form-control form-control-lg text-end fw-bold text-primary" value="0" style="font-size: 1.1rem;">
                             </div>
                         </div>
                         <hr class="my-4">
@@ -111,16 +111,16 @@
                             <h4 id="grand_total_display" class="mb-0 text-primary fw-bold font-monospace">₹0.00</h4>
                         </div>
                         <hr class="my-4">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="text-muted">Received Amount</span>
-                            <div class="input-group input-group-sm w-50">
-                                <span class="input-group-text bg-transparent">₹</span>
-                                <input type="number" id="received_amount_input" class="form-control text-end" value="0">
+                        <div class="d-none justify-content-between align-items-center mb-4">
+                            <span class="text-muted fw-bold">Received Amount</span>
+                            <div class="input-group w-60 shadow-sm">
+                                <span class="input-group-text bg-light fw-bold text-success">₹</span>
+                                <input type="number" id="received_amount_input" class="form-control form-control-lg text-end fw-bold text-success" value="0" style="font-size: 1.1rem;">
                             </div>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center mb-0">
-                            <span class="text-muted">Change</span>
-                            <span id="change_display" class="fw-bold text-success">₹0.00</span>
+                        <div class="d-none justify-content-between align-items-center p-3 bg-light rounded mb-0">
+                            <span class="text-muted fw-bold fs-5">Change</span>
+                            <span id="change_display" class="fw-bold text-danger fs-4 font-monospace">₹0.00</span>
                         </div>
                     </div>
 
