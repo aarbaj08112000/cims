@@ -1,0 +1,85 @@
+name: Deploymet of Inventory Managment
+
+on:
+  push:
+    branches:
+      - deploy
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Remove git directory
+        run: rm -rf .git
+
+      # Restore previous FTP sync state
+      - name: Restore FTP state cache
+        uses: actions/cache@v4
+        with:
+          path: .ftp-deploy-sync-state.json
+          key: ${{ runner.os }}-ftp-${{ github.ref }}
+          restore-keys: |
+            ${{ runner.os }}-ftp-
+
+      # Upload only changed files
+      - name: Deploy changed files only
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftp
+          port: 21
+          server-dir: /public_html/
+          local-dir: ./
+          exclude: |
+            **/.git*
+            **/.git/**
+            **/.github*
+            .github/**
+            **/node_modules/*
+            **/README.md
+          dangerous-clean-slate: false
+          state-name: .ftp-deploy-sync-state.json
+          log-level: minimal
+
+      # Save FTP sync state
+      - name: Save FTP state cache
+        uses: actions/cache@v4
+        with:
+          path: .ftp-deploy-sync-state.json
+          key: ${{ runner.os }}-ftp-${{ github.sha }}
+
+      # Telegram success notification
+      - name: Telegram notification (success)
+        if: success()
+        run: |
+          COMMIT_MSG="${{ github.event.head_commit.message }}"
+
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TG_BOT_TOKEN }}/sendMessage \
+            -d chat_id=${{ secrets.TG_CHAT_ID }} \
+            -d text="✅ Deployment to Hostinger completed successfully.
+            
+          Branch: ${{ github.ref }}
+          By: ${{ github.actor }}
+          Commit: $COMMIT_MSG"
+
+      # Telegram failure notification
+      - name: Telegram notification (failure)
+        if: failure()
+        run: |
+          COMMIT_MSG="${{ github.event.head_commit.message }}"
+
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TG_BOT_TOKEN }}/sendMessage \
+            -d chat_id=${{ secrets.TG_CHAT_ID }} \
+            -d text="❌ Deployment FAILED!
+            
+          Branch: ${{ github.ref }}
+          By: ${{ github.actor }}
+          Commit: $COMMIT_MSG
+            
+          Check GitHub Actions logs."
