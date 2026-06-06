@@ -219,7 +219,7 @@ const page = {
           className: "d-none",
           filename: file_name,
           exportOptions: {
-            columns: [2, 3, 4, 5, 6] // Export barcode, product name, description, price, stock, status
+            columns: [1, 2, 3, 4, 5, 6] // Export barcode, product name, description, price, stock, status
           }
         },
         {
@@ -228,7 +228,7 @@ const page = {
           title: pdf_title,
           filename: file_name,
           exportOptions: {
-            columns: [2, 3, 4, 5, 6]
+            columns: [1, 2, 3, 4, 5, 6]
           },
           customize: function (doc) {
             doc.pageMargins = [15, 15, 15, 15];
@@ -238,46 +238,59 @@ const page = {
         }
       ],
       language: {
-        emptyTable:   '<div class="cat-empty">No products found.</div>',
-        zeroRecords:  '<div class="cat-empty">No records match your search.</div>',
-        info:         'Showing _START_ to _END_ of _TOTAL_ entries',
-        infoEmpty:    'Showing 0 to 0 of 0 entries',
+        emptyTable: '<div class="cat-empty">No products found.</div>',
+        zeroRecords: '<div class="cat-empty">No records match your search.</div>',
+        info: 'Showing _START_ to _END_ of _TOTAL_ entries',
+        infoEmpty: 'Showing 0 to 0 of 0 entries',
         infoFiltered: '(filtered from _MAX_ total)',
-        lengthMenu:   'Show _MENU_ entries',
+        lengthMenu: '_MENU_',
         paginate: {
-          first:    '<i class="ti ti-chevrons-left"></i>',
-          last:     '<i class="ti ti-chevrons-right"></i>',
-          next:     '<i class="ti ti-chevron-right"></i>',
+          first: '<i class="ti ti-chevrons-left"></i>',
+          last: '<i class="ti ti-chevrons-right"></i>',
+          next: '<i class="ti ti-chevron-right"></i>',
           previous: '<i class="ti ti-chevron-left"></i>'
         }
       },
       searching: true,
-      autoWidth: false,
+      autoWidth: true,
+      scrollX: true,
+      scrollY: true,
+      scrollCollapse: true,
+      lengthChange: true,
       pagingType: "full_numbers",
+      columnDefs: [
+        { targets: 0, orderable: false, searchable: false, className: "text-center" },
+        { targets: 7, orderable: false, searchable: false, className: "text-center" }
+      ],
+      order: [[2, 'asc']],
       initComplete: function () {
         this.api().columns.adjust();
+      },
+      drawCallback: function () {
+        $(".dataTables_length select").select2({
+          minimumResultsForSearch: Infinity
+        });
       }
     });
 
     // Custom Export Buttons Integration
     $('#export-csv').on('click', function () {
-        table.button('.buttons-csv').trigger();
+      table.button('.buttons-csv').trigger();
     });
 
     $('#export-pdf').on('click', function () {
-        table.button('.buttons-pdf').trigger();
+      table.button('.buttons-pdf').trigger();
     });
-    $('#search-filter-input').on('keyup', function () {
-      table.search(this.value).draw();
+
+    // Custom Search Integration
+    var searchTimer;
+    $('#search-filter-input').on('keyup input', function () {
+      var val = this.value;
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(function () {
+        table.search(val).draw();
+      }, 350);
     });
-    $('.dataTables_length').find('label').contents().filter(function () {
-      return this.nodeType === 3; // Filter out text nodes
-    }).remove();
-    setTimeout(function () {
-      $(".dataTables_length select").select2({
-        minimumResultsForSearch: Infinity
-      });
-    }, 1000)
   },
   formInitiate: function () {
     let that = this;

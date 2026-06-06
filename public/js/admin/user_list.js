@@ -18,77 +18,50 @@ const user_app = {
 
         // Initialize the DataTable
         table = $("#erp_users").DataTable({
-            dom: "<"row align- items - center mb - 2"<"col - sm - 12 col - md - 6"B><"col - sm - 12 col - md - 6 text - end"f>><"dt - scroll - body - wrapper"<"col - sm - 12"rt>><"dt - fixed - footer row align - items - center pt - 3 mt - 1 border - top"<"col - sm - 12 col - md - 5"i><"col - sm - 12 col - md - 7 d - flex align - items - center justify - content - end gap - 2"pl>>",
+            dom: 'Brt<"cat-dt-footer"<"cat-dt-info"i><"cat-dt-controls"<"cat-dt-length"l><"cat-dt-paging"p>>>',
             buttons: [
             {
                 extend: "csv",
-                text: '<i class="ti ti-file-type-csv"></i>',
-                init: function (api, node, config) {
-                    $(node).attr("title", "Download CSV");
-                },
-                customize: function (csv) {
-                    var lines = csv.split('\n');
-                    var modifiedLines = lines.map(function (line) {
-                        var values = line.split(',');
-                        values.splice(7, 1);
-                        return values.join(',');
-                    });
-                    return modifiedLines.join('\n');
-                },
+                className: "d-none",
                 filename: file_name
             },
-
             {
                 extend: "pdf",
-                text: '<i class="ti ti-file-type-pdf"></i>',
-                init: function (api, node, config) {
-                    $(node).attr("title", "Download Pdf");
-                },
+                className: "d-none",
+                title: pdf_title,
                 filename: file_name,
                 customize: function (doc) {
                     doc.pageMargins = [15, 15, 15, 15];
-                    doc.content[0].text = pdf_title;
-                    doc.content[0].color = theme_color;
-                    // doc.content[1].table.widths = ["19%", "19%", "13%", "13%", "15%", "15%"];
-                    doc.content[1].table.body[0].forEach(function (cell) {
-                        cell.fillColor = theme_color;
-                    });
-                    doc.content[1].table.body.forEach(function (row, index) {
-                        row.splice(7, 1);
-                        row.forEach(function (cell) {
-                            // Set alignment for each cell
-                            cell.alignment = "center"; // Change to 'left' or 'right' as needed
-                        });
-                    });
+                    doc.styles.tableHeader.fillColor = '#f8f7fa';
+                    doc.styles.tableHeader.color = '#333333';
                 },
             },
         ],
             language: {
-            // loadingRecords: "&nbsp;",
-            // processing: '<div class="spinner"></div>',
-            emptyTable: no_data_message,
-            zeroRecords: no_data_message
-            // paginate: {
-            //     first: "<<",
-            //     last: ">>",
-            //     next: ">",
-            //     previous: "<",
-            // },
-        },
+               emptyTable: '<div class="cat-empty">No users found.</div>',
+               zeroRecords: '<div class="cat-empty">No records match your search.</div>',
+               info: 'Showing _START_ to _END_ of _TOTAL_ entries',
+               infoEmpty: 'Showing 0 to 0 of 0 entries',
+               infoFiltered: '(filtered from _MAX_ total)',
+               lengthMenu: '_MENU_',
+               paginate: {
+                 first: '<i class="ti ti-chevrons-left"></i>',
+                 last: '<i class="ti ti-chevrons-right"></i>',
+                 next: '<i class="ti ti-chevron-right"></i>',
+                 previous: '<i class="ti ti-chevron-left"></i>'
+               }
+            },
             searching: true,
             scrollX: true,
             scrollY: true,
             bScrollCollapse: true,
-            // columnDefs: [{ sortable: false, targets: 7 }],
             pagingType: "full_numbers",
+            initComplete: function () {
+                this.api().columns.adjust();
+            },
             "preDrawCallback": function (settings) {
-                // Get current page and page length
-                // var page = settings._iDisplayStart / settings._iDisplayLength + 1; // Current page (1-based)
-                // var pageLength = settings._iDisplayLength; // Page length (number of records per page)
-
-                // // Get the data range that will be displayed
-                var start = settings._iDisplayStart; // The start index for the data to be displayed
-                var end = settings.fnDisplayEnd(); // The end index for the data to be displayed
+                var start = settings._iDisplayStart; 
+                var end = settings.fnDisplayEnd(); 
 
                 var pageData = settings.aoData.slice(start, end);
                 var html = grid.gridStructure(module_name, pageData, no_data_message);
@@ -100,23 +73,24 @@ const user_app = {
                     $(".dataTables_scroll").addClass("hide-grid-table");
                     $("body").addClass("grid-layout");
                 }
-
             }
-       
-        
         });
-$('#search-filter-input').on('keyup', function () {
-    table.search(this.value).draw();
-});
-$('.dataTables_length').find('label').contents().filter(function () {
-    return this.nodeType === 3; // Filter out text nodes
-}).remove();
 
-// Custom search filter event
+        var searchTimer;
+        $('#search-filter-input').on('keyup input', function () {
+            var val = this.value;
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(function () {
+                table.search(val).draw();
+            }, 350);
+        });
 
-setTimeout(function () {
-    $(".select2-multiple").select2()
-}, 1000)
+        setTimeout(function () {
+            $(".dataTables_length select").select2({
+                minimumResultsForSearch: Infinity
+            });
+            $(".select2-multiple").select2();
+        }, 200);
     },
 formInit: function() {
     let that = this;

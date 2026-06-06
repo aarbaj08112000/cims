@@ -226,8 +226,30 @@
   width: 100% !important;
   margin: 0 !important;
   border-collapse: collapse !important;
+  table-layout: fixed !important;
   font-family: var(--cat-font);
   font-size: 14px;
+}
+
+/* User required Datatable scroll constraints applied globally */
+.dataTables_wrapper .dataTables_scrollBody {
+    min-height: 55vh;
+    max-height: 59vh !important;
+    overflow-y: auto;
+}
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody {
+    height: auto !important; /* Allow min/max height bounds to control it completely */
+}
+
+/* 
+  FIX: When scrollY is enabled, DataTables duplicates the header into dataTables_scrollHeadInner.
+  demo.css aggressively overrides the padding to 15px 18px, making it larger than body columns.
+  We revert it here to match category_ui.css so header width math works.
+*/
+.cat-table-card .dataTables_scrollHeadInner table.dataTable thead th, 
+.cat-table-card .dataTables_scrollHeadInner table.dataTable thead td {
+    padding: 13px 16px !important;
+    border-bottom: 1.5px solid var(--cat-gray-200) !important;
 }
 
 /* Ensure header and body match widths */

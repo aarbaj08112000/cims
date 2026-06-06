@@ -110,7 +110,6 @@
           <table id="suppliersTable" class="table table-hover mb-0 w-100">
             <thead>
                <tr>
-                  <th class="cat-col-num">#</th>
                   <th>Supplier Name</th>
                   <th>Contact Person</th>
                   <th>Phone</th>
@@ -124,7 +123,6 @@
               <%assign var='i' value= 1 %>
               <%foreach from=$suppliers item=val %>
                <tr>
-                  <td class="text-center cat-row-num"><span class="cat-row-num"><%$i %></span></td>
                   <td><%$val['supplier_name'] %></td>
                   <td><%$val['contact_person']|default:'N/A' %></td>
                   <td><%$val['phone']|default:'N/A' %></td>

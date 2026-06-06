@@ -1,29 +1,34 @@
-
+<link rel="stylesheet" href="<%$base_url%>public/css/category_ui.css" />
 <div class="content-wrapper">
   <!-- Content -->
 
   <div class="container-xxl flex-grow-1 container-p-y">
- 
-
-    <nav aria-label="breadcrumb">
-      <div class="sub-header-left pull-left breadcrumb">
-        <h1>
-          Home
-          <a hijacked="yes" href="javascript:void(0)" class="backlisting-link" title="Back to Issue Request Listing" >
-            <i class="ti ti-chevrons-right" ></i>
-            <em >Banner</em></a>
-          </h1>
-          <br>
-          <span >Banner</span>
+    <!-- Page Header -->
+    <div class="cat-page-header">
+      <div class="cat-page-header-left">
+        <div class="cat-page-icon">
+          <i class="ti ti-photo"></i>
         </div>
-      </nav>
-
-      <div class="dt-top-btn d-grid gap-2 d-md-flex justify-content-md-end mb-5">
-        <input type="text" id="search-filter-input" placeholder="Filter Search" class="form-control search-filter-input me-2">
-        <button type="button" class="btn btn-seconday" data-bs-toggle="modal" data-bs-target="#addBanner" title="Add Banner">
-       <i class="ti ti-plus"></i>
+        <div>
+          <h1 class="cat-page-title">Banner</h1>
+          <nav class="cat-breadcrumb">
+            <a href="<%base_url('dashboard')%>">Home</a>
+            <i class="ti ti-chevron-right"></i>
+            <span>Banner</span>
+          </nav>
+        </div>
+      </div>
+      <div class="cat-page-header-right">
+        <div class="cat-search-box">
+          <i class="ti ti-search"></i>
+          <input type="text" id="search-filter-input" placeholder="Search banners..." />
+        </div>
+        <button type="button" class="cat-btn cat-btn-primary" data-bs-toggle="modal" data-bs-target="#addBanner" title="Add Banner">
+          <i class="ti ti-plus"></i> Add Banner
         </button>
       </div>
+    </div>
+
       <div class="modal fade" id="addBanner" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
          <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
@@ -53,14 +58,14 @@
 
 
       <!-- Main content -->
-      <div class="card p-0 mt-4 w-100">
-            <table width="100%" border="1" cellspacing="0" cellpadding="0" class="table table-striped text-nowrap" border-color="#e1e1e1" id="banner">
-              <thead>
+      <div class="cat-table-card w-100">
+            <table class="table table-hover mb-0 w-100" id="banner">
+              <thead class="bg-light">
                  <tr>
                     <!-- <th>Sr No</th> -->
                     <th>Banner Image </th>
                     <th>Status</th>
-                    <th>Action</th>
+                    <th class="text-center">Action</th>
                  </tr>
               </thead>
               <tbody>
@@ -69,23 +74,27 @@
                       <%foreach from=$banner item=val %>
                      <tr>
                         <!-- <td><%$i %></td> -->
-                        <td><img src="<%base_url()%>public/uploads/banner/<%$val['banner_image'] %>" atr="<%$val['banner_image'] %>" width="250" height="auto">
+                        <td><img src="<%base_url()%>public/uploads/banner/<%$val['banner_image'] %>" atr="<%$val['banner_image'] %>" width="250" height="auto" class="rounded">
                         </td>
                         
-                        <td style="font-weight: bold; 
-                            <%if $val['status'] == 'Active' %>color: green;<%else %>color: red;<%/if %>">
-                            <%$val['status'] %>
+                        <td class="cat-col-status">
+                           <%if $val['status'] == 'Active' %>
+                              <span class="cat-badge cat-badge-active"><span class="cat-badge-dot"></span>Active</span>
+                           <%else %>
+                              <span class="cat-badge cat-badge-inactive"><span class="cat-badge-dot"></span>Inactive</span>
+                           <%/if %>
                         </td>
-                        <td>
-                          
-                        	<a type="button" class="" data-bs-toggle="modal" data-bs-target="#updateGroup<%$i %>" title="Edit">
-                            <i class="ti ti-edit edit-part" ></i>
+                        <td class="text-center cat-col-action">
+                          <div class="d-flex align-items-center justify-content-center">
+                        	<a type="button" class="me-2" data-bs-toggle="modal" data-bs-target="#updateGroup<%$i %>" title="Edit">
+                            <i class="ti ti-edit text-primary" ></i>
                           </a>
-                          <span class="delete_data" title="Delete Record" data-id="<%$val['banners_id']%>"><i class="ti ti-trash"></i>
+                          <span class="delete_data cursor-pointer text-danger" title="Delete Record" data-id="<%$val['banners_id']%>"><i class="ti ti-trash"></i>
                           </span>
+                          </div>
                           
                         	<div class="modal fade" id="updateGroup<%$i %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-						         <div class="modal-dialog  modal-dialog-centered " role="document">
+						         <div class="modal-dialog  modal-dialog-centered text-start" role="document">
 						            <div class="modal-content">
 						               <div class="modal-header">
 						                  <h5 class="modal-title" id="exampleModalLabel">Update Banner</h5>
@@ -125,9 +134,6 @@
               
                  </tbody>
            </table>
-          </div>
-        </div>
-        <!--/ Responsive Table -->
       </div>
       <!-- /.col -->
 
@@ -140,4 +146,4 @@
     var base_url = <%$base_url|@json_encode%>
     </script>
 
-    <script src="<%$base_url%>public/js/admin_panel/banner.js">"></script>
+    <script src="<%$base_url%>public/js/admin_panel/banner.js"></script>

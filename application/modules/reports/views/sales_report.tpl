@@ -46,7 +46,6 @@
       <table class="table table-hover mb-0 w-100" id="salesReportTable">
         <thead>
           <tr>
-            <th style="white-space: nowrap;">Sr No</th>
             <th>Date</th>
             <th>Customer Name</th>
             <th>Contact</th>
@@ -59,7 +58,6 @@
           <%assign var="sr_no" value=1%>
           <%foreach from=$sales item=sale%>
           <tr>
-            <td style="white-space: nowrap;"><%$sr_no++%></td>
             <td style="white-space: nowrap;"><%$sale.sales_date|date_format:"%d %b %Y"%></td>
             <td><%$sale.customer_name|default:'Walk-in Customer'%></td>
             <td><%$sale.mobile_number|default:'-'%></td>
@@ -71,7 +69,6 @@
         </tbody>
         <tfoot>
           <tr>
-            <th style="border-top: 1px solid var(--cat-border);"></th>
             <th style="border-top: 1px solid var(--cat-border);"></th>
             <th style="border-top: 1px solid var(--cat-border);"></th>
             <th style="border-top: 1px solid var(--cat-border);"></th>

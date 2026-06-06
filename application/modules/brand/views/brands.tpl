@@ -63,7 +63,6 @@
       <table id="brandsTable" class="table table-hover mb-0 w-100">
         <thead>
           <tr>
-            <th class="cat-col-num text-center" width="50">#</th>
             <th>Brand Name</th>
             <th width="140">Status</th>
             <th width="160" class="text-center">Action</th>
