@@ -1,44 +1,51 @@
 <%assign var='units' value=[] %>
 <%assign var='groups_arr' value=[] %>
+<link rel="stylesheet" href="<%$base_url%>public/css/category_ui.css" />
 <div class="wrapper container-xxl flex-grow-1 container-p-y">
-   <nav aria-label="breadcrumb">
-      <div class="sub-header-left pull-left breadcrumb">
-         <h1>
-            User Management
-            <a hijacked="yes" href="#stock/issue_request/index" class="backlisting-link" title="Back to Issue Request Listing" >
-            <i class="ti ti-chevrons-right" ></i>
-            <em >User</em></a>
-         </h1>
-         <br>
-         <span >Listing</span>
+   <!-- Page Header -->
+   <div class="cat-page-header">
+      <div class="cat-page-header-left">
+         <div class="cat-page-icon">
+            <i class="ti ti-users"></i>
+         </div>
+         <div>
+            <h1 class="cat-page-title">User Management</h1>
+            <nav class="cat-breadcrumb">
+               <a href="<%base_url('dashboard')%>">Home</a>
+               <i class="ti ti-chevron-right"></i>
+               <span>User</span>
+            </nav>
+         </div>
       </div>
-   </nav>
-   <div class="dt-top-btn d-grid gap-2 d-md-flex justify-content-md-end mb-5">
-      <input type="text" id="search-filter-input" placeholder="Filter Search" class="form-control search-filter-input me-2">
-      <button type="button" class="btn btn-seconday" data-bs-toggle="modal" data-bs-target="#addPromo">
-      Add User
-      </button>
-      <!-- <button class="btn btn-seconday" type="button" id="downloadCSVBtn" title="Download CSV"><i class="ti ti-file-type-csv"></i></button>
-      <button class="btn btn-seconday" type="button" id="downloadPDFBtn" title="Download PDF"><i class="ti ti-file-type-pdf"></i></button> -->
-      <div class="dropdown grid-drop-down">
-          <button class="btn btn-secondary top-btn-row btn-seconday " type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" title="Export">
-            <i class=" la-list-ul ti ti-arrow-down-from-arc" ></i>
-          </button>
-          <ul class="dropdown-menu p-0 mt-1 export-drop-down" aria-labelledby="dropdownMenuButton1" >
-            <li class="csv"  id="downloadCSVBtn" title="CSV"><label class="hide">CSV</label> <i class="ti ti-file-type-csv" style="color: black"></i></li>
-            <li class="pdf " id="downloadPDFBtn" title="PDF"><label class="hide">PDF</label><i class="ti ti-file-type-pdf" style="color: black"></i></li>
-          </ul>
-      </div>
-      <div class="dropdown grid-drop-down">
-          <button class="btn btn-secondary top-btn-row btn-seconday " type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class=" la-list-ul ti ti-list-details" ></i>
-          </button>
-          <ul class="dropdown-menu p-0 mt-1 toggle-grid-btn" aria-labelledby="dropdownMenuButton1" >
-            <li class="table active" data-value="Table"><label>Table</label> <i class="las la-stream" style="color: black"></i></li>
-            <li class="grid " data-value="Grid"><label>Grid</label><i class="las la-border-all" style="color: black"></i></li>
-          </ul>
+      <div class="cat-page-header-right">
+         <div class="cat-search-box">
+            <i class="ti ti-search"></i>
+            <input type="text" id="search-filter-input" placeholder="Filter Search" />
+         </div>
+         <button type="button" class="cat-btn cat-btn-primary" data-bs-toggle="modal" data-bs-target="#addPromo">
+            <i class="ti ti-plus"></i> Add User
+         </button>
+         <div class="dropdown grid-drop-down">
+             <button class="btn btn-secondary top-btn-row btn-seconday " type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" title="Export">
+               <i class=" la-list-ul ti ti-arrow-down-from-arc" ></i>
+             </button>
+             <ul class="dropdown-menu p-0 mt-1 export-drop-down" aria-labelledby="dropdownMenuButton1" >
+               <li class="csv"  id="downloadCSVBtn" title="CSV"><label class="hide">CSV</label> <i class="ti ti-file-type-csv" style="color: black"></i></li>
+               <li class="pdf " id="downloadPDFBtn" title="PDF"><label class="hide">PDF</label><i class="ti ti-file-type-pdf" style="color: black"></i></li>
+             </ul>
+         </div>
+         <div class="dropdown grid-drop-down">
+             <button class="btn btn-secondary top-btn-row btn-seconday " type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+               <i class=" la-list-ul ti ti-list-details" ></i>
+             </button>
+             <ul class="dropdown-menu p-0 mt-1 toggle-grid-btn" aria-labelledby="dropdownMenuButton2" >
+               <li class="table active" data-value="Table"><label>Table</label> <i class="las la-stream" style="color: black"></i></li>
+               <li class="grid " data-value="Grid"><label>Grid</label><i class="las la-border-all" style="color: black"></i></li>
+             </ul>
+         </div>
       </div>
    </div>
+
    <div class="content-wrapper" >
       <!-- Main content -->
       <section class="content">
@@ -57,22 +64,22 @@
                               </button>
                            </div>
                            <form action="<%base_url('user/user/addUsersData') %>" method="POST" enctype="multipart/form-data" id="addTransporterForm">
-                              <div class="modal-body">
+                              <div class="modal-body text-start">
                                 <div class="row">
 
-                                 <div class="form-group">
+                                 <div class="form-group mb-3">
                                     <label for="on click url">User Full Name<span class="text-danger">*</span></label> <br>
                                     <input required type="text" name="user_name" placeholder="Enter Full Name" class="form-control" value="" id="">
                                  </div>
-                                 <div class="form-group">
+                                 <div class="form-group mb-3">
                                     <label for="on click url">User Email<span class="text-danger">*</span></label> <br>
                                     <input required type="email" name="user_email" placeholder="Enter Email" class="form-control" value="" id="">
                                  </div>
-                                 <div class="form-group">
+                                 <div class="form-group mb-3">
                                     <label for="on click url">User Password<span class="text-danger">*</span></label> <br>
                                     <input required type="password" name="user_password" placeholder="Enter Password" class="form-control" value="" id="">
                                  </div>
-                                 <div class="form-group">
+                                 <div class="form-group mb-3">
                                     <label for="on click url">User Role<span class="text-danger">*</span></label> <br>
                                     <select name="user_role" class="form-control select2" id="">
                                        <option value="Admin">Admin</option>
@@ -89,7 +96,7 @@
                                        <option value="Sales">Sales</option>
                                     </select>
                                  </div>
-                                 <div class="form-group">
+                                 <div class="form-group mb-3">
                                     <label for="on click url">Unit<span class="text-danger">*</span></label> <br>
                                     <div class="row">
                                        <%foreach from=$client item='client_val' %>
@@ -100,7 +107,7 @@
                                        <%/foreach%>
                                     </div>
                                  </div>
-                                 <div class="form-group" >
+                                 <div class="form-group mb-3" >
                                     <label for="on click url" class="w-100">Groups<span class="text-danger">*</span> <a class="float-end page-access-btn" href="javascript:void(0)">View Page Access</a></label> <br>
                                     <select name="groups[]" class="form-control select2-multiple"   multiple="multiple">
                                        <%foreach from=$groups item='groups_val' %>
@@ -121,13 +128,12 @@
                      </div>
                   </div>
 
-                  <div class="card w-100 table-card">
+                  <div class="cat-table-card w-100">
                      <!-- /.card-header -->
                      <div class="table-responsive text-nowrap">
                         <table id="erp_users" class="table table-striped w-100">
                            <thead>
                               <tr>
-                                 <th class="hide">Sr No</th> 
                                  <th>Full Name</th>
                                  <th>Email</th>
                                  <th>Password</th>
@@ -143,7 +149,6 @@
                               <tr>
                                  <%assign var='units' value=explode(",",$u['unit_ids']|default:"")%>
                                  <%assign var='groups_arr' value=explode(",",$u['groups']|default:"")%>
-                                 <td class="hide"><%$i %></td>
                                  <td><%$u['user_name'] %></td>
                                  <td><%$u['user_email'] %></td>
                                  <td><%$u['user_password'] %></td>

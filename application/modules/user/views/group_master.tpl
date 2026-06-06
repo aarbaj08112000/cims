@@ -1,29 +1,33 @@
-
+<link rel="stylesheet" href="<%$base_url%>public/css/category_ui.css" />
 <div class="content-wrapper">
   <!-- Content -->
-
   <div class="container-xxl flex-grow-1 container-p-y">
- 
-
-    <nav aria-label="breadcrumb">
-      <div class="sub-header-left pull-left breadcrumb">
-        <h1>
-          User Management
-          <a hijacked="yes" href="javascript:void(0)" class="backlisting-link" title="Back to Issue Request Listing" >
-            <i class="ti ti-chevrons-right" ></i>
-            <em >Group Master</em></a>
-          </h1>
-          <br>
-          <span >Listing</span>
+    <!-- Page Header -->
+    <div class="cat-page-header">
+      <div class="cat-page-header-left">
+        <div class="cat-page-icon">
+          <i class="ti ti-users"></i>
         </div>
-      </nav>
-
-      <div class="dt-top-btn d-grid gap-2 d-md-flex justify-content-md-end mb-5">
-        <input type="text" id="search-filter-input" placeholder="Filter Search" class="form-control search-filter-input me-2">
-        <button type="button" class="btn btn-seconday" data-bs-toggle="modal" data-bs-target="#addPromo" title="Add process">
-       <i class="ti ti-plus"></i>
+        <div>
+          <h1 class="cat-page-title">Group Master</h1>
+          <nav class="cat-breadcrumb">
+            <a href="<%base_url('dashboard')%>">Home</a>
+            <i class="ti ti-chevron-right"></i>
+            <span>User Management</span>
+          </nav>
+        </div>
+      </div>
+      <div class="cat-page-header-right">
+        <div class="cat-search-box">
+          <i class="ti ti-search"></i>
+          <input type="text" id="search-filter-input" placeholder="Search groups..." />
+        </div>
+        <button type="button" class="cat-btn cat-btn-primary" data-bs-toggle="modal" data-bs-target="#addPromo" title="Add Group">
+          <i class="ti ti-plus"></i> Add Group
         </button>
       </div>
+    </div>
+
       <div class="modal fade" id="addPromo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
          <div class="modal-dialog  modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -65,18 +69,15 @@
 
 
       <!-- Main content -->
-      <div class="card p-0 mt-4 w-100">
-        <div class="">
-
-        <div class="card p-0 mt-2 w-100">
-            <table width="100%" border="1" cellspacing="0" cellpadding="0" class="table table-striped text-nowrap" border-color="#e1e1e1" id="process">
-              <thead>
+      <div class="cat-table-card w-100">
+            <table class="table table-hover mb-0 w-100" id="process">
+              <thead class="bg-light">
                  <tr>
                     <!-- <th>Sr No</th> -->
                     <th>Group Name</th>
                     <th>Group Code</th>
                     <th>Status</th>
-                    <th>Action</th>
+                    <th class="text-center">Action</th>
                  </tr>
               </thead>
               <tbody>
@@ -85,17 +86,23 @@
                       <%foreach from=$groups item=u %>
                      <tr>
                         <!-- <td><%$i %></td> -->
-                        <td><a href="<%base_url('group_menu')%>?id=<%$u['group_master_id']%>"><%$u['group_name'] %></a></td>
+                        <td><a href="<%base_url('group_menu')%>?id=<%$u['group_master_id']%>" class="text-primary fw-medium"><%$u['group_name'] %></a></td>
                         <td><%$u['group_code'] %></td>
-                        <td><%$u['status'] %></td>
-                        <td>
-                          
-                        	<a type="button" class="" data-bs-toggle="modal" data-bs-target="#updateGroup<%$i %>" title="Edit">
-					       		<i class="ti ti-edit edit-part" ></i>
+                        <td class="cat-col-status">
+                           <%if $u['status'] == 'Active' %>
+                              <span class="cat-badge cat-badge-active"><span class="cat-badge-dot"></span>Active</span>
+                           <%else %>
+                              <span class="cat-badge cat-badge-inactive"><span class="cat-badge-dot"></span>Inactive</span>
+                           <%/if %>
+                        </td>
+                        <td class="text-center cat-col-action">
+                          <div class="d-flex align-items-center justify-content-center">
+                        	<a type="button" class="me-2" data-bs-toggle="modal" data-bs-target="#updateGroup<%$i %>" title="Edit">
+					       		<i class="ti ti-edit text-primary" ></i>
 					        </a>
-                        	
+                          </div>
                         	<div class="modal fade" id="updateGroup<%$i %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-						         <div class="modal-dialog  modal-dialog-centered" role="document">
+						         <div class="modal-dialog  modal-dialog-centered text-start" role="document">
 						            <div class="modal-content">
 						               <div class="modal-header">
 						                  <h5 class="modal-title" id="exampleModalLabel">Update Group</h5>
@@ -139,9 +146,6 @@
                   <%/if%>
               </tbody>
            </table>
-          </div>
-        </div>
-        <!--/ Responsive Table -->
       </div>
       <!-- /.col -->
 

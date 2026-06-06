@@ -1,6 +1,5 @@
+<link rel="stylesheet" href="<%$base_url%>public/css/category_ui.css" />
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-
     :root {
         --dash-primary: #7367f0;
         --dash-success: #28c76f;
@@ -11,12 +10,6 @@
         --dash-bg: #f8f7fa;
         --card-shadow: 0 10px 30px 0 rgba(115, 103, 240, 0.08);
         --card-shadow-hover: 0 15px 45px 0 rgba(115, 103, 240, 0.15);
-    }
-
-    body {
-        font-family: 'Plus Jakarta Sans', sans-serif !important;
-        background-color: var(--dash-bg);
-        color: #444050;
     }
 
     .dashboard-wrapper {
@@ -275,18 +268,24 @@
 <!-- Load ApexCharts -->
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
-<div class="dashboard-wrapper">
-    <!-- Header -->
-    <div class="header-section d-flex justify-content-between align-items-center">
+<div class="content-wrapper">
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <!-- Page Header -->
+    <div class="cat-page-header mb-4">
+      <div class="cat-page-header-left">
+        <div class="cat-page-icon"><i class="ti ti-chart-pie"></i></div>
         <div>
-            <h2>Dashboard Analytics</h2>
-            <p class="text-muted mb-0">Discover your business trends and performance at a glance.</p>
+          <h1 class="cat-page-title">Dashboard Analytics</h1>
+          <nav class="cat-breadcrumb">
+             <span class="text-muted">Discover your business trends and performance at a glance.</span>
+          </nav>
         </div>
-        <div class="d-flex gap-3">
-            <button class="btn btn-primary shadow-sm rounded-pill px-4 py-2 fw-bold" style="background: var(--dash-primary); border: none;">
-                <i class="ti ti-download me-2"></i>Export Report
-            </button>
-        </div>
+      </div>
+      <div class="cat-page-header-right">
+        <button class="cat-btn cat-btn-primary">
+            <i class="ti ti-download"></i> Export Report
+        </button>
+      </div>
     </div>
 
     <!-- 6 Summary Cards Row -->
@@ -521,6 +520,7 @@
             </div>
         </div>
     </div>
+  </div>
 </div>
 
 <script>
@@ -551,7 +551,7 @@
                 height: 400,
                 type: 'line',
                 toolbar: { show: false },
-                fontFamily: 'Plus Jakarta Sans, sans-serif',
+                fontFamily: 'var(--cat-font)',
                 dropShadow: {
                     enabled: true,
                     color: '#000',
@@ -659,7 +659,7 @@
             chart: {
                 type: 'donut',
                 height: 350,
-                fontFamily: 'Plus Jakarta Sans, sans-serif'
+                fontFamily: 'var(--cat-font)'
             },
             labels: catLabels,
             colors: ['#7367f0', '#28c76f', '#ff9f43', '#00cfe8', '#ea5455'],
@@ -710,7 +710,7 @@
                 type: 'area',
                 toolbar: { show: false },
                 zoom: { enabled: false },
-                fontFamily: 'Plus Jakarta Sans, sans-serif'
+                fontFamily: 'var(--cat-font)'
             },
             colors: ['#7367f0'],
             dataLabels: { enabled: false },

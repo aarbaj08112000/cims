@@ -39,9 +39,8 @@
       <table class="table table-hover mb-0 w-100" id="product_list">
         <thead class="bg-light">
           <tr>
-            <th class="text-center" style="width: 60px;">Sr No</th>
                     <th class="text-center" style="width: 80px;">Image</th>
-                    <th>Barcode</th>
+                    <th class="text-center">Barcode</th>
                     <th>Product Name</th>
                     <th>Description</th>
                     <th>Price</th>
@@ -52,26 +51,24 @@
               </thead>
               <tbody>
                  <%if ($products) %>
-                      <%assign var='i' value= 1 %>
                       <%foreach from=$products item=u %>
                      <tr>
-                        <td class="text-center"><%$i%></td>
-                       
                         <td class="text-center">
                            <%if $u['image']%>
                                <img src="public/uploads/product/product_image/<%$u['product_id']%>/<%$u['image']%>" 
                                      onerror="this.src='public/assets/images/no_image.jpg';"
-                                     alt="Product Image" style="max-width: 75px; height: auto;">
+                                     alt="Product Image" style="width: 50px; height: 50px; object-fit: contain;">
                            <%else%>
-                               <img src="public/assets/images/no_image.jpg" alt="No Image" style="max-width: 75px; height: auto;">
+                               <img src="public/assets/images/no_image.jpg" alt="No Image" style="width: 50px; height: 50px; object-fit: contain;">
                            <%/if%>
                         </td>
 
-                        <td>
+                        <td class="text-center">
                            <%if $u['line_bar_code']%>
-                               <img src="public/uploads/product/bar_code/<%$u['product_id']%>/<%$u['line_bar_code']%>.png" 
-                                    onerror="this.src='public/assets/images/no_image.jpg';"
-                                    alt="<%$u['line_bar_code']%>" style="max-width: 100px; height: auto;">
+                               <img src="public/uploads/product/bar_code/<%$u['product_id']%>/<%$u['line_bar_code']%>.png"
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';"
+                                     alt="<%$u['line_bar_code']%>" style="width: 100px; height: 40px; object-fit: contain; display:block;margin:auto;">
+                               <span style="display:none;">-</span>
                                <br>
                                <small><%$u['line_bar_code']%></small>
                            <%else%>
@@ -121,7 +118,6 @@
                             </div>
                         </td>
                      </tr>
-                  <%assign var='i' value=$i+1 %>
                   <%/foreach%>
                   <%/if%>
               </tbody>
@@ -139,7 +135,7 @@
     var base_url = <%$base_url|@json_encode%>
     </script>
 
-    <script src="<%$base_url%>public/js/admin_panel/product_list.js"></script>
+    <script src="<%$base_url%>public/js/admin_panel/product_list.js?v=<%time()%>"></script>
 
 <!-- Print Barcode Modal -->
 <div class="modal fade" id="printBarcodeModal" tabindex="-1" aria-hidden="true">
@@ -321,5 +317,32 @@
         height: 45px !important;
         object-fit: contain !important;
     }
+}
+
+/* User required Datatable scroll constraints */
+.dataTables_wrapper .dataTables_scrollBody {
+    min-height: 55vh;
+    max-height: 59vh !important;
+    overflow-y: auto;
+}
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody {
+    height: auto !important; /* Allow min/max height bounds to control it completely */
+}
+
+/* 
+  FIX: When scrollY is enabled, DataTables duplicates the header into dataTables_scrollHeadInner.
+  demo.css aggressively overrides the padding to 15px 18px, making it larger than body columns,
+  causing total desync in computed width. We revert it here to match category_ui.css
+*/
+.cat-table-card .dataTables_scrollHeadInner table.dataTable thead th, 
+.cat-table-card .dataTables_scrollHeadInner table.dataTable thead td {
+    padding: 13px 16px !important;
+    border-bottom: 1.5px solid var(--cat-gray-200) !important;
+}
+
+/* Fix table calculation algorithms */
+.cat-table-card table.dataTable {
+    table-layout: fixed !important;
+    width: 100% !important;
 }
 </style>

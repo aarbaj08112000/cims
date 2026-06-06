@@ -13,7 +13,7 @@ const salesReport = {
 
     dataTable: function () {
         salesReportTable = $('#salesReportTable').DataTable({
-            order: [[1, 'desc']], // Order by Date descending
+            order: [[0, 'desc']], // Order by Date descending
             pagingType: "full_numbers",
             pageLength: 25,
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],

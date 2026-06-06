@@ -77,7 +77,6 @@
       <table id="categoriesTable" class="table table-hover mb-0 w-100">
         <thead>
           <tr>
-            <th class="cat-col-num text-center">#</th>
             <th>Category Name</th>
             <th>Status</th>
             <th class="text-center">Action</th>

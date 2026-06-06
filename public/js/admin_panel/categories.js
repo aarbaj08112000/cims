@@ -41,31 +41,31 @@ var category_pdf_title = "Category List";
 
 // Custom export action to fetch all data before exporting
 function newExportAction(e, dt, button, config) {
-    var self = this;
-    var oldStart = dt.settings()[0]._iDisplayStart;
-    dt.one('preXhr', function (e, s, data) {
-        // Load all data from the server
-        data.start = 0;
-        data.length = -1;
-        dt.one('preDraw', function (e, settings) {
-            // Call the original action function
-            if (button[0].className.indexOf('buttons-csv') >= 0) {
-                $.fn.dataTable.ext.buttons.csvHtml5.action.call(self, e, dt, button, config);
-            } else if (button[0].className.indexOf('buttons-pdf') >= 0) {
-                $.fn.dataTable.ext.buttons.pdfHtml5.action.call(self, e, dt, button, config);
-            }
-            dt.one('preXhr', function (e, s, data) {
-                // Revert settings to what they were before exporting
-                settings._iDisplayStart = oldStart;
-                data.start = oldStart;
-            });
-            // Reload the grid with original page
-            setTimeout(dt.ajax.reload, 0);
-            return false;
-        });
+  var self = this;
+  var oldStart = dt.settings()[0]._iDisplayStart;
+  dt.one('preXhr', function (e, s, data) {
+    // Load all data from the server
+    data.start = 0;
+    data.length = -1;
+    dt.one('preDraw', function (e, settings) {
+      // Call the original action function
+      if (button[0].className.indexOf('buttons-csv') >= 0) {
+        $.fn.dataTable.ext.buttons.csvHtml5.action.call(self, e, dt, button, config);
+      } else if (button[0].className.indexOf('buttons-pdf') >= 0) {
+        $.fn.dataTable.ext.buttons.pdfHtml5.action.call(self, e, dt, button, config);
+      }
+      dt.one('preXhr', function (e, s, data) {
+        // Revert settings to what they were before exporting
+        settings._iDisplayStart = oldStart;
+        data.start = oldStart;
+      });
+      // Reload the grid with original page
+      setTimeout(dt.ajax.reload, 0);
+      return false;
     });
-    // Requery the server with new export settings
-    dt.ajax.reload();
+  });
+  // Requery the server with new export settings
+  dt.ajax.reload();
 }
 
 const categoryPage = {
@@ -77,61 +77,50 @@ const categoryPage = {
 
   dataTable: function () {
     categoryTable = $("#categoriesTable").DataTable({
-      processing:  true,
-      serverSide:  true,
-      searching:   true,
-      pagingType:  "full_numbers",
-      pageLength:  15,
-      lengthMenu:  [[10, 15, 25, 50, 100], [10, 15, 25, 50, 100]],
-      autoWidth:   false,
+      processing: true,
+      serverSide: true,
+      searching: true,
+      pagingType: "full_numbers",
+      pageLength: 15,
+      lengthMenu: [[10, 15, 25, 50, 100], [10, 15, 25, 50, 100]],
+      autoWidth: false,
       dom: 'Brt<"cat-dt-footer"<"cat-dt-info"i><"cat-dt-controls"<"cat-dt-length"l><"cat-dt-paging"p>>>',
 
       buttons: [
-          {
-              extend: 'csv',
-              className: 'd-none',
-              filename: category_file_name,
-              action: newExportAction,
-              exportOptions: {
-                  columns: [0, 1, 2] // Export #, Category Name, Status
-              }
-          },
-          {
-              extend: 'pdf',
-              className: 'd-none',
-              filename: category_file_name,
-              title: category_pdf_title,
-              action: newExportAction,
-              exportOptions: {
-                  columns: [0, 1, 2] // Export #, Category Name, Status
-              }
+        {
+          extend: 'csv',
+          className: 'd-none',
+          filename: category_file_name,
+          action: newExportAction,
+          exportOptions: {
+            columns: [0, 1] // Export Category Name, Status
           }
+        },
+        {
+          extend: 'pdf',
+          className: 'd-none',
+          filename: category_file_name,
+          title: category_pdf_title,
+          action: newExportAction,
+          exportOptions: {
+            columns: [0, 1] // Export Category Name, Status
+          }
+        }
       ],
 
       ajax: {
-        url:  base_url + "get_categories_ajax",
+        url: base_url + "get_categories_ajax",
         type: "POST"
       },
 
       columns: [
         {
-          data:       null,
-          orderable:  false,
-          searchable: false,
-          width:      "50px",
-          className:  "text-center",
-          render: function (data, type, row, meta) {
-            var num = meta.settings._iDisplayStart + meta.row + 1;
-            return '<span class="cat-row-num">' + num + '</span>';
-          }
+          data: 0,
+          className: "cat-col-name text-left"
         },
         {
-          data:      0,
-          className: "cat-col-name"
-        },
-        {
-          data:      1,
-          width:     "140px",
+          data: 1,
+          width: "140px",
           className: "cat-col-status",
           render: function (data) {
             var tmp = document.createElement('div');
@@ -144,29 +133,35 @@ const categoryPage = {
           }
         },
         {
-          data:       2,
-          width:      "160px",
-          className:  "text-center cat-col-action",
-          orderable:  false,
+          data: 2,
+          width: "160px",
+          className: "text-center cat-col-action",
+          orderable: false,
           searchable: false
         }
       ],
 
       language: {
-        processing:   '<div class="cat-processing"><i class="ti ti-loader-2 cat-spin"></i>&nbsp;Loading...</div>',
-        emptyTable:   '<div class="cat-empty">No categories found.</div>',
-        zeroRecords:  '<div class="cat-empty">No records match your search.</div>',
-        info:         'Showing _START_ to _END_ of _TOTAL_ entries',
-        infoEmpty:    'Showing 0 to 0 of 0 entries',
+        processing: '<div class="cat-processing"><i class="ti ti-loader-2 cat-spin"></i>&nbsp;Loading...</div>',
+        emptyTable: '<div class="cat-empty">No categories found.</div>',
+        zeroRecords: '<div class="cat-empty">No records match your search.</div>',
+        info: 'Showing _START_ to _END_ of _TOTAL_ entries',
+        infoEmpty: 'Showing 0 to 0 of 0 entries',
         infoFiltered: '(filtered from _MAX_ total)',
-        lengthMenu:   'Show _MENU_ entries',
+        lengthMenu: 'Show _MENU_ entries',
         paginate: {
-          first:    '<i class="ti ti-chevrons-left"></i>',
-          last:     '<i class="ti ti-chevrons-right"></i>',
-          next:     '<i class="ti ti-chevron-right"></i>',
+          first: '<i class="ti ti-chevrons-left"></i>',
+          last: '<i class="ti ti-chevrons-right"></i>',
+          next: '<i class="ti ti-chevron-right"></i>',
           previous: '<i class="ti ti-chevron-left"></i>'
         }
       },
+      searching: true,
+      autoWidth: true,
+      scrollX: true,
+      scrollY: true,
+      scrollCollapse: true,
+      lengthChange: true,
 
       drawCallback: function (settings) {
         $(".select2").select2();
@@ -190,11 +185,11 @@ const categoryPage = {
 
     // --- Custom Export Buttons ---
     $('#export-csv').on('click', function () {
-        categoryTable.button('.buttons-csv').trigger();
+      categoryTable.button('.buttons-csv').trigger();
     });
 
     $('#export-pdf').on('click', function () {
-        categoryTable.button('.buttons-pdf').trigger();
+      categoryTable.button('.buttons-pdf').trigger();
     });
   },
 
@@ -203,16 +198,16 @@ const categoryPage = {
     $(".addCategories,.update_categories").off('submit').submit(function (e) {
       e.preventDefault();
       var href = $(this).attr("action");
-      var id   = $(this).attr("id");
+      var id = $(this).attr("id");
       if (that.formValidate(id)) { return; }
       var formData = new FormData($(this)[0]);
       $.ajax({
-        type:        "POST",
-        url:         href,
-        data:        formData,
+        type: "POST",
+        url: href,
+        data: formData,
         processData: false,
         contentType: false,
-        dataType:    "json",
+        dataType: "json",
         success: function (response) {
           if (response.success == 1) {
             toaster("success", response.msg);

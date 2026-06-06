@@ -97,27 +97,43 @@ const reportsPage = {
         }
 
         let table = $(selector).DataTable({
-            dom: '<"row align-items-center mb-2"<"col-sm-12 col-md-6"B><"col-sm-12 col-md-6 text-end"f>><"dt-scroll-body-wrapper"<"col-sm-12"rt>><"dt-fixed-footer row align-items-center pt-3 mt-1 border-top"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7 d-flex align-items-center justify-content-end gap-2"pl>>',
+            dom: 'Brt<"cat-dt-footer"<"cat-dt-info"i><"cat-dt-controls"<"cat-dt-length"l><"cat-dt-paging"p>>>',
             buttons: [
                 {
                     extend: "csv",
-                    text: '<i class="ti ti-file-type-csv"></i>',
-                    titleAttr: "Download CSV",
+                    className: "d-none",
                     filename: filename
                 },
                 {
                     extend: "pdf",
-                    text: '<i class="ti ti-file-type-pdf"></i>',
-                    titleAttr: "Download Pdf",
+                    className: "d-none",
+                    title: filename.replace(/_/g, " "),
                     filename: filename,
                     customize: function (doc) {
                         doc.pageMargins = [15, 15, 15, 15];
-                        doc.content[0].text = filename.replace(/_/g, " ");
-                        doc.styles.tableHeader.fontSize = 10;
+                        doc.styles.tableHeader.fillColor = '#f8f7fa';
+                        doc.styles.tableHeader.color = '#333333';
                     },
                 },
             ],
+            language: {
+                emptyTable: '<div class="cat-empty">No reports found.</div>',
+                zeroRecords: '<div class="cat-empty">No records match your search.</div>',
+                info: 'Showing _START_ to _END_ of _TOTAL_ entries',
+                infoEmpty: 'Showing 0 to 0 of 0 entries',
+                infoFiltered: '(filtered from _MAX_ total)',
+                lengthMenu: '_MENU_',
+                paginate: {
+                  first: '<i class="ti ti-chevrons-left"></i>',
+                  last: '<i class="ti ti-chevrons-right"></i>',
+                  next: '<i class="ti ti-chevron-right"></i>',
+                  previous: '<i class="ti ti-chevron-left"></i>'
+                }
+            },
             searching: true,
+            scrollX: true,
+            scrollY: true,
+            bScrollCollapse: true,
             order: [],
             pagingType: "full_numbers",
             autoWidth: false

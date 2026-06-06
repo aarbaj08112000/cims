@@ -77,13 +77,13 @@ const brandPage = {
 
     dataTable: function () {
         brandTable = $("#brandsTable").DataTable({
-            processing:  true,
-            serverSide:  true,
-            searching:   true,
-            pagingType:  "full_numbers",
-            pageLength:  15,
-            lengthMenu:  [[10, 15, 25, 50, 100], [10, 15, 25, 50, 100]],
-            autoWidth:   false,
+            processing: true,
+            serverSide: true,
+            searching: true,
+            pagingType: "full_numbers",
+            pageLength: 15,
+            lengthMenu: [[10, 15, 25, 50, 100], [10, 15, 25, 50, 100]],
+            autoWidth: false,
             dom: 'Brt<"cat-dt-footer"<"cat-dt-info"i><"cat-dt-controls"<"cat-dt-length"l><"cat-dt-paging"p>>>',
 
             buttons: [
@@ -93,7 +93,7 @@ const brandPage = {
                     filename: brand_file_name,
                     action: newExportAction,
                     exportOptions: {
-                        columns: [0, 1, 2] // Export #, Brand Name, Status
+                        columns: [0, 1] // Export Brand Name, Status
                     }
                 },
                 {
@@ -103,35 +103,24 @@ const brandPage = {
                     title: brand_pdf_title,
                     action: newExportAction,
                     exportOptions: {
-                        columns: [0, 1, 2] // Export #, Brand Name, Status
+                        columns: [0, 1] // Export Brand Name, Status
                     }
                 }
             ],
 
             ajax: {
-                url:  base_url + "get_brands_ajax",
+                url: base_url + "get_brands_ajax",
                 type: "POST"
             },
 
             columns: [
                 {
-                    data:       null,
-                    orderable:  false,
-                    searchable: false,
-                    width:      "50px",
-                    className:  "text-center",
-                    render: function (data, type, row, meta) {
-                        var num = meta.settings._iDisplayStart + meta.row + 1;
-                        return '<span class="cat-row-num">' + num + '</span>';
-                    }
-                },
-                {
-                    data:      0,
+                    data: 0,
                     className: "cat-col-name"
                 },
                 {
-                    data:      1,
-                    width:     "140px",
+                    data: 1,
+                    width: "140px",
                     className: "cat-col-status",
                     render: function (data) {
                         var tmp = document.createElement('div');
@@ -144,29 +133,35 @@ const brandPage = {
                     }
                 },
                 {
-                    data:       2,
-                    width:      "160px",
-                    className:  "text-center cat-col-action",
-                    orderable:  false,
+                    data: 2,
+                    width: "160px",
+                    className: "text-center cat-col-action",
+                    orderable: false,
                     searchable: false
                 }
             ],
 
             language: {
-                processing:   '<div class="cat-processing"><i class="ti ti-loader-2 cat-spin"></i>&nbsp;Loading...</div>',
-                emptyTable:   '<div class="cat-empty">No brands found.</div>',
-                zeroRecords:  '<div class="cat-empty">No records match your search.</div>',
-                info:         'Showing _START_ to _END_ of _TOTAL_ entries',
-                infoEmpty:    'Showing 0 to 0 of 0 entries',
+                processing: '<div class="cat-processing"><i class="ti ti-loader-2 cat-spin"></i>&nbsp;Loading...</div>',
+                emptyTable: '<div class="cat-empty">No brands found.</div>',
+                zeroRecords: '<div class="cat-empty">No records match your search.</div>',
+                info: 'Showing _START_ to _END_ of _TOTAL_ entries',
+                infoEmpty: 'Showing 0 to 0 of 0 entries',
                 infoFiltered: '(filtered from _MAX_ total)',
-                lengthMenu:   'Show _MENU_ entries',
+                lengthMenu: 'Show _MENU_ entries',
                 paginate: {
-                    first:    '<i class="ti ti-chevrons-left"></i>',
-                    last:     '<i class="ti ti-chevrons-right"></i>',
-                    next:     '<i class="ti ti-chevron-right"></i>',
+                    first: '<i class="ti ti-chevrons-left"></i>',
+                    last: '<i class="ti ti-chevrons-right"></i>',
+                    next: '<i class="ti ti-chevron-right"></i>',
                     previous: '<i class="ti ti-chevron-left"></i>'
                 }
             },
+            searching: true,
+            autoWidth: true,
+            scrollX: true,
+            scrollY: true,
+            scrollCollapse: true,
+            lengthChange: true,
 
             drawCallback: function (settings) {
                 $(".select2").select2();
@@ -203,16 +198,16 @@ const brandPage = {
         $(".addBrandForm,.update_brands").off('submit').submit(function (e) {
             e.preventDefault();
             var href = $(this).attr("action");
-            var id   = $(this).attr("id");
+            var id = $(this).attr("id");
             if (that.formValidate(id)) { return; }
             var formData = new FormData($(this)[0]);
             $.ajax({
-                type:        "POST",
-                url:         href,
-                data:        formData,
+                type: "POST",
+                url: href,
+                data: formData,
                 processData: false,
                 contentType: false,
-                dataType:    "json",
+                dataType: "json",
                 success: function (response) {
                     if (response.success == 1) {
                         toaster("success", response.msg);

@@ -18,22 +18,15 @@ table.dataTable tbody td.cat-col-num {
     text-align: center !important;
 }
 
-/* Specific alignment for Categories Table (1: Sr No, 4: Action) */
-#categoriesTable th:nth-child(1), #categoriesTable td:nth-child(1),
-#categoriesTable th:nth-child(4), #categoriesTable td:nth-child(4) {
-    text-align: center !important;
-}
 
-/* Specific alignment for Brands Table (1: Sr No, 4: Action) */
-#brandsTable th:nth-child(1), #brandsTable td:nth-child(1),
-#brandsTable th:nth-child(4), #brandsTable td:nth-child(4) {
-    text-align: center !important;
-}
 
 /* Specific alignment for Products Table (1: Sr No, 2: Image, 9: Action) */
-#product_list th:nth-child(1), #product_list td:nth-child(1),
-#product_list th:nth-child(2), #product_list td:nth-child(2),
-#product_list th:nth-child(9), #product_list td:nth-child(9) {
+#product_list th:nth-child(1),
+#product_list td:nth-child(1),
+#product_list th:nth-child(2),
+#product_list td:nth-child(2),
+#product_list th:nth-child(9),
+#product_list td:nth-child(9) {
     text-align: center !important;
 }
 

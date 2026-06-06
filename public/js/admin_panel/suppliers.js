@@ -58,7 +58,7 @@ const supplierPage = {
                     className: "d-none",
                     filename: supplier_file_name,
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5]
+                        columns: [0, 1, 2, 3, 4]
                     }
                 },
                 {
@@ -68,10 +68,10 @@ const supplierPage = {
                     customize: function (doc) {
                         doc.pageMargins = [15, 15, 15, 15];
                         doc.content[0].text = supplier_pdf_title;
-                        doc.content[1].table.widths = ["10%", "20%", "20%", "20%", "20%", "10%"];
+                        doc.content[1].table.widths = ["20%", "20%", "20%", "20%", "20%"];
                     },
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5]
+                        columns: [0, 1, 2, 3, 4]
                     }
                 },
             ],
