@@ -1,0 +1,54 @@
+/* datatable-standard.css - Global DataTable UI Standardization */
+
+/* 1. Left Alignment For All Other Columns (Default) */
+table.dataTable thead th,
+table.dataTable tbody td {
+    text-align: left !important;
+    vertical-align: middle;
+}
+
+/* 2. Center Alignment Only For: SR No, Image, Action */
+/* By generic classes if any */
+table.dataTable thead th.text-center,
+table.dataTable tbody td.text-center,
+table.dataTable thead th.dt-center,
+table.dataTable tbody td.dt-center,
+table.dataTable thead th.cat-col-num,
+table.dataTable tbody td.cat-col-num {
+    text-align: center !important;
+}
+
+
+
+/* Specific alignment for Products Table (1: Sr No, 2: Image, 9: Action) */
+#product_list th:nth-child(1),
+#product_list td:nth-child(1),
+#product_list th:nth-child(2),
+#product_list td:nth-child(2),
+#product_list th:nth-child(9),
+#product_list td:nth-child(9) {
+    text-align: center !important;
+}
+
+/* Ensure consistent column widths and layout */
+table.dataTable {
+    width: 100% !important;
+    margin: 0 !important;
+    clear: both;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+/* Common badge styles */
+.cat-badge {
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Common action column styling */
+table.dataTable .dropdown-menu {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border: none;
+}
