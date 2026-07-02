@@ -95,7 +95,23 @@ table.dataTable thead td {
 
 .menu .app-brand.demo .close-vertical-btn {
     position: absolute;
-    right: 19px;
+    right: 10px;
+    background-color: #babbc3;
+    color: #f8e6e6;
+    width: 32px;
+    height: 32px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    box-shadow: 0 0.125rem 0.25rem rgba(165, 163, 174, 0.3);
+    opacity: 0;
+
+}
+
+.menu .app-brand.demo .close-vertical-btn:hover {
+    background-color: var(--primary-hover);
+    color: #fff;
 }
 
 .layout-content-navbar .layout-menu {
@@ -1710,6 +1726,12 @@ font-weight: 800;
 .grid-drop-down .export-drop-down li:hover i {
     color: #fff !important;
 
+}
+
+.layout-menu-hover .close-vertical-btn {
+    display: block !important;
+    right: -32px !important;
+    opacity: 1 !important;
 }
 
 /*grid css*/

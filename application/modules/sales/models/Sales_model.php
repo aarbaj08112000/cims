@@ -38,8 +38,9 @@ class Sales_model extends CI_Model {
     }
 
     public function get_sale_master($sales_id) {
-        $this->db->select('s.*');
+        $this->db->select('s.*, COALESCE(NULLIF(s.customer_name,""), c.full_name) as customer_name');
         $this->db->from('sales_master s');
+        $this->db->join('customer_master c', 's.customer_phone_number = c.mobile_number', 'left');
         $this->db->where('s.sales_id', $sales_id);
         $query = $this->db->get();
         return $query->row_array();

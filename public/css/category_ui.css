@@ -8,26 +8,26 @@
 
 /* ---------- Variables ---------- */
 :root {
-  --cat-primary:        #5b5fc7;
-  --cat-primary-light:  #ededfa;
-  --cat-primary-hover:  #4a4eb5;
-  --cat-danger:         #e74c3c;
-  --cat-danger-light:   #fdecea;
-  --cat-success:        #27ae60;
-  --cat-success-light:  #e8f8f0;
-  --cat-gray-50:        #f8f9fc;
-  --cat-gray-100:       #f1f3f9;
-  --cat-gray-200:       #e2e6ef;
-  --cat-gray-300:       #cdd3e0;
-  --cat-gray-500:       #8490a7;
-  --cat-gray-700:       #3d4f6f;
-  --cat-gray-900:       #1e293b;
-  --cat-border:         #e8ecf3;
-  --cat-white:          #ffffff;
-  --cat-radius:         12px;
-  --cat-radius-sm:      8px;
-  --cat-shadow:         0 2px 16px rgba(91,95,199,0.09);
-  --cat-font:           'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --cat-primary: #5b5fc7;
+  --cat-primary-light: #ededfa;
+  --cat-primary-hover: #4a4eb5;
+  --cat-danger: #e74c3c;
+  --cat-danger-light: #fdecea;
+  --cat-success: #27ae60;
+  --cat-success-light: #e8f8f0;
+  --cat-gray-50: #f8f9fc;
+  --cat-gray-100: #f1f3f9;
+  --cat-gray-200: #e2e6ef;
+  --cat-gray-300: #cdd3e0;
+  --cat-gray-500: #8490a7;
+  --cat-gray-700: #3d4f6f;
+  --cat-gray-900: #1e293b;
+  --cat-border: #e8ecf3;
+  --cat-white: #ffffff;
+  --cat-radius: 12px;
+  --cat-radius-sm: 8px;
+  --cat-shadow: 0 2px 16px rgba(91, 95, 199, 0.09);
+  --cat-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 /* ====================================================
@@ -87,8 +87,14 @@
   text-decoration: none;
   font-weight: 500;
 }
-.cat-breadcrumb a:hover { text-decoration: underline; }
-.cat-breadcrumb i { font-size: 11px; }
+
+.cat-breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.cat-breadcrumb i {
+  font-size: 11px;
+}
 
 /* ====================================================
    TOOLBAR (right side of header)
@@ -106,6 +112,7 @@
   display: flex;
   align-items: center;
 }
+
 .cat-search-box i {
   position: absolute;
   left: 11px;
@@ -114,6 +121,7 @@
   pointer-events: none;
   line-height: 1;
 }
+
 .cat-search-box input {
   font-family: var(--cat-font);
   font-size: 13px;
@@ -128,11 +136,15 @@
   height: 38px;
   box-sizing: border-box;
 }
+
 .cat-search-box input:focus {
   border-color: var(--cat-primary);
-  box-shadow: 0 0 0 3px rgba(91,95,199,0.12);
+  box-shadow: 0 0 0 3px rgba(91, 95, 199, 0.12);
 }
-.cat-search-box input::placeholder { color: var(--cat-gray-300); }
+
+.cat-search-box input::placeholder {
+  color: var(--cat-gray-300);
+}
 
 /* Buttons */
 .cat-btn {
@@ -153,17 +165,22 @@
   line-height: 1;
   text-decoration: none;
 }
-.cat-btn i { font-size: 16px; line-height: 1; }
+
+.cat-btn i {
+  font-size: 16px;
+  line-height: 1;
+}
 
 .cat-btn-primary {
   background: var(--cat-primary);
   border-color: var(--cat-primary);
   color: var(--cat-white);
 }
+
 .cat-btn-primary:hover {
   background: var(--cat-primary-hover);
   border-color: var(--cat-primary-hover);
-  box-shadow: 0 4px 12px rgba(91,95,199,0.28);
+  box-shadow: 0 4px 12px rgba(91, 95, 199, 0.28);
   transform: translateY(-1px);
   color: var(--cat-white);
 }
@@ -173,6 +190,7 @@
   color: var(--cat-primary);
   border-color: var(--cat-primary);
 }
+
 .cat-btn-outline:hover {
   background: var(--cat-primary-light);
   color: var(--cat-primary);
@@ -183,6 +201,7 @@
   color: var(--cat-danger);
   border-color: var(--cat-danger);
 }
+
 .cat-btn-outline-red:hover {
   background: var(--cat-danger-light);
   color: var(--cat-danger);
@@ -233,12 +252,14 @@
 
 /* User required Datatable scroll constraints applied globally */
 .dataTables_wrapper .dataTables_scrollBody {
-    min-height: 55vh;
-    max-height: 59vh !important;
-    overflow-y: auto;
+  min-height: 55vh;
+  max-height: 59vh !important;
+  overflow-y: auto;
 }
+
 .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody {
-    height: auto !important; /* Allow min/max height bounds to control it completely */
+  height: auto !important;
+  /* Allow min/max height bounds to control it completely */
 }
 
 /* 
@@ -246,10 +267,10 @@
   demo.css aggressively overrides the padding to 15px 18px, making it larger than body columns.
   We revert it here to match category_ui.css so header width math works.
 */
-.cat-table-card .dataTables_scrollHeadInner table.dataTable thead th, 
+.cat-table-card .dataTables_scrollHeadInner table.dataTable thead th,
 .cat-table-card .dataTables_scrollHeadInner table.dataTable thead td {
-    padding: 13px 16px !important;
-    border-bottom: 1.5px solid var(--cat-gray-200) !important;
+  padding: 13px 16px !important;
+  border-bottom: 1.5px solid var(--cat-gray-200) !important;
 }
 
 /* Ensure header and body match widths */
@@ -262,6 +283,7 @@
 .cat-table-card table.dataTable thead tr {
   background: var(--cat-gray-50);
 }
+
 .cat-table-card table.dataTable thead th {
   font-family: var(--cat-font);
   font-weight: 600;
@@ -284,6 +306,7 @@
   padding-right: 28px;
   cursor: pointer;
 }
+
 .cat-table-card table.dataTable thead th.sorting::before,
 .cat-table-card table.dataTable thead th.sorting::after,
 .cat-table-card table.dataTable thead th.sorting_asc::before,
@@ -293,6 +316,7 @@
   opacity: 0.4;
   font-size: 10px;
 }
+
 .cat-table-card table.dataTable thead th.sorting_asc::after,
 .cat-table-card table.dataTable thead th.sorting_desc::after {
   opacity: 1;
@@ -304,12 +328,15 @@
   border-bottom: 1px solid var(--cat-border);
   transition: background 0.15s ease;
 }
+
 .cat-table-card table.dataTable tbody tr:last-child {
   border-bottom: none;
 }
+
 .cat-table-card table.dataTable tbody tr:hover {
   background: var(--cat-gray-50) !important;
 }
+
 .cat-table-card table.dataTable tbody td {
   font-family: var(--cat-font);
   padding: 14px 16px;
@@ -339,23 +366,31 @@
   border-radius: 20px;
   white-space: nowrap;
 }
+
 .cat-badge-dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
   flex-shrink: 0;
 }
+
 .cat-badge-active {
   background: var(--cat-success-light);
   color: var(--cat-success);
 }
-.cat-badge-active .cat-badge-dot { background: var(--cat-success); }
+
+.cat-badge-active .cat-badge-dot {
+  background: var(--cat-success);
+}
 
 .cat-badge-inactive {
   background: var(--cat-danger-light);
   color: var(--cat-danger);
 }
-.cat-badge-inactive .cat-badge-dot { background: var(--cat-danger); }
+
+.cat-badge-inactive .cat-badge-dot {
+  background: var(--cat-danger);
+}
 
 /* ====================================================
    ROW INDEX (#)
@@ -378,10 +413,10 @@
    Only apply to direct table action icons, NOT inside dropdown menus
    ==================================================== */
 
-/* Edit icon - exclude dropdown menus */
-.cat-table-card :not(.dropdown-menu) > .ti-edit,
-.cat-table-card :not(.dropdown-menu) > i.ti-edit,
-.cat-table-card > tbody > tr > td > .ti-edit {
+/* Edit icon - exclude dropdown menus and .cat-btn buttons */
+.cat-table-card :not(.dropdown-menu):not(.cat-btn)>.ti-edit,
+.cat-table-card :not(.dropdown-menu):not(.cat-btn)>i.ti-edit,
+.cat-table-card>tbody>tr>td>.ti-edit {
   display: inline-flex !important;
   align-items: center;
   justify-content: center;
@@ -396,19 +431,37 @@
   margin-right: 4px;
   text-decoration: none;
 }
-.cat-table-card :not(.dropdown-menu) > .ti-edit:hover,
-.cat-table-card :not(.dropdown-menu) > i.ti-edit:hover,
-.cat-table-card > tbody > tr > td > .ti-edit:hover {
+
+.cat-table-card :not(.dropdown-menu):not(.cat-btn)>.ti-edit:hover,
+.cat-table-card :not(.dropdown-menu):not(.cat-btn)>i.ti-edit:hover,
+.cat-table-card>tbody>tr>td>.ti-edit:hover {
   background: var(--cat-primary);
   color: var(--cat-white);
-  box-shadow: 0 3px 10px rgba(91,95,199,0.3);
+  box-shadow: 0 3px 10px rgba(91, 95, 199, 0.3);
   transform: translateY(-1px);
 }
 
+/* Reset icon styles when inside a .cat-btn — prevents icon getting
+   standalone circular treatment inside labeled buttons (e.g. grid cards) */
+.cat-table-card .cat-btn i.ti-edit,
+.cat-table-card .cat-btn .ti-edit {
+  width: auto !important;
+  height: auto !important;
+  display: inline-flex !important;
+  background: none !important;
+  border-radius: 0 !important;
+  color: inherit !important;
+  margin-right: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  font-size: inherit !important;
+  cursor: inherit !important;
+}
+
 /* Delete icon - exclude dropdown menus */
-.cat-table-card :not(.dropdown-menu) > .ti-trash,
-.cat-table-card :not(.dropdown-menu) > i.ti-trash,
-.cat-table-card > tbody > tr > td > .ti-trash {
+.cat-table-card :not(.dropdown-menu)>.ti-trash,
+.cat-table-card :not(.dropdown-menu)>i.ti-trash,
+.cat-table-card>tbody>tr>td>.ti-trash {
   display: inline-flex !important;
   align-items: center;
   justify-content: center;
@@ -422,12 +475,13 @@
   transition: all 0.2s ease;
   text-decoration: none;
 }
-.cat-table-card :not(.dropdown-menu) > .ti-trash:hover,
-.cat-table-card :not(.dropdown-menu) > i.ti-trash:hover,
-.cat-table-card > tbody > tr > td > .ti-trash:hover {
+
+.cat-table-card :not(.dropdown-menu)>.ti-trash:hover,
+.cat-table-card :not(.dropdown-menu)>i.ti-trash:hover,
+.cat-table-card>tbody>tr>td>.ti-trash:hover {
   background: var(--cat-danger);
   color: var(--cat-white);
-  box-shadow: 0 3px 10px rgba(231,76,60,0.3);
+  box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
   transform: translateY(-1px);
 }
 
@@ -445,7 +499,9 @@
 }
 
 /* Action column */
-.cat-col-action { white-space: nowrap; }
+.cat-col-action {
+  white-space: nowrap;
+}
 
 /* Align icons and text inside dropdown menu items */
 .cat-table-card .dropdown-menu .dropdown-item {
@@ -500,10 +556,12 @@
   gap: 8px;
   white-space: nowrap;
 }
+
 .cat-dt-length .dataTables_length label {
   margin: 0;
   font-weight: 400;
 }
+
 .cat-dt-length .dataTables_length select {
   font-family: var(--cat-font);
   font-size: 13px;
@@ -516,6 +574,7 @@
   transition: border-color 0.2s;
   cursor: pointer;
 }
+
 .cat-dt-length .dataTables_length select:focus {
   border-color: var(--cat-primary);
 }
@@ -526,8 +585,9 @@
   float: none;
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: 9px;
 }
+
 .cat-dt-paging .dataTables_paginate .paginate_button {
   font-family: var(--cat-font) !important;
   font-size: 13px !important;
@@ -548,18 +608,21 @@
   align-items: center !important;
   justify-content: center !important;
 }
+
 .cat-dt-paging .dataTables_paginate .paginate_button:hover {
   background: var(--cat-primary-light) !important;
   border-color: var(--cat-primary) !important;
   color: var(--cat-primary) !important;
 }
+
 .cat-dt-paging .dataTables_paginate .paginate_button.current,
 .cat-dt-paging .dataTables_paginate .paginate_button.current:hover {
   background: var(--cat-primary) !important;
   border-color: var(--cat-primary) !important;
   color: var(--cat-white) !important;
-  box-shadow: 0 2px 8px rgba(91,95,199,0.3) !important;
+  box-shadow: 0 2px 8px rgba(91, 95, 199, 0.3) !important;
 }
+
 .cat-dt-paging .dataTables_paginate .paginate_button.disabled,
 .cat-dt-paging .dataTables_paginate .paginate_button.disabled:hover {
   opacity: 0.4 !important;
@@ -569,12 +632,17 @@
   color: var(--cat-gray-500) !important;
 }
 
+.dataTables_paginate span {
+  display: flex;
+  gap: 10px;
+}
+
 /* ====================================================
    PROCESSING INDICATOR
    ==================================================== */
 .dataTables_processing {
   font-family: var(--cat-font) !important;
-  background: rgba(255,255,255,0.95) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
   color: var(--cat-primary) !important;
   border: 1px solid var(--cat-border) !important;
   border-radius: var(--cat-radius-sm) !important;
@@ -584,17 +652,25 @@
   padding: 12px 20px !important;
   z-index: 9999 !important;
 }
+
 .cat-processing {
   display: flex;
   align-items: center;
   gap: 8px;
 }
+
 .cat-processing i {
   animation: cat-spin 0.8s linear infinite;
 }
+
 @keyframes cat-spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Empty table */
@@ -613,10 +689,12 @@
 .cat-table-card table.dataTable tbody td {
   text-align: left;
 }
+
 .cat-table-card table.dataTable thead th.text-center,
 .cat-table-card table.dataTable tbody td.text-center {
   text-align: center !important;
 }
+
 .cat-table-card table.dataTable thead th.text-end,
 .cat-table-card table.dataTable tbody td.text-end {
   text-align: right !important;
@@ -630,8 +708,15 @@
     flex-direction: column;
     align-items: flex-start;
   }
-  .cat-page-header-right { width: 100%; }
-  .cat-search-box input  { width: 170px; }
+
+  .cat-page-header-right {
+    width: 100%;
+  }
+
+  .cat-search-box input {
+    width: 170px;
+  }
+
   .cat-dt-footer {
     flex-direction: column;
     align-items: flex-start;
@@ -639,16 +724,89 @@
 }
 
 @media (max-width: 768px) {
-  .cat-search-box { width: 100%; }
-  .cat-search-box input { width: 100%; }
-  .cat-btn { font-size: 12px; padding: 0 12px; }
+  .cat-search-box {
+    width: 100%;
+  }
+
+  .cat-search-box input {
+    width: 100%;
+  }
+
+  .cat-btn {
+    font-size: 12px;
+    padding: 0 12px;
+  }
+
   .cat-table-card table.dataTable thead th,
-  .cat-table-card table.dataTable tbody td { padding: 11px 12px; }
-  .cat-dt-controls { flex-wrap: wrap; gap: 8px; }
+  .cat-table-card table.dataTable tbody td {
+    padding: 11px 12px;
+  }
+
+  .cat-dt-controls {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
 }
 
 @media (max-width: 576px) {
-  .cat-page-title { font-size: 18px; }
-  .cat-page-icon  { width: 40px; height: 40px; font-size: 18px; }
-  .cat-page-header-right { gap: 6px; }
+  .cat-page-title {
+    font-size: 18px;
+  }
+
+  .cat-page-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+
+  .cat-page-header-right {
+    gap: 6px;
+  }
+}
+
+.open-dropdown-item .ti {
+  display: block !important;
+  width: auto !important;
+  height: auto !important;
+  margin-left: 0px !important;
+}
+
+/* ====================================================
+   GRID / TABLE TOGGLE UTILITIES
+   ==================================================== */
+
+/* Hide helper — used to toggle between grid and table view */
+.hide-grid-table {
+  display: none !important;
+}
+
+/* Grid block container — injected by JS after DataTables scroll */
+.grid-block {
+  width: 100%;
+}
+
+/* No-data placeholder inside grid view */
+.grid-no-message {
+  color: var(--cat-gray-500);
+  font-family: var(--cat-font);
+  font-size: 14px;
+}
+
+/* ── Grid mode: strip the white card wrapper ─────────────────
+   When body has .grid-layout the .cat-table-card should be
+   transparent so only the individual user cards are visible,
+   matching the reference design (second screenshot).
+   ──────────────────────────────────────────────────────────── */
+body.grid-layout .cat-table-card {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+}
+
+/* Also remove footer border/bg in grid mode */
+body.grid-layout .cat-dt-footer {
+  background: transparent !important;
+  border-top-color: transparent !important;
 }

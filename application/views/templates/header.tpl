@@ -113,7 +113,7 @@ div:where(.swal2-icon) .swal2-icon-content {
             <a href="dashboard" class="app-brand-link">
                <img src="<%base_url()%><%$config['company_logo']%>" alt="Logo" style="max-height: 45px; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));">
             </a>
-            <i class="ti ti-x fs-3 close-vertical-btn d-xl-none" id="close-vertical-btn" title="Close" style="cursor: pointer;"></i>
+            <i class="ti ti-x fs-3 close-vertical-btn d-block d-xl-block toggle-sidebar-btn" id="close-vertical-btn" title="Close" style="cursor: pointer;"></i>
          </div>
          <div class="menu-inner-shadow"></div>
           <ul class="menu-inner py-1">
@@ -239,7 +239,7 @@ div:where(.swal2-icon) .swal2-icon-content {
              </li>
 
              <!-- Reports -->
-             <li class="menu-item <%if strpos($current_uri, 'reports') !== false || strpos($current_uri, 'sales_report') !== false || strpos($current_uri, 'purchase_report') !== false || strpos($current_uri, 'stock_valuation_report') !== false%>active open<%/if%>">
+             <li class="menu-item <%if strpos($current_uri, 'reports') !== false || strpos($current_uri, 'sales_report') !== false || strpos($current_uri, 'purchase_report') !== false || strpos($current_uri, 'stock_valuation_report') !== false || strpos($current_uri, 'stock_adjustment_report') !== false%>active open<%/if%>">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                    <i class="menu-icon tf-icons bx bx-bar-chart-alt-2"></i>
                    <div data-i18n="Reports">Reports</div>
@@ -261,11 +261,16 @@ div:where(.swal2-icon) .swal2-icon-content {
                       </a>
                    </li>
                    <li class="menu-item <%if strpos($current_uri, 'stock_valuation_report') !== false%>active<%/if%>">
-                      <a href="stock_valuation_report" class="menu-link">
-                         <div data-i18n="Stock Valuation Report">Stock Valuation Report</div>
-                      </a>
-                   </li>
-                </ul>
+                       <a href="stock_valuation_report" class="menu-link">
+                          <div data-i18n="Stock Valuation Report">Stock Valuation Report</div>
+                       </a>
+                    </li>
+                    <li class="menu-item <%if strpos($current_uri, 'stock_adjustment_report') !== false%>active<%/if%>">
+                       <a href="stock_adjustment_report" class="menu-link">
+                          <div data-i18n="Stock Adjustment Report">Stock Adjustment Report</div>
+                       </a>
+                    </li>
+                 </ul>
              </li>
 
              <!-- User Management -->
@@ -354,8 +359,8 @@ div:where(.swal2-icon) .swal2-icon-content {
 
             <!-- vertical menu bar -->
             <%if $config['menu_type'] eq 'vertical'%>
-            <button class="navbar-toggler top-sidebar-toggle-btn" type="button" aria-label="Toggle navigation" style="border: none; background: transparent;">
-               <i class="ti ti-x text-primary" style="font-size: 1.5rem;"></i>
+            <button class="navbar-toggler top-sidebar-toggle-btn d-block d-xl-block toggle-sidebar-btn" type="button" aria-label="Toggle navigation" style="border: none; background: transparent; padding: 0.25rem 0;">
+               <i class="ti ti-menu-2 text-primary" style="font-size: 1.5rem;"></i>
             </button>
             <%/if%>
             <%if !(strpos($smarty.server.PATH_INFO, "/sitemap") !== false) %>

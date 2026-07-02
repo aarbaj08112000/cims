@@ -42,9 +42,10 @@
               <th>Invoice No</th>
               <th>Customer</th>
               <th>Sales Date</th>
-              <th>Total Amount</th>
-              <th>Payment Mode</th>
-              <th>Added Date</th>
+              <th class="text-end">Total Amount</th>
+              <th class="text-end">Discount</th>
+              <th class="text-end">Grand Total</th>
+              <th class="text-center">Payment Mode</th>
               <th class="text-center">Action</th>
            </tr>
         </thead>
@@ -55,19 +56,26 @@
               <td class="fw-medium text-dark"><%$val['bill_no'] %></td>
               <td><%$val['customer_phone_number']|default:'Walk-in' %></td>
               <td><%$val['sales_date']|date_format:'%d-%m-%Y' %></td>
-              <td class="fw-bold text-success"><%$val['total_amount']|number_format:2 %></td>
-              <td class="cat-col-status">
+              <td class="text-end"><%$val['total_amount']|number_format:2 %></td>
+              <td class="text-end text-danger"><%$val['discount_amount']|number_format:2 %></td>
+              <td class="fw-bold text-success text-end"><%$val['payable_amount']|number_format:2 %></td>
+              <td class="cat-col-status text-center">
                 <%if $val['payment_mode'] == 'Cash' %>
                   <span class="cat-badge cat-badge-active"><%$val['payment_mode']%></span>
                 <%else %>
                   <span class="cat-badge cat-badge-inactive"><%$val['payment_mode']%></span>
                 <%/if %>
               </td>
-              <td><%$val['added_date']|date_format:'%d-%m-%Y %H:%M' %></td>
               <td class="text-center cat-col-action">
                 <div class="d-flex align-items-center justify-content-center">
                   <a href="javascript:void(0)" class="view-sale-details" data-id="<%$val['sales_id']%>" title="View Details">
-                    <i class="ti ti-eye text-primary"></i>
+                    <i class="ti ti-eye text-primary me-2"></i>
+                  </a>
+                  <a href="<%$base_url%>sales/print_invoice/<%$val['sales_id']%>" target="_blank" title="Print Invoice" class="me-2">
+                    <i class="ti ti-printer text-success"></i>
+                  </a>
+                  <a href="<%$base_url%>sales/download_invoice/<%$val['sales_id']%>" title="Download Invoice">
+                    <i class="ti ti-download text-info"></i>
                   </a>
                 </div>
               </td>

@@ -59,6 +59,7 @@ $route['add_brand'] = 'brand/brand/add_brand';
 
 $route['dashboard'] = 'dashboard/dashboard/index';
 $route['get_product_for_print'] = 'product/product/get_product_for_print';
+$route['print_barcode_pdf/(:num)/(:num)'] = 'product/product/print_barcode_pdf/$1/$2';
 
 $route['supplier'] = 'supplier/supplier/index';
 $route['add_supplier'] = 'supplier/supplier/add_supplier';
@@ -69,6 +70,7 @@ $route['create_purchase'] = 'purchase/purchase/create_purchase';
 $route['save_purchase'] = 'purchase/purchase/save_purchase';
 $route['purchase_list'] = 'purchase/purchase/index';
 $route['purchase_details/(:num)'] = 'purchase/purchase/purchase_details/$1';
+$route['purchase/print_pdf/(:num)'] = 'purchase/purchase/print_pdf/$1';
 $route['get_purchase_details_ajax'] = 'purchase/purchase/get_purchase_details_ajax';
 
 $route['purchase_return_list'] = 'purchase/purchase_return/index';
@@ -83,6 +85,8 @@ $route['sales'] = 'sales/sales/index';
 $route['create_sale'] = 'sales/sales/create_sale';
 $route['save_sale'] = 'sales/sales/save_sale';
 $route['sales_details_ajax'] = 'sales/Sales/sales_details_ajax';
+$route['sales/download_invoice/(:num)'] = 'sales/sales/download_invoice/$1';
+$route['sales/print_invoice/(:num)'] = 'sales/sales/print_invoice/$1';
 
 // POS Billing Routes
 $route['pos'] = 'sales/Pos/index';
@@ -111,6 +115,9 @@ $route['stock_valuation_report'] = 'reports/Reports/stock_valuation_report';
 $route['get_sales_report_ajax'] = 'reports/Reports/get_sales_report_ajax';
 $route['get_purchase_report_ajax'] = 'reports/Reports/get_purchase_report_ajax';
 $route['get_stock_valuation_ajax'] = 'reports/Reports/get_stock_valuation_ajax';
+$route['stock_adjustment_report'] = 'reports/Reports/stock_adjustment_report';
+$route['get_stock_adjustment_ajax'] = 'reports/Reports/get_stock_adjustment_ajax';
+
 
 // Settings Routes
 $route['settings'] = 'settings/Settings';

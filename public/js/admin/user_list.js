@@ -111,9 +111,6 @@ formInit: function() {
             user_role: {
                 required: true
             },
-            'client[]': {
-                required: true
-            },
             'groups[]': {
                 required: true
             }
@@ -133,9 +130,6 @@ formInit: function() {
             },
             user_role: {
                 required: "Please select a role"
-            },
-            'client[]': {
-                required: "Please select unit"
             },
             'groups[]': {
                 required: "Please select groups"
@@ -304,15 +298,6 @@ formValidate: function(form_class = '') {
     const clients = $('.custom-form.' + form_class + ' input[name="client[]"]:checked').map(function () {
         return $(this).val();
     }).get();
-    if (clients.length == 0) {
-        flag = true;
-        var exit_ele = $(".custom-form." + form_class + " .unit-box label.error");
-        if (exit_ele.length == 0) {
-            $(".custom-form." + form_class + " .unit-box .row").after("<label class='error'>Please select unit</label>");
-        }
-    } else {
-        $(".custom-form." + form_class + " .unit-box label.error").remove();
-    }
 
     return flag;
 }

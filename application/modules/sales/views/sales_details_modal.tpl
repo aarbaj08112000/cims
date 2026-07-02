@@ -68,7 +68,7 @@
                 </div>
                 <div>
                     <div class="sales-info-label">Payment Summary</div>
-                    <div class="sales-info-value text-success" style="font-size: 1.15rem;">₹<%$sale['total_amount']|number_format:2%></div>
+                    <div class="sales-info-value text-success" style="font-size: 1.15rem;">₹<%$sale['payable_amount']|number_format:2%></div>
                     <div class="mt-1">
                         <span class="cat-badge <%if $sale['payment_mode'] == 'Cash'%>cat-badge-active<%else%>cat-badge-inactive<%/if%>">
                             <span class="cat-badge-dot"></span> Mode: <%$sale['payment_mode']%>
@@ -108,8 +108,16 @@
             </tbody>
             <tfoot class="bg-light">
                 <tr>
+                    <th colspan="3" class="text-end py-2 fw-bold text-muted">Subtotal:</th>
+                    <th class="text-end py-2 fw-bold text-muted">₹<%$sale['total_amount']|number_format:2%></th>
+                </tr>
+                <tr>
+                    <th colspan="3" class="text-end py-2 fw-bold text-muted">Discount:</th>
+                    <th class="text-end py-2 fw-bold text-muted">₹<%$sale['discount_amount']|number_format:2%></th>
+                </tr>
+                <tr>
                     <th colspan="3" class="text-end py-3 fw-bold">Grand Total:</th>
-                    <th class="text-end py-3 text-success h5 mb-0 fw-bold">₹<%$sale['total_amount']|number_format:2%></th>
+                    <th class="text-end py-3 text-success h5 mb-0 fw-bold">₹<%$sale['payable_amount']|number_format:2%></th>
                 </tr>
             </tfoot>
         </table>
