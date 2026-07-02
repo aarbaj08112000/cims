@@ -52,7 +52,7 @@
         <%if ($purchases) %>
           <%foreach from=$purchases item=val %>
            <tr>
-              <td class="fw-medium text-dark"><%$val['bill_no'] %></td>
+              <td class="fw-medium text-dark"><a href="<%base_url('purchase_details/')%><%$val['purchase_id']%>" class="text-primary text-decoration-none fw-bold"><%$val['bill_no'] %></a></td>
               <td><%$val['supplier_name']|default:'N/A' %></td>
               <td><%$val['purchase_date']|date_format:'%d-%m-%Y' %></td>
               <td class="fw-bold"><%$val['total_amount']|number_format:2 %></td>

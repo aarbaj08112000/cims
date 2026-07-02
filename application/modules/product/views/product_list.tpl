@@ -99,7 +99,7 @@
                                     <a class="dropdown-item" href="product_details/<%$u['product_id']%>">
                                         <i class="ti ti-eye me-1"></i> View Details
                                     </a>
-                                    <a class="dropdown-item" href="update_product/<%$u['product_id']%>">
+                                    <a class="dropdown-item open-dropdown-item" href="update_product/<%$u['product_id']%>">
                                         <i class="ti ti-edit me-1"></i> Edit
                                     </a>
                                     <a class="dropdown-item update_stock" href="javascript:void(0);" data-id="<%$u['product_id']%>">
@@ -111,7 +111,7 @@
                                     <a class="dropdown-item print_barcode" href="javascript:void(0);" data-id="<%$u['product_id']%>">
                                         <i class="ti ti-printer me-1"></i> Print
                                     </a>
-                                    <a class="dropdown-item delete_data text-danger" href="javascript:void(0);" data-id="<%$u['product_id']%>">
+                                    <a class="dropdown-item delete_data text-danger open-dropdown-item" href="javascript:void(0);" data-id="<%$u['product_id']%>">
                                         <i class="ti ti-trash me-1"></i> Delete
                                     </a>
                                 </div>

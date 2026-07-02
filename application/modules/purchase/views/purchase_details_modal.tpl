@@ -1,7 +1,7 @@
 <div class="modal-header border-bottom pb-3">
     <h5 class="modal-title fw-bold d-flex align-items-center text-dark">
         <i class="ti ti-receipt fs-4 me-2 text-primary"></i> 
-        Purchase Bill: <span class="text-primary ms-1"><%$purchase['bill_no']%></span>
+        Purchase Bill: <a href="<%base_url('purchase_details/')%><%$purchase['purchase_id']%>" class="text-primary ms-2 text-decoration-underline"><%$purchase['bill_no']%></a>
     </h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
@@ -95,7 +95,10 @@
 </div>
 <div class="modal-footer border-top bg-light pt-3 pb-3">
     <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Close</button>
-    <a href="<%base_url('purchase_details/')%><%$purchase['purchase_id']%>" class="cat-btn cat-btn-primary px-4 text-white">
-        <i class="ti ti-printer me-2"></i> Full View / Print
+    <button type="button" onclick="window.open('<%base_url('purchase/print_pdf/')%><%$purchase['purchase_id']%>', '_blank')" class="cat-btn cat-btn-primary px-4 text-white">
+        <i class="ti ti-printer me-2"></i> Print
+    </button>
+    <a href="<%base_url('purchase/print_pdf/')%><%$purchase['purchase_id']%>?download=1" class="cat-btn cat-btn-outline px-4 text-primary ms-2">
+        <i class="ti ti-download me-2"></i> Download
     </a>
 </div>

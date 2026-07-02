@@ -24269,7 +24269,7 @@ html:not(.layout-menu-fixed) .menu-inner-shadow {
 .menu-vertical .menu-block,
 .menu-vertical .menu-inner>.menu-item,
 .menu-vertical .menu-inner>.menu-header {
-    width: 16.25rem
+    width: 19.25rem
 }
 
 .menu-vertical .menu-inner {
@@ -24904,7 +24904,7 @@ html:not(.layout-menu-fixed) .menu-inner-shadow {
     align-items: stretch;
     flex: 1 1 auto;
     flex-direction: column;
-    justify-content: space-between
+    /* justify-content: space-between */
 }
 
 .content-backdrop {

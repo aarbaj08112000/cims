@@ -71,10 +71,17 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="mb-3">
+                        <label class="form-label fw-bold">Customer Name</label>
+                        <div class="input-group input-group-merge">
+                            <span class="input-group-text"><i class="ti ti-user"></i></span>
+                            <input type="text" id="pos_customer_name" class="form-control" placeholder="Enter Customer Name" value="">
+                        </div>
+                    </div>
+                    <div class="mb-3">
                         <label class="form-label fw-bold">Customer Mobile Number</label>
                         <div class="input-group input-group-merge">
                             <span class="input-group-text"><i class="ti ti-device-mobile"></i></span>
-                            <input type="text" id="pos_customer" class="form-control" placeholder="Enter Mobile Number (Optional)" value="">
+                            <input type="text" id="pos_customer_mobile" class="form-control" placeholder="Enter Mobile Number (Optional)" value="">
                         </div>
                     </div>
                 </div>

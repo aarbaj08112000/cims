@@ -350,7 +350,7 @@
         <a href="<%$base_url%>purchase_list" class="cat-btn cat-btn-outline">
           <i class="ti ti-arrow-left"></i> Back to List
         </a>
-        <button class="cat-btn cat-btn-primary" onclick="window.print()">
+        <button onclick="window.open('<%$base_url%>purchase/print_pdf/<%$purchase['purchase_id']%>', '_blank')" class="cat-btn cat-btn-primary">
           <i class="ti ti-printer"></i> Print Bill
         </button>
       </div>

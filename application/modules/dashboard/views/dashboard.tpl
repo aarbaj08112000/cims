@@ -8,8 +8,8 @@
         --dash-info: #00cfe8;
         --dash-secondary: #82868b;
         --dash-bg: #f8f7fa;
-        --card-shadow: 0 10px 30px 0 rgba(115, 103, 240, 0.08);
-        --card-shadow-hover: 0 15px 45px 0 rgba(115, 103, 240, 0.15);
+        --card-shadow: var(--cat-shadow, 0 2px 16px rgba(91,95,199,0.09));
+        --card-shadow-hover: 0 8px 24px rgba(91,95,199,0.15);
     }
 
     .dashboard-wrapper {
@@ -35,11 +35,11 @@
     /* Metric Cards Redesign */
     .metric-card-premium {
         background: #fff;
-        border-radius: 20px;
-        padding: 1.75rem;
-        border: 1px solid rgba(115, 103, 240, 0.05);
+        border-radius: var(--cat-radius, 12px);
+        padding: 1.25rem;
+        border: 1px solid var(--cat-border, rgba(115, 103, 240, 0.05));
         box-shadow: var(--card-shadow);
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
         height: 100%;
@@ -55,14 +55,14 @@
     }
 
     .metric-icon-box {
-        width: 56px;
-        height: 56px;
-        border-radius: 16px;
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-bottom: 1.25rem;
-        font-size: 1.75rem;
+        margin-bottom: 1rem;
+        font-size: 1.4rem;
         transition: transform 0.3s ease;
     }
 
@@ -78,26 +78,26 @@
     .icon-indigo { background: linear-gradient(135deg, rgba(30, 42, 210, 0.15), rgba(30, 42, 210, 0.05)); color: #1e2ad2; }
 
     .metric-info h3 {
-        font-size: 2rem;
-        font-weight: 800;
+        font-size: 1.35rem;
+        font-weight: 700;
         color: #2f2b3d;
         margin: 0;
-        letter-spacing: -0.02em;
+        letter-spacing: -0.01em;
     }
 
     .metric-info span {
-        font-size: 0.95rem;
+        font-size: 0.85rem;
         color: #82868b;
-        font-weight: 600;
+        font-weight: 500;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.02em;
     }
 
     /* Section Cards */
     .dashboard-card {
         background: #fff;
-        border-radius: 24px;
-        border: 1px solid rgba(115, 103, 240, 0.05);
+        border-radius: var(--cat-radius, 12px);
+        border: 1px solid var(--cat-border, #e8ecf3);
         box-shadow: var(--card-shadow);
         height: 100%;
         overflow: hidden;
@@ -109,23 +109,23 @@
     }
 
     .card-title-box {
-        padding: 1.75rem 2rem;
-        border-bottom: 1px solid #f1f1f2;
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid var(--cat-border, #f1f1f2);
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background: linear-gradient(to right, #ffffff, #fdfdff);
+        background: #fff;
     }
 
     .card-title-box h5 {
         margin: 0;
-        font-weight: 700;
+        font-weight: 600;
         color: #2f2b3d;
-        font-size: 1.25rem;
+        font-size: 1.05rem;
     }
 
     .card-body-content {
-        padding: 2rem;
+        padding: 1.5rem;
     }
 
     /* Tiny Progress Bars/Stats */
@@ -140,9 +140,9 @@
     .mini-stat-header {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 0.75rem;
-        font-size: 0.9rem;
-        font-weight: 700;
+        margin-bottom: 0.5rem;
+        font-size: 0.85rem;
+        font-weight: 600;
         color: #5d596c;
     }
 
@@ -162,28 +162,27 @@
     .activity-item {
         display: flex;
         align-items: center;
-        padding: 1.15rem 0;
+        padding: 1rem 0;
         border-bottom: 1px solid #f8f7fa;
         transition: transform 0.2s ease;
     }
 
     .activity-item:hover {
-        transform: translateX(5px);
+        transform: translateX(3px);
     }
 
     .activity-item:last-child { border-bottom: none; }
 
     .activity-point {
-        width: 12px;
-        height: 12px;
-        border-radius: 4px;
-        margin-right: 1.25rem;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-right: 1rem;
         flex-shrink: 0;
-        box-shadow: 0 0 10px currentColor;
     }
 
     .activity-text {
-        font-size: 0.95rem;
+        font-size: 0.85rem;
         color: #5d596c;
         font-weight: 500;
     }
@@ -192,7 +191,7 @@
         margin-left: auto;
         font-size: 0.8rem;
         color: #b9b9c3;
-        font-weight: 600;
+        font-weight: 500;
     }
 
     /* Badge Label Styling */
@@ -241,18 +240,18 @@
 
     .summary-item .label {
         display: block;
-        font-size: 0.85rem;
-        font-weight: 700;
+        font-size: 0.75rem;
+        font-weight: 600;
         color: #82868b;
         text-transform: uppercase;
-        margin-bottom: 0.5rem;
-        letter-spacing: 0.05em;
+        margin-bottom: 0.25rem;
+        letter-spacing: 0.02em;
     }
 
     .summary-item .value {
         display: block;
-        font-size: 1.5rem;
-        font-weight: 800;
+        font-size: 1.15rem;
+        font-weight: 700;
         color: #2f2b3d;
     }
 

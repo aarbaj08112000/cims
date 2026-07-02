@@ -179,4 +179,28 @@ class Reports_model extends CI_Model {
 
         return $stats;
     }
+
+    /**
+     * Get All Stock Adjustment Entries
+     */
+    public function get_stock_adjustment_report($from_date = '', $to_date = '', $product_id = '') {
+        $this->db->select('sm.stock_id, sm.added_date, sm.qty, sm.previous_qty, sm.new_qty, sm.remarks, p.name as product_name, p.product_code, u.user_name as adjusted_by');
+        $this->db->from('stock_master sm');
+        $this->db->join('product_master p', 'sm.product_id = p.product_id', 'left');
+        $this->db->join('userinfo u', 'sm.added_by = u.id', 'left');
+
+        if (!empty($from_date)) {
+            $this->db->where('DATE(sm.added_date) >=', $from_date);
+        }
+        if (!empty($to_date)) {
+            $this->db->where('DATE(sm.added_date) <=', $to_date);
+        }
+        if (!empty($product_id)) {
+            $this->db->where('sm.product_id', $product_id);
+        }
+
+        $this->db->order_by('sm.stock_id', 'DESC');
+        return $this->db->get()->result_array();
+    }
 }
+

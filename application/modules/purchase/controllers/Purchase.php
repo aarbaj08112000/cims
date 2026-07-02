@@ -103,4 +103,71 @@ class Purchase extends MY_Controller {
         
         echo json_encode(['success' => 1, 'html' => $html]);
     }
+
+    private function _get_logo_base64($logo_path)
+    {
+        if (empty($logo_path))
+            return '';
+        $abs = FCPATH . ltrim($logo_path, '/');
+        if (file_exists($abs)) {
+            $mime = mime_content_type($abs);
+            return 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($abs));
+        }
+        return '';
+    }
+
+    public function print_pdf($purchase_id) {
+        $purchase_id = (int)$purchase_id;
+        if (empty($purchase_id)) {
+            show_404();
+            return;
+        }
+
+        $data['purchase'] = $this->Purchase_model->get_purchase_master($purchase_id);
+        $data['items'] = $this->Purchase_model->get_purchase_items($purchase_id);
+
+        if (empty($data['purchase'])) {
+            show_404();
+            return;
+        }
+
+        $this->load->model('company/Company_model');
+        $comp_master = $this->Company_model->get_company();
+        
+        $data['company_name'] = !empty($comp_master['company_name']) ? $comp_master['company_name'] : 'Your Company';
+
+        $address_parts = [];
+        if (!empty($comp_master['address'])) $address_parts[] = $comp_master['address'];
+        if (!empty($comp_master['city'])) $address_parts[] = $comp_master['city'];
+        if (!empty($comp_master['state'])) $address_parts[] = $comp_master['state'] . (!empty($comp_master['pincode']) ? ' - ' . $comp_master['pincode'] : '');
+        $data['company_address'] = implode(', ', $address_parts);
+
+        $data['company_gst'] = !empty($comp_master['gst_number']) ? $comp_master['gst_number'] : '';
+
+        $logo_path = !empty($comp_master['company_logo']) ? 'public/uploads/company/' . $comp_master['company_logo'] : '';
+        $data['logo_base64'] = $this->_get_logo_base64($logo_path);
+
+        $data['base_url'] = base_url();
+
+        // Load the view and get HTML
+        $html = $this->smarty->loadView('purchase_print_pdf.tpl', $data, 'No', 'No', TRUE);
+
+        // Load PDF library
+        $this->load->library('Pdf');
+        $pdf = new Pdf();
+        // Set Dompdf options to better support fonts/unicode if needed
+        $options = $pdf->getOptions();
+        $options->set('isRemoteEnabled', true);
+        $options->set('isFontSubsettingEnabled', true);
+        $options->set('defaultFont', 'DejaVu Sans'); // Setting DejaVu Sans for Rupee symbol support
+        $pdf->setOptions($options);
+        
+        $pdf->loadHtml($html);
+        $pdf->setPaper('A4', 'portrait');
+        $pdf->render();
+        
+        // Output the generated PDF
+        $attachment = $this->input->get('download') == 1 ? 1 : 0;
+        $pdf->stream('Purchase_Bill_' . $data['purchase']['bill_no'] . '.pdf', ['Attachment' => $attachment]);
+    }
 }

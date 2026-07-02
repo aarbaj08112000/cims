@@ -61,6 +61,10 @@
               <input type="text" name="customer_mobile" class="form-control required-input" placeholder="Enter Mobile No" maxlength="15">
             </div>
             <div class="col-md-3">
+              <label class="form-label">Customer Name <span class="text-danger">*</span></label>
+              <input type="text" name="customer_name" id="customer_name" class="form-control required-input" placeholder="Enter Customer Name">
+            </div>
+            <div class="col-md-3">
               <label class="form-label">Bill Number <span class="text-danger">*</span></label>
               <input type="text" name="bill_no" class="form-control required-input" value="INV-<%rand(1000,9999)%>">
             </div>
@@ -108,7 +112,7 @@
                     <select name="product_id[]" class="form-control select2 product-select required-input">
                       <option value="">Choose Product</option>
                       <%foreach from=$products item=p%>
-                        <option value="<%$p['product_id']%>" data-price="<%$p['sale_price']%>" data-stock="<%$p['qty']%>"><%$p['name']%> (<%$p['product_code']%>)</option>
+                        <option value="<%$p['product_id']%>" data-price="<%$p['price']%>" data-stock="<%$p['qty']%>"><%$p['name']%> (<%$p['product_code']%>)</option>
                       <%/foreach%>
                     </select>
                   </td>
@@ -116,10 +120,10 @@
                     <input type="text" class="form-control stock-display bg-light text-center" readonly value="0">
                   </td>
                   <td>
-                    <input type="number" name="qty[]" class="form-control qty-input required-input text-center" min="1" value="1">
+                    <input type="number" name="qty[]" class="form-control qty-input required-input text-center" min="1" value="">
                   </td>
                   <td>
-                    <input type="number" name="price[]" class="form-control price-input required-input text-end" step="0.01" value="0">
+                    <input type="number" name="price[]" class="form-control price-input required-input text-end bg-light" step="0.01" value="0" readonly>
                   </td>
                   <td>
                     <input type="number" name="total[]" class="form-control total-input bg-light text-end fw-bold" readonly value="0">
@@ -131,9 +135,23 @@
               </tbody>
               <tfoot class="bg-light border-top">
                 <tr>
-                  <th colspan="4" class="text-end h5 fw-bold pt-3 pb-3">Grand Total:</th>
-                  <th class="pt-3 pb-3">
-                    <input type="number" name="grand_total" id="grand_total" class="form-control bg-white text-end text-primary h5 fw-bold mb-0 border-0 shadow-none" readonly value="0">
+                  <th colspan="4" class="text-end h6 fw-bold pt-3 pb-2">Subtotal:</th>
+                  <th class="pt-3 pb-2">
+                    <input type="number" name="sub_total" id="sub_total" class="form-control bg-transparent text-end h6 fw-bold mb-0 border-0 shadow-none" readonly value="0">
+                  </th>
+                  <th></th>
+                </tr>
+                <tr>
+                  <th colspan="4" class="text-end h6 fw-bold pt-2 pb-2">Discount Amount:</th>
+                  <th class="pt-2 pb-2">
+                    <input type="number" name="discount" id="discount" class="form-control text-end bg-white" step="0.01" min="0" value="0">
+                  </th>
+                  <th></th>
+                </tr>
+                <tr>
+                  <th colspan="4" class="text-end h5 fw-bold pt-2 pb-3 text-primary">Grand Total:</th>
+                  <th class="pt-2 pb-3">
+                    <input type="number" name="grand_total" id="grand_total" class="form-control bg-transparent text-end text-primary h5 fw-bold mb-0 border-0 shadow-none" readonly value="0">
                   </th>
                   <th></th>
                 </tr>
@@ -157,7 +175,7 @@
       <select name="product_id[]" class="form-control select2 product-select required-input">
         <option value="">Choose Product</option>
         <%foreach from=$products item=p%>
-          <option value="<%$p['product_id']%>" data-price="<%$p['sale_price']%>" data-stock="<%$p['qty']%>"><%$p['name']%> (<%$p['product_code']%>)</option>
+          <option value="<%$p['product_id']%>" data-price="<%$p['price']%>" data-stock="<%$p['qty']%>"><%$p['name']%> (<%$p['product_code']%>)</option>
         <%/foreach%>
       </select>
     </td>
@@ -165,10 +183,10 @@
        <input type="text" class="form-control stock-display bg-light text-center" readonly value="0">
     </td>
     <td>
-      <input type="number" name="qty[]" class="form-control qty-input required-input text-center" min="1" value="1">
+      <input type="number" name="qty[]" class="form-control qty-input required-input text-center" min="1" value="0">
     </td>
     <td>
-      <input type="number" name="price[]" class="form-control price-input required-input text-end" step="0.01" value="0">
+      <input type="number" name="price[]" class="form-control price-input required-input text-end bg-light" step="0.01" value="0" readonly>
     </td>
     <td>
       <input type="number" name="total[]" class="form-control total-input bg-light text-end fw-bold" readonly value="0">

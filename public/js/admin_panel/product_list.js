@@ -75,15 +75,12 @@ const page = {
         return;
       }
 
-      // Generate all labels for printing
-      renderLabels(product, count);
-
-      // Delay slightly to ensure DOM is updated before print dialog
-      setTimeout(function () {
-        window.print();
-        // Restore single preview after print dialog closes/is shown
-        renderLabels(product, 1);
-      }, 500);
+      // Open PDF in new tab
+      var printUrl = base_url + "print_barcode_pdf/" + product.product_id + "/" + count;
+      window.open(printUrl, '_blank');
+      
+      // Close the modal optionally
+      $("#printBarcodeModal").modal("hide");
     });
 
     $(".select2").select2();

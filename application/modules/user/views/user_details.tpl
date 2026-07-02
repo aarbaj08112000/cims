@@ -68,19 +68,19 @@
                                 <div class="row">
 
                                  <div class="form-group mb-3">
-                                    <label for="on click url">User Full Name<span class="text-danger">*</span></label> <br>
+                                    <label for="on click url">User Full Name<span class="text-danger">*</span></label>
                                     <input required type="text" name="user_name" placeholder="Enter Full Name" class="form-control" value="" id="">
                                  </div>
                                  <div class="form-group mb-3">
-                                    <label for="on click url">User Email<span class="text-danger">*</span></label> <br>
+                                    <label for="on click url">User Email<span class="text-danger">*</span></label>
                                     <input required type="email" name="user_email" placeholder="Enter Email" class="form-control" value="" id="">
                                  </div>
                                  <div class="form-group mb-3">
-                                    <label for="on click url">User Password<span class="text-danger">*</span></label> <br>
+                                    <label for="on click url">User Password<span class="text-danger">*</span></label>
                                     <input required type="password" name="user_password" placeholder="Enter Password" class="form-control" value="" id="">
                                  </div>
                                  <div class="form-group mb-3">
-                                    <label for="on click url">User Role<span class="text-danger">*</span></label> <br>
+                                    <label for="on click url">User Role<span class="text-danger">*</span></label>
                                     <select name="user_role" class="form-control select2" id="">
                                        <option value="Admin">Admin</option>
                                        <option value="Purchase">Purchase</option>
@@ -96,8 +96,8 @@
                                        <option value="Sales">Sales</option>
                                     </select>
                                  </div>
-                                 <div class="form-group mb-3">
-                                    <label for="on click url">Unit<span class="text-danger">*</span></label> <br>
+                                 <div class="form-group mb-3 d-none">
+                                    <label for="on click url">Unit<span class="text-danger">*</span></label>
                                     <div class="row">
                                        <%foreach from=$client item='client_val' %>
                                        <div class="col-4">
@@ -108,7 +108,7 @@
                                     </div>
                                  </div>
                                  <div class="form-group mb-3" >
-                                    <label for="on click url" class="w-100">Groups<span class="text-danger">*</span> <a class="float-end page-access-btn" href="javascript:void(0)">View Page Access</a></label> <br>
+                                    <label for="on click url" class="w-100">Groups<span class="text-danger">*</span> <a class="float-end page-access-btn hide" href="javascript:void(0)">View Page Access</a></label>
                                     <select name="groups[]" class="form-control select2-multiple"   multiple="multiple">
                                        <%foreach from=$groups item='groups_val' %>
                                        <option value="<%$groups_val['group_master_id']%>" <%if in_array($groups_val['group_master_id'],$groups_arr)%>selected<%/if%>><%$groups_val['group_name']%></option>
@@ -156,87 +156,7 @@
                                  <td><%$u['status'] %></td>
                                  <td>
                                     <a data-bs-toggle="modal" data-bs-target="#updatePromo<%$i%>"><i class="ti ti-edit"></i></a>
-                                    <div class="modal fade" id="updatePromo<%$i%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                       <div class="modal-dialog  modal-dialog-centered" role="document">
-                                          <div class="modal-content">
-                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Update EPR Users</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                                </button>
-                                             </div>
-                                             <form action="<%base_url('user/user/updateUsersData') %>" method="POST" enctype="multipart/form-data" id="update_users_data<%$i%>" class="update_users_data update_users_data<%$i%> custom-form">
-                                                <div class="modal-body">
-                                                  <div class="row">
-                                                     <div class="form-group">
-                                                        <input type="hidden" name="user_id" value="<%$u['id']%>">
-                                                     </div>
-                                                     <div class="form-group">
-                                                        <label for="on click url">User Full Name<span class="text-danger">*</span></label> <br>
-                                                        <input  type="text" name="user_name" placeholder="Enter Full Name" class="form-control required-input" value="<%$u['user_name'] %>">
-                                                     </div>
-                                                     <div class="form-group">
-                                                        <label for="on click url">User Email<span class="text-danger">*</span></label> <br>
-                                                        <input  type="email" name="user_email" placeholder="Enter Email" class="form-control required-input" value="<%$u['user_email'] %>" disabled>
-                                                     </div>
-                                                     <!-- <div class="form-group">
-                                                        <label for="on click url">User Password<span class="text-danger">*</span></label> <br>
-                                                        <input required type="password" name="user_password" placeholder="Enter Password" class="form-control" value="" id="">
-                                                        </div> -->
-                                                     <div class="form-group">
-                                                        <label for="on click url">Select Role<span class="text-danger">*</span></label> <br>
-                                                        <select name="user_role" class="form-control select2 required-input"  disabled>
-                                                           <option value="Admin">Admin</option>
-                                                           <option value="Purchase">Purchase</option>
-                                                           <option value="Approver">Approver</option>
-                                                           <option value="inward_stores">inward stores </option>
-                                                           <option value="stores">stores </option>
-                                                           <option value="production">production</option>
-                                                           <option value="FG_stores">FG stores</option>
-                                                           <option value="Marketing">Marketing</option>
-                                                           <option value="Development">Development</option>
-                                                           <option value="Quality">Quality</option>
-                                                           <option value="Inward_Quality">Inward Quality</option>
-                                                           <option value="Sales">Sales</option>
-                                                        </select>
-                                                     </div>
-                                                     <div class="form-group unit-box">
-                                                        <label for="on click url">Unit<span class="text-danger">*</span></label> <br>
-                                                        <div class="row">
-                                                           <%foreach from=$client item='client_val' %>
-                                                           <div class="col-4">
-                                                              <input type="checkbox" class="check-box required-input" name="client[]" value="<%$client_val['id'] %>" <%if in_array($client_val['id'],$units)%>checked<%/if%>>
-                                                              <label for="client" class="ms-1"><%$client_val['client_unit']%></label>
-                                                           </div>
-                                                           <%/foreach%>
-                                                        </div>
-                                                     </div>
-                                                     <div class="form-group" >
-                                                        <label for="on click url" class="w-100">Groups<span class="text-danger">*</span> <a type="button" class="float-end page-access-btn hide" href="javascript:void(0)">View Page Access</a></label> <br>
-                                                        <select name="groups[]" class="form-control select2-multiple required-input"   multiple="multiple">
-                                                           <%foreach from=$groups item='groups_val' %>
-                                                           <option value="<%$groups_val['group_master_id'] %>" <%if in_array($groups_val['group_master_id'],$groups_arr)%>selected<%/if%>><%$groups_val['group_name']%></option>
-                                                           <%/foreach%>
-                                                        </select>
-                                                     </div>
-                                                    </div>
-                                                     <div class="form-group" >
-                                                        <label for="on click url" class="w-100">Groups<span class="text-danger">*</span> </label> <br>
-                                                        <select name="status" class="form-control select2-multiple required-input"  >
-                                                           <option value="Active" <%if $u['status'] eq 'Active'%>selected<%/if%>>Active</option>
-                                                           <option value="Inactive" <%if $u['status'] eq 'Inactive'%>selected<%/if%>>Inactive</option>
-                                                           <option value="Block" <%if $u['status'] eq 'Block'%>selected<%/if%>>Block</option>
-                                                        </select>
-                                                     </div>
-                                                    </div>
-                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-primary">Save changes</button>
-                                             </form>
-                                             </div>
-                                             </div>
-                                          </div>
-                                       </div>
-                                    </div>
+
                                  </td>
                               </tr>
                               <%assign var='i' value=$i+1 %>
@@ -251,13 +171,102 @@
                </div>
             </div>
             <!-- /.row -->
-            <!-- Main row -->
-            <!-- /.row (main row) -->
+             <!-- /.row (main row) -->
+          </div>
+          <!-- /.container-fluid -->
+       </section>
+       <!-- /.content -->
+    </div>
+
+   <%if (true) %>
+   <%assign var='i' value=1 %>
+   <%foreach from=$user_info item=u %>
+   <%assign var='units' value=explode(",",$u['unit_ids']|default:"")%>
+   <%assign var='groups_arr' value=explode(",",$u['groups']|default:"")%>
+   <div class="modal fade" id="updatePromo<%$i%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog  modal-dialog-centered" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title" id="exampleModalLabel">Update EPR Users</h5>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+               </button>
+            </div>
+            <form action="<%base_url('user/user/updateUsersData') %>" method="POST" enctype="multipart/form-data" id="update_users_data<%$i%>" class="update_users_data update_users_data<%$i%> custom-form">
+               <div class="modal-body">
+                 <div class="row">
+                    <div class="form-group">
+                       <input type="hidden" name="user_id" value="<%$u['id']%>">
+                    </div>
+                    <div class="form-group">
+                       <label for="on click url">User Full Name<span class="text-danger">*</span></label> 
+                       <input  type="text" name="user_name" placeholder="Enter Full Name" class="form-control required-input" value="<%$u['user_name'] %>">
+                    </div>
+                    <div class="form-group">
+                       <label for="on click url">User Email<span class="text-danger">*</span></label> 
+                       <input  type="email" name="user_email" placeholder="Enter Email" class="form-control required-input" value="<%$u['user_email'] %>" disabled>
+                    </div>
+                    <!-- <div class="form-group">
+                       <label for="on click url">User Password<span class="text-danger">*</span></label>
+                       <input required type="password" name="user_password" placeholder="Enter Password" class="form-control" value="" id="">
+                       </div> -->
+                    <div class="form-group">
+                       <label for="on click url">Select Role<span class="text-danger">*</span></label> 
+                       <select name="user_role" class="form-control select2 required-input"  disabled>
+                          <option value="Admin">Admin</option>
+                          <option value="Purchase">Purchase</option>
+                          <option value="Approver">Approver</option>
+                          <option value="inward_stores">inward stores </option>
+                          <option value="stores">stores </option>
+                          <option value="production">production</option>
+                          <option value="FG_stores">FG stores</option>
+                          <option value="Marketing">Marketing</option>
+                          <option value="Development">Development</option>
+                          <option value="Quality">Quality</option>
+                          <option value="Inward_Quality">Inward Quality</option>
+                          <option value="Sales">Sales</option>
+                       </select>
+                    </div>
+                    <div class="form-group unit-box d-none">
+                       <label for="on click url">Unit<span class="text-danger">*</span></label>
+                       <div class="row">
+                          <%foreach from=$client item='client_val' %>
+                          <div class="col-4">
+                             <input type="checkbox" class="check-box required-input" name="client[]" value="<%$client_val['id'] %>" <%if in_array($client_val['id'],$units)%>checked<%/if%>>
+                             <label for="client" class="ms-1"><%$client_val['client_unit']%></label>
+                          </div>
+                          <%/foreach%>
+                       </div>
+                    </div>
+                    <div class="form-group" >
+                       <label for="on click url" class="w-100">Groups<span class="text-danger">*</span> <a type="button" class="float-end page-access-btn hide" href="javascript:void(0)">View Page Access</a></label> 
+                       <select name="groups[]" class="form-control select2-multiple required-input"   multiple="multiple">
+                          <%foreach from=$groups item='groups_val' %>
+                          <option value="<%$groups_val['group_master_id'] %>" <%if in_array($groups_val['group_master_id'],$groups_arr)%>selected<%/if%>><%$groups_val['group_name']%></option>
+                          <%/foreach%>
+                       </select>
+                    </div>
+                   </div>
+                    <div class="form-group" >
+                       <label for="on click url" class="w-100">Status<span class="text-danger">*</span> </label>
+                       <select name="status" class="form-control select2-multiple required-input"  >
+                          <option value="Active" <%if $u['status'] eq 'Active'%>selected<%/if%>>Active</option>
+                          <option value="Inactive" <%if $u['status'] eq 'Inactive'%>selected<%/if%>>Inactive</option>
+                          <option value="Block" <%if $u['status'] eq 'Block'%>selected<%/if%>>Block</option>
+                       </select>
+                    </div>
+                   </div>
+                    <div class="modal-footer">
+                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                       <button type="submit" class="btn btn-primary">Save changes</button>
+            </form>
+            </div>
+            </div>
          </div>
-         <!-- /.container-fluid -->
-      </section>
-      <!-- /.content -->
+      </div>
    </div>
+   <%assign var='i' value=$i+1 %>
+   <%/foreach%>
+   <%/if%>
    <div class="modal fade" id="accessGroups" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
          <div class="modal-content">

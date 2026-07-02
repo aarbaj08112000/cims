@@ -205,8 +205,16 @@ $(document).ready(function () {
             return;
         }
 
+        var customerName = $('#pos_customer_name').val().trim();
+        if (customerName === '') {
+            toaster('error', 'Customer Name is required.');
+            $('#pos_customer_name').focus();
+            return;
+        }
+
         var formData = {
-            customer_mobile: $('#pos_customer').val(),
+            customer_name: $('#pos_customer_name').val(),
+            customer_mobile: $('#pos_customer_mobile').val(),
             bill_no: current_bill_no,
             payment_mode: $('input[name="payment_mode"]:checked').val(),
             product_id: $('input[name="product_id[]"]').map(function(){ return $(this).val(); }).get(),

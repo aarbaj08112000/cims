@@ -124,9 +124,12 @@
                 <select name="product_id" id="adjustment_product_id" class="form-control select2 required-input" data-placeholder="Choose Product">
                     <option value=""></option>
                     <%foreach from=$stock_levels item=val%>
-                        <option value="<%$val['product_id']%>"><%$val['name']%> (<%$val['product_code']%>)</option>
+                        <option value="<%$val['product_id']%>" data-stock="<%$val['current_stock']%>"><%$val['name']%> (<%$val['product_code']%>)</option>
                     <%/foreach%>
                 </select>
+                <div id="current_stock_display" class="mt-2 text-muted small" style="display: none;">
+                   Current / Old Stock: <span id="current_stock_val" class="fw-bold text-dark badge bg-label-secondary"></span>
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label">Adjustment Quantity (Use positive to add, negative to subtract)</label>

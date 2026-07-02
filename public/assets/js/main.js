@@ -26,8 +26,9 @@ const app = {
     })
 
     $("#close-vertical-btn").on("click", function (e) {
-      $('html').removeClass("layout-menu-hover")
-      // $(this).find('i').removeClass("bx-chevron-right").addClass("bx-chevron-left")
+      $('html').removeClass("layout-menu-hover");
+      $("html").addClass("layout-menu-collapsed").removeClass("layout-menu-expanded");
+      $('.top-sidebar-toggle-btn i').removeClass("ti-x").addClass("ti-menu-2");
     })
     $('#toggle-horizontal-menu-bar').on('click', function () {
       $('html').addClass("layout-menu-hover")
@@ -37,14 +38,14 @@ const app = {
     
     $('.top-sidebar-toggle-btn').on('click', function (e) {
       e.preventDefault();
-      $("html").toggleClass("layout-menu-collapsed");
+      $("html").toggleClass("layout-menu-collapsed").toggleClass("layout-menu-expanded");
       
       // Optionally toggle the icon between menu and close
       var icon = $(this).find('i');
-      if($("html").hasClass("layout-menu-collapsed")) {
-          icon.removeClass("ti-x").addClass("ti-menu-2");
-      } else {
+      if($("html").hasClass("layout-menu-expanded")) {
           icon.removeClass("ti-menu-2").addClass("ti-x");
+      } else {
+          icon.removeClass("ti-x").addClass("ti-menu-2");
       }
     });
     $(".menu-item").on("click", function () {
@@ -225,6 +226,11 @@ const app = {
           $(".grid-block").addClass("hide-grid-table");
           $(".dataTables_scroll").removeClass("hide-grid-table");
           $("body").removeClass("grid-layout");
+          
+          // Re-adjust datatables columns after making table visible again
+          if ($.fn.dataTable) {
+            $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+          }
         } else {
           $(parent_ele).find(".table").removeClass("active");
           $(".dataTables_scroll").addClass("hide-grid-table");

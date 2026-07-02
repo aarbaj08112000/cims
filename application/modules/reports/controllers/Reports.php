@@ -102,4 +102,36 @@ class Reports extends MY_Controller {
         // Expected format from model: ['draw'=>..., 'recordsTotal'=>..., 'recordsFiltered'=>..., 'data'=>...]
         echo json_encode($result);
     }
+
+    /**
+     * Dedicated Stock Adjustment Report Page
+     */
+    public function stock_adjustment_report() {
+        $from_date = $this->input->get('from_date') ?: date('Y-m-01');
+        $to_date   = $this->input->get('to_date')   ?: date('Y-m-t');
+        $product_id = $this->input->get('product_id') ?: '';
+
+        $data['adjustments'] = $this->Reports_model->get_stock_adjustment_report($from_date, $to_date, $product_id);
+        $data['from_date']   = $from_date;
+        $data['to_date']     = $to_date;
+        $data['product_id']  = $product_id;
+        $data['base_url']    = base_url();
+
+        $this->smarty->loadView('stock_adjustment_report.tpl', $data, 'Yes', 'Yes');
+    }
+
+    /**
+     * AJAX: Get Stock Adjustment Report table
+     */
+    public function get_stock_adjustment_ajax() {
+        $from_date  = $this->input->post('from_date')  ?: date('Y-m-01');
+        $to_date    = $this->input->post('to_date')    ?: date('Y-m-t');
+        $product_id = $this->input->post('product_id') ?: '';
+
+        $data['adjustments'] = $this->Reports_model->get_stock_adjustment_report($from_date, $to_date, $product_id);
+        $html = $this->smarty->fetch('stock_adjustment_table.tpl', $data);
+
+        echo json_encode(['success' => 1, 'html' => $html]);
+    }
 }
+

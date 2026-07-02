@@ -387,5 +387,45 @@ class Product extends MY_Controller {
         echo json_encode($ret_arr);
     }
 
+    public function print_barcode_pdf($product_id, $count = 1)
+    {
+        $product_data = $this->Product_model->get_products_details($product_id);
+        if (empty($product_data)) {
+            show_404();
+            return;
+        }
+
+        $product = $product_data[0];
+        $count = (int)$count;
+        if ($count < 1) $count = 1;
+
+        // Encode barcode as base64 so dompdf can embed it
+        $barcode_path = FCPATH . "public/uploads/product/bar_code/" . $product_id . "/" . $product['line_bar_code'] . ".png";
+        $barcode_base64 = '';
+        if (file_exists($barcode_path)) {
+            $mime = mime_content_type($barcode_path);
+            $barcode_base64 = 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($barcode_path));
+        }
+        $product['barcode_base64'] = $barcode_base64;
+
+        // Build labels array — one entry per copy needed
+        $labels = array();
+        for ($i = 0; $i < $count; $i++) {
+            $labels[] = $product;
+        }
+
+        $data['labels']   = $labels;
+        $data['base_url'] = base_url();
+
+        $html = $this->smarty->loadView('barcode_print_pdf.tpl', $data, 'No', 'No', TRUE);
+
+        $this->load->library('Pdf');
+        $pdf = new Pdf();
+        $pdf->loadHtml($html);
+        $pdf->setPaper('A4', 'portrait');
+        $pdf->render();
+        $pdf->stream('Barcode_' . $product['product_code'] . '.pdf', ['Attachment' => 0]);
+    }
+
 
 }

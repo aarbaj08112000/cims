@@ -124,6 +124,7 @@ class Smartie extends Smarty {
         $content = '';
 
         if(strtolower($header) == 'no' && strtolower($footer) == 'no'){
+            $this->smartyDefaultPath();
             $content.= $this->fetch($template,$data);
         }
 

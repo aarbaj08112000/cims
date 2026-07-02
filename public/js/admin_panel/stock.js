@@ -40,6 +40,18 @@ const stockPage = {
             $("#manualAdjustmentModal").modal("show");
         });
 
+        // Show current/old stock when product is selected
+        $("#adjustment_product_id").on("change", function () {
+            let selectedOption = $(this).find("option:selected");
+            if (selectedOption.val()) {
+                let stock = selectedOption.data("stock");
+                $("#current_stock_val").text(stock);
+                $("#current_stock_display").slideDown(200);
+            } else {
+                $("#current_stock_display").slideUp(200);
+            }
+        });
+
         // Manual Adjustment Form Submit
         $("#stockAdjustmentForm").submit(function (e) {
             e.preventDefault();

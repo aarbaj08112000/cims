@@ -39,6 +39,16 @@ const salesPage = {
 
             row.find(".price-input").val(price);
             row.find(".stock-display").val(stock);
+            
+            if($(this).val() != "") {
+                if(row.find(".qty-input").val() == 0 || row.find(".qty-input").val() == "") {
+                    row.find(".qty-input").val(1);
+                    row.find(".qty-input").removeClass("is-invalid");
+                }
+            } else {
+                row.find(".qty-input").val(0);
+            }
+
             that.calculateRowTotal(row);
         });
 
@@ -56,6 +66,11 @@ const salesPage = {
             }
 
             that.calculateRowTotal(row);
+        });
+
+        // Discount Change
+        $(document).on("input", "#discount", function () {
+            that.calculateGrandTotal();
         });
 
         // Form Submit
@@ -87,7 +102,6 @@ const salesPage = {
             });
 
             if (invalid) {
-                toaster("error", "Please fix errors before submitting.");
                 return;
             }
 
@@ -102,6 +116,9 @@ const salesPage = {
                 success: function (response) {
                     if (response.success == 1) {
                         toaster("success", response.msg);
+                        if (response.sales_id) {
+                            window.open("sales/print_invoice/" + response.sales_id, "_blank");
+                        }
                         setTimeout(function () {
                             window.location.href = "sales_list";
                         }, 1500);
@@ -120,10 +137,22 @@ const salesPage = {
         this.calculateGrandTotal();
     },
     calculateGrandTotal: function () {
-        let grandTotal = 0;
+        let subTotal = 0;
         $(".total-input").each(function () {
-            grandTotal += parseFloat($(this).val()) || 0;
+            subTotal += parseFloat($(this).val()) || 0;
         });
+        
+        let discount = parseFloat($("#discount").val()) || 0;
+        
+        // Ensure discount doesn't exceed subtotal
+        if (discount > subTotal) {
+            discount = subTotal;
+            $("#discount").val(discount.toFixed(2));
+        }
+
+        let grandTotal = subTotal - discount;
+        
+        $("#sub_total").val(subTotal.toFixed(2));
         $("#grand_total").val(grandTotal.toFixed(2));
     }
 }
