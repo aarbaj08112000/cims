@@ -428,4 +428,32 @@ class Product extends MY_Controller {
     }
 
 
+    public function scan_barcode()
+    {
+        $data['base_url'] = base_url();
+        $this->smarty->loadView('scan_barcode.tpl', $data, 'Yes', 'Yes');
+    }
+
+    public function get_product_by_barcode()
+    {
+        $barcode = $this->input->post('barcode');
+        $ret_arr = ['success' => 0, 'data' => null, 'msg' => ''];
+
+        if (!empty($barcode)) {
+            $product_data = $this->Product_model->get_product_by_barcode_text($barcode);
+            if (!empty($product_data)) {
+                $ret_arr['success'] = 1;
+                $ret_arr['data'] = $product_data;
+                $ret_arr['data']['barcode_url'] = base_url() . "public/uploads/product/bar_code/" . $product_data['product_id'] . "/" . $product_data['line_bar_code'] . ".png";
+                $ret_arr['msg'] = 'Product found.';
+            } else {
+                $ret_arr['msg'] = 'Product not found for the given barcode.';
+            }
+        } else {
+            $ret_arr['msg'] = 'Barcode is required.';
+        }
+
+        echo json_encode($ret_arr);
+    }
+
 }

@@ -25,6 +25,18 @@ class Product_model extends CI_Model {
         return $ret_data;
     }
     
+    public function get_product_by_barcode_text($barcode){
+        $this->db->select('p.*, c.category_name, b.brand_name');
+        $this->db->from('product_master as p');
+        $this->db->join('categories as c', 'p.category_id = c.category_id', 'left');
+        $this->db->join('brands as b', 'p.brand_id = b.brand_id', 'left');
+        $this->db->where('p.line_bar_code', $barcode);
+        $this->db->where('p.is_delete', "0");
+        $result_obj = $this->db->get();
+        $ret_data = is_object($result_obj) ? $result_obj->row_array() : [];
+        return $ret_data;
+    }
+    
     public function get_products_image($product_id = 0){
         // Multiple images not required
         return [];
