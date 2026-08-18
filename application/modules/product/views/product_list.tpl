@@ -28,7 +28,10 @@
         <button type="button" id="export-pdf" class="cat-btn cat-btn-outline-red" title="Export PDF">
           <i class="ti ti-file-type-pdf"></i> Export PDF
         </button>
-        <a href="add_product" class="cat-btn cat-btn-primary text-white" title="Add Product">
+        <a href="<%$base_url%>product/scan_barcode" class="cat-btn cat-btn-outline-primary" title="Scan Barcode">
+          <i class="ti ti-barcode"></i> Scan
+        </a>
+        <a href="<%$base_url%>product/add_product" class="cat-btn cat-btn-primary text-white" title="Add Product">
           <i class="ti ti-plus"></i> Add Product
         </a>
       </div>
