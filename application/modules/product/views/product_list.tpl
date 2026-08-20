@@ -28,7 +28,7 @@
         <button type="button" id="export-pdf" class="cat-btn cat-btn-outline-red" title="Export PDF">
           <i class="ti ti-file-type-pdf"></i> Export PDF
         </button>
-        <a href="<%$base_url%>product/scan_barcode" class="cat-btn cat-btn-outline-primary" title="Scan Barcode">
+        <a href="<%$base_url%>product/scan_barcode" class="cat-btn cat-btn-outline" title="Scan Barcode">
           <i class="ti ti-barcode"></i> Scan
         </a>
         <a href="<%$base_url%>product/add_product" class="cat-btn cat-btn-primary text-white" title="Add Product">
@@ -39,6 +39,7 @@
 
     <!-- Main content -->
     <div class="cat-table-card">
+      <div class="table-responsive text-nowrap">
       <table class="table table-hover mb-0 w-100" id="product_list">
         <thead class="bg-light">
           <tr>
@@ -126,6 +127,7 @@
               </tbody>
            </table>
         </div>
+      </div>
       </div>
       <!-- /.col -->
 
@@ -343,9 +345,5 @@
     border-bottom: 1.5px solid var(--cat-gray-200) !important;
 }
 
-/* Fix table calculation algorithms */
-.cat-table-card table.dataTable {
-    table-layout: fixed !important;
-    width: 100% !important;
-}
+
 </style>

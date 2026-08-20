@@ -24,8 +24,12 @@
                             <div class="input-group input-group-merge shadow-none border rounded">
                                 <span class="input-group-text border-0 bg-transparent"><i class="ti ti-scan text-primary"></i></span>
                                 <input type="text" id="barcode_scan" class="form-control border-0 bg-transparent" placeholder="Scan Barcode Here..." autofocus>
+                                <button class="btn btn-outline-primary border-0 border-start" type="button" id="start_mobile_scan" title="Scan with Camera">
+                                    <i class="ti ti-camera"></i>
+                                </button>
                             </div>
                             <small class="text-muted mt-1 d-block"><i class="ti ti-info-circle me-1"></i>Automatically adds product on scan</small>
+                            <div id="qr-reader" class="mt-3 rounded" style="display: none; overflow: hidden; border: 2px solid var(--cat-primary);"></div>
                         </div>
                         <div class="col-md-6">
                             <div class="input-group input-group-merge shadow-none border rounded">
@@ -202,6 +206,93 @@
 }
 </style>
 
+<!-- Mobile Responsive POS Table Card Layout -->
+<style>
+@media (max-width: 768px) {
+    /* Disable horizontal scroll wrapper since we stack */
+    .table-responsive {
+        overflow-x: visible !important;
+    }
+    
+    #pos_table {
+        border: 0;
+        width: 100% !important;
+    }
+    #pos_table thead {
+        display: none;
+    }
+    #pos_table tbody tr {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        border: 1px solid var(--cat-border);
+        border-radius: var(--cat-radius);
+        margin-bottom: 20px;
+        background: var(--cat-white);
+        padding: 15px;
+        box-shadow: 0 4px 15px rgba(91, 95, 199, 0.08);
+    }
+    #pos_table tbody td {
+        display: flex;
+        flex-direction: column;
+        border: none !important;
+        padding: 0 !important;
+        text-align: left !important;
+    }
+    #pos_table tbody td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        font-size: 11.5px;
+        color: var(--cat-gray-500);
+        margin-bottom: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    #pos_table tbody td > input {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0;
+        text-align: left !important;
+        background: var(--cat-gray-50) !important;
+        border: 1px solid var(--cat-gray-200) !important;
+        border-radius: 6px;
+    }
+    
+    #pos_table tbody td[data-label="Total"] {
+        margin-top: 5px;
+        font-size: 16px;
+        color: var(--cat-primary);
+    }
+
+    #pos_table tbody td[data-label="Action"] {
+        margin-top: 10px;
+    }
+    #pos_table tbody td > .btn-label-danger {
+        width: 100%;
+        margin: 0;
+        height: 44px;
+        border-radius: 8px;
+    }
+    #pos_table tbody td > .btn-label-danger::after {
+        content: "Remove Item";
+        margin-left: 8px;
+        font-weight: 600;
+        font-size: 14px;
+    }
+    #empty_state_row {
+        box-shadow: none !important;
+        border: 1px dashed var(--cat-border) !important;
+        padding: 40px 10px !important;
+        align-items: center;
+        background: transparent !important;
+    }
+    #empty_state_row td::before {
+        content: none !important;
+    }
+}
+</style>
+
 <!-- Scripts -->
 <script type="text/javascript">
     var base_url = <%$base_url|@json_encode%>;
@@ -211,5 +302,8 @@
 <!-- jQuery UI for product search -->
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+<!-- HTML5 QRCode library for camera scanning -->
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
 <script src="<%$base_url%>public/js/admin_panel/pos_billing.js"></script>
