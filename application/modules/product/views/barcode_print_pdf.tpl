@@ -6,13 +6,13 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 0px;
             color: #000;
         }
         table.main-table {
             width: 100%;
             border-collapse: separate;
-            border-spacing: 15px;
+            border-spacing: 5px;
         }
         td.label {
             width: 33.33%;
@@ -45,7 +45,7 @@
             padding-top: 10px;
         }
         .bcode-img {
-            width: 160px;
+            width: 185px;
             height: 50px;
         }
         .bcode-txt {
