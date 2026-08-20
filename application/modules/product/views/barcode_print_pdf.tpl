@@ -5,77 +5,71 @@
     <title>Barcode Print</title>
     <style>
         body {
-            font-family: 'Helvetica', 'Arial', sans-serif;
-            background: #fff;
-            padding: 15px;
-            margin: 0;
+            font-family: Arial, sans-serif;
+            margin: 20px;
             color: #000;
         }
-        table.label-grid {
+        table {
             width: 100%;
             border-collapse: collapse;
         }
-        td.label-cell {
+        td.label {
             width: 33.3%;
-            padding: 10px;
-            vertical-align: top;
-        }
-        .sticker-label {
             border: 1px dashed #666;
             padding: 15px;
             text-align: center;
+            vertical-align: top;
         }
-        .label-product-name {
+        td.empty {
+            border: none;
+        }
+        .name {
             font-weight: bold;
-            font-size: 16px;
+            font-size: 15px;
             margin-bottom: 5px;
         }
-        .label-meta {
+        .meta {
             font-size: 12px;
             color: #333;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 10px;
+            margin-bottom: 8px;
         }
-        .barcode-section {
-            margin-top: 10px;
+        .divider {
+            border-top: 1px solid #ccc;
+            margin-bottom: 8px;
         }
-        .barcode-section img {
-            width: 170px;
+        .bcode-img {
+            width: 160px;
             height: 50px;
         }
-        .barcode-num {
+        .bcode-txt {
             font-size: 13px;
             letter-spacing: 2px;
             font-weight: bold;
-            margin-top: 5px;
+            margin-top: 4px;
         }
     </style>
 </head>
 <body>
-    <table class="label-grid">
+    <table>
         <%assign var="col" value=0%>
         <%foreach from=$labels item=label%>
             <%if $col == 0%><tr><%/if%>
-            <td class="label-cell">
-                <div class="sticker-label">
-                    <div class="label-product-name"><%$label['name']%></div>
-                    <div class="label-meta">Size: <%$label['size']|default:'N/A'%> &nbsp;|&nbsp; Code: <%$label['product_code']|default:'N/A'%></div>
-                    <div class="barcode-section">
-                        <%if $label['barcode_base64'] != ''%>
-                            <img src="<%$label['barcode_base64']%>">
-                        <%/if%>
-                        <div class="barcode-num"><%$label['line_bar_code']%></div>
-                    </div>
-                </div>
+            <td class="label">
+                <div class="name"><%$label['name']%></div>
+                <div class="meta">Size: <%$label['size']|default:'N/A'%> &nbsp;|&nbsp; Code: <%$label['product_code']|default:'N/A'%></div>
+                <div class="divider"></div>
+                <%if $label['barcode_base64'] != ''%>
+                    <div><img class="bcode-img" src="<%$label['barcode_base64']%>"></div>
+                <%/if%>
+                <div class="bcode-txt"><%$label['line_bar_code']%></div>
             </td>
             <%assign var="col" value=$col+1%>
             <%if $col == 3%></tr><%assign var="col" value=0%><%/if%>
         <%/foreach%>
         <%if $col == 1%>
-            <td class="label-cell"></td><td class="label-cell"></td></tr>
+            <td class="empty"></td><td class="empty"></td></tr>
         <%elseif $col == 2%>
-            <td class="label-cell"></td></tr>
+            <td class="empty"></td></tr>
         <%/if%>
     </table>
 </body>
