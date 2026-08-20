@@ -9,59 +9,77 @@
             margin: 20px;
             color: #000;
         }
-        table {
+        table.main-table {
             width: 100%;
             border-collapse: collapse;
         }
         td.label {
-            width: 33.3%;
+            width: 33.33%;
             border: 1px dashed #666;
-            padding: 15px;
-            text-align: center;
+            padding: 10px;
             vertical-align: top;
         }
         td.empty {
             border: none;
         }
+        table.inner-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
         .name {
             font-weight: bold;
-            font-size: 15px;
-            margin-bottom: 5px;
+            font-size: 16px;
+            text-align: center;
+            padding-bottom: 5px;
         }
         .meta {
             font-size: 12px;
             color: #333;
-            margin-bottom: 8px;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ccc;
         }
-        .divider {
-            border-top: 1px solid #ccc;
-            margin-bottom: 8px;
+        .bcode-td {
+            text-align: center;
+            padding-top: 10px;
         }
         .bcode-img {
             width: 160px;
             height: 50px;
         }
         .bcode-txt {
-            font-size: 13px;
-            letter-spacing: 2px;
+            font-size: 14px;
+            letter-spacing: 1px;
             font-weight: bold;
-            margin-top: 4px;
+            text-align: center;
+            padding-top: 5px;
         }
     </style>
 </head>
 <body>
-    <table>
+    <table class="main-table">
         <%assign var="col" value=0%>
         <%foreach from=$labels item=label%>
             <%if $col == 0%><tr><%/if%>
             <td class="label">
-                <div class="name"><%$label['name']%></div>
-                <div class="meta">Size: <%$label['size']|default:'N/A'%> &nbsp;|&nbsp; Code: <%$label['product_code']|default:'N/A'%></div>
-                <div class="divider"></div>
-                <%if $label['barcode_base64'] != ''%>
-                    <div><img class="bcode-img" src="<%$label['barcode_base64']%>"></div>
-                <%/if%>
-                <div class="bcode-txt"><%$label['line_bar_code']%></div>
+                <table class="inner-table">
+                    <tr>
+                        <td class="name"><%$label['name']%></td>
+                    </tr>
+                    <tr>
+                        <td class="meta">Size: <%$label['size']|default:'N/A'%> &nbsp;|&nbsp; Code: <%$label['product_code']|default:'N/A'%></td>
+                    </tr>
+                    <tr>
+                        <td class="bcode-td">
+                            <%if $label['barcode_base64'] != ''%>
+                                <img class="bcode-img" src="<%$label['barcode_base64']%>">
+                            <%/if%>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bcode-txt"><%$label['line_bar_code']%></td>
+                    </tr>
+                </table>
             </td>
             <%assign var="col" value=$col+1%>
             <%if $col == 3%></tr><%assign var="col" value=0%><%/if%>
