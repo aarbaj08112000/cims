@@ -274,27 +274,30 @@
     $(document).ready(function() {
         // Make qrbox responsive to screen size
         function getQrBoxSize(viewfinderWidth, viewfinderHeight) {
-            let minEdgePercentage = 0.8; // 80%
+            let minEdgePercentage = 0.9; // 90% for maximum scanning area
             let minEdgeSize = Math.min(viewfinderWidth, viewfinderHeight);
             let qrboxSize = Math.floor(minEdgeSize * minEdgePercentage);
             
-            // Return a box that's wider than it is tall, suitable for 1D barcodes
+            // 1D barcodes need a wider box.
             return {
                 width: qrboxSize,
-                height: Math.floor(qrboxSize * 0.6)
+                height: Math.floor(qrboxSize * 0.5) // More rectangular for 1D
             };
         }
 
         html5QrcodeScanner = new Html5QrcodeScanner(
             "reader",
             { 
-                fps: 15, 
+                fps: 20, 
                 qrbox: getQrBoxSize,
-                aspectRatio: 1.0,
                 showTorchButtonIfSupported: true,
-                useBarCodeDetectorIfSupported: true,
+                // Removing useBarCodeDetectorIfSupported as it can sometimes fail for 1D barcodes on mobile browsers
+                // Removing aspectRatio to let the camera use its natural resolution without cropping
                 videoConstraints: {
-                    facingMode: "environment"
+                    facingMode: "environment",
+                    // Request higher resolution specifically for 1D barcodes (they need clarity)
+                    width: { min: 640, ideal: 1920, max: 1920 },
+                    height: { min: 480, ideal: 1080, max: 1080 }
                 }
             },
             false
