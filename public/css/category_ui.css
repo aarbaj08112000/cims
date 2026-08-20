@@ -245,9 +245,19 @@
   width: 100% !important;
   margin: 0 !important;
   border-collapse: collapse !important;
-  table-layout: fixed !important;
   font-family: var(--cat-font);
   font-size: 14px;
+}
+@media (min-width: 768px) {
+  .cat-table-card table.dataTable {
+    table-layout: fixed !important;
+  }
+}
+@media (max-width: 767px) {
+  .cat-table-card table.dataTable {
+    width: 800px !important;
+    max-width: none !important;
+  }
 }
 
 /* User required Datatable scroll constraints applied globally */
@@ -760,7 +770,39 @@
   }
 
   .cat-page-header-right {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    width: 100%;
     gap: 6px;
+    padding-bottom: 4px; /* for scrollbar if needed */
+  }
+
+  .cat-page-header-right::-webkit-scrollbar {
+    height: 0px; /* Hide scrollbar visually */
+  }
+
+  .cat-search-box {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .cat-search-box input {
+    width: 100%;
+  }
+
+  /* Make buttons icon-only to save space */
+  .cat-page-header-right .cat-btn {
+    font-size: 0 !important;
+    width: 38px;
+    padding: 0;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .cat-page-header-right .cat-btn i {
+    font-size: 18px !important;
+    margin: 0 !important;
   }
 }
 

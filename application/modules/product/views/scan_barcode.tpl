@@ -2,31 +2,137 @@
 <style>
     .scanner-container {
         max-width: 600px;
-        margin: 0 auto;
+        margin: 20px auto;
         background: #fff;
+        padding: 0;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        overflow: hidden;
+    }
+    .scanner-header {
+        background: linear-gradient(135deg, var(--cat-primary), #4318FF);
+        color: white;
         padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+    .scanner-header h5 {
+        margin: 0;
+        color: white;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+    .scanner-body {
+        padding: 20px;
     }
     #reader {
         width: 100%;
-        min-height: 300px;
+        border: none !important;
+        border-radius: 8px;
+        overflow: hidden;
     }
+    #reader video {
+        border-radius: 8px;
+        object-fit: cover;
+    }
+    /* html5-qrcode overrides */
+    #reader__scan_region {
+        background: #f8f9fa;
+        border-radius: 8px;
+    }
+    #reader__dashboard_section_csr button {
+        background: var(--cat-primary);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    #reader__dashboard_section_csr button:hover {
+        background: #4318FF;
+    }
+    
     .product-details-card {
         display: none;
         margin-top: 20px;
-        padding: 20px;
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
+        padding: 25px;
+        border: 1px solid #eee;
+        border-radius: 12px;
         background: #fafafa;
+        animation: fadeIn 0.4s ease-out;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .product-img-wrapper {
+        background: #fff;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #eaeaea;
+        margin-bottom: 15px;
+        text-align: center;
     }
     .product-img {
-        max-width: 150px;
-        border-radius: 4px;
+        max-width: 100%;
+        max-height: 180px;
+        object-fit: contain;
+    }
+    .product-info-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .product-info-list li {
+        padding: 8px 0;
+        border-bottom: 1px dashed #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+    .product-info-list li:last-child {
+        border-bottom: none;
+    }
+    .product-info-list .info-label {
+        font-weight: 600;
+        color: #555;
+        flex: 0 0 40%;
+        font-size: 0.9rem;
+    }
+    .product-info-list .info-value {
+        flex: 1;
+        text-align: right;
+        font-size: 0.9rem;
+        color: #222;
+        word-break: break-word;
     }
     .scan-btn-resume {
         display: none;
-        margin-top: 15px;
+        margin-top: 20px;
+        width: 100%;
+        padding: 12px;
+        font-size: 1rem;
+        border-radius: 8px;
+    }
+    
+    @media (max-width: 768px) {
+        .cat-page-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .cat-page-header-right {
+            margin-top: 15px;
+            width: 100%;
+            justify-content: flex-end;
+        }
+        .scanner-container {
+            margin: 10px;
+            border-radius: 10px;
+        }
+        .scanner-body {
+            padding: 15px;
+        }
     }
 </style>
 <div class="content-wrapper">
@@ -53,41 +159,44 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-12">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8">
                 <div class="scanner-container">
-                    <h5 class="text-center mb-3">Position Barcode in the Camera Frame</h5>
-                    <div id="reader"></div>
-                    
-                    <div id="product-details" class="product-details-card">
-                        <h4 class="mb-3 text-primary">Product Details</h4>
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <img id="p_image" src="" alt="Product Image" class="product-img mb-2" onerror="this.src='<%$base_url%>public/assets/images/no_image.jpg';">
-                                <br>
-                                <strong><span id="p_code"></span></strong>
-                            </div>
-                            <div class="col-md-8">
-                                <table class="table table-borderless table-sm">
-                                    <tbody>
-                                        <tr><th width="40%">Name:</th><td><span id="p_name"></span></td></tr>
-                                        <tr><th>Category:</th><td><span id="p_category"></span></td></tr>
-                                        <tr><th>Brand:</th><td><span id="p_brand"></span></td></tr>
-                                        <tr><th>Price:</th><td><span id="p_price" class="text-success fw-bold"></span></td></tr>
-                                        <tr><th>Stock:</th><td><span id="p_stock"></span> <span id="p_unit"></span></td></tr>
-                                        <tr><th>Description:</th><td><span id="p_desc"></span></td></tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="text-center mt-3">
-                            <a id="p_link" href="#" class="btn btn-sm btn-outline-primary">View Full Details</a>
-                        </div>
+                    <div class="scanner-header">
+                        <h5><i class="ti ti-scan me-2"></i> Position Barcode in Frame</h5>
                     </div>
+                    <div class="scanner-body">
+                        <div id="reader"></div>
+                        
+                        <div id="product-details" class="product-details-card">
+                            <h4 class="mb-4 text-primary text-center">Product Found</h4>
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <div class="product-img-wrapper">
+                                        <img id="p_image" src="" alt="Product Image" class="product-img" onerror="this.src='<%$base_url%>public/assets/images/no_image.jpg';">
+                                    </div>
+                                    <div class="text-center mb-3 mb-sm-0">
+                                        <span class="badge bg-label-primary px-3 py-2" id="p_code"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-7">
+                                    <ul class="product-info-list">
+                                        <li><span class="info-label">Name:</span> <span class="info-value fw-bold" id="p_name"></span></li>
+                                        <li><span class="info-label">Category:</span> <span class="info-value" id="p_category"></span></li>
+                                        <li><span class="info-label">Brand:</span> <span class="info-value" id="p_brand"></span></li>
+                                        <li><span class="info-label">Price:</span> <span class="info-value text-success fw-bold fs-5" id="p_price"></span></li>
+                                        <li><span class="info-label">Stock:</span> <span class="info-value" id="p_stock_container"><span id="p_stock"></span> <span id="p_unit" class="text-muted small"></span></span></li>
+                                        <li><span class="info-label">Description:</span> <span class="info-value text-muted" id="p_desc"></span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="text-center mt-4">
+                                <a id="p_link" href="#" class="btn btn-outline-primary w-100">View Full Details <i class="ti ti-arrow-right ms-1"></i></a>
+                            </div>
+                        </div>
 
-                    <div class="text-center">
                         <button type="button" id="resume-scan" class="btn btn-primary scan-btn-resume">
-                            <i class="ti ti-scan"></i> Scan Another Item
+                            <i class="ti ti-scan me-1"></i> Scan Another Item
                         </button>
                     </div>
                 </div>
@@ -102,17 +211,14 @@
     let html5QrcodeScanner;
 
     function onScanSuccess(decodedText, decodedResult) {
-        // Stop scanning after successful scan
         if(html5QrcodeScanner) {
             html5QrcodeScanner.pause(true);
         }
 
-        // Show loading state or toaster (assuming toaster is available in project)
         if(typeof toastr !== 'undefined'){
             toastr.info("Barcode scanned. Fetching details...");
         }
 
-        // Fetch product details
         $.ajax({
             url: base_url + "product/get_product_by_barcode",
             type: "POST",
@@ -124,7 +230,6 @@
                     
                     let p = res.data;
                     
-                    // Update UI
                     $('#p_name').text(p.name || '-');
                     $('#p_code').text(p.product_code || '-');
                     $('#p_category').text(p.category_name || '-');
@@ -132,7 +237,10 @@
                     $('#p_price').text(p.price ? "₹ " + p.price : '-');
                     $('#p_stock').text(p.qty || '0');
                     $('#p_unit').text(p.unit || '');
-                    $('#p_desc').text(p.description || '-');
+                    
+                    let desc = p.description || '-';
+                    if (desc.length > 60) desc = desc.substring(0, 60) + '...';
+                    $('#p_desc').text(desc);
                     
                     if(p.image){
                         $('#p_image').attr('src', base_url + 'public/uploads/product/product_image/' + p.product_id + '/' + p.image);
@@ -142,39 +250,59 @@
 
                     $('#p_link').attr('href', base_url + 'product/product_details/' + p.product_id);
 
-                    // Show details, show resume button
-                    $('#product-details').slideDown();
-                    $('#resume-scan').show();
+                    $('#product-details').slideDown(300);
+                    $('#resume-scan').fadeIn(300);
 
                 } else {
                     if(typeof toastr !== 'undefined') toastr.error(res.msg);
-                    alert(res.msg); // Fallback
-                    $('#resume-scan').show();
+                    else alert(res.msg); 
+                    
+                    $('#resume-scan').fadeIn(300);
                 }
             },
             error: function () {
                 if(typeof toastr !== 'undefined') toastr.error("Server Error while fetching details.");
-                $('#resume-scan').show();
+                $('#resume-scan').fadeIn(300);
             }
         });
     }
 
     function onScanFailure(error) {
-        // handle scan failure, usually better to ignore and keep scanning
-        // console.warn(`Code scan error = ${error}`);
+        // Handle scan failure silently to keep the scanner running smoothly
     }
 
     $(document).ready(function() {
-        // Initialize scanner
+        // Make qrbox responsive to screen size
+        function getQrBoxSize(viewfinderWidth, viewfinderHeight) {
+            let minEdgePercentage = 0.8; // 80%
+            let minEdgeSize = Math.min(viewfinderWidth, viewfinderHeight);
+            let qrboxSize = Math.floor(minEdgeSize * minEdgePercentage);
+            
+            // Return a box that's wider than it is tall, suitable for 1D barcodes
+            return {
+                width: qrboxSize,
+                height: Math.floor(qrboxSize * 0.6)
+            };
+        }
+
         html5QrcodeScanner = new Html5QrcodeScanner(
             "reader",
-            { fps: 10, qrbox: {width: 250, height: 150} },
-            /* verbose= */ false
+            { 
+                fps: 15, 
+                qrbox: getQrBoxSize,
+                aspectRatio: 1.0,
+                showTorchButtonIfSupported: true,
+                useBarCodeDetectorIfSupported: true,
+                videoConstraints: {
+                    facingMode: "environment"
+                }
+            },
+            false
         );
         html5QrcodeScanner.render(onScanSuccess, onScanFailure);
 
         $('#resume-scan').on('click', function(){
-            $('#product-details').slideUp();
+            $('#product-details').slideUp(200);
             $(this).hide();
             if(html5QrcodeScanner){
                 html5QrcodeScanner.resume();

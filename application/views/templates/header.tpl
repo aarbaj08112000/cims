@@ -332,7 +332,7 @@ div:where(.swal2-icon) .swal2-icon-content {
          <div class="container-fluid">
             <a href="dashboard" class="app-brand-link navbar-brand">
             <span class="app-brand-logo demo">
-            <img src="<%base_url()%><%$config['company_logo']%>" alt="" width="150" title="<%$config['company_name']%>">
+            <img src="<%base_url()%><%$config['company_logo']%>" alt="" style="max-width: 130px; height: auto;" title="<%$config['company_name']%>">
             </span>
             <!-- <span class="stat-cards-info__num fw-bolder ms-2 pt-1">AROM</span> -->
             </a>
@@ -367,22 +367,26 @@ div:where(.swal2-icon) .swal2-icon-content {
             <i class="ti ti-category quick-menu-bar login-nav-block-mobile" title="Quick Menu"></i>
             <%/if%>
 
-            <div class="navbar-right-wrap ms-2 d-flex align-items-center nav-top-wrap navbar-nav">
-               <div class="header_userprofile_blk me-2">
-                  <img src="public/assets/images/user.png" width="38" height="38" onerror="imageLoadingError(this,'top-profile-image', 'S')" >
-               </div>
-               <div class="profile-info">
-                  <span class="profile-name"><%$session_data['user_name']%></span>
-                  <em class="text-muted" style="font-size: 11px; display: block; margin-top: -4px;"><%$session_data['role']%></em>
-               </div>
-               <ul class="navbar-right-wrap ms-auto d-flex nav-top-wrap navbar-nav">
-                  <li class="ms-2 dropdown">
-                     <a class="dropdownUser inactive" id="dropdownUser" aria-expanded="false">
-                        <i class="las la-angle-down"></i>
+            <div class="navbar-right-wrap ms-auto d-flex align-items-center nav-top-wrap navbar-nav flex-nowrap" style="padding-right: 5px;">
+               <ul class="navbar-right-wrap d-flex nav-top-wrap navbar-nav mb-0 flex-nowrap align-items-center m-0 p-0">
+                  <li class="dropdown list-unstyled">
+                     <a class="dropdownUser inactive d-flex align-items-center flex-nowrap text-decoration-none text-dark" id="dropdownUser" aria-expanded="false" data-bs-toggle="dropdown" style="cursor: pointer;">
+                        <div class="header_userprofile_blk me-2">
+                           <img src="public/assets/images/user.png" width="38" height="38" class="rounded-circle" onerror="imageLoadingError(this,'top-profile-image', 'S')" >
+                        </div>
+                        <div class="profile-info text-start d-none d-md-flex flex-column justify-content-center" style="white-space: nowrap;">
+                           <span class="profile-name fw-bold text-dark" style="line-height: 1.2;"><%$session_data['user_name']%></span>
+                           <em class="text-muted" style="font-size: 11px; line-height: 1.2;"><%$session_data['role']%></em>
+                        </div>
+                        <i class="las la-angle-down fs-5 ms-1 text-dark"></i>
                      </a>
-                     <div data-bs-popper="static" class="dropdown-menu dropdown-menu-end  dropdown-menu dropdown-menu-end dropdownUserNav" aria-labelledby="dropdownUser" id="dropdownUserNav">
+                     <div data-bs-popper="static" class="dropdown-menu dropdown-menu-end dropdownUserNav" aria-labelledby="dropdownUser" id="dropdownUserNav">
                         <div data-rr-ui-dropdown-item="" class=" ">
-                           <ul class="top-menu ps-0">
+                           <div class="d-block d-md-none px-3 py-2 border-bottom mb-2 text-center">
+                              <h6 class="mb-0 fw-bold text-dark"><%$session_data['user_name']%></h6>
+                              <small class="text-muted"><%$session_data['role']%></small>
+                           </div>
+                           <ul class="top-menu ps-0 mb-0">
                               <li class="top-child-menu">
                                     <a href="javascript:void(0);" title="Reset Password" class="top-menu-link" data-bs-toggle="modal" data-bs-target="#headerForgotPasswordModal">
                                         <span class="las la-user"></span>Reset Password
@@ -408,7 +412,7 @@ div:where(.swal2-icon) .swal2-icon-content {
                </ul>
             </div>
             <%if $config['menu_type'] eq 'vertical'%>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <div class="collapse navbar-collapse d-none" id="navbarNavDropdown">
                <ul class="navbar-nav">
                   <!-- <li class="nav-item">
                      <a class="nav-link active" aria-current="page" href="http://localhost/extra_work/erp_converted/dashboard">Dashboard</a>

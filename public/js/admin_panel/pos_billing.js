@@ -5,7 +5,7 @@ $(document).ready(function () {
     // Get current bill number from DOM
     var current_bill_no = $('#bill_no_display').text();
 
-    // 2. Barcode Scan Event
+    // 2. Barcode Scan Event (Manual Input)
     $('#barcode_scan').on('keypress', function (e) {
         if (e.which === 13) { // Enter key
             var barcode = $(this).val();
@@ -14,6 +14,51 @@ $(document).ready(function () {
                 $(this).val('');
             }
         }
+    });
+
+    // 2.1 Mobile Camera Barcode Scanner
+    var html5QrcodeScanner = null;
+    $('#start_mobile_scan').on('click', function() {
+        var $btn = $(this);
+        var $container = $('#qr-reader');
+        
+        // If already scanning, stop it
+        if (html5QrcodeScanner) {
+            html5QrcodeScanner.clear().then(() => {
+                $container.hide();
+                $btn.html('<i class="ti ti-camera"></i>').removeClass('btn-danger').addClass('btn-outline-primary');
+                html5QrcodeScanner = null;
+            });
+            return;
+        }
+        
+        // Initialize and start scanner
+        $container.show();
+        $btn.html('<i class="ti ti-square-x"></i>').removeClass('btn-outline-primary').addClass('btn-danger');
+        
+        html5QrcodeScanner = new Html5QrcodeScanner(
+            "qr-reader", 
+            { fps: 10, qrbox: {width: 250, height: 150} },
+            /* verbose= */ false
+        );
+        
+        html5QrcodeScanner.render(function(decodedText, decodedResult) {
+            // Success Callback
+            if (decodedText) {
+                // Play a beep sound or visual cue if desired
+                $('#barcode_scan').val(decodedText);
+                addProductByBarcode(decodedText);
+                
+                // Pause scanning briefly to prevent multiple scans of same code
+                html5QrcodeScanner.pause(true);
+                setTimeout(() => {
+                    if (html5QrcodeScanner) html5QrcodeScanner.resume();
+                    $('#barcode_scan').val('');
+                }, 1500);
+            }
+        }, function(errorMessage) {
+            // Error Callback - ignore to avoid console spam during seeking
+        });
     });
 
     // 3. Manual Product Search (Autocomplete)
@@ -106,23 +151,23 @@ $(document).ready(function () {
             // Add new row
             var rowHtml = `
                 <tr data-product-id="${product.product_id}">
-                    <td>
+                    <td data-label="Product">
                         <div class="fw-bold">${product.name}</div>
                         <small class="text-muted">${product.product_code}</small>
                         <input type="hidden" name="product_id[]" value="${product.product_id}">
                     </td>
-                    <td class="text-center">
+                    <td data-label="Price" class="text-center">
                         ₹${parseFloat(product.price).toFixed(2)}
                         <input type="hidden" name="price[]" class="row-price" value="${product.price}">
                     </td>
-                    <td class="text-center">
+                    <td data-label="Qty" class="text-center">
                         <input type="number" name="qty[]" class="form-control qty-input mx-auto" value="1" min="1">
                     </td>
-                    <td class="text-end fw-bold row-total-display">
+                    <td data-label="Total" class="text-end fw-bold row-total-display">
                         ₹${parseFloat(product.price).toFixed(2)}
                         <input type="hidden" name="total[]" class="row-total-val" value="${product.price}">
                     </td>
-                    <td class="text-center">
+                    <td data-label="Action" class="text-center">
                         <button type="button" class="btn btn-label-danger btn-sm remove-item-btn">
                             <i class="ti ti-trash"></i>
                         </button>
