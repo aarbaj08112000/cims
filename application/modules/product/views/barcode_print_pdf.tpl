@@ -4,62 +4,51 @@
     <meta charset="utf-8">
     <title>Barcode Print</title>
     <style>
-        @page {
-            margin: 20px;
-        }
         body {
             font-family: 'Helvetica', 'Arial', sans-serif;
             background: #fff;
-            padding: 0;
+            padding: 15px;
             margin: 0;
             color: #000;
         }
         table.label-grid {
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 15px;
-            table-layout: fixed;
+            border-collapse: collapse;
         }
         td.label-cell {
-            width: 33.33%;
+            width: 33.3%;
+            padding: 10px;
             vertical-align: top;
         }
         .sticker-label {
             border: 1px dashed #666;
             padding: 15px;
-            background: #fff;
             text-align: center;
         }
         .label-product-name {
             font-weight: bold;
-            font-size: 18px;
-            margin-bottom: 6px;
+            font-size: 16px;
+            margin-bottom: 5px;
         }
         .label-meta {
-            font-size: 14px;
+            font-size: 12px;
             color: #333;
-            margin-bottom: 4px;
-        }
-        .divider {
-            border-top: 1px solid #ccc;
-            margin: 10px 0;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
         }
         .barcode-section {
-            text-align: center;
             margin-top: 10px;
         }
         .barcode-section img {
-            width: 90%;
-            height: 60px;
+            width: 170px;
+            height: 50px;
         }
         .barcode-num {
-            font-size: 14px;
-            letter-spacing: 1px;
+            font-size: 13px;
+            letter-spacing: 2px;
             font-weight: bold;
-            margin-top: 6px;
-        }
-        td.empty-cell {
-            width: 33.33%;
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -71,8 +60,7 @@
             <td class="label-cell">
                 <div class="sticker-label">
                     <div class="label-product-name"><%$label['name']%></div>
-                    <div class="label-meta">Size: <%$label['size']|default:'N/A'%> &nbsp; | &nbsp; Code: <%$label['product_code']|default:'N/A'%></div>
-                    <div class="divider"></div>
+                    <div class="label-meta">Size: <%$label['size']|default:'N/A'%> &nbsp;|&nbsp; Code: <%$label['product_code']|default:'N/A'%></div>
                     <div class="barcode-section">
                         <%if $label['barcode_base64'] != ''%>
                             <img src="<%$label['barcode_base64']%>">
@@ -85,9 +73,9 @@
             <%if $col == 3%></tr><%assign var="col" value=0%><%/if%>
         <%/foreach%>
         <%if $col == 1%>
-            <td class="empty-cell"></td><td class="empty-cell"></td></tr>
+            <td class="label-cell"></td><td class="label-cell"></td></tr>
         <%elseif $col == 2%>
-            <td class="empty-cell"></td></tr>
+            <td class="label-cell"></td></tr>
         <%/if%>
     </table>
 </body>
