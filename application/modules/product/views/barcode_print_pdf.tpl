@@ -11,7 +11,8 @@
         }
         table.main-table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 15px;
         }
         td.label {
             width: 33.33%;
