@@ -11,13 +11,11 @@
             color: #000;
         }
         table.main-table {
-            width: 100%;
             border-collapse: collapse;
         }
         td.label-td {
             padding: 3px;
             vertical-align: top;
-            width: 20%; /* Safely dividing into 5 columns */
         }
         .label-box {
             border: 1px dashed #666;
@@ -25,7 +23,6 @@
             text-align: center;
         }
         table.inner-table {
-            width: 100%;
             border-collapse: collapse;
         }
         .name {
@@ -61,8 +58,8 @@
         <%assign var="col" value=0%>
         <%foreach from=$labels item=label%>
             <%if $col == 0%><tr><%/if%>
-            <td class="label-td">
-                <div class="label-box">
+            <td class="label-td" >
+                <div class="label-box" style="height:150px;">
                     <table class="inner-table">
                         <tr>
                             <td class="name"><%$label['name']%></td>
