@@ -101,4 +101,5 @@ if($_SERVER['SERVER_NAME'] == 'inventory.codecrafterinfotech.in'){
 	$db['default']['username'] = 'u875583157_inventory';
 	$db['default']['password'] = 'Inventory@#2026';
 	$db['default']['database'] = 'u875583157_inventory';
+	$db['default']['port'] = 3306;
 }	

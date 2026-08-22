@@ -6,22 +6,23 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0px;
+            margin: 0;
+            padding: 0;
             color: #000;
         }
         table.main-table {
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 5px;
+            border-collapse: collapse;
         }
-        td.label {
-            width: 20%;
+        td.label-td {
+            padding: 3px;
+            vertical-align: top;
+            width: 20%; /* Safely dividing into 5 columns */
+        }
+        .label-box {
             border: 1px dashed #666;
             padding: 5px;
-            vertical-align: top;
-        }
-        td.empty {
-            border: none;
+            text-align: center;
         }
         table.inner-table {
             width: 100%;
@@ -45,12 +46,10 @@
             padding-top: 5px;
         }
         .qr-code {
-            /* Let dompdf render at native image size to avoid resampling destruction */
             margin-top: 3px;
         }
         .bcode-txt {
             font-size: 9px;
-            letter-spacing: 0px;
             font-weight: bold;
             text-align: center;
             padding-top: 3px;
@@ -62,25 +61,27 @@
         <%assign var="col" value=0%>
         <%foreach from=$labels item=label%>
             <%if $col == 0%><tr><%/if%>
-            <td class="label">
-                <table class="inner-table">
-                    <tr>
-                        <td class="name"><%$label['name']%></td>
-                    </tr>
-                    <tr>
-                        <td class="meta">Size: <%$label['size']|default:'N/A'%> &nbsp;|&nbsp; Code: <%$label['product_code']|default:'N/A'%></td>
-                    </tr>
-                    <tr>
-                        <td class="bcode-td">
-                            <%if $label['barcode_base64'] != ''%>
-                                <img class="bcode-img <%$label['barcode_class']|default:'bar-code'%>" src="<%$label['barcode_base64']%>">
-                            <%/if%>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="bcode-txt"><%$label['line_bar_code']%></td>
-                    </tr>
-                </table>
+            <td class="label-td">
+                <div class="label-box">
+                    <table class="inner-table">
+                        <tr>
+                            <td class="name"><%$label['name']%></td>
+                        </tr>
+                        <tr>
+                            <td class="meta">Size: <%$label['size']|default:'N/A'%> &nbsp;|&nbsp; Code: <%$label['product_code']|default:'N/A'%></td>
+                        </tr>
+                        <tr>
+                            <td class="bcode-td">
+                                <%if $label['barcode_base64'] != ''%>
+                                    <img class="bcode-img <%$label['barcode_class']|default:'bar-code'%>" src="<%$label['barcode_base64']%>">
+                                <%/if%>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bcode-txt"><%$label['line_bar_code']%></td>
+                        </tr>
+                    </table>
+                </div>
             </td>
             <%assign var="col" value=$col+1%>
             <%if $col == 5%></tr><%assign var="col" value=0%><%/if%>
@@ -88,7 +89,7 @@
         
         <%if $col > 0%>
             <%while $col < 5%>
-                <td class="empty"></td>
+                <td class="label-td"></td>
                 <%assign var="col" value=$col+1%>
             <%/while%>
             </tr>
