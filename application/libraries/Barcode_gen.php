@@ -10,8 +10,9 @@ class Barcode_gen {
         
         require_once APPPATH . 'libraries/phpqrcode/qrlib.php';
         
-        // Generate QR Code with Error Correction Level L (less dense, larger blocks for small printing), size 10 (sharp), margin 2
-        QRcode::png($text, $file_path, QR_ECLEVEL_L, 10, 2);
+        // Generate QR Code with Error Correction Level L, size 4, margin 1.
+        // Keeping the generated image size natively perfect prevents dompdf from dropping pixels!
+        QRcode::png($text, $file_path, QR_ECLEVEL_L, 4, 1);
         
         return true;
     }

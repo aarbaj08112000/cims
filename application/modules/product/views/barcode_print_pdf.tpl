@@ -15,9 +15,9 @@
             border-spacing: 5px;
         }
         td.label {
-            width: 33.33%;
+            width: 20%;
             border: 1px dashed #666;
-            padding: 10px;
+            padding: 5px;
             vertical-align: top;
         }
         td.empty {
@@ -29,38 +29,31 @@
         }
         .name {
             font-weight: bold;
-            font-size: 16px;
+            font-size: 11px;
             text-align: center;
-            padding-bottom: 5px;
+            padding-bottom: 2px;
         }
         .meta {
-            font-size: 12px;
+            font-size: 9px;
             color: #333;
             text-align: center;
-            padding-bottom: 10px;
+            padding-bottom: 5px;
             border-bottom: 1px solid #ccc;
         }
         .bcode-td {
             text-align: center;
-            padding-top: 10px;
-        }
-        .bcode-img {
-            margin-top: 5px;
-        }
-        .bar-code {
-            width: 170px;
-            height: 50px;
+            padding-top: 5px;
         }
         .qr-code {
-            width: 70px;
-            height: 70px;
+            /* Let dompdf render at native image size to avoid resampling destruction */
+            margin-top: 3px;
         }
         .bcode-txt {
-            font-size: 14px;
-            letter-spacing: 1px;
+            font-size: 9px;
+            letter-spacing: 0px;
             font-weight: bold;
             text-align: center;
-            padding-top: 5px;
+            padding-top: 3px;
         }
     </style>
 </head>
@@ -90,12 +83,15 @@
                 </table>
             </td>
             <%assign var="col" value=$col+1%>
-            <%if $col == 3%></tr><%assign var="col" value=0%><%/if%>
+            <%if $col == 5%></tr><%assign var="col" value=0%><%/if%>
         <%/foreach%>
-        <%if $col == 1%>
-            <td class="empty"></td><td class="empty"></td></tr>
-        <%elseif $col == 2%>
-            <td class="empty"></td></tr>
+        
+        <%if $col > 0%>
+            <%while $col < 5%>
+                <td class="empty"></td>
+                <%assign var="col" value=$col+1%>
+            <%/while%>
+            </tr>
         <%/if%>
     </table>
 </body>
