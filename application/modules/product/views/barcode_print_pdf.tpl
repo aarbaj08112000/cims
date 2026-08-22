@@ -45,8 +45,15 @@
             padding-top: 10px;
         }
         .bcode-img {
-            width: 185px;
+            margin-top: 5px;
+        }
+        .bar-code {
+            width: 170px;
             height: 50px;
+        }
+        .qr-code {
+            width: 70px;
+            height: 70px;
         }
         .bcode-txt {
             font-size: 14px;
@@ -73,7 +80,7 @@
                     <tr>
                         <td class="bcode-td">
                             <%if $label['barcode_base64'] != ''%>
-                                <img class="bcode-img" src="<%$label['barcode_base64']%>">
+                                <img class="bcode-img <%$label['barcode_class']|default:'bar-code'%>" src="<%$label['barcode_base64']%>">
                             <%/if%>
                         </td>
                     </tr>

@@ -69,11 +69,11 @@
 
                         <td class="text-center">
                            <%if $u['line_bar_code']%>
-                               <img src="public/uploads/product/bar_code/<%$u['product_id']%>/<%$u['line_bar_code']%>.png"
+                               <img class="list-barcode-img" src="public/uploads/product/bar_code/<%$u['product_id']%>/<%$u['line_bar_code']%>.png"
                                      onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';"
-                                     alt="<%$u['line_bar_code']%>" style="width: 100px; height: 40px; object-fit: contain; display:block;margin:auto;">
+                                     alt="<%$u['line_bar_code']%>" style="width: 120px; height: 80px; object-fit: contain; display:block;margin:auto; transition: transform .2s;">
                                <span style="display:none;">-</span>
-                               <br>
+                               
                                <small><%$u['line_bar_code']%></small>
                            <%else%>
                                -
@@ -249,7 +249,7 @@
 
 .horizontal-barcode {
     width: 100%;
-    height: 45px;
+    height: 70px;
     object-fit: contain;
 }
 
@@ -345,5 +345,14 @@
     border-bottom: 1.5px solid var(--cat-gray-200) !important;
 }
 
+.list-barcode-img:hover {
+    transform: scale(2.5);
+    z-index: 10;
+    position: relative;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-radius: 4px;
+    padding: 5px;
+}
 
 </style>

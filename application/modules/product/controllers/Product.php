@@ -402,11 +402,20 @@ class Product extends MY_Controller {
         // Encode barcode as base64 so dompdf can embed it
         $barcode_path = FCPATH . "public/uploads/product/bar_code/" . $product_id . "/" . $product['line_bar_code'] . ".png";
         $barcode_base64 = '';
+        $barcode_class = 'bar-code';
         if (file_exists($barcode_path)) {
             $mime = mime_content_type($barcode_path);
             $barcode_base64 = 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($barcode_path));
+            list($img_w, $img_h) = getimagesize($barcode_path);
+            if ($img_w && $img_h) {
+                // If the image is roughly square, it's a QR code
+                if (abs($img_w - $img_h) < 20) {
+                    $barcode_class = 'qr-code';
+                }
+            }
         }
         $product['barcode_base64'] = $barcode_base64;
+        $product['barcode_class'] = $barcode_class;
 
         // Build labels array — one entry per copy needed
         $labels = array();

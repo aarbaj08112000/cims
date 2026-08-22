@@ -278,10 +278,10 @@
             let minEdgeSize = Math.min(viewfinderWidth, viewfinderHeight);
             let qrboxSize = Math.floor(minEdgeSize * minEdgePercentage);
             
-            // 1D barcodes need a wider box.
+            // QR Codes require a square box for optimal scanning.
             return {
                 width: qrboxSize,
-                height: Math.floor(qrboxSize * 0.5) // More rectangular for 1D
+                height: qrboxSize
             };
         }
 
