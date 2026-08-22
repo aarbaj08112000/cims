@@ -215,8 +215,8 @@
             html5QrcodeScanner.pause(true);
         }
 
-        if(typeof toastr !== 'undefined'){
-            toastr.info("Barcode scanned. Fetching details...");
+        if(typeof toaster !== 'undefined'){
+            toaster("info", "Barcode scanned. Fetching details...");
         }
 
         $.ajax({
@@ -226,7 +226,7 @@
             dataType: "json",
             success: function (res) {
                 if (res.success) {
-                    if(typeof toastr !== 'undefined') toastr.success(res.msg);
+                    if(typeof toaster !== 'undefined') toaster("success", res.msg);
                     
                     let p = res.data;
                     
@@ -250,18 +250,20 @@
 
                     $('#p_link').attr('href', base_url + 'product/product_details/' + p.product_id);
 
+                    // Hide scanner, show details
+                    $('#reader').slideUp(300);
                     $('#product-details').slideDown(300);
                     $('#resume-scan').fadeIn(300);
 
                 } else {
-                    if(typeof toastr !== 'undefined') toastr.error(res.msg);
+                    if(typeof toaster !== 'undefined') toaster("error", res.msg);
                     else alert(res.msg); 
                     
                     $('#resume-scan').fadeIn(300);
                 }
             },
             error: function () {
-                if(typeof toastr !== 'undefined') toastr.error("Server Error while fetching details.");
+                if(typeof toaster !== 'undefined') toaster("error", "Server Error while fetching details.");
                 $('#resume-scan').fadeIn(300);
             }
         });
@@ -307,9 +309,11 @@
         $('#resume-scan').on('click', function(){
             $('#product-details').slideUp(200);
             $(this).hide();
-            if(html5QrcodeScanner){
-                html5QrcodeScanner.resume();
-            }
+            $('#reader').slideDown(300, function() {
+                if(html5QrcodeScanner){
+                    html5QrcodeScanner.resume();
+                }
+            });
         });
     });
 </script>
