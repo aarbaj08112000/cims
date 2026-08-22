@@ -42,7 +42,7 @@
             </div>
             <h1 class="fw-bold text-dark display-6 mb-3"><%$products[0]['name']%></h1>
             <div class="d-flex align-items-center mb-4">
-              <h2 class="text-primary fw-bold mb-0 me-3">₹<%$products[0]['price']|number_format:2%></h2>
+              <h2 class="text-primary fw-bold mb-0 me-3">₹<%$products[0]['price']|default:0|number_format:2%></h2>
               <%if $products[0]['qty'] > 0%>
                 <span class="cat-badge cat-badge-success">In Stock (<%$products[0]['qty']%>)</span>
               <%else%>
