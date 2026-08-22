@@ -74,9 +74,9 @@ $active_group = 'default';
 $query_builder = TRUE;
 
 $db['default'] = array(
-	'dsn'	=> '',
+	'dsn' => '',
 	// 'hostname' => 'host.docker.internal', 
-	'hostname' => 'localhost', 
+	'hostname' => 'localhost',
 	'username' => 'root',
 	'password' => 'Root@12345678',
 	'database' => 'inventory',
@@ -97,9 +97,10 @@ $db['default'] = array(
 	'port' => 3307
 );
 
-if($_SERVER['SERVER_NAME'] == 'inventory.codecrafterinfotech.in'){
+if(isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'inventory.codecrafterinfotech.in') !== false){
+	$db['default']['hostname'] = 'localhost'; // Hostinger requires 'localhost' for UNIX socket
 	$db['default']['username'] = 'u875583157_inventory';
 	$db['default']['password'] = 'Inventory@#2026';
 	$db['default']['database'] = 'u875583157_inventory';
-	$db['default']['port'] = 3306;
-}	
+	unset($db['default']['port']); // Crucial: Remove the port so it doesn't force a blocked TCP connection
+}
