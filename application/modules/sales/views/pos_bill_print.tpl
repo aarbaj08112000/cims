@@ -109,7 +109,7 @@
     <!-- Floating Print Button -->
     <div class="print-trigger-overlay p-4">
         <div class="d-flex gap-2">
-            <button type="button" class="btn btn-primary btn-lg w-50 shadow-lg print-btn-v2 d-flex align-items-center justify-content-center" onclick="printReceiptHTML()">
+            <button type="button" class="btn btn-primary btn-lg w-50 shadow-lg print-btn-v2 d-flex align-items-center justify-content-center" onclick="printReceiptAjax('<%$sale.sales_id%>')">
                 <i class="ti ti-printer me-2 fs-3"></i> PRINT
             </button>
             <a href="<%$base_url%>sales/Pos/download_receipt_pdf/<%$sale.sales_id%>/download" class="btn btn-dark btn-lg w-50 shadow-lg print-btn-v2 d-flex align-items-center justify-content-center" style="text-decoration: none;">
@@ -118,45 +118,49 @@
         </div>
         <div class="text-center mt-2 small text-muted">Thermal PDF Download available</div>
     </div>
+    
     <script>
-    function printReceiptHTML() {
-        var printContents = document.getElementById('thermal-receipt').outerHTML;
-        var iframe = document.createElement('iframe');
-        iframe.name = "receiptPrintIframe";
-        iframe.style.position = "absolute";
-        iframe.style.width = "0px";
-        iframe.style.height = "0px";
-        iframe.style.border = "none";
-        document.body.appendChild(iframe);
-        
-        var doc = iframe.contentWindow.document;
-        doc.open();
-        doc.write('<html><head><title>Print Receipt</title>');
-        
-        var styles = document.getElementsByTagName('style');
-        for (var i = 0; i < styles.length; i++) {
-            doc.write(styles[i].outerHTML);
-        }
-        var links = document.getElementsByTagName('link');
-        for (var i = 0; i < links.length; i++) {
-            if (links[i].rel === 'stylesheet') {
-                doc.write(links[i].outerHTML);
-            }
-        }
-        
-        doc.write('<style>@media print { @page { margin: 0; } body { margin: 0; padding: 10px; } body * { visibility: visible !important; color: #000 !important; border-color: #000 !important; background: transparent !important; } .pos-receipt-v2 { width: 100% !important; max-width: 80mm !important; margin: 0 auto; box-shadow: none !important; } .no-print { display: none !important; } }</style>');
-        doc.write('</head><body>');
-        doc.write(printContents);
-        doc.write('</body></html>');
-        doc.close();
-        
-        setTimeout(function() {
-            iframe.contentWindow.focus();
-            iframe.contentWindow.print();
-            setTimeout(function() { document.body.removeChild(iframe); }, 1000);
-        }, 500);
+    function printReceiptAjax(sales_id) {
+        var url = '<%$base_url%>sales/Pos/download_receipt_pdf/' + sales_id + '/html';
+        fetch(url)
+            .then(response => response.text())
+            .then(html => {
+                var iframe = document.getElementById('receiptAjaxIframe');
+                if (iframe) {
+                    iframe.remove();
+                }
+                
+                iframe = document.createElement('iframe');
+                iframe.id = "receiptAjaxIframe";
+                iframe.style.position = "absolute";
+                iframe.style.width = "0px";
+                iframe.style.height = "0px";
+                iframe.style.border = "none";
+                document.body.appendChild(iframe);
+                
+                var doc = iframe.contentWindow.document;
+                doc.open();
+                doc.write('<html><head><title>Print Receipt</title>');
+                doc.write(html);
+                
+                // Add a small stylesheet override to ensure the PDF HTML structure fits perfectly in a browser print dialog
+                doc.write('<style>@media print { @page { margin: 0; } body { margin: 0; } }</style>');
+                doc.write('</head><body></body></html>');
+                doc.close();
+                
+                setTimeout(function() {
+                    iframe.contentWindow.focus();
+                    iframe.contentWindow.print();
+                    setTimeout(function() { document.body.removeChild(iframe); }, 1000);
+                }, 500);
+            })
+            .catch(error => {
+                console.error("Failed to load receipt HTML for printing", error);
+                alert("Failed to load receipt for printing.");
+            });
     }
     </script>
+    
     <%/if%>
 </div>
 

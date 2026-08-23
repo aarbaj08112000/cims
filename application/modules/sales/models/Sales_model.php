@@ -1,14 +1,17 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Sales_model extends CI_Model {
+class Sales_model extends CI_Model
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('product/Product_model');
     }
 
-    public function save_sale($master_data, $details_data) {
+    public function save_sale($master_data, $details_data)
+    {
         $this->db->trans_start();
 
         // 1. Insert into sales_master
@@ -29,7 +32,8 @@ class Sales_model extends CI_Model {
         return $this->db->trans_status() ? $sales_id : false;
     }
 
-    public function get_sales() {
+    public function get_sales()
+    {
         $this->db->select('s.*');
         $this->db->from('sales_master s');
         $this->db->order_by('s.sales_id', 'DESC');
@@ -37,16 +41,18 @@ class Sales_model extends CI_Model {
         return $query->result_array();
     }
 
-    public function get_sale_master($sales_id) {
-        $this->db->select('s.*, COALESCE(NULLIF(s.customer_name,""), c.full_name) as customer_name');
+    public function get_sale_master($sales_id)
+    {
+        $this->db->select('s.*, COALESCE(NULLIF(s.customer_name,""), c.full_name) as customer_name', FALSE);
         $this->db->from('sales_master s');
-        $this->db->join('customer_master c', 's.customer_phone_number = c.mobile_number', 'left');
+        $this->db->join('customer_master c', 's.customer_phone_number COLLATE utf8mb4_general_ci = c.mobile_number COLLATE utf8mb4_general_ci', 'left', FALSE);
         $this->db->where('s.sales_id', $sales_id);
         $query = $this->db->get();
         return $query->row_array();
     }
 
-    public function get_sale_items($sales_id) {
+    public function get_sale_items($sales_id)
+    {
         $this->db->select('sd.*, p.name as product_name, p.product_code');
         $this->db->from('sales_details sd');
         $this->db->join('product_master p', 'sd.product_id = p.product_id', 'left');
@@ -55,7 +61,8 @@ class Sales_model extends CI_Model {
         return $query->result_array();
     }
 
-    public function get_product_by_barcode($barcode) {
+    public function get_product_by_barcode($barcode)
+    {
         $this->db->select('product_id, name, price, qty, line_bar_code, product_code');
         $this->db->from('product_master');
         $this->db->where('line_bar_code', $barcode);
@@ -64,7 +71,8 @@ class Sales_model extends CI_Model {
         return $query->row_array();
     }
 
-    public function search_products($term) {
+    public function search_products($term)
+    {
         $this->db->select('product_id, name, price, qty, line_bar_code, product_code');
         $this->db->from('product_master');
         $this->db->group_start();
