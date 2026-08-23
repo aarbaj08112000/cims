@@ -33,10 +33,10 @@ class Inline extends AbstractRenderer
         // Draw the left border if applicable
         $bp = $style->get_border_properties();
         $widths = array(
-            (float)$style->length_in_pt($bp["top"]["width"]),
-            (float)$style->length_in_pt($bp["right"]["width"]),
-            (float)$style->length_in_pt($bp["bottom"]["width"]),
-            (float)$style->length_in_pt($bp["left"]["width"])
+            (float) $style->length_in_pt($bp["top"]["width"]),
+            (float) $style->length_in_pt($bp["right"]["width"]),
+            (float) $style->length_in_pt($bp["bottom"]["width"]),
+            (float) $style->length_in_pt($bp["left"]["width"])
         );
 
         // Draw the background & border behind each child.  To do this we need
@@ -110,15 +110,15 @@ class Inline extends AbstractRenderer
 
                 $x = $child_x;
                 $y = $child_y;
-                $w = (float)$child_w;
-                $h = (float)$child_h;
+                $w = (float) $child_w;
+                $h = (float) $child_h;
                 continue;
             }
 
             if (is_null($w)) {
-                $w = (float)$child_w;
-            }else {
-                $w += (float)$child_w;
+                $w = (float) $child_w;
+            } else {
+                $w += (float) $child_w;
             }
 
             $h = max($h, $child_h);
@@ -149,11 +149,11 @@ class Inline extends AbstractRenderer
         }
 
         // Add the border widths
-        $w += (float)$widths[1] + (float)$widths[3];
-        $h += (float)$widths[0] + (float)$widths[2];
+        $w += (float) $widths[1] + (float) $widths[3];
+        $h += (float) $widths[0] + (float) $widths[2];
 
         // make sure the border and background start inside the left margin
-        $left_margin = (float)$style->length_in_pt($style->margin_left);
+        $left_margin = (float) $style->length_in_pt($style->margin_left);
         $x += $left_margin;
 
         // If this is the first row, draw the left border too
@@ -182,7 +182,7 @@ class Inline extends AbstractRenderer
         }
 
         $id = $frame->get_node()->getAttribute("id");
-        if (strlen($id) > 0)  {
+        if (strlen($id) > 0) {
             $this->_canvas->add_named_dest($id);
         }
 
