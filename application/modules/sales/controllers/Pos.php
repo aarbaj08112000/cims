@@ -170,7 +170,7 @@ class Pos extends MY_Controller
         return '';
     }
 
-    public function download_receipt_pdf($sales_id)
+    public function download_receipt_pdf($sales_id, $action = 'inline')
     {
         $data['sale'] = $this->Sales_model->get_sale_master($sales_id);
         $data['items'] = $this->Sales_model->get_sale_items($sales_id);
@@ -186,7 +186,9 @@ class Pos extends MY_Controller
         // Generate real barcode image as base64 data URI
         $bill_no = $data['sale']['bill_no'] ?? 'UNKNOWN';
         $data['barcode_img'] = $this->_generate_barcode_base64($bill_no);
-
+        $data['gar_dark'] = "#000000";
+        $data['gar_light'] = "#000000";
+        $data['gar_light2'] = "#000000";
         $html = $this->smarty->fetch('pos_bill_print_pdf.tpl', $data);
 
         $this->load->library('Pdf');
@@ -199,8 +201,10 @@ class Pos extends MY_Controller
         $dynamic_height = $base_height + ($item_count * $item_height);
 
         // Set paper width to accommodate 96dpi px-to-pt scaling differences in Dompdf, with dynamic height for thermal rolls
-        $pdf->setPaper(array(0, 0, 240, $dynamic_height), 'portrait');
+        $pdf->setPaper(array(0, 0, 260, $dynamic_height), 'portrait');
         $pdf->render();
-        $pdf->stream('POS_Receipt_' . $bill_no . '.pdf', ['Attachment' => 1]);
+        
+        $attachment = ($action == 'download') ? 1 : 0;
+        $pdf->stream('POS_Receipt_' . $bill_no . '.pdf', ['Attachment' => $attachment]);
     }
 }
