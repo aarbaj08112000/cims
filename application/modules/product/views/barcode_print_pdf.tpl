@@ -59,13 +59,16 @@
         <%foreach from=$labels item=label%>
             <%if $col == 0%><tr><%/if%>
             <td class="label-td" >
-                <div class="label-box" style="height:150px;">
+                <div class="label-box" style="height:165px;">
                     <table class="inner-table">
                         <tr>
                             <td class="name"><%$label['name']%></td>
                         </tr>
                         <tr>
                             <td class="meta">Size: <%$label['size']|default:'N/A'%> &nbsp;|&nbsp; Code: <%$label['product_code']|default:'N/A'%></td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 11px; font-weight: bold; text-align: center; padding-bottom: 3px; color: #000;">Price: <%$label['price']|default:'0'%></td>
                         </tr>
                         <tr>
                             <td class="bcode-td">

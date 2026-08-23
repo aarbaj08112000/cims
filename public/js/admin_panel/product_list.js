@@ -83,6 +83,24 @@ const page = {
       $("#printBarcodeModal").modal("hide");
     });
 
+    $(document).on("click", "#print_labels_thermal_btn", function () {
+      var product = $("#printBarcodeModal").data("product");
+      var count = parseInt($("#label_count").val()) || 1;
+      var max = parseInt($("#label_count").attr("max")) || 0;
+
+      if (count > max) {
+        Swal.fire("Validation Error", "Print quantity cannot exceed available stock (" + max + ").", "error");
+        return;
+      }
+
+      // Open PDF in new tab
+      var printUrl = base_url + "print_barcode_thermal_pdf/" + product.product_id + "/" + count;
+      window.open(printUrl, '_blank');
+      
+      // Close the modal optionally
+      $("#printBarcodeModal").modal("hide");
+    });
+
     $(".select2").select2();
     $(document).on("click", ".delete_data", function () {
       var product_id = $(this).data("id"); // Get category ID

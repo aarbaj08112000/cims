@@ -168,8 +168,11 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-info" id="print_labels_thermal_btn">
+                    <i class="ti ti-printer me-1"></i> Print Thermal (48mm)
+                </button>
                 <button type="button" class="btn btn-success" id="print_labels_btn">
-                    <i class="ti ti-printer me-1"></i> Print Labels
+                    <i class="ti ti-printer me-1"></i> Print A4
                 </button>
             </div>
         </div>
