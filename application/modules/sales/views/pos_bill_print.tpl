@@ -109,58 +109,15 @@
     <!-- Floating Print Button -->
     <div class="print-trigger-overlay p-4">
         <div class="d-flex gap-2">
-            <button type="button" class="btn btn-primary btn-lg w-50 shadow-lg print-btn-v2 d-flex align-items-center justify-content-center" onclick="printReceiptAjax('<%$sale.sales_id%>')">
+            <a href="<%$base_url%>sales/Pos/download_receipt_pdf/<%$sale.sales_id%>" target="_blank" class="btn btn-primary btn-lg w-50 shadow-lg print-btn-v2 d-flex align-items-center justify-content-center" style="text-decoration: none;">
                 <i class="ti ti-printer me-2 fs-3"></i> PRINT
-            </button>
+            </a>
             <a href="<%$base_url%>sales/Pos/download_receipt_pdf/<%$sale.sales_id%>/download" class="btn btn-dark btn-lg w-50 shadow-lg print-btn-v2 d-flex align-items-center justify-content-center" style="text-decoration: none;">
                 <i class="ti ti-download me-2 fs-3"></i> DOWNLOAD
             </a>
         </div>
         <div class="text-center mt-2 small text-muted">Thermal PDF Download available</div>
     </div>
-    
-    <script>
-    function printReceiptAjax(sales_id) {
-        var url = '<%$base_url%>sales/Pos/download_receipt_pdf/' + sales_id + '/html';
-        fetch(url)
-            .then(response => response.text())
-            .then(html => {
-                var iframe = document.getElementById('receiptAjaxIframe');
-                if (iframe) {
-                    iframe.remove();
-                }
-                
-                iframe = document.createElement('iframe');
-                iframe.id = "receiptAjaxIframe";
-                iframe.style.position = "absolute";
-                iframe.style.width = "0px";
-                iframe.style.height = "0px";
-                iframe.style.border = "none";
-                document.body.appendChild(iframe);
-                
-                var doc = iframe.contentWindow.document;
-                doc.open();
-                doc.write('<html><head><title>Print Receipt</title>');
-                doc.write(html);
-                
-                // Add a small stylesheet override to ensure the PDF HTML structure fits perfectly in a browser print dialog
-                doc.write('<style>@media print { @page { margin: 0; } body { margin: 0; } }</style>');
-                doc.write('</head><body></body></html>');
-                doc.close();
-                
-                setTimeout(function() {
-                    iframe.contentWindow.focus();
-                    iframe.contentWindow.print();
-                    setTimeout(function() { document.body.removeChild(iframe); }, 1000);
-                }, 500);
-            })
-            .catch(error => {
-                console.error("Failed to load receipt HTML for printing", error);
-                alert("Failed to load receipt for printing.");
-            });
-    }
-    </script>
-    
     <%/if%>
 </div>
 
