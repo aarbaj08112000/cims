@@ -22,50 +22,65 @@
             border: 1px dashed #666;
             text-align: center;
         }
+        .inner-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
         .name {
-            font-weight: bold;
+            font-weight: 500;
             font-size: 11px;
-            margin-bottom: 2px;
+            text-align: center;
+            padding-bottom: 2px;
             color: #000;
         }
         .meta {
             font-size: 9px;
-            margin-bottom: 4px;
+            text-align: center;
             padding-bottom: 4px;
             border-bottom: 1px solid #ccc;
-            color: #1a4b77; /* Subtle blue to match reference */
         }
         .bcode-td {
-            margin-top: 4px;
+            text-align: center;
+            padding-top: 4px;
         }
         .bcode-img {
-            max-width: 100%;
-            height: 95px;
+            height: 75px;
             object-fit: contain;
-        }
+            width: 100px;
+        } 
         .bcode-txt {
             font-size: 10px;
-            font-weight: bold;
-            margin-top: 3px;
-            color: #1a4b77; /* Subtle blue to match reference */
+            font-weight: 500;
+            text-align: center;
+            padding-top: 2px;
         }
     </style>
 </head>
 <body>
     <%foreach from=$labels item=label name=lbl%>
         <div class="label-container" <%if not $smarty.foreach.lbl.last%>style="page-break-after: always;"<%/if%>>
-            <div class="label-box">
-                <div class="name"><%$label['name']%></div>
-                <div class="meta">
-                    Size: <%$label['size']|default:'N/A'%> | Code: <%$label['product_code']|default:'N/A'%><br>
-                    <span style="font-size: 11px; font-weight: bold; color: #000;">Price: <%$label['price']|default:'0'%></span>
-                </div>
-                <div class="bcode-td">
-                    <%if $label['barcode_base64'] != ''%>
-                        <img class="bcode-img" src="<%$label['barcode_base64']%>">
-                    <%/if%>
-                </div>
-                <div class="bcode-txt"><%$label['line_bar_code']%></div>
+            <div class="label-box" style="height:140px;">
+                <table class="inner-table">
+                    <tr>
+                        <td class="name"><%$label['name']%></td>
+                    </tr>
+                    <tr>
+                        <td class="meta">
+                            Size: <%$label['size']|default:'N/A'%> | Code: <%$label['product_code']|default:'N/A'%><br>
+                            <span style="font-size: 11px; font-weight: 500; color: #000;">Price: <%$label['price']|default:'0'%></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bcode-td" style="width:100px;">
+                            <%if $label['barcode_base64'] != ''%>
+                                <img class="bcode-img" style="width:100px;" src="<%$label['barcode_base64']%>">
+                            <%/if%>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bcode-txt"><%$label['line_bar_code']%></td>
+                    </tr>
+                </table>
             </div>
         </div>
     <%/foreach%>

@@ -431,7 +431,7 @@ class Product extends MY_Controller
 
         // 48mm printing width = ~136 points.
         // Height increased to 148 points to comfortably fit the new Price line
-        $customPaper = array(0, 0, 136, 148);
+        $customPaper = array(0, 0, 136, 134);
         $pdf->setPaper($customPaper);
         $pdf->render();
         $pdf->stream('Barcode_Thermal_' . $product['product_code'] . '.pdf', ['Attachment' => 0]);
