@@ -60,6 +60,7 @@ $route['add_brand'] = 'brand/brand/add_brand';
 $route['dashboard'] = 'dashboard/dashboard/index';
 $route['get_product_for_print'] = 'product/product/get_product_for_print';
 $route['print_barcode_pdf/(:num)/(:num)'] = 'product/product/print_barcode_pdf/$1/$2';
+$route['print_barcode_thermal_pdf/(:num)/(:num)'] = 'product/product/print_barcode_thermal_pdf/$1/$2';
 
 $route['supplier'] = 'supplier/supplier/index';
 $route['add_supplier'] = 'supplier/supplier/add_supplier';
