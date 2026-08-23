@@ -297,7 +297,26 @@ body { margin: 0; padding: 0; }
 
 /* Print Styles */
 @media print {
+    body * { visibility: hidden; }
+    .receipt-inner, .receipt-inner * {
+        visibility: visible;
+    }
+    .receipt-inner {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        max-width: none;
+        box-shadow: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    .pos-receipt-v2 {
+        padding: 0;
+        width: 100%;
+    }
     .print-trigger-overlay { display: none !important; }
+    .no-print { visibility: hidden; width: 0; height: 0; padding: 0; margin: 0; }
 }
 
 .print-btn-v2 {

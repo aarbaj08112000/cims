@@ -191,11 +191,6 @@ class Pos extends MY_Controller
         $data['gar_light2'] = "#000000";
         $html = $this->smarty->fetch('pos_bill_print_pdf.tpl', $data);
 
-        if ($action == 'html') {
-            echo $html;
-            return;
-        }
-
         $this->load->library('Pdf');
         $pdf = new Pdf();
         $pdf->loadHtml($html);
