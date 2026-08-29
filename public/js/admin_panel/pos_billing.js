@@ -301,22 +301,37 @@ $(document).ready(function () {
     }
 
     function showReceiptPopup(salesId) {
-        $.ajax({
-            url: base_url + "sales/Pos/get_bill_print_ajax",
-            type: "POST",
-            data: { 
-                sales_id: salesId,
-                received_amount: $('#received_amount_input').val(),
-                change_amount: $('#change_display').text().replace('₹', '')
-            },
-            dataType: "json",
-            success: function (response) {
-                if (response.success) {
-                    $('#receipt_content').html(response.html);
-                    $('#receiptModal').modal('show');
+        var printType = $('#pos_receipt_print_type').val();
+        
+        if (printType === 'PDF') {
+            // Load PDF directly in an iframe
+            var pdfUrl = base_url + "sales/Pos/download_receipt_pdf/" + salesId;
+            var iframeHtml = '<iframe src="' + pdfUrl + '" style="width: 100%; height: 65vh; border: none; border-radius: 8px;"></iframe>';
+            
+            // Adjust modal size for PDF viewing
+            $('#receiptModal .modal-dialog').css('max-width', '800px');
+            $('#receipt_content').html(iframeHtml);
+            $('#receiptModal').modal('show');
+        } else {
+            // Load standard HTML receipt
+            $('#receiptModal .modal-dialog').css('max-width', '85mm');
+            $.ajax({
+                url: base_url + "sales/Pos/get_bill_print_ajax",
+                type: "POST",
+                data: { 
+                    sales_id: salesId,
+                    received_amount: $('#received_amount_input').val(),
+                    change_amount: $('#change_display').text().replace('₹', '')
+                },
+                dataType: "json",
+                success: function (response) {
+                    if (response.success) {
+                        $('#receipt_content').html(response.html);
+                        $('#receiptModal').modal('show');
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     // Reload page when receipt modal is closed
