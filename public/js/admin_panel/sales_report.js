@@ -12,12 +12,41 @@ const salesReport = {
     },
 
     dataTable: function () {
+        var from_date = $('input[name="from_date"]').val();
+        var to_date = $('input[name="to_date"]').val();
+
         salesReportTable = $('#salesReportTable').DataTable({
+            serverSide: true,
+            processing: true,
+            ajax: {
+                url: base_url + "reports/get_sales_report_datatables",
+                type: "POST",
+                data: function(d) {
+                    d.from_date = from_date;
+                    d.to_date = to_date;
+                }
+            },
             order: [[0, 'desc']], // Order by Date descending
             pagingType: "full_numbers",
             pageLength: 25,
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
             autoWidth: false,
+            
+            columnDefs: [
+                { targets: 4, className: 'text-end fw-bold' }
+            ],
+
+            drawCallback: function(settings) {
+                var api = this.api();
+                var json = api.ajax.json();
+                if (json) {
+                    if (json.grand_total) $('#grand-total-footer').text(json.grand_total);
+                    if (json.total_entries !== undefined) $('#kpi-total-entries').text(json.total_entries);
+                    if (json.total_cash !== undefined) $('#kpi-total-cash').text('₹' + json.total_cash);
+                    if (json.total_upi !== undefined) $('#kpi-total-upi').text('₹' + json.total_upi);
+                    if (json.total_card !== undefined) $('#kpi-total-card').text('₹' + json.total_card);
+                }
+            },
 
             // Match exactly with Category & Purchase Report UI layout
             dom: 'Brt<"cat-dt-footer"<"cat-dt-info"i><"cat-dt-controls"<"cat-dt-length"l><"cat-dt-paging"p>>>',
@@ -75,6 +104,12 @@ const salesReport = {
             searchTimer = setTimeout(function () {
                 salesReportTable.search(val).draw();
             }, 350);
+        });
+
+        // --- Filter Form Submission ---
+        $('#filter-form').on('submit', function (e) {
+            e.preventDefault();
+            salesReportTable.draw(); // This will trigger AJAX request and update table + KPIs
         });
 
         // --- Custom Export Buttons Integration ---

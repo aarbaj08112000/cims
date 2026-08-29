@@ -6,6 +6,58 @@ class Product_model extends CI_Model {
     public function __construct() {
         parent::__construct();
     }
+    public function get_products_ssp($start, $length, $search, $order_col, $order_dir) {
+        $this->db->select("p.*, c.category_name, b.brand_name");
+        $this->db->from("product_master as p");
+        $this->db->join("categories as c", "p.category_id = c.category_id", "left");
+        $this->db->join("brands as b", "p.brand_id = b.brand_id", "left");
+        $this->db->where("p.is_delete", "0");
+
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like("p.name", $search);
+            $this->db->or_like("p.line_bar_code", $search);
+            $this->db->or_like("p.description", $search);
+            $this->db->group_end();
+        }
+
+        $columns = [
+            0 => "p.product_id",
+            1 => "p.line_bar_code",
+            2 => "p.name",
+            3 => "p.description",
+            4 => "p.sale_price",
+            5 => "p.qty",
+            6 => "p.status"
+        ];
+        
+        if (isset($columns[$order_col])) {
+            $this->db->order_by($columns[$order_col], $order_dir);
+        } else {
+            $this->db->order_by("p.product_id", "DESC");
+        }
+
+        if ($length != -1) {
+            $this->db->limit($length, $start);
+        }
+
+        $result_obj = $this->db->get();
+        return is_object($result_obj) ? $result_obj->result_array() : [];
+    }
+
+    public function get_products_ssp_count($search = null) {
+        $this->db->from("product_master as p");
+        $this->db->where("p.is_delete", "0");
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like("p.name", $search);
+            $this->db->or_like("p.line_bar_code", $search);
+            $this->db->or_like("p.description", $search);
+            $this->db->group_end();
+        }
+        return $this->db->count_all_results();
+    }
+
      public function get_products(){
         $this->db->select('p.*');
         $this->db->from('product_master as p');

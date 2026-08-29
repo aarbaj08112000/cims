@@ -1,0 +1,6 @@
+{
+    "name": "cims/libs",
+    "require": {
+        "dompdf/dompdf": "^3.0"
+    }
+}

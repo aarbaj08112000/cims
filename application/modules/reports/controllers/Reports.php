@@ -23,7 +23,7 @@ class Reports extends MY_Controller {
         $from_date = $this->input->post('from_date') ?: ($this->input->get('from_date') ?: date('Y-m-01'));
         $to_date = $this->input->post('to_date') ?: ($this->input->get('to_date') ?: date('Y-m-t'));
 
-        $data['sales'] = $this->Reports_model->get_sales_report($from_date, $to_date);
+        $data['summary'] = $this->Reports_model->get_sales_summary($from_date, $to_date);
         $data['from_date'] = $from_date;
         $data['to_date'] = $to_date;
         $data['base_url'] = base_url();
@@ -38,7 +38,7 @@ class Reports extends MY_Controller {
         $from_date = $this->input->post('from_date') ?: ($this->input->get('from_date') ?: date('Y-m-01'));
         $to_date = $this->input->post('to_date') ?: ($this->input->get('to_date') ?: date('Y-m-t'));
         
-        $data['purchases'] = $this->Reports_model->get_purchase_report($from_date, $to_date);
+        $data['summary'] = $this->Reports_model->get_purchase_summary($from_date, $to_date);
         $data['from_date'] = $from_date;
         $data['to_date'] = $to_date;
         $data['base_url'] = base_url();
@@ -57,6 +57,15 @@ class Reports extends MY_Controller {
     }
 
     /**
+     * AJAX: Get Sales Report (DataTables SSP)
+     */
+    public function get_sales_report_datatables() {
+        $postData = $this->input->post();
+        $result = $this->Reports_model->get_sales_report_datatables($postData);
+        echo json_encode($result);
+    }
+
+    /**
      * AJAX: Get Sales Report
      */
     public function get_sales_report_ajax() {
@@ -67,6 +76,15 @@ class Reports extends MY_Controller {
         $html = $this->smarty->fetch('sales_report_table.tpl', $data);
         
         echo json_encode(['success' => 1, 'html' => $html]);
+    }
+
+    /**
+     * AJAX: Get Purchase Report (DataTables SSP)
+     */
+    public function get_purchase_report_datatables() {
+        $postData = $this->input->post();
+        $result = $this->Reports_model->get_purchase_report_datatables($postData);
+        echo json_encode($result);
     }
 
     /**

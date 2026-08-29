@@ -20,6 +20,7 @@ class Product extends MY_Controller
     {
         $data['products'] = $this->Product_model->get_products();
         $data['base_url'] = base_url();
+        $data['time'] = time();
         $this->smarty->loadView('product_list.tpl', $data, 'Yes', 'Yes');
     }
 
@@ -514,6 +515,82 @@ class Product extends MY_Controller
         }
 
         echo json_encode($ret_arr);
+    }
+
+    public function product_ssp()
+    {
+        $draw = intval($this->input->post('draw'));
+        $start = intval($this->input->post('start'));
+        $length = intval($this->input->post('length'));
+
+        $search = $this->input->post('search');
+        $search_value = isset($search['value']) ? $search['value'] : '';
+
+        $order = $this->input->post('order');
+        $order_col = isset($order[0]['column']) ? intval($order[0]['column']) : 0;
+        $order_dir = isset($order[0]['dir']) ? $order[0]['dir'] : 'desc';
+
+        $total_records = $this->Product_model->get_products_ssp_count();
+        $total_filtered = empty($search_value) ? $total_records : $this->Product_model->get_products_ssp_count($search_value);
+
+        $products = $this->Product_model->get_products_ssp($start, $length, $search_value, $order_col, $order_dir);
+
+        $data = array();
+        $time = time();
+        foreach ($products as $row) {
+            $image_html = '';
+            if (!empty($row['image'])) {
+                $img_url = base_url("public/uploads/product/product_image/" . $row['product_id'] . "/" . $row['image'] . "?ver=" . $time);
+                $image_html = '<img src="' . $img_url . '" onerror="this.src=\'' . base_url("public/assets/images/no_image.jpg") . '\';" alt="Product Image" style="width: 50px; height: 50px; object-fit: contain;">';
+            } else {
+                $image_html = '<img src="' . base_url("public/assets/images/no_image.jpg") . '" alt="No Image" style="width: 50px; height: 50px; object-fit: contain;">';
+            }
+
+            $barcode_html = '-';
+            if (!empty($row['line_bar_code'])) {
+                $barcode_url = base_url("public/uploads/product/bar_code/" . $row['product_id'] . "/" . $row['line_bar_code'] . ".png?ver=" . $time);
+                $barcode_html = '<img class="list-barcode-img" src="' . $barcode_url . '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'inline\';" alt="' . $row['line_bar_code'] . '" style="width: 120px; height: 80px; object-fit: contain; display:block;margin:auto; transition: transform .2s;"><span style="display:none;">-</span><small>' . $row['line_bar_code'] . '</small>';
+            }
+
+            $desc_html = '<span title="' . htmlspecialchars($row['description']) . '" style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display:inline-block;">' . htmlspecialchars($row['description']) . '</span>';
+
+            $status_html = ($row['status'] == 'Active') ? '<span class="badge bg-success">Active</span>' : '<span class="badge bg-danger">Inactive</span>';
+
+            $action_html = '
+            <div class="dropdown text-center">
+                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="ti ti-dots-vertical text-muted"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" style="">
+                    <li><a class="dropdown-item" href="' . base_url('product/product_details/') . $row['product_id'] . '"><i class="ti ti-eye me-1"></i> View Details</a></li>
+                    <li><a class="dropdown-item" href="' . base_url('product/add_product/') . $row['product_id'] . '"><i class="ti ti-pencil me-1"></i> Edit</a></li>
+                    <li><a class="dropdown-item update_stock" href="javascript:void(0);" data-id="' . $row['product_id'] . '"><i class="ti ti-box me-1"></i> Update Stock</a></li>
+                    <li><a class="dropdown-item regenerate_barcode" href="javascript:void(0);" data-id="' . $row['product_id'] . '"><i class="ti ti-refresh me-1"></i> Regenerate Barcode</a></li>
+                    <li><a class="dropdown-item print_barcode" href="javascript:void(0);" data-id="' . $row['product_id'] . '"><i class="ti ti-printer me-1"></i> Print</a></li>
+                    <li><a class="dropdown-item text-danger delete_data" href="javascript:void(0);" data-id="' . $row['product_id'] . '"><i class="ti ti-trash me-1"></i> Delete</a></li>
+                </ul>
+            </div>';
+
+            $data[] = array(
+                $image_html,
+                $barcode_html,
+                htmlspecialchars($row['name']),
+                $desc_html,
+                $row['sale_price'],
+                $row['qty'],
+                $status_html,
+                $action_html
+            );
+        }
+
+        $output = array(
+            "draw" => $draw,
+            "recordsTotal" => $total_records,
+            "recordsFiltered" => $total_filtered,
+            "data" => $data
+        );
+
+        echo json_encode($output);
     }
 
 }
