@@ -16,28 +16,89 @@
           </nav>
         </div>
       </div>
-      <form method="POST" action="<%$base_url%>sales_report" class="cat-page-header-right m-0" id="filter-form" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-        <div class="cat-search-box">
-          <i class="ti ti-search"></i>
-          <input type="text" id="search-filter-input" placeholder="Search report..." />
-        </div>
-
-        <div class="d-flex align-items-center gap-2">
-            <input type="date" name="from_date" class="form-control form-control-sm" value="<%$from_date%>" required style="width: auto; height: 38px;" title="From Date" />
-            <span class="text-muted">to</span>
-            <input type="date" name="to_date" class="form-control form-control-sm" value="<%$to_date%>" required style="width: auto; height: 38px;" title="To Date" />
-            <button type="submit" class="cat-btn cat-btn-primary" style="padding: 0 12px;">Filter</button>
-        </div>
-
-        <button type="button" id="export-csv" class="cat-btn cat-btn-outline" title="Export CSV">
+      <div class="cat-page-header-right">
+        <button id="export-csv" class="cat-btn cat-btn-outline" title="Export CSV">
           <i class="ti ti-file-type-csv"></i> Export CSV
         </button>
-        <button type="button" id="export-pdf" class="cat-btn cat-btn-outline-red" title="Export PDF">
+        <button id="export-pdf" class="cat-btn cat-btn-outline-red" title="Export PDF">
           <i class="ti ti-file-type-pdf"></i> Export PDF
         </button>
-        <button type="button" class="cat-btn cat-btn-primary" onclick="window.location.href='<%$base_url%>sales_report'" title="Refresh">
-          <i class="ti ti-refresh"></i> Refresh
-        </button>
+      </div>
+    </div>
+
+    
+    <!-- Summary Cards -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-3">
+          <div class="adj-summary-card">
+              <div class="adj-summary-icon" style="background:#e8e6fb; color:#7367f0;">
+                  <i class="ti ti-list-details"></i>
+              </div>
+              <div>
+                  <div style="font-size:0.75rem; font-weight:600; color:var(--cat-light); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Total Entries</div>
+                  <div id="kpi-total-entries" style="font-size:1.6rem; font-weight:800; color:var(--cat-dark); line-height:1;"><%$summary.total_entries%></div>
+              </div>
+          </div>
+      </div>
+      <div class="col-md-3">
+          <div class="adj-summary-card">
+              <div class="adj-summary-icon" style="background:#e8f8f0; color:#27ae60;">
+                  <i class="ti ti-cash"></i>
+              </div>
+              <div>
+                  <div style="font-size:0.75rem; font-weight:600; color:var(--cat-light); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Cash Total</div>
+                  <div id="kpi-total-cash" style="font-size:1.6rem; font-weight:800; color:var(--cat-dark); line-height:1;">₹<%$summary.total_cash|number_format:0%></div>
+              </div>
+          </div>
+      </div>
+      <div class="col-md-3">
+          <div class="adj-summary-card">
+              <div class="adj-summary-icon" style="background:#fff0e1; color:#fd7e14;">
+                  <i class="ti ti-device-mobile"></i>
+              </div>
+              <div>
+                  <div style="font-size:0.75rem; font-weight:600; color:var(--cat-light); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">UPI Total</div>
+                  <div id="kpi-total-upi" style="font-size:1.6rem; font-weight:800; color:var(--cat-dark); line-height:1;">₹<%$summary.total_upi|number_format:0%></div>
+              </div>
+          </div>
+      </div>
+      <div class="col-md-3">
+          <div class="adj-summary-card">
+              <div class="adj-summary-icon" style="background:#fdecea; color:#e74c3c;">
+                  <i class="ti ti-credit-card"></i>
+              </div>
+              <div>
+                  <div style="font-size:0.75rem; font-weight:600; color:var(--cat-light); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Other (Card) Total</div>
+                  <div id="kpi-total-card" style="font-size:1.6rem; font-weight:800; color:var(--cat-dark); line-height:1;">₹<%$summary.total_card|number_format:0%></div>
+              </div>
+          </div>
+      </div>
+    </div>
+
+    <!-- Filter Card -->
+    <div class="card border-0 shadow-sm mb-4" style="border-radius:12px;">
+      <form method="POST" action="<%$base_url%>sales_report" id="filter-form">
+      <div class="card-body p-3">
+        <div class="row g-3 align-items-end">
+          <div class="col-md-3">
+            <label class="form-label fw-semibold text-muted" style="font-size:0.78rem; text-transform:uppercase; letter-spacing:.5px;">From Date</label>
+            <input type="date" name="from_date" class="form-control" value="<%$from_date%>">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label fw-semibold text-muted" style="font-size:0.78rem; text-transform:uppercase; letter-spacing:.5px;">To Date</label>
+            <input type="date" name="to_date" class="form-control" value="<%$to_date%>">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold text-muted" style="font-size:0.78rem; text-transform:uppercase; letter-spacing:.5px;">Search</label>
+            <input type="text" id="search-filter-input" class="form-control" placeholder="Search customer, contact, mode…">
+          </div>
+          <div class="col-md-2">
+            <button type="submit" class="cat-btn cat-btn-primary w-100">
+              <i class="ti ti-filter"></i> Apply
+            </button>
+          </div>
+        </div>
+      </div>
       </form>
     </div>
 
@@ -54,18 +115,7 @@
           </tr>
         </thead>
         <tbody>
-          <%assign var="grand_total" value=0%>
-          <%assign var="sr_no" value=1%>
-          <%foreach from=$sales item=sale%>
-          <tr>
-            <td style="white-space: nowrap;"><%$sale.sales_date|date_format:"%d %b %Y"%></td>
-            <td><%$sale.customer_name|default:'Walk-in Customer'%></td>
-            <td><%$sale.mobile_number|default:'-'%></td>
-            <td><%$sale.payment_mode|default:'Cash'%></td>
-            <td class="text-end fw-bold"><%$sale.total_amount|number_format:2%></td>
-          </tr>
-          <%assign var="grand_total" value=$grand_total+$sale.total_amount%>
-          <%/foreach%>
+          <!-- Populated by DataTables Server-Side Processing -->
         </tbody>
         <tfoot>
           <tr>
@@ -73,7 +123,7 @@
             <th style="border-top: 1px solid var(--cat-border);"></th>
             <th style="border-top: 1px solid var(--cat-border);"></th>
             <th class="text-end" style="border-top: 1px solid var(--cat-border);">Grand Total:</th>
-            <th class="text-primary text-end" style="font-size: 1.1rem; color: #c0392b !important; border-top: 1px solid var(--cat-border);"><%$grand_total|number_format:2%></th>
+            <th id="grand-total-footer" class="text-primary text-end" style="font-size: 1.1rem; color: #c0392b !important; border-top: 1px solid var(--cat-border);">0.00</th>
           </tr>
         </tfoot>
       </table>
@@ -96,5 +146,15 @@
     .cat-btn, .cat-search-box, .cat-page-header-right, form, .sidebar, .navbar, .cat-breadcrumb { display: none !important; }
     .cat-table-card { border: none !important; box-shadow: none !important; }
     .content-wrapper { padding: 0 !important; margin: 0 !important; }
+  }
+
+  .adj-summary-card {
+    background: #fff; border-radius: 12px; border: 1px solid #e2e6ef;
+    padding: 1.2rem 1.5rem; box-shadow: 0 2px 16px rgba(91,95,199,.07);
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .adj-summary-icon {
+    width: 50px; height: 50px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0;
   }
 </style>

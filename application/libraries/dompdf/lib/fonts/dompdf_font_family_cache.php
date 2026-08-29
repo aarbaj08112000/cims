@@ -80,4 +80,7 @@
   'poppins' => array(
     'normal' => $fontDir . '/4a08cccbc2911e3077321a0298f4e093',
   ),
+  'outfit' => array(
+    'normal' => $fontDir . '/b427b5567815855f2c1aedcbca5c426a',
+  ),
 ) ?>

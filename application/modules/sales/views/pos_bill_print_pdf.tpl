@@ -1,13 +1,21 @@
+<%if $is_pdf|default:false%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<%/if%>
 <div class="receipt-outer-wrap no-print">
     <div class="receipt-inner shadow-2xl">
         <div id="thermal-receipt" class="pos-receipt-v2">
             <!-- Header section with Brand Identity -->
             <div class="header-section text-center">
-                <h1 class="main-title" style="font-size:20px; font-weight: 500;">Code Crafter Infotech</h1>
+                <h1 class="main-title" style="font-size:14.4px; font-weight: 400;">Code Crafter Infotech</h1>
                 <div class="contact-details mt-2" style="margin-top:0px;">
-                    <span style="font-size:14px;"><i class="ti ti-phone-call"></i> +91 9988776655</span>
-                    <span class="mx-2" style="font-size:14px;margin-left:7px;margin-right:3px;">|</span>
-                    <span style="font-size:14px;"><i class="ti ti-world"></i> www.codecrafter.com</span>
+                    <span style="font-size:10.5px;"><i class="ti ti-phone-call"></i> +91 9988776655</span>
+                    <span class="mx-2" style="font-size:10.5px;margin-left:7px;margin-right:3px;">|</span>
+                    <span style="font-size:10.5px;"><i class="ti ti-world"></i> www.codecrafter.com</span>
                 </div>
             </div>
 
@@ -37,20 +45,20 @@
                 <table class="item-table">
                     <thead>
                         <tr>
-                            <th class="text-start" style="font-size:15px;font-weight: 500;">ITEM DESCRIPTION</th>
-                            <th class="text-center" style="font-size:15px;font-weight: 500;">QTY</th>
-                            <th class="text-end" style="font-size:15px;font-weight: 500;">TOTAL</th>
+                            <th class="text-start" style="font-size:10.5px;font-weight: 400;">ITEM DESCRIPTION</th>
+                            <th class="text-center" style="font-size:10.5px;font-weight: 400;">QTY</th>
+                            <th class="text-end" style="font-size:10.5px;font-weight: 400;">TOTAL</th>
                         </tr>
                     </thead>
                     <tbody>
                         <%foreach from=$items item=item%>
                         <tr class="item-row">
-                            <td class="text-start" style="font-size:15px;">
+                            <td class="text-start" style="font-size:10px;">
                                 <div class="p-name"><%$item.product_name%></div>
-                                <span class="p-rate text-muted" style="font-size:13px;">@ <span class="rupees_block">₹</span> <%$item.sale_price|number_format:2%></span>
+                                <span class="p-rate text-muted" style="font-size:9px;">₹ <%$item.sale_price|number_format:2%></span>
                             </td>
-                            <td class="text-center p-qty" style="font-size:15px;">× <%$item.qty%></td>
-                            <td class="text-end p-total" style="font-size:15px;"><span class="rupees_block">₹</span> <%$item.total_amount|number_format:2%></td>
+                            <td class="text-center p-qty" style="font-size:10px;">× <%$item.qty%></td>
+                            <td class="text-end p-total" style="font-size:10px;">₹ <%$item.total_amount|number_format:2%></td>
                         </tr>
                         <%/foreach%>
                     </tbody>
@@ -60,26 +68,26 @@
 
             <!-- Financials Summary -->
             <div class="summary-section" style="margin-top:0px;">
-                <div class="summary-line" style="margin-top:10px;font-size:11px;">
-                    <span>SUBTOTAL</span>
-                    <span class="fw-bold" style="font-size:15px;"><span class="rupees_block">₹</span> <%$sale.total_amount|number_format:2%></span>
+                <div class="summary-line" style="margin-top:10px;font-size:6.82px;">
+                    <span style="font-size:14px;">SUBTOTAL</span>
+                    <span class="fw-bold" style="font-size:13px;"><span class="rupees_block">₹</span> <%$sale.total_amount|number_format:2%></span>
                 </div>
                 <%if $settings['pos_tax_enabled']['value']|default:'Yes' == 'Yes'%>
-                <div class="summary-line" style="margin-top:10px;font-size:11px;">
-                    <span>GST (<%$settings['pos_tax_percentage']['value']|default:'2.5'%>%)</span>
-                    <span style="font-size:15px;"><span class="rupees_block">₹</span> <%($sale.total_amount * ($settings['pos_tax_percentage']['value']|default:'2.5' / 100))|number_format:2%></span>
+                <div class="summary-line" style="margin-top:10px;font-size:6.82px;">
+                    <span style="font-size:14px;">GST (<%$settings['pos_tax_percentage']['value']|default:'2.5'%>%)</span>
+                    <span style="font-size:13px;"><span class="rupees_block">₹</span> <%($sale.total_amount * ($settings['pos_tax_percentage']['value']|default:'2.5' / 100))|number_format:2%></span>
                 </div>
                 <%/if%>
                 <div class="net-payable-box my-3 p-2 rounded" style="<%if $is_pdf|default:false%>background-color:#e8e6fb !important; padding:10px;<%/if%>">
                     <div class="summary-line net-row p-2 rounded" style="margin-top:4px;">
                         <span class="net-label" style="color: #000000 !important; font-size:13px;">NET PAYABLE AMOUNT</span>
-                        <span class="net-value fw-bolder" style="color: #000000 !important; font-size:16px;">₹<%$sale.payable_amount|number_format:2%></span>
+                        <span class="net-value" style="color: #000000 !important; font-size:13px;">₹ <%$sale.payable_amount|number_format:2%></span>
                     </div>
                 </div>
             </div>
 
             <!-- Verification Stamp -->
-            <div class="stamp-wrap text-center" style="margin: 10px 10px 10px 10px;">
+            <div class="stamp-wrap text-center" style="margin: 10px 40px 10px 40px;">
                 <div class="verification-stamp" style="width:100%;">
                     <i class="ti ti-circle-check-filled success-icon"></i>
                     <span class="stamp-text">PAID & VERIFIED</span>
@@ -89,8 +97,8 @@
             <!-- Footer & Barcode -->
             <div class="footer-wrap text-center mt-2">
                 <div class="footer-note mb-4">
-                    <strong style="font-size:17px;">Thank you for your visit!</strong><br>
-                    <span class="text-muted small">Items once sold can be exchanged within 7 days.</span>
+                    <strong style="font-size:14.54px;">Thank you for your visit!</strong><br>
+                    <span class="text-muted small" style="font-size:12px;">Items once sold can be exchanged within 7 days.</span>
                 </div>
                 <div class="barcode-container" style="margin-top:12px; clear:both;">
                     <%if $barcode_img|default:''%>
@@ -98,9 +106,9 @@
                     <%else%>
                     <div class="design-barcode"></div>
                     <%/if%>
-                    <div class="barcode-id font-monospace" style="margin-top:4px; font-size:12px; letter-spacing:2px; color:<%$gar_light2%>;"><%$sale.bill_no%></div>
+                    <div class="barcode-id font-monospace" style="margin-top:4px; font-size:14.44px; letter-spacing:2px; color:<%$gar_light2%>;"><%$sale.bill_no%></div>
                 </div>
-                <div class="version-tag" style="margin-top:6px; font-size:12px;color:<%$gar_dark%>;">Generated by CIMS System</div>
+                <div class="version-tag" style="margin-top:6px; font-size:12.44px;color:<%$gar_dark%>;">Generated by CIMS System</div>
             </div>
         </div>
     </div>
@@ -136,9 +144,7 @@
     scrollbar-width: thin;
     scrollbar-color: #7367f0 #f0f0f0;
 }
-.rupees_block {
-    font-family: DejaVu Sans, sans-serif;
-}
+
 <%if $is_pdf|default:false%>
 body { margin: 0; padding: 0; }
 .pos-receipt-v2 {
@@ -146,10 +152,10 @@ body { margin: 0; padding: 0; }
     box-sizing: border-box;
     padding: 16px 16px;
     background: #fff;
-    font-family: Arial, sans-serif;
+    font-family: 'DejaVu Sans', sans-serif;
     color: #2b2b2b;
     margin: 0 auto;
-    font-size:13px;
+    font-size:8.06px;
 }
 <%else%>
 .pos-receipt-v2 {
@@ -158,7 +164,7 @@ body { margin: 0; padding: 0; }
     box-sizing: border-box;
     padding: 8px 8px;
     background: #fff;
-    font-family: 'Outfit', 'Inter', sans-serif;
+   font-family: Arial, sans-serif;
     color: #2b2b2b;
     margin: 0 auto;
 }
@@ -169,10 +175,10 @@ body { margin: 0; padding: 0; }
 .text-start { text-align: left; }
 .text-end { text-align: right; }
 .text-primary { color: #7367f0 !important; }
-.fw-bold { font-weight: 500; }
-.fw-bolder { font-weight: 500; }
+.fw-bold { font-weight: 400; }
+.fw-bolder { font-weight: 400; }
 .text-muted { color: <%$gar_light2%>; }
-.small { font-size: 1em; }
+.small { font-size:0.62em; }
 .my-3 { margin-top: 1rem; margin-bottom: 1rem; }
 .mt-4 { margin-top: 1.5rem; }
 
@@ -182,64 +188,64 @@ body { margin: 0; padding: 0; }
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
 }
 .    {
-    font-size: 1.725rem;
-    font-weight: 500;
+    font-size:1.07rem;
+    font-weight: 400;
     letter-spacing: -0.5px;
     margin: 0;
     color: #111;
 }
 .sub-header {
-    font-size: 0.925rem;
+    font-size:0.57rem;
     color: #777;
     margin: 4px 0 0 0;
-    font-weight: 500;
+    font-weight: 400;
 }
 .contact-details {
-    font-size: 0.825rem;
+    font-size:0.51rem;
     color: <%$gar_dark%> !important;
 }
 
 /* Dividers */
 <%if !$is_pdf|default:false%>
-.ornamental-divider { display: flex; align-items: center; color: #00000; margin: 15px 0; }
+.ornamental-divider { display: flex; align-items: center; color: #00000; margin: 1px 0; }
 .ornamental-divider::before, .ornamental-divider::after { content: ""; flex: 1; border-bottom: 2px dashed #00000; }
-.ornamental-divider span { margin: 0 10px; font-size: 1.325rem; }
+.ornamental-divider span { margin: 0 10px; font-size:0.82rem; }
 <%else%>
-.ornamental-divider { text-align: center; border-top: 2px dashed #00000; margin: 15px 0; position: relative; padding-top: 10px; }
+.ornamental-divider { text-align: center; border-top: 2px dashed #00000; margin-top: 10px; position: relative; padding-top: 10px; }
 <%/if%>
 .straight-divider { border-bottom: 1px solid #00000; margin: 15px 0; }
 
 /* Meta */
-.transaction-meta { background: #fff; padding-top: 15px; border-radius: 8px; border: none; }
+.transaction-meta { background: #fff; padding-top: 1px; border-radius: 8px; border: none; }
 <%if !$is_pdf|default:false%>
 .meta-row { display: flex; justify-content: space-between; margin-bottom: 4px; border-bottom: 1px dotted #ececec; padding-bottom: 4px; }
-.m-label { font-size: 0.775rem; color: <%$gar_light%>; font-weight: 500; }
-.m-value { font-size: 0.975rem; font-weight: 500; color: #00000; }
+.m-label { font-size:0.48rem; color: <%$gar_light%>; font-weight: 400; }
+.m-value { font-size:0.6rem; font-weight: 400; color: #00000; }
 <%else%>
 .meta-row { display: table; width: 100%; margin-bottom: 4px; border-bottom: 1px dotted #0000; padding-bottom: 4px; }
-.m-label { display: table-cell; text-align: left; font-size: 1.125rem; color: <%$gar_light%>; font-weight: 500; width: 40%; vertical-align: middle; }
-.m-value { display: table-cell; text-align: right; font-size: 1.125rem; font-weight: 500; color: #00000; width: 55%; vertical-align: middle; }
+.m-label { display: table-cell; text-align: left; font-size:0.7rem; color: <%$gar_light%>; font-weight: 400; width: 40%; vertical-align: middle; }
+.m-value { display: table-cell; text-align: right; font-size:0.7rem; font-weight: 400; color: #00000; width: 55%; vertical-align: middle; }
 <%/if%>
 .meta-row:last-child { border: 0; padding: 0; margin: 0; }
 .highlight { color: #000000; }
 
 /* Table */
 .item-table { width: 100%; border-collapse: collapse; }
-.item-table th { font-size: 0.775rem; color: <%$gar_light2%>; padding-bottom: 10px; border-bottom: 1px solid #00000; }
+.item-table th { font-size:0.48rem; color: <%$gar_light2%>; padding-bottom: 10px; border-bottom: 1px solid #00000; }
 .item-row td { padding: 12px 0; border-bottom: 1px solid #00000; vertical-align: top; }
-.p-name { font-weight: 500; font-size: 0.975rem; line-height: 1.2; color: #111; }
-.p-rate { font-size: 0.875rem; }
-.p-qty { font-size: 0.925rem; font-weight: 500; color: #00000; }
-.p-total { font-weight: 500; color: #111; font-size: 1.025rem; }
+.p-name { font-weight: 400; font-size:0.6rem; line-height: 1.2; color: #111; }
+.p-rate { font-size:0.54rem; }
+.p-qty { font-size:0.57rem; font-weight: 400; color: #00000; }
+.p-total { font-weight: 400; color: #111; font-size:0.64rem; }
 
 /* Summary */
 <%if !$is_pdf|default:false%>
-.summary-line { display: flex; justify-content: space-between; font-size: 0.925rem; margin-bottom: 6px; }
-.breakdown-line { display: flex; justify-content: space-between; margin-bottom: 3px; font-size: 0.875rem; }
+.summary-line { display: flex; justify-content: space-between; font-size:0.57rem; margin-bottom: 6px; }
+.breakdown-line { display: flex; justify-content: space-between; margin-bottom: 3px; font-size:0.54rem; }
 <%else%>
-.summary-line { display: table; width: 100%; font-size: 0.925rem; margin-bottom: 6px; }
+.summary-line { display: table; width: 100%; font-size:0.57rem; margin-bottom: 6px; }
 .summary-line > span:first-child { display: table-cell; text-align: left; vertical-align: middle; }
-.summary-line > span:last-child { display: table-cell; text-align: right; font-weight: 500; vertical-align: middle; }
+.summary-line > span:last-child { display: table-cell; text-align: right; font-weight: 400; vertical-align: middle; }
 <%/if%>
 <%if !$is_pdf|default:false%>
 .net-payable-box { background: rgba(115, 103, 240, 0.05); }
@@ -247,8 +253,8 @@ body { margin: 0; padding: 0; }
 <%else%>
 .net-payable-box { background-color: #e8e6fb; }
 <%/if%>
-.net-label { font-weight: 500; font-size: 0.975rem; }
-.net-value { font-size: 1.425rem; }
+.net-label { font-weight: 400; font-size:0.6rem; }
+.net-value { font-size:0.88rem; }
 
 /* Stamp */
 <%if !$is_pdf|default:false%>
@@ -260,7 +266,7 @@ body { margin: 0; padding: 0; }
     border-radius: 6px;
     color: #000000;
     transform: rotate(-3deg);
-    font-weight: 500;
+    font-weight: 400;
 }
 <%else%>
 .verification-stamp {
@@ -269,11 +275,11 @@ body { margin: 0; padding: 0; }
     border: 3px solid #000000;
     border-radius: 6px;
     color: #000000;
-    font-weight: 500;
+    font-weight: 400;
 }
 <%/if%>
-.success-icon { font-size: 1.525rem; margin-right: 8px; }
-.stamp-text { font-size: 1.225rem; letter-spacing: 1px; }
+.success-icon { font-size:0.95rem; margin-right: 8px; }
+.stamp-text { font-size:0.76rem; letter-spacing: 1px; }
 
 /* Footer */
 .footer-note { line-height: 1.4; }
@@ -293,7 +299,7 @@ body { margin: 0; padding: 0; }
     text-align: center;
 }
 <%/if%>
-.barcode-id { font-size: 0.825rem; color: <%$gar_light2%>; margin-top: 5px; letter-spacing: 3px; }
+.barcode-id { font-size:0.51rem; color: <%$gar_light2%>; margin-top: 5px; letter-spacing: 3px; }
 
 /* Print Styles */
 @media print {
@@ -327,4 +333,8 @@ body { margin: 0; padding: 0; }
     box-shadow: 0 8px 15px rgba(115, 103, 240, 0.4);
 }
 </style>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+<%if $is_pdf|default:false%>
+</body>
+</html>
+<%/if%>

@@ -306,8 +306,11 @@ class FontMetrics
      */
     public function getFontHeight($font, $size)
     {
-        return $this->getCanvas()->get_font_height($font, $size);
+        $h = $this->getCanvas()->get_font_height($font, $size);
+        file_put_contents('/var/www/html/extra_work/inventory_management/application/libraries/dompdf/lib/fonts/debug_html.log', "getFontHeight: font=$font, size=$size, h=$h\n", FILE_APPEND);
+        return $h;
     }
+
 
     /**
      * @param $family_raw

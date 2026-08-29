@@ -193,7 +193,7 @@ class Pos extends MY_Controller
 
         $this->load->library('Pdf');
         $pdf = new Pdf();
-        $pdf->loadHtml($html);
+        $pdf->loadHtml($html, 'UTF-8');
         // Calculate dynamic height: base height + (item count * row height)
         $base_height = 580;
         $item_height = 40;
@@ -203,8 +203,10 @@ class Pos extends MY_Controller
         // Set paper width to accommodate 96dpi px-to-pt scaling differences in Dompdf, with dynamic height for thermal rolls
         $pdf->setPaper(array(0, 0, 260, $dynamic_height), 'portrait');
         $pdf->render();
-        
+
         $attachment = ($action == 'download') ? 1 : 0;
         $pdf->stream('POS_Receipt_' . $bill_no . '.pdf', ['Attachment' => $attachment]);
     }
+
+
 }

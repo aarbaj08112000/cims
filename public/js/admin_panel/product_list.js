@@ -78,7 +78,7 @@ const page = {
       // Open PDF in new tab
       var printUrl = base_url + "print_barcode_pdf/" + product.product_id + "/" + count;
       window.open(printUrl, '_blank');
-      
+
       // Close the modal optionally
       $("#printBarcodeModal").modal("hide");
     });
@@ -96,7 +96,7 @@ const page = {
       // Open PDF in new tab
       var printUrl = base_url + "print_barcode_thermal_pdf/" + product.product_id + "/" + count;
       window.open(printUrl, '_blank');
-      
+
       // Close the modal optionally
       $("#printBarcodeModal").modal("hide");
     });
@@ -227,6 +227,16 @@ const page = {
   },
   dataTable: function () {
     table = $("#product_list").DataTable({
+      serverSide: true,
+      processing: false,
+      ajax: {
+        url: base_url + "product/product_ssp",
+        type: "POST"
+      },
+      columnDefs: [
+        { orderable: false, targets: [0, 1, 3, 7] }
+      ],
+      lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
       dom: 'Brt<"cat-dt-footer"<"cat-dt-info"i><"cat-dt-controls"<"cat-dt-length"l><"cat-dt-paging"p>>>',
       buttons: [
         {

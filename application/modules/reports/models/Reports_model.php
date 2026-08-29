@@ -8,29 +8,186 @@ class Reports_model extends CI_Model {
     }
 
     /**
-     * Get Sales Report Data
+     * Get Sales Summary Statistics (KPIs)
      */
-    public function get_sales_report($from_date = '', $to_date = '') {
-        $this->db->select('sm.*');
-        $this->db->from('sales_master sm');
+    public function get_sales_summary($from_date = '', $to_date = '') {
+        $this->db->select('
+            COUNT(sales_id) as total_entries,
+            SUM(total_amount) as grand_total,
+            SUM(CASE WHEN LOWER(payment_mode) = "cash" THEN total_amount ELSE 0 END) as total_cash,
+            SUM(CASE WHEN LOWER(payment_mode) = "upi" THEN total_amount ELSE 0 END) as total_upi,
+            SUM(CASE WHEN LOWER(payment_mode) != "cash" AND LOWER(payment_mode) != "upi" THEN total_amount ELSE 0 END) as total_card
+        ');
+        $this->db->from('sales_master');
         
+        if (!empty($from_date)) {
+            $this->db->where('sales_date >=', $from_date);
+        }
+        if (!empty($to_date)) {
+            $this->db->where('sales_date <=', $to_date);
+        }
+        
+        $result = $this->db->get()->row_array();
+        return [
+            'total_entries' => $result['total_entries'] ?? 0,
+            'grand_total'   => $result['grand_total'] ?? 0,
+            'total_cash'    => $result['total_cash'] ?? 0,
+            'total_upi'     => $result['total_upi'] ?? 0,
+            'total_card'    => $result['total_card'] ?? 0
+        ];
+    }
+
+    /**
+     * Server-side DataTables for Sales Report
+     */
+    public function get_sales_report_datatables($postData) {
+        $from_date = isset($postData['from_date']) ? $postData['from_date'] : '';
+        $to_date = isset($postData['to_date']) ? $postData['to_date'] : '';
+
+        // Columns mapping
+        $columns = [
+            0 => 'sales_date',
+            1 => 'customer_name',
+            2 => 'mobile_number',
+            3 => 'payment_mode',
+            4 => 'total_amount'
+        ];
+
+        // Apply base filters
+        $this->db->from('sales_master sm');
         if (!empty($from_date)) {
             $this->db->where('sm.sales_date >=', $from_date);
         }
         if (!empty($to_date)) {
             $this->db->where('sm.sales_date <=', $to_date);
         }
-        
-        $this->db->order_by('sm.sales_date', 'DESC');
-        $this->db->order_by('sm.sales_id', 'DESC');
-        return $this->db->get()->result_array();
+
+        // Clone DB instance for total records (without search)
+        $db_total = clone $this->db;
+        $db_total->select('COUNT(sm.sales_id) as count');
+        $recordsTotal = $db_total->get()->row()->count;
+
+        // Apply filtering
+        if (!empty($postData['search']['value'])) {
+            $search = $postData['search']['value'];
+            $this->db->group_start();
+            $this->db->like('sm.customer_name', $search);
+            $this->db->or_like('sm.mobile_number', $search);
+            $this->db->or_like('sm.payment_mode', $search);
+            $this->db->group_end();
+        }
+
+        // Clone DB instance for filtered records and grand total
+        $db_filtered = clone $this->db;
+        $db_filtered->select('
+            COUNT(sm.sales_id) as count, 
+            SUM(sm.total_amount) as sum_total,
+            SUM(CASE WHEN LOWER(sm.payment_mode) = "cash" THEN sm.total_amount ELSE 0 END) as total_cash,
+            SUM(CASE WHEN LOWER(sm.payment_mode) = "upi" THEN sm.total_amount ELSE 0 END) as total_upi,
+            SUM(CASE WHEN LOWER(sm.payment_mode) != "cash" AND LOWER(sm.payment_mode) != "upi" THEN sm.total_amount ELSE 0 END) as total_card
+        ');
+        $filteredResult = $db_filtered->get()->row();
+        $recordsFiltered = $filteredResult->count;
+        $sumTotal = $filteredResult->sum_total;
+        $totalCash = $filteredResult->total_cash;
+        $totalUpi = $filteredResult->total_upi;
+        $totalCard = $filteredResult->total_card;
+
+        // Ordering
+        if (isset($postData['order'][0]['column'])) {
+            $colIdx = (int)$postData['order'][0]['column'];
+            $dir = $postData['order'][0]['dir'] === 'asc' ? 'ASC' : 'DESC';
+            $orderCol = $columns[$colIdx] ?? 'sm.sales_date';
+            if ($orderCol) {
+                $this->db->order_by($orderCol, $dir);
+            }
+        } else {
+            $this->db->order_by('sm.sales_date', 'DESC');
+            $this->db->order_by('sm.sales_id', 'DESC');
+        }
+
+        // Pagination
+        $limit = intval($postData['length']);
+        $start = intval($postData['start']);
+        if ($limit > 0) {
+            $this->db->limit($limit, $start);
+        }
+
+        // Fetch data
+        $this->db->select('sm.*');
+        $data = $this->db->get()->result_array();
+
+        // Prepare rows for DataTables
+        $rows = [];
+        foreach ($data as $row) {
+            $rows[] = [
+                date('d M Y', strtotime($row['sales_date'])),
+                $row['customer_name'] ? htmlspecialchars($row['customer_name']) : 'Walk-in Customer',
+                $row['mobile_number'] ? htmlspecialchars($row['mobile_number']) : '-',
+                $row['payment_mode'] ? htmlspecialchars($row['payment_mode']) : 'Cash',
+                number_format($row['total_amount'], 2)
+            ];
+        }
+        return [
+            'draw' => isset($postData['draw']) ? intval($postData['draw']) : 0,
+            'recordsTotal' => $recordsTotal,
+            'recordsFiltered' => $recordsFiltered,
+            'grand_total' => $sumTotal ? number_format($sumTotal, 2) : '0.00',
+            'total_entries' => $recordsFiltered,
+            'total_cash' => isset($totalCash) && $totalCash ? number_format($totalCash, 0) : '0',
+            'total_upi' => isset($totalUpi) && $totalUpi ? number_format($totalUpi, 0) : '0',
+            'total_card' => isset($totalCard) && $totalCard ? number_format($totalCard, 0) : '0',
+            'data' => $rows
+        ];
     }
 
     /**
-     * Get Purchase Report Data
+     * Get Purchase Summary Statistics (KPIs)
      */
-    public function get_purchase_report($from_date = '', $to_date = '') {
-        $this->db->select('pm.*, s.supplier_name');
+    public function get_purchase_summary($from_date = '', $to_date = '') {
+        $this->db->select('
+            COUNT(purchase_id) as total_entries,
+            SUM(total_amount) as grand_total
+        ');
+        $this->db->from('purchase_master');
+        
+        if (!empty($from_date)) {
+            $this->db->where('purchase_date >=', $from_date);
+        }
+        if (!empty($to_date)) {
+            $this->db->where('purchase_date <=', $to_date);
+        }
+        
+        $result = $this->db->get()->row_array();
+        
+        $grand_total = $result['grand_total'] ?? 0;
+        
+        return [
+            'total_entries' => $result['total_entries'] ?? 0,
+            'grand_total'   => $grand_total,
+            'total_cash'    => $grand_total, // Defaulting all purchases to Cash as before
+            'total_upi'     => 0,
+            'total_card'    => 0
+        ];
+    }
+
+    /**
+     * Server-side DataTables for Purchase Report
+     */
+    public function get_purchase_report_datatables($postData) {
+        $from_date = isset($postData['from_date']) ? $postData['from_date'] : '';
+        $to_date = isset($postData['to_date']) ? $postData['to_date'] : '';
+
+        // Columns mapping
+        $columns = [
+            0 => 'purchase_date',
+            1 => 'supplier_name',
+            2 => 'contact_number',
+            3 => null, // Payment mode doesn't exist in DB, it's just Cash
+            4 => 'total_amount'
+        ];
+
+        // Apply base filters
         $this->db->from('purchase_master pm');
         $this->db->join('supplier_master s', 'pm.supplier_id = s.supplier_id', 'left');
         
@@ -40,10 +197,77 @@ class Reports_model extends CI_Model {
         if (!empty($to_date)) {
             $this->db->where('pm.purchase_date <=', $to_date);
         }
-        
-        $this->db->order_by('pm.purchase_date', 'DESC');
-        $this->db->order_by('pm.purchase_id', 'DESC');
-        return $this->db->get()->result_array();
+
+        // Clone DB instance for total records (without search)
+        $db_total = clone $this->db;
+        $db_total->select('COUNT(pm.purchase_id) as count');
+        $recordsTotal = $db_total->get()->row()->count;
+
+        // Apply filtering
+        if (!empty($postData['search']['value'])) {
+            $search = $postData['search']['value'];
+            $this->db->group_start();
+            $this->db->like('s.supplier_name', $search);
+            // Since contact_number doesn't exist in purchase_master, remove it from search too? 
+            // Wait, we need to be careful if contact_number exists or not.
+            // But let's just remove payment_mode for sure.
+            $this->db->group_end();
+        }
+
+        // Clone DB instance for filtered records and grand total
+        $db_filtered = clone $this->db;
+        $db_filtered->select('COUNT(pm.purchase_id) as count, SUM(pm.total_amount) as sum_total');
+        $filteredResult = $db_filtered->get()->row();
+        $recordsFiltered = $filteredResult->count;
+        $sumTotal = $filteredResult->sum_total;
+
+        // Ordering
+        if (isset($postData['order'][0]['column'])) {
+            $colIdx = (int)$postData['order'][0]['column'];
+            $dir = $postData['order'][0]['dir'] === 'asc' ? 'ASC' : 'DESC';
+            $orderCol = $columns[$colIdx] ?? 'pm.purchase_date';
+            if ($orderCol) {
+                $this->db->order_by($orderCol, $dir);
+            }
+        } else {
+            $this->db->order_by('pm.purchase_date', 'DESC');
+            $this->db->order_by('pm.purchase_id', 'DESC');
+        }
+
+        // Pagination
+        $limit = intval($postData['length']);
+        $start = intval($postData['start']);
+        if ($limit > 0) {
+            $this->db->limit($limit, $start);
+        }
+
+        // Fetch data
+        $this->db->select('pm.*, s.supplier_name');
+        $data = $this->db->get()->result_array();
+
+        // Prepare rows for DataTables
+        $rows = [];
+        foreach ($data as $row) {
+            $rows[] = [
+                date('d M Y', strtotime($row['purchase_date'])),
+                $row['supplier_name'] ? htmlspecialchars($row['supplier_name']) : '-',
+                isset($row['contact_number']) && $row['contact_number'] ? htmlspecialchars($row['contact_number']) : '-',
+                'Cash', // Default to Cash
+                number_format($row['total_amount'], 2)
+            ];
+        }
+
+        return [
+            'draw' => isset($postData['draw']) ? intval($postData['draw']) : 0,
+            'recordsTotal' => $recordsTotal,
+            'recordsFiltered' => $recordsFiltered,
+            'grand_total' => $sumTotal ? number_format($sumTotal, 2) : '0.00',
+            'total_entries' => $recordsFiltered,
+            'total_cash' => $sumTotal ? number_format($sumTotal, 0) : '0',
+            'total_upi' => '0',
+            'total_card' => '0',
+            'data' => $rows
+        ];
     }
 
     /**
