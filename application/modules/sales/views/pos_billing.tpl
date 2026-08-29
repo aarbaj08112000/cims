@@ -2,6 +2,7 @@
     <!-- Tax Configuration -->
     <input type="hidden" id="pos_tax_enabled" value="<%$settings['pos_tax_enabled']['value']|default:'Yes'%>">
     <input type="hidden" id="pos_tax_percentage" value="<%$settings['pos_tax_percentage']['value']|default:'2.5'%>">
+    <input type="hidden" id="pos_receipt_print_type" value="<%$settings['pos_receipt_print_type']['value']|default:'PDF'%>">
 
     <div class="row g-4">
         <!-- Left Side: Product Scanning and Table -->

@@ -12,9 +12,6 @@ const salesReport = {
     },
 
     dataTable: function () {
-        var from_date = $('input[name="from_date"]').val();
-        var to_date = $('input[name="to_date"]').val();
-
         salesReportTable = $('#salesReportTable').DataTable({
             serverSide: true,
             processing: true,
@@ -22,8 +19,8 @@ const salesReport = {
                 url: base_url + "reports/get_sales_report_datatables",
                 type: "POST",
                 data: function(d) {
-                    d.from_date = from_date;
-                    d.to_date = to_date;
+                    d.from_date = $('input[name="from_date"]').val();
+                    d.to_date = $('input[name="to_date"]').val();
                 }
             },
             order: [[0, 'desc']], // Order by Date descending
