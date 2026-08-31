@@ -6,6 +6,11 @@ $(document).ready(function () {
         required: true,
         minlength: 2
       },
+      actual_price: {
+        required: true,
+        number: true,
+        min: 0.01
+      },
       price: {
         required: true,
         number: true,
@@ -25,6 +30,11 @@ $(document).ready(function () {
       name: {
         required: "Please enter product name",
         minlength: "Name must be at least 2 characters"
+      },
+      actual_price: {
+        required: "Please enter the actual selling price",
+        number: "Enter a valid number",
+        min: "Price must be greater than 0"
       },
       price: {
         required: "Please enter the product price",
@@ -97,6 +107,23 @@ $(document).ready(function () {
     }
   });
 
+  function calculateSellingPrice() {
+    var actualPrice = parseFloat($('#actual_price').val()) || 0;
+    var discount = parseFloat($('#discount').val()) || 0;
+    var sellingPrice = actualPrice;
+    
+    if (discount > 0 && actualPrice > 0) {
+      sellingPrice = actualPrice - (actualPrice * discount / 100);
+    }
+    
+    if (actualPrice > 0) {
+      $('#price').val(sellingPrice.toFixed(2));
+    } else {
+      $('#price').val('');
+    }
+  }
 
-  
+  $('#actual_price, #discount').on('input', function() {
+    calculateSellingPrice();
+  });
 });

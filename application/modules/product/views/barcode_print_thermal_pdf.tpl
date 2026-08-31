@@ -44,7 +44,7 @@
             padding-top: 4px;
         }
         .bcode-img {
-            height: 75px;
+            height: 90px;
             object-fit: contain;
             width: 100px;
         } 
@@ -59,7 +59,7 @@
 <body>
     <%foreach from=$labels item=label name=lbl%>
         <div class="label-container" <%if not $smarty.foreach.lbl.last%>style="page-break-after: always;"<%/if%>>
-            <div class="label-box" style="height:140px;">
+            <div class="label-box" style="height:155px;">
                 <table class="inner-table">
                     <tr>
                         <td class="name"><%$label['name']%></td>
@@ -67,7 +67,7 @@
                     <tr>
                         <td class="meta">
                             Size: <%$label['size']|default:'N/A'%> | Code: <%$label['product_code']|default:'N/A'%><br>
-                            <span style="font-size: 11px; font-weight: 500; color: #000;">Price: <%$label['price']|default:'0'%></span>
+                            <span style="font-size: 11px; font-weight: 500; color: #000;">Price: <%if $label['discount'] > 0%><%$label['price']|default:'0'%> <del><%$label['actual_price']|default:'0'%></del><%else%><%$label['price']|default:'0'%><%/if%></span>
                         </td>
                     </tr>
                     <tr>

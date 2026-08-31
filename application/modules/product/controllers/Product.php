@@ -105,6 +105,8 @@ class Product extends MY_Controller
             'alert_qty' => $this->input->post("alert_qty"),
             'qty' => $this->input->post("qty"),
             'purchase_price' => $this->input->post("purchase_price"),
+            'actual_price' => $this->input->post("actual_price"),
+            'discount' => $this->input->post("discount"),
             'price' => $this->input->post("price"),
             'tax_rate' => $this->input->post("tax_rate"),
             'description' => $this->input->post("description"),
@@ -246,6 +248,8 @@ class Product extends MY_Controller
             'alert_qty' => $this->input->post("alert_qty"),
             'qty' => $this->input->post("qty"),
             'purchase_price' => $this->input->post("purchase_price"),
+            'actual_price' => $this->input->post("actual_price"),
+            'discount' => $this->input->post("discount"),
             'price' => $this->input->post("price"),
             'tax_rate' => $this->input->post("tax_rate"),
             'description' => $this->input->post("description"),
@@ -423,6 +427,7 @@ class Product extends MY_Controller
 
         $data['labels'] = $labels;
         $data['base_url'] = base_url();
+        // pr($data, 1);
 
         $html = $this->smarty->loadView('barcode_print_thermal_pdf.tpl', $data, 'No', 'No', TRUE);
 
@@ -552,7 +557,7 @@ class Product extends MY_Controller
                 $barcode_html = '<img class="list-barcode-img" src="' . $barcode_url . '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'inline\';" alt="' . $row['line_bar_code'] . '" style="width: 120px; height: 80px; object-fit: contain; display:block;margin:auto; transition: transform .2s;"><span style="display:none;">-</span><small>' . $row['line_bar_code'] . '</small>';
             }
 
-            $desc_html = '<span title="' . htmlspecialchars($row['description']) . '" style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display:inline-block;">' . htmlspecialchars($row['description']) . '</span>';
+            $desc_html = '<span title="' . htmlspecialchars($row['description']) . '" style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; display:inline-block;">' . htmlspecialchars($row['description']) . '</span>';
 
             $status_html = ($row['status'] == 'Active') ? '<span class="badge bg-success">Active</span>' : '<span class="badge bg-danger">Inactive</span>';
 
@@ -562,8 +567,8 @@ class Product extends MY_Controller
                     <i class="ti ti-dots-vertical text-muted"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" style="">
-                    <li><a class="dropdown-item" href="' . base_url('product/product_details/') . $row['product_id'] . '"><i class="ti ti-eye me-1"></i> View Details</a></li>
-                    <li><a class="dropdown-item" href="' . base_url('product/add_product/') . $row['product_id'] . '"><i class="ti ti-pencil me-1"></i> Edit</a></li>
+                    <li><a class="dropdown-item" href="' . base_url('product_details/') . $row['product_id'] . '"><i class="ti ti-eye me-1"></i> View Details</a></li>
+                    <li><a class="dropdown-item" href="' . base_url('update_product/') . $row['product_id'] . '"><i class="ti ti-pencil me-1"></i> Edit</a></li>
                     <li><a class="dropdown-item update_stock" href="javascript:void(0);" data-id="' . $row['product_id'] . '"><i class="ti ti-box me-1"></i> Update Stock</a></li>
                     <li><a class="dropdown-item regenerate_barcode" href="javascript:void(0);" data-id="' . $row['product_id'] . '"><i class="ti ti-refresh me-1"></i> Regenerate Barcode</a></li>
                     <li><a class="dropdown-item print_barcode" href="javascript:void(0);" data-id="' . $row['product_id'] . '"><i class="ti ti-printer me-1"></i> Print</a></li>
@@ -576,7 +581,9 @@ class Product extends MY_Controller
                 $barcode_html,
                 htmlspecialchars($row['name']),
                 $desc_html,
-                $row['sale_price'],
+                $row['price'],
+                $row['purchase_price'],
+                $row['unit'],
                 $row['qty'],
                 $status_html,
                 $action_html
