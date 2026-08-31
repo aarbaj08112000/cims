@@ -52,7 +52,7 @@
         <form id="product_form" action="javascript:void(0)" method="POST" enctype="multipart/form-data">
            <div class="row">
            <!-- Row 1 -->
-            <%if isset($products)%>
+            <%if isset($products) && count($products) > 0%>
             <div class="mb-3 col-md-4 col-12">
                <label class="form-label">Product Code <span class="text-danger">*</span></label>
                <input type="text" name="product_code" class="form-control" placeholder="Auto Generated" value="<%$products[0].product_code%>" readonly>
@@ -100,8 +100,18 @@
 
              <!-- Row 3 -->
             <div class="mb-3 col-md-4 col-12">
+              <label class="form-label">Actual Price (Selling) <span class="text-danger">*</span></label>
+              <input type="text" step="0.01" name="actual_price" id="actual_price" class="form-control required-input onlyNumericInput" placeholder="Enter Actual Selling Price" value="<%if isset($products) %><%$products[0].actual_price%><%/if%>">
+            </div>
+
+            <div class="mb-3 col-md-4 col-12">
+              <label class="form-label">Discount (%)</label>
+              <input type="text" step="0.01" name="discount" id="discount" class="form-control onlyNumericInput" placeholder="Enter Discount Percentage" value="<%if isset($products) %><%$products[0].discount%><%/if%>">
+            </div>
+
+            <div class="mb-3 col-md-4 col-12">
               <label class="form-label">Price (Selling) <span class="text-danger">*</span></label>
-              <input type="text" step="0.01" name="price" class="form-control required-input onlyNumericInput" placeholder="Enter Selling Price" value="<%if isset($products) %><%$products[0].price%><%/if%>">
+              <input type="text" step="0.01" name="price" id="price" class="form-control required-input onlyNumericInput" placeholder="Auto Calculated" value="<%if isset($products) %><%$products[0].price%><%/if%>" readonly tabindex="-1" style="background-color: #e9ecef; pointer-events: none;">
             </div>
             
             <div class="mb-3 col-md-4 col-12">

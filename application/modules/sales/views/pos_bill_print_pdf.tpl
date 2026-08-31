@@ -26,15 +26,15 @@
             <!-- Transaction Details -->
             <div class="transaction-meta mb-4">
                 <div class="meta-row">
-                    <span class="m-label">BILL NUMBER</span>
-                    <span class="m-value highlight">#<%$sale.bill_no%></span>
+                    <span class="m-label" style="font-size:13px;">BILL NUMBER</span>
+                    <span class="m-value " style="font-size:13px;">#<%$sale.bill_no%></span>
                 </div>
                 <div class="meta-row">
-                    <span class="m-label">DATE & TIME</span>
-                    <span class="m-value"><%$sale.sales_date|date_format:"%d %b %Y"%> | <%$smarty.now|date_format:"%H:%M"%></span>
+                    <span class="m-label" style="font-size:14px;">DATE & TIME</span>
+                    <span class="m-value" style="font-size:14px;"><%$sale.sales_date|date_format:"%d %b %Y"%> | <%$smarty.now|date_format:"%H:%M"%></span>
                 </div>
                 <div class="meta-row">
-                    <span class="m-label">CUSTOMER</span>
+                    <span class="m-label" style="font-size:14px;">CUSTOMER</span>
                     <span class="m-value"><%$sale.customer_phone_number|default:'Walk-In Customer'%></span>
                 </div>
             </div>
@@ -45,20 +45,20 @@
                 <table class="item-table">
                     <thead>
                         <tr>
-                            <th class="text-start" style="font-size:10.5px;font-weight: 400;">ITEM DESCRIPTION</th>
-                            <th class="text-center" style="font-size:10.5px;font-weight: 400;">QTY</th>
-                            <th class="text-end" style="font-size:10.5px;font-weight: 400;">TOTAL</th>
+                            <th class="text-start" style="font-size:12.5px;font-weight: 400;">ITEM DESCRIPTION</th>
+                            <th class="text-center" style="font-size:12.5px;font-weight: 400;">QTY</th>
+                            <th class="text-end" style="font-size:12.5px;font-weight: 400;">TOTAL</th>
                         </tr>
                     </thead>
                     <tbody>
                         <%foreach from=$items item=item%>
                         <tr class="item-row">
-                            <td class="text-start" style="font-size:10px;">
-                                <div class="p-name"><%$item.product_name%></div>
-                                <span class="p-rate text-muted" style="font-size:9px;">₹ <%$item.sale_price|number_format:2%></span>
+                            <td class="text-start" style="font-size:14px;">
+                                <div class="p-name" style="font-size:12px;"><%$item.product_name%></div>
+                                <span class="p-rate text-muted" style="font-size:10px;">₹ <%$item.sale_price|number_format:2%></span>
                             </td>
-                            <td class="text-center p-qty" style="font-size:10px;">× <%$item.qty%></td>
-                            <td class="text-end p-total" style="font-size:10px;">₹ <%$item.total_amount|number_format:2%></td>
+                            <td class="text-center p-qty" style="font-size:13px;">× <%$item.qty%></td>
+                            <td class="text-end p-total" style="font-size:13px;">₹ <%$item.total_amount|number_format:2%></td>
                         </tr>
                         <%/foreach%>
                     </tbody>
@@ -69,19 +69,19 @@
             <!-- Financials Summary -->
             <div class="summary-section" style="margin-top:0px;">
                 <div class="summary-line" style="margin-top:10px;font-size:6.82px;">
-                    <span style="font-size:14px;">SUBTOTAL</span>
-                    <span class="fw-bold" style="font-size:13px;"><span class="rupees_block">₹</span> <%$sale.total_amount|number_format:2%></span>
+                    <span style="font-size:15px;">SUBTOTAL</span>
+                    <span class="fw-bold" style="font-size:14px;"><span class="rupees_block">₹</span> <%$sale.total_amount|number_format:2%></span>
                 </div>
                 <%if $settings['pos_tax_enabled']['value']|default:'Yes' == 'Yes'%>
                 <div class="summary-line" style="margin-top:10px;font-size:6.82px;">
-                    <span style="font-size:14px;">GST (<%$settings['pos_tax_percentage']['value']|default:'2.5'%>%)</span>
-                    <span style="font-size:13px;"><span class="rupees_block">₹</span> <%($sale.total_amount * ($settings['pos_tax_percentage']['value']|default:'2.5' / 100))|number_format:2%></span>
+                    <span style="font-size:15px;">GST (<%$settings['pos_tax_percentage']['value']|default:'2.5'%>%)</span>
+                    <span style="font-size:14px;"><span class="rupees_block">₹</span> <%($sale.total_amount * ($settings['pos_tax_percentage']['value']|default:'2.5' / 100))|number_format:2%></span>
                 </div>
                 <%/if%>
-                <div class="net-payable-box my-3 p-2 rounded" style="<%if $is_pdf|default:false%>background-color:#e8e6fb !important; padding:10px;<%/if%>">
+                <div class="net-payable-box my-3 p-2 rounded" style="<%if $is_pdf|default:false%>padding:10px;<%/if%>">
                     <div class="summary-line net-row p-2 rounded" style="margin-top:4px;">
-                        <span class="net-label" style="color: #000000 !important; font-size:13px;">NET PAYABLE AMOUNT</span>
-                        <span class="net-value" style="color: #000000 !important; font-size:13px;">₹ <%$sale.payable_amount|number_format:2%></span>
+                        <span class="net-label" style="color: #000000 !important; font-size:15px;">NET PAYABLE AMOUNT</span>
+                        <span class="net-value" style="color: #000000 !important; font-size:15px;">₹ <%$sale.payable_amount|number_format:2%></span>
                     </div>
                 </div>
             </div>
@@ -97,8 +97,8 @@
             <!-- Footer & Barcode -->
             <div class="footer-wrap text-center mt-2">
                 <div class="footer-note mb-4">
-                    <strong style="font-size:14.54px;">Thank you for your visit!</strong><br>
-                    <span class="text-muted small" style="font-size:12px;">Items once sold can be exchanged within 7 days.</span>
+                    <strong style="font-size:15px;">Thank you for your visit!</strong><br>
+                    <span class="text-muted small" style="font-size:13px;">Items once sold can be exchanged within 7 days.</span>
                 </div>
                 <div class="barcode-container" style="margin-top:12px; clear:both;">
                     <%if $barcode_img|default:''%>
@@ -106,9 +106,9 @@
                     <%else%>
                     <div class="design-barcode"></div>
                     <%/if%>
-                    <div class="barcode-id font-monospace" style="margin-top:4px; font-size:14.44px; letter-spacing:2px; color:<%$gar_light2%>;"><%$sale.bill_no%></div>
+                    <div class="barcode-id font-monospace" style="margin-top:4px; font-size:15px; letter-spacing:2px; color:<%$gar_light2%>;"><%$sale.bill_no%></div>
                 </div>
-                <div class="version-tag" style="margin-top:6px; font-size:12.44px;color:<%$gar_dark%>;">Generated by CIMS System</div>
+                <div class="version-tag" style="margin-top:6px; font-size:14px;color:<%$gar_dark%>;">Generated by CIMS System</div>
             </div>
         </div>
     </div>
@@ -135,7 +135,8 @@
     perspective: 1000px;
 }
 .receipt-inner {
-    max-width: 85mm;
+     margin-left: -10px !important;
+    max-width: 125mm;
     margin: 0 auto;
     border-radius: 16px;
     background: #fff;
@@ -148,7 +149,8 @@
 <%if $is_pdf|default:false%>
 body { margin: 0; padding: 0; }
 .pos-receipt-v2 {
-    width: 280px;
+   
+    width: 335px;
     box-sizing: border-box;
     padding: 16px 16px;
     background: #fff;
@@ -251,7 +253,7 @@ body { margin: 0; padding: 0; }
 .net-payable-box { background: rgba(115, 103, 240, 0.05); }
 .net-row { border: 2px solid rgba(115, 103, 240, 0.2); }
 <%else%>
-.net-payable-box { background-color: #e8e6fb; }
+.net-payable-box { border: 1px solid #0d0c0eff; border-radius: 5px;}
 <%/if%>
 .net-label { font-weight: 400; font-size:0.6rem; }
 .net-value { font-size:0.88rem; }

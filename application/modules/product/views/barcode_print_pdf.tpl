@@ -36,7 +36,6 @@
             color: #333;
             text-align: center;
             padding-bottom: 5px;
-            border-bottom: 1px solid #ccc;
         }
         .bcode-td {
             text-align: center;
@@ -68,7 +67,7 @@
                             <td class="meta">Size: <%$label['size']|default:'N/A'%> &nbsp;|&nbsp; Code: <%$label['product_code']|default:'N/A'%></td>
                         </tr>
                         <tr>
-                            <td style="font-size: 11px; font-weight: bold; text-align: center; padding-bottom: 3px; color: #000;">Price: <%$label['price']|default:'0'%></td>
+                            <td style="font-size: 11px; font-weight: bold; text-align: center; padding-bottom: 3px; color: #000; border-bottom: 1px solid #ccc;">Price: <%if $label['discount'] > 0%><%$label['price']|default:'0'%> <del><%$label['actual_price']|default:'0'%></del><%else%><%$label['price']|default:'0'%><%/if%></td>
                         </tr>
                         <tr>
                             <td class="bcode-td">

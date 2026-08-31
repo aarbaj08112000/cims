@@ -47,7 +47,9 @@
                     <th class="text-center">Barcode</th>
                     <th>Product Name</th>
                     <th>Description</th>
-                    <th>Price</th>
+                    <th>Sale Price</th>
+                    <th>Purchase Price</th>
+                    <th>Unit</th>
                     <th>Stock</th>
                     <th>Status</th>
                     <th class="text-center" style="width: 100px;">Action</th>
