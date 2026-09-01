@@ -100,6 +100,9 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="print_labels_bluetooth_btn">
+                    <i class="ti ti-bluetooth me-1"></i> Bluetooth Print
+                </button>
                 <button type="button" class="btn btn-info" id="print_labels_thermal_btn">
                     <i class="ti ti-printer me-1"></i> Print Thermal (48mm)
                 </button>

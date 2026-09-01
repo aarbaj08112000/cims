@@ -4,6 +4,8 @@ $(document).ready(function () {
 var table = '';
 var file_name = "product_list";
 var pdf_title = "product_list";
+let currentBluetoothDevice = null;
+let currentBluetoothCharacteristic = null;
 const page = {
   init: function () {
     this.dataTable();
@@ -99,6 +101,129 @@ const page = {
 
       // Close the modal optionally
       $("#printBarcodeModal").modal("hide");
+    });
+
+    $(document).on("click", "#print_labels_bluetooth_btn", async function () {
+      var product = $("#printBarcodeModal").data("product");
+      var count = parseInt($("#label_count").val()) || 1;
+      var max = parseInt($("#label_count").attr("max")) || 0;
+
+      if (count > max) {
+        Swal.fire("Validation Error", "Print quantity cannot exceed available stock (" + max + ").", "error");
+        return;
+      }
+      if (!product.line_bar_code) {
+        Swal.fire("Error", "Product does not have a barcode number.", "error");
+        return;
+      }
+
+      let btn = $(this);
+      let originalText = btn.html();
+      btn.html('<i class="ti ti-loader fa-spin me-1"></i> Printing...').prop('disabled', true);
+
+      try {
+        if (!currentBluetoothDevice || !currentBluetoothDevice.gatt.connected) {
+          const optionalServices = [
+            'e7810a71-73ae-499d-8c15-faa9aef0c3f2',
+            '49535343-fe7d-4ae5-8fa9-9fafd205e455',
+            '000018f0-0000-1000-8000-00805f9b34fb'
+          ];
+          currentBluetoothDevice = await navigator.bluetooth.requestDevice({
+            acceptAllDevices: true,
+            optionalServices: optionalServices
+          });
+          const server = await currentBluetoothDevice.gatt.connect();
+
+          let printerService = null;
+          for (const uuid of optionalServices) {
+            try {
+              printerService = await server.getPrimaryService(uuid);
+              if (printerService) break;
+            } catch (e) {}
+          }
+          if (!printerService) {
+            const services = await server.getPrimaryServices();
+            for (const s of services) {
+              if (s.uuid.startsWith('0000') === false || s.uuid === '000018f0-0000-1000-8000-00805f9b34fb') {
+                printerService = s; break;
+              }
+            }
+          }
+          if (!printerService) throw new Error("Compatible printer service not found.");
+
+          const characteristics = await printerService.getCharacteristics();
+          for (const c of characteristics) {
+            if (c.properties.write || c.properties.writeWithoutResponse) {
+              currentBluetoothCharacteristic = c;
+              break;
+            }
+          }
+          if (!currentBluetoothCharacteristic) throw new Error("Writable characteristic not found.");
+          
+          currentBluetoothDevice.addEventListener('gattserverdisconnected', function() {
+              console.log('Bluetooth device disconnected.');
+              currentBluetoothDevice = null;
+          });
+        }
+
+        for(let j = 0; j < count; j++) {
+            const encoder = new TextEncoder();
+            const initCmd = new Uint8Array([0x1B, 0x40]);
+            const alignCenter = new Uint8Array([0x1B, 0x61, 1]);
+            const price = product.price || product.sale_price || '0.00'; 
+            const headerText = encoder.encode(product.name + "\nPrice: Rs. " + price + "\n\n");
+            const barcodeHeight = new Uint8Array([0x1D, 0x68, 80]);
+            const barcodeWidth = new Uint8Array([0x1D, 0x77, 2]);
+            const barcodeHRI = new Uint8Array([0x1D, 0x48, 2]);
+            
+            const barcodeString = product.line_bar_code;
+            const barcodeCmd = new Uint8Array([0x1D, 0x6B, 69, barcodeString.length]);
+            const barcodeData = encoder.encode(barcodeString);
+            
+            const alignLeft = new Uint8Array([0x1B, 0x61, 0]);
+            const footerText = encoder.encode("\n\n\n\n\n");
+            
+            const totalLength = initCmd.length + alignCenter.length + headerText.length + 
+                                barcodeHeight.length + barcodeWidth.length + barcodeHRI.length + 
+                                barcodeCmd.length + barcodeData.length + 
+                                alignLeft.length + footerText.length;
+                                
+            let printData = new Uint8Array(totalLength);
+            let offset = 0;
+            printData.set(initCmd, offset); offset += initCmd.length;
+            printData.set(alignCenter, offset); offset += alignCenter.length;
+            printData.set(headerText, offset); offset += headerText.length;
+            printData.set(barcodeHeight, offset); offset += barcodeHeight.length;
+            printData.set(barcodeWidth, offset); offset += barcodeWidth.length;
+            printData.set(barcodeHRI, offset); offset += barcodeHRI.length;
+            printData.set(barcodeCmd, offset); offset += barcodeCmd.length;
+            printData.set(barcodeData, offset); offset += barcodeData.length;
+            printData.set(alignLeft, offset); offset += alignLeft.length;
+            printData.set(footerText, offset); offset += footerText.length;
+
+            const chunkSize = 100;
+            for (let i = 0; i < printData.length; i += chunkSize) {
+                const chunk = printData.slice(i, i + chunkSize);
+                await currentBluetoothCharacteristic.writeValue(chunk);
+                await new Promise(resolve => setTimeout(resolve, 50)); 
+            }
+        }
+        
+        Swal.fire({
+          title: "Success",
+          text: "Printed " + count + " labels via Bluetooth!",
+          icon: "success",
+          timer: 1500,
+          showConfirmButton: false
+        });
+
+      } catch (error) {
+        console.error("Bluetooth Error:", error);
+        Swal.fire("Bluetooth Error", error.message, "error");
+        currentBluetoothDevice = null;
+      } finally {
+        btn.html(originalText).prop('disabled', false);
+      }
     });
 
     $(".select2").select2();
