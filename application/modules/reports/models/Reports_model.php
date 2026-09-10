@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Reports_model extends CI_Model {
@@ -19,14 +19,14 @@ class Reports_model extends CI_Model {
             SUM(CASE WHEN LOWER(payment_mode) != "cash" AND LOWER(payment_mode) != "upi" THEN total_amount ELSE 0 END) as total_card
         ');
         $this->db->from('sales_master');
-        
+
         if (!empty($from_date)) {
             $this->db->where('sales_date >=', $from_date);
         }
         if (!empty($to_date)) {
             $this->db->where('sales_date <=', $to_date);
         }
-        
+
         $result = $this->db->get()->row_array();
         return [
             'total_entries' => $result['total_entries'] ?? 0,
@@ -48,7 +48,7 @@ class Reports_model extends CI_Model {
         $columns = [
             0 => 'sales_date',
             1 => 'customer_name',
-            2 => 'mobile_number',
+            2 => 'customer_phone_number',
             3 => 'payment_mode',
             4 => 'total_amount'
         ];
@@ -72,7 +72,7 @@ class Reports_model extends CI_Model {
             $search = $postData['search']['value'];
             $this->db->group_start();
             $this->db->like('sm.customer_name', $search);
-            $this->db->or_like('sm.mobile_number', $search);
+            $this->db->or_like('sm.customer_phone_number', $search);
             $this->db->or_like('sm.payment_mode', $search);
             $this->db->group_end();
         }
@@ -80,7 +80,7 @@ class Reports_model extends CI_Model {
         // Clone DB instance for filtered records and grand total
         $db_filtered = clone $this->db;
         $db_filtered->select('
-            COUNT(sm.sales_id) as count, 
+            COUNT(sm.sales_id) as count,
             SUM(sm.total_amount) as sum_total,
             SUM(CASE WHEN LOWER(sm.payment_mode) = "cash" THEN sm.total_amount ELSE 0 END) as total_cash,
             SUM(CASE WHEN LOWER(sm.payment_mode) = "upi" THEN sm.total_amount ELSE 0 END) as total_upi,
@@ -123,7 +123,7 @@ class Reports_model extends CI_Model {
             $rows[] = [
                 date('d M Y', strtotime($row['sales_date'])),
                 $row['customer_name'] ? htmlspecialchars($row['customer_name']) : 'Walk-in Customer',
-                $row['mobile_number'] ? htmlspecialchars($row['mobile_number']) : '-',
+                $row['customer_phone_number'] ? htmlspecialchars($row['customer_phone_number']) : '-',
                 $row['payment_mode'] ? htmlspecialchars($row['payment_mode']) : 'Cash',
                 number_format($row['total_amount'], 2)
             ];
@@ -142,6 +142,26 @@ class Reports_model extends CI_Model {
     }
 
     /**
+     * Get Sales Report (simple list for AJAX table)
+     */
+    public function get_sales_report($from_date = '', $to_date = '') {
+        $this->db->select('sm.sales_id, sm.bill_no, sm.sales_date, sm.customer_name, sm.customer_phone_number, sm.payment_mode, sm.total_amount, sm.payment_status');
+        $this->db->from('sales_master sm');
+
+        if (!empty($from_date)) {
+            $this->db->where('sm.sales_date >=', $from_date);
+        }
+        if (!empty($to_date)) {
+            $this->db->where('sm.sales_date <=', $to_date);
+        }
+
+        $this->db->order_by('sm.sales_date', 'DESC');
+        $this->db->order_by('sm.sales_id', 'DESC');
+
+        return $this->db->get()->result_array();
+    }
+
+    /**
      * Get Purchase Summary Statistics (KPIs)
      */
     public function get_purchase_summary($from_date = '', $to_date = '') {
@@ -150,22 +170,22 @@ class Reports_model extends CI_Model {
             SUM(total_amount) as grand_total
         ');
         $this->db->from('purchase_master');
-        
+
         if (!empty($from_date)) {
             $this->db->where('purchase_date >=', $from_date);
         }
         if (!empty($to_date)) {
             $this->db->where('purchase_date <=', $to_date);
         }
-        
+
         $result = $this->db->get()->row_array();
-        
+
         $grand_total = $result['grand_total'] ?? 0;
-        
+
         return [
             'total_entries' => $result['total_entries'] ?? 0,
             'grand_total'   => $grand_total,
-            'total_cash'    => $grand_total, // Defaulting all purchases to Cash as before
+            'total_cash'    => $grand_total, // Defaulting all purchases to Cash
             'total_upi'     => 0,
             'total_card'    => 0
         ];
@@ -183,14 +203,14 @@ class Reports_model extends CI_Model {
             0 => 'purchase_date',
             1 => 'supplier_name',
             2 => 'contact_number',
-            3 => null, // Payment mode doesn't exist in DB, it's just Cash
+            3 => null, // Payment mode doesn't exist in DB
             4 => 'total_amount'
         ];
 
         // Apply base filters
         $this->db->from('purchase_master pm');
         $this->db->join('supplier_master s', 'pm.supplier_id = s.supplier_id', 'left');
-        
+
         if (!empty($from_date)) {
             $this->db->where('pm.purchase_date >=', $from_date);
         }
@@ -208,9 +228,6 @@ class Reports_model extends CI_Model {
             $search = $postData['search']['value'];
             $this->db->group_start();
             $this->db->like('s.supplier_name', $search);
-            // Since contact_number doesn't exist in purchase_master, remove it from search too? 
-            // Wait, we need to be careful if contact_number exists or not.
-            // But let's just remove payment_mode for sure.
             $this->db->group_end();
         }
 
@@ -252,7 +269,7 @@ class Reports_model extends CI_Model {
                 date('d M Y', strtotime($row['purchase_date'])),
                 $row['supplier_name'] ? htmlspecialchars($row['supplier_name']) : '-',
                 isset($row['contact_number']) && $row['contact_number'] ? htmlspecialchars($row['contact_number']) : '-',
-                'Cash', // Default to Cash
+                'Cash',
                 number_format($row['total_amount'], 2)
             ];
         }
@@ -268,6 +285,27 @@ class Reports_model extends CI_Model {
             'total_card' => '0',
             'data' => $rows
         ];
+    }
+
+    /**
+     * Get Purchase Report (simple list for AJAX table)
+     */
+    public function get_purchase_report($from_date = '', $to_date = '') {
+        $this->db->select('pm.purchase_id, pm.bill_no, pm.purchase_date, pm.total_amount, pm.payment_status, s.supplier_name');
+        $this->db->from('purchase_master pm');
+        $this->db->join('supplier_master s', 'pm.supplier_id = s.supplier_id', 'left');
+
+        if (!empty($from_date)) {
+            $this->db->where('pm.purchase_date >=', $from_date);
+        }
+        if (!empty($to_date)) {
+            $this->db->where('pm.purchase_date <=', $to_date);
+        }
+
+        $this->db->order_by('pm.purchase_date', 'DESC');
+        $this->db->order_by('pm.purchase_id', 'DESC');
+
+        return $this->db->get()->result_array();
     }
 
     /**
@@ -378,7 +416,7 @@ class Reports_model extends CI_Model {
      */
     public function get_summary_stats() {
         $stats = [];
-        
+
         // 1. Total Sales
         $this->db->select_sum('total_amount');
         $query = $this->db->get('sales_master');
@@ -427,4 +465,5 @@ class Reports_model extends CI_Model {
         return $this->db->get()->result_array();
     }
 }
+
 

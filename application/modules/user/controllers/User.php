@@ -21,9 +21,8 @@ class User extends MY_Controller {
 		$msg ='';
 		$success = 1;
         $client_arr  = $this->input->post("client");
-        $groups  = $this->input->post("groups");
         
-        if(is_valid_array($client_arr) && is_valid_array($groups)){
+        if(is_valid_array($client_arr)){
     		$data = array(
     			'user_name' => $this->input->post('user_name'),
     			'user_email' => $this->input->post('user_email'),
@@ -32,8 +31,7 @@ class User extends MY_Controller {
     			'added_date' => date("Y-m-d H:i:s"),
     			'added_by' => $this->session->userdata('user_id'),
                 'unit_ids' => implode(",", $client_arr),
-                "deleted"=>0,
-                'groups' => implode(",", $groups),
+                "deleted"=>0
     		);
 
     		$inser_query = $this->User_model->insertUser($data);
@@ -54,9 +52,6 @@ class User extends MY_Controller {
         }else if(!is_valid_array($client_arr)){
             $msg = 'Please select unit.';
             $success = 0;
-        }else if(!is_valid_array($groups)){
-            $msg = 'Please select groups.';
-            $success = 0;
         }
 		$ret_arr['msg'] = $msg;
 		$ret_arr['success'] = $success;
@@ -69,12 +64,10 @@ class User extends MY_Controller {
         $success = 1;
         $client_arr  = $this->input->post("client");
         $status = $this->input->post('status');
-        $groups  = $this->input->post("groups");
-        if(is_valid_array($client_arr) && is_valid_array($groups)){
+        if(is_valid_array($client_arr)){
             $data = array(
                 'user_name' => $this->input->post('user_name'),
                 'unit_ids' => implode(",", $client_arr),
-                'groups' => implode(",", $groups),
                 'status' => $status
             );
             if($status != "Block"){
@@ -97,9 +90,6 @@ class User extends MY_Controller {
             }
         }else if(!is_valid_array($client_arr)){
             $msg = 'Please select unit.';
-            $success = 0;
-        }else if(!is_valid_array($groups)){
-            $msg = 'Please select groups.';
             $success = 0;
         }
         $ret_arr['messages'] = $msg;

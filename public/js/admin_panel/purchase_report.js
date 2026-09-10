@@ -1,4 +1,4 @@
-$(document).ready(function () {
+﻿$(document).ready(function () {
     purchaseReport.init();
 });
 
@@ -37,7 +37,6 @@ const purchaseReport = {
                 var api = this.api();
                 var json = api.ajax.json();
                 if (json) {
-                    if (json.grand_total) $('#grand-total-footer').text(json.grand_total);
                     if (json.total_entries !== undefined) $('#kpi-total-entries').text(json.total_entries);
                     if (json.total_cash !== undefined) $('#kpi-total-cash').text('₹' + json.total_cash);
                     if (json.total_upi !== undefined) $('#kpi-total-upi').text('₹' + json.total_upi);
@@ -74,8 +73,8 @@ const purchaseReport = {
             ],
 
             language: {
-                emptyTable:   '<div class="cat-empty">No purchase records found.</div>',
-                zeroRecords:  '<div class="cat-empty">No records match your search.</div>',
+                emptyTable:   '<div class="text-center py-5"><i class="ti ti-shopping-cart-off d-block" style="font-size:2.5rem;color:#cbd5e1;"></i><p class="fw-semibold text-muted mt-2 mb-1">No Purchase Records Found</p><small class="text-muted">Try adjusting your date filters.</small></div>',
+                zeroRecords:  '<div class="text-center py-5"><i class="ti ti-search-off d-block" style="font-size:2.5rem;color:#cbd5e1;"></i><p class="fw-semibold text-muted mt-2 mb-1">No Records Match</p><small class="text-muted">Try a different search term.</small></div>',
                 info:         'Showing _START_ to _END_ of _TOTAL_ entries',
                 infoEmpty:    'Showing 0 to 0 of 0 entries',
                 infoFiltered: '(filtered from _MAX_ total)',

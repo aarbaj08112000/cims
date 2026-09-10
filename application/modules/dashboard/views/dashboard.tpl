@@ -280,7 +280,7 @@
           </nav>
         </div>
       </div>
-      <div class="cat-page-header-right">
+      <div class="cat-page-header-right hide">
         <button class="cat-btn cat-btn-primary">
             <i class="ti ti-download"></i> Export Report
         </button>

@@ -31,7 +31,7 @@ const salesReturnPage = {
             let return_id = $(this).data("id");
             $.ajax({
                 type: "POST",
-                url: base_url + "return_details_ajax",
+                url: base_url + "sales_return_details_ajax",
                 data: { return_id: return_id },
                 dataType: "json",
                 success: function (response) {

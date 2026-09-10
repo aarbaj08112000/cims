@@ -1,4 +1,4 @@
-<table class="table table-striped table-hover" id="salesReportTable" style="width: 100%">
+﻿<table class="table table-striped table-hover" id="salesReportTable" style="width: 100%">
     <thead>
         <tr>
             <th>Bill No</th>
@@ -32,3 +32,4 @@
     </tfoot>
     <%/if%>
 </table>
+

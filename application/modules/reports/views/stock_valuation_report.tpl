@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="<%$base_url%>public/css/category_ui.css" />
+﻿<link rel="stylesheet" href="<%$base_url%>public/css/category_ui.css" />
 <div class="content-wrapper">
   <div class="container-xxl flex-grow-1 container-p-y">
 
@@ -66,17 +66,6 @@
             <%assign var="grand_total" value=$grand_total+$item_value%>
             <%/foreach%>
           </tbody>
-          <tfoot>
-            <tr>
-              <th style="border-top: 1px solid var(--cat-border);"></th>
-              <th style="border-top: 1px solid var(--cat-border);"></th>
-              <th style="border-top: 1px solid var(--cat-border);"></th>
-              <th style="border-top: 1px solid var(--cat-border);"></th>
-              <th style="border-top: 1px solid var(--cat-border);"></th>
-              <th class="text-end" style="border-top: 1px solid var(--cat-border);">Total Inventory Value:</th>
-              <th class="text-primary" style="font-size: 1.1rem; color: #c0392b !important; border-top: 1px solid var(--cat-border);"><%$grand_total|number_format:2%></th>
-            </tr>
-          </tfoot>
         </table>
     </div>
 
@@ -88,12 +77,4 @@
 </script>
 <script src="<%$base_url%>public/js/admin_panel/stock_valuation_report.js"></script>
 
-<style>
-/* Custom Footer Styling specifically for Stock Valuation Report */
-#stockValuationTable tfoot th {
-  background-color: var(--cat-gray-50) !important;
-  font-family: var(--cat-font);
-  font-weight: 600;
-  padding: 16px !important;
-}
-</style>
+

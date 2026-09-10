@@ -285,11 +285,11 @@ div:where(.swal2-icon) .swal2-icon-content {
                          <div data-i18n="User">User</div>
                       </a>
                    </li>
-                   <li class="menu-item <%if strpos($current_uri, 'group_master') !== false%>active<%/if%>">
+                  <!--  <li class="menu-item <%if strpos($current_uri, 'group_master') !== false%>active<%/if%>">
                       <a href="group_master" class="menu-link">
                          <div data-i18n="Group Master">Group Master</div>
                       </a>
-                   </li>
+                   </li> -->
                 </ul>
              </li>
 
