@@ -22,7 +22,7 @@
      <!-- toaster -->
    </head>
    <body class="modern-login-body">
-      <div class="login-wrapper">
+      <div class="login-wrapper outer-div-box">
          <div class="login-card">
             <!-- Logo Section -->
             <div class="login-logo">

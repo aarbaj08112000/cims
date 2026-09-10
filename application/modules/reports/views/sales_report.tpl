@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="<%$base_url%>public/css/category_ui.css" />
+﻿<link rel="stylesheet" href="<%$base_url%>public/css/category_ui.css" />
 <div class="content-wrapper">
   <div class="container-xxl flex-grow-1 container-p-y">
     <!-- Page Header -->
@@ -90,7 +90,7 @@
           </div>
           <div class="col-md-4">
             <label class="form-label fw-semibold text-muted" style="font-size:0.78rem; text-transform:uppercase; letter-spacing:.5px;">Search</label>
-            <input type="text" id="search-filter-input" class="form-control" placeholder="Search customer, contact, mode…">
+            <input type="text" id="search-filter-input" class="form-control" placeholder="Search customer, contact, modeâ€¦">
           </div>
           <div class="col-md-2">
             <button type="submit" class="cat-btn cat-btn-primary w-100">
@@ -117,15 +117,6 @@
         <tbody>
           <!-- Populated by DataTables Server-Side Processing -->
         </tbody>
-        <tfoot>
-          <tr>
-            <th style="border-top: 1px solid var(--cat-border);"></th>
-            <th style="border-top: 1px solid var(--cat-border);"></th>
-            <th style="border-top: 1px solid var(--cat-border);"></th>
-            <th class="text-end" style="border-top: 1px solid var(--cat-border);">Grand Total:</th>
-            <th id="grand-total-footer" class="text-primary text-end" style="font-size: 1.1rem; color: #c0392b !important; border-top: 1px solid var(--cat-border);">0.00</th>
-          </tr>
-        </tfoot>
       </table>
     </div>
   </div>
@@ -136,12 +127,6 @@
 </script>
 <script src="<%$base_url%>public/js/admin_panel/sales_report.js"></script>
 <style>
-  #salesReportTable tfoot th {
-    background-color: var(--cat-gray-50) !important;
-    font-family: var(--cat-font);
-    font-weight: 600;
-    padding: 16px !important;
-  }
   @media print {
     .cat-btn, .cat-search-box, .cat-page-header-right, form, .sidebar, .navbar, .cat-breadcrumb { display: none !important; }
     .cat-table-card { border: none !important; box-shadow: none !important; }
@@ -158,3 +143,4 @@
     display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0;
   }
 </style>
+

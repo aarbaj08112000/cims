@@ -107,14 +107,6 @@
                                        <%/foreach%>
                                     </div>
                                  </div>
-                                 <div class="form-group mb-3" >
-                                    <label for="on click url" class="w-100">Groups<span class="text-danger">*</span> <a class="float-end page-access-btn hide" href="javascript:void(0)">View Page Access</a></label>
-                                    <select name="groups[]" class="form-control select2-multiple"   multiple="multiple">
-                                       <%foreach from=$groups item='groups_val' %>
-                                       <option value="<%$groups_val['group_master_id']%>" <%if in_array($groups_val['group_master_id'],$groups_arr)%>selected<%/if%>><%$groups_val['group_name']%></option>
-                                       <%/foreach%>
-                                    </select>
-                                 </div>
                                  </div>
                                  <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -236,14 +228,6 @@
                           </div>
                           <%/foreach%>
                        </div>
-                    </div>
-                    <div class="form-group" >
-                       <label for="on click url" class="w-100">Groups<span class="text-danger">*</span> <a type="button" class="float-end page-access-btn hide" href="javascript:void(0)">View Page Access</a></label> 
-                       <select name="groups[]" class="form-control select2-multiple required-input"   multiple="multiple">
-                          <%foreach from=$groups item='groups_val' %>
-                          <option value="<%$groups_val['group_master_id'] %>" <%if in_array($groups_val['group_master_id'],$groups_arr)%>selected<%/if%>><%$groups_val['group_name']%></option>
-                          <%/foreach%>
-                       </select>
                     </div>
                    </div>
                     <div class="form-group" >
