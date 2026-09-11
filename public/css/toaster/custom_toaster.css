@@ -1,4 +1,4 @@
-
+﻿
 * {
   margin: 0;
   padding: 0;
@@ -11,8 +11,8 @@
 
 .toast {
   position: fixed;
-  top: 77px;
-  right: 30px;
+  top: 20px;
+  right: 24px;
   border-radius: 12px;
   background: #fff;
   padding: 20px 35px 20px 25px;

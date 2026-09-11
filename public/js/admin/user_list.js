@@ -30,10 +30,19 @@ const user_app = {
                     className: "d-none",
                     title: pdf_title,
                     filename: file_name,
-                    customize: function (doc) {
+                                        customize: function (doc) {
                         doc.pageMargins = [15, 15, 15, 15];
-                        doc.styles.tableHeader.fillColor = '#f8f7fa';
-                        doc.styles.tableHeader.color = '#333333';
+                        if (doc.content[1] && doc.content[1].table && doc.content[1].table.body) {
+                            var colCount = doc.content[1].table.body[0].length;
+                            var widths = [];
+                            for(var j=0; j<colCount; j++) { widths.push('*'); }
+                            doc.content[1].table.widths = widths;
+                            var tableHeader = doc.content[1].table.body[0];
+                            for (var i = 0; i < tableHeader.length; i++) {
+                                tableHeader[i].fillColor = '#f8f7fa';
+                                tableHeader[i].color = '#333333';
+                            }
+                        }
                     },
                 },
             ],
