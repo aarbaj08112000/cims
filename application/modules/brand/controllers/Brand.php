@@ -104,6 +104,22 @@ class Brand extends MY_Controller {
         $this->output->set_content_type('application/json')->set_output(json_encode($ret_arr));
     }
 
+
+	public function export_pdf()
+	{
+		$data['brands'] = $this->Brand_model->get_brands();
+		$data['base_url'] = base_url();
+
+		$html = $this->smarty->loadView('export_brand_pdf.tpl', $data, 'No', 'No', TRUE);
+
+		$this->load->library('Pdf');
+		$pdf = new Pdf();
+		$pdf->loadHtml($html);
+		$pdf->setPaper('A4', 'portrait');
+		$pdf->render();
+		$pdf->stream('Brand_Report_' . date('Y-m-d') . '.pdf', array('Attachment' => 0));
+	}
+
 	public function get_brands_ajax() {
 		$postData = $this->input->post();
 		$data = $this->Brand_model->get_brands_ssp($postData);

@@ -1,4 +1,4 @@
-$(document).ready(function () {
+﻿$(document).ready(function () {
   categoryPage.init();
 
   $(document).on("click", ".delete_data", function () {
@@ -240,3 +240,4 @@ const categoryPage = {
     return flag;
   }
 };
+

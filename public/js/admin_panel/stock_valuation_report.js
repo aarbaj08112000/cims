@@ -43,6 +43,15 @@ const stockValuationReport = {
                         doc.pageMargins = [15, 15, 15, 15];
                         doc.styles.tableHeader.fillColor = '#f8f7fa';
                         doc.styles.tableHeader.color = '#333333';
+                        
+                        // Explicitly apply background color to the header row cells
+                        if (doc.content[1] && doc.content[1].table && doc.content[1].table.body) {
+                            var tableHeader = doc.content[1].table.body[0];
+                            for (var i = 0; i < tableHeader.length; i++) {
+                                tableHeader[i].fillColor = '#f8f7fa';
+                                tableHeader[i].color = '#333333';
+                            }
+                        }
                     }
                 }
             ],

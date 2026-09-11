@@ -304,7 +304,7 @@ const page = {
     });
 
     $('#export-pdf').on('click', function () {
-      table.button('.buttons-pdf').trigger();
+      window.open(base_url + 'product/export_pdf', '_blank');
     });
 
     // Custom Search Integration

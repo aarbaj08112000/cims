@@ -32,22 +32,22 @@ $(document).ready(function() {
                     $(node).attr("title", "Download Pdf");
                 },
                 filename: file_name,
-                customize: function (doc) {
+                                customize: function (doc) {
                     doc.pageMargins = [15, 15, 15, 15];
                     doc.content[0].text = pdf_title;
-                    doc.content[0].color = theme_color;
-                    doc.content[1].table.widths = ["50%", "50%"];
-                    doc.content[1].table.body[0].forEach(function (cell) {
-                        cell.fillColor = theme_color;
-                    });
-                    doc.content[1].table.body.forEach(function (row, index) {
-                        // row.splice(7, 1);
-                        row.forEach(function (cell) {
-                            // Set alignment for each cell
-                            cell.alignment = "center"; // Change to 'left' or 'right' as needed
-                        });
-                    });
-                },
+                    if (doc.content[1] && doc.content[1].table && doc.content[1].table.body) {
+                        var colCount = doc.content[1].table.body[0].length;
+                        var widths = [];
+                        for(var j=0; j<colCount; j++) { widths.push((100/colCount)+'%'); }
+                        doc.content[1].table.widths = widths;
+                        
+                        var tableHeader = doc.content[1].table.body[0];
+                        for (var i = 0; i < tableHeader.length; i++) {
+                            tableHeader[i].fillColor = '#f8f7fa';
+                            tableHeader[i].color = '#333333';
+                        }
+                    }
+                }
             },
         ],
         searching: true,

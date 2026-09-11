@@ -189,7 +189,7 @@ const brandPage = {
         });
 
         $('#export-pdf').on('click', function () {
-            brandTable.button('.buttons-pdf').trigger();
+            window.open(base_url + 'brand/export_pdf', '_blank');
         });
     },
 

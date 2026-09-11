@@ -66,8 +66,8 @@ const salesReport = {
                     },
                     customize: function (doc) {
                         doc.pageMargins = [15, 15, 15, 15];
-                        doc.styles.tableHeader.fillColor = '#f8f7fa';
-                        doc.styles.tableHeader.color = '#333333';
+                        doc.content[0].text = report_pdf_title;
+                        doc.content[1].table.widths = ["20%", "20%", "20%", "20%", "20%"];
                     }
                 }
             ],

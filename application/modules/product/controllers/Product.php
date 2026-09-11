@@ -522,6 +522,22 @@ class Product extends MY_Controller
         echo json_encode($ret_arr);
     }
 
+
+    public function export_pdf()
+    {
+        $data['products'] = $this->Product_model->get_products();
+        $data['base_url'] = base_url();
+
+        $html = $this->smarty->loadView('export_product_pdf.tpl', $data, 'No', 'No', TRUE);
+
+        $this->load->library('Pdf');
+        $pdf = new Pdf();
+        $pdf->loadHtml($html);
+        $pdf->setPaper('A4', 'landscape');
+        $pdf->render();
+        $pdf->stream('Product_Report_' . date('Y-m-d') . '.pdf', array('Attachment' => 0));
+    }
+
     public function product_ssp()
     {
         $draw = intval($this->input->post('draw'));

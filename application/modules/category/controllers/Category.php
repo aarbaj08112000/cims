@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Category extends MY_Controller {
 	public function __construct() {
@@ -114,6 +114,23 @@ class Category extends MY_Controller {
 	
 	
 
+	
+
+	public function export_pdf()
+	{
+		$data['categories'] = $this->Categories_model->get_categories();
+		$data['base_url'] = base_url();
+
+		$html = $this->smarty->loadView('export_category_pdf.tpl', $data, 'No', 'No', TRUE);
+
+		$this->load->library('Pdf');
+		$pdf = new Pdf();
+		$pdf->loadHtml($html);
+		$pdf->setPaper('A4', 'portrait');
+		$pdf->render();
+		$pdf->stream('Category_Report_' . date('Y-m-d') . '.pdf', array('Attachment' => 0));
+	}
+
 	public function get_categories_ajax() {
 		$postData = $this->input->post();
 		$data = $this->Categories_model->get_categories_ssp($postData);
@@ -200,3 +217,4 @@ class Category extends MY_Controller {
 	}
 
 }
+
