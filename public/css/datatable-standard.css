@@ -18,7 +18,10 @@ table.dataTable tbody td.cat-col-num {
     text-align: center !important;
 }
 
-
+.dataTables_wrapper .dataTables_processing {
+    visibility: hidden !important;
+    display: none !important;
+}
 
 /* Specific alignment for Products Table (1: Sr No, 2: Image, 9: Action) */
 #product_list th:nth-child(1),
