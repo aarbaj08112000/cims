@@ -858,3 +858,7 @@ body.grid-layout .cat-dt-footer {
   background: transparent !important;
   border-top-color: transparent !important;
 }
+/* Hide table body rows while DataTables is processing (loader showing) */
+.dataTables_wrapper.processing tbody tr {
+  visibility: hidden !important;
+}

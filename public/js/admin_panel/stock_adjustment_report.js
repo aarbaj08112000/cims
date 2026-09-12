@@ -65,7 +65,25 @@ function initAdjTable() {
                 className: 'd-none',
                 filename: 'Stock_Adjustment_Report',
                 title: 'Stock Adjustment Report',
-                exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7] },
+                exportOptions: {
+                    columns: [1, 2, 3, 4, 5, 6, 7],
+                    format: {
+                        body: function (data, row, column, node) {
+                            // column 6 = "Adjusted By" (7th exported col, 0-based index 6)
+                            if (column === 6) {
+                                var tmp = document.createElement('div');
+                                tmp.innerHTML = data;
+                                // Get all text nodes, filter out single-char initials
+                                var text = (tmp.textContent || tmp.innerText || '').trim();
+                                // The initial circle contains the first letter, followed by the full name
+                                // Split by whitespace and filter out single-char tokens
+                                var parts = text.split(/\s+/).filter(function(t) { return t.length > 1; });
+                                return parts.join(' ') || text;
+                            }
+                            return data.replace ? data.replace(/<[^>]*>?/gm, '').trim() : data;
+                        }
+                    }
+                },
                 customize: function (doc) {
                     doc.pageMargins = [40, 40, 40, 40];
 
