@@ -78,6 +78,7 @@
         <thead>
           <tr>
             <th>Category Name</th>
+            <th>Category Code</th>
             <th>Status</th>
             <th class="text-center">Action</th>
           </tr>

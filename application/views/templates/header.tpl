@@ -127,7 +127,7 @@ div:where(.swal2-icon) .swal2-icon-content {
              </li>
 
              <!-- Master Management -->
-             <li class="menu-item <%if stripos($current_uri, 'category') !== false || stripos($current_uri, 'brand') !== false || stripos($current_uri, 'product') !== false%>active open<%/if%>">
+             <li class="menu-item <%if stripos($current_uri, 'category') !== false || stripos($current_uri, 'brand') !== false || stripos($current_uri, 'attribute') !== false || stripos($current_uri, 'product') !== false%>active open<%/if%>">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                    <i class="menu-icon tf-icons bx bx-data"></i>
                    <div data-i18n="Master Management">Master Management</div>
@@ -143,6 +143,12 @@ div:where(.swal2-icon) .swal2-icon-content {
                       <a href="brand" class="menu-link">
                          <i class="menu-icon tf-icons bx bx-award hide"></i>
                          <div data-i18n="Brand">Brand</div>
+                      </a>
+                   </li>
+                   <li class="menu-item <%if stripos($current_uri, 'attribute') !== false%>active<%/if%>">
+                      <a href="attribute" class="menu-link">
+                         <i class="menu-icon tf-icons bx bx-slider hide"></i>
+                         <div data-i18n="Attribute">Attribute</div>
                       </a>
                    </li>
                    <li class="menu-item <%if stripos($current_uri, 'product') !== false%>active<%/if%>">

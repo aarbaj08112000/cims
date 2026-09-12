@@ -1,8 +1,8 @@
 $(document).ready(function () {
-  categoryPage.init();
+  attributePage.init();
 
   $(document).on("click", ".delete_data", function () {
-    var categoryId = $(this).data("id");
+    var attributeId = $(this).data("id");
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -14,9 +14,9 @@ $(document).ready(function () {
     }).then((result) => {
       if (result.isConfirmed) {
         $.ajax({
-          url: "delete_category",
+          url: "delete_attribute",
           type: "POST",
-          data: { category_id: categoryId },
+          data: { attribute_id: attributeId },
           dataType: "json",
           success: function (response) {
             if (response.success == 1) {
@@ -35,40 +35,34 @@ $(document).ready(function () {
   });
 });
 
-var categoryTable = '';
-var category_file_name = "category_list";
-var category_pdf_title = "Category List";
+var attributeTable = '';
+var attribute_file_name = "attribute_list";
+var attribute_pdf_title = "Attribute List";
 
-// Custom export action to fetch all data before exporting
 function newExportAction(e, dt, button, config) {
   var self = this;
   var oldStart = dt.settings()[0]._iDisplayStart;
   dt.one('preXhr', function (e, s, data) {
-    // Load all data from the server
     data.start = 0;
     data.length = -1;
     dt.one('preDraw', function (e, settings) {
-      // Call the original action function
       if (button[0].className.indexOf('buttons-csv') >= 0) {
         $.fn.dataTable.ext.buttons.csvHtml5.action.call(self, e, dt, button, config);
       } else if (button[0].className.indexOf('buttons-pdf') >= 0) {
         $.fn.dataTable.ext.buttons.pdfHtml5.action.call(self, e, dt, button, config);
       }
       dt.one('preXhr', function (e, s, data) {
-        // Revert settings to what they were before exporting
         settings._iDisplayStart = oldStart;
         data.start = oldStart;
       });
-      // Reload the grid with original page
       setTimeout(dt.ajax.reload, 0);
       return false;
     });
   });
-  // Requery the server with new export settings
   dt.ajax.reload();
 }
 
-const categoryPage = {
+const attributePage = {
   init: function () {
     this.dataTable();
     this.formInitiate();
@@ -76,7 +70,7 @@ const categoryPage = {
   },
 
   dataTable: function () {
-    categoryTable = $("#categoriesTable").DataTable({
+    attributeTable = $("#attributesTable").DataTable({
       processing: true,
       serverSide: true,
       searching: true,
@@ -90,7 +84,7 @@ const categoryPage = {
         {
           extend: 'csv',
           className: 'd-none',
-          filename: category_file_name,
+          filename: attribute_file_name,
           action: newExportAction,
           exportOptions: {
             columns: [0, 1, 2]
@@ -99,8 +93,8 @@ const categoryPage = {
         {
           extend: 'pdf',
           className: 'd-none',
-          filename: category_file_name,
-          title: category_pdf_title,
+          filename: attribute_file_name,
+          title: attribute_pdf_title,
           action: newExportAction,
           exportOptions: {
             columns: [0, 1, 2]
@@ -113,10 +107,8 @@ const categoryPage = {
               doc.content[0].alignment = 'center';
               doc.content[0].margin = [0, 0, 0, 5];
             }
-
             var now = new Date();
             var dateStr = now.getDate() + ' ' + now.toLocaleString('default', { month: 'short' }) + ' ' + now.getFullYear();
-
             doc.content.splice(1, 0, {
               text: 'Generated on: ' + dateStr,
               color: '#888888',
@@ -124,80 +116,48 @@ const categoryPage = {
               alignment: 'center',
               margin: [0, 0, 0, 15]
             });
-
             doc.content.splice(2, 0, {
-              canvas: [
-                {
-                  type: 'line',
-                  x1: 0, y1: 0,
-                  x2: 515, y2: 0,
-                  lineWidth: 2,
-                  lineColor: '#5b5fc7'
-                }
-              ],
+              canvas: [{ type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 2, lineColor: '#5b5fc7' }],
               margin: [0, 0, 0, 20]
             });
-
             if (doc.content[3] && doc.content[3].table && doc.content[3].table.body) {
               var tableBody = doc.content[3].table.body;
-
               var colCount = tableBody[0].length;
               var widths = [];
               for (var j = 0; j < colCount; j++) { widths.push((100 / colCount) + '%'); }
               doc.content[3].table.widths = widths;
-
               var tableHeader = tableBody[0];
               for (var i = 0; i < tableHeader.length; i++) {
                 tableHeader[i].fillColor = '#eef0f2';
                 tableHeader[i].color = '#333333';
                 tableHeader[i].bold = true;
                 tableHeader[i].margin = [5, 5, 5, 5];
-                if (i === tableHeader.length - 1) {
-                  tableHeader[i].alignment = 'center';
-                }
+                if (i === tableHeader.length - 1) { tableHeader[i].alignment = 'center'; }
               }
-
               for (var r = 1; r < tableBody.length; r++) {
                 var row = tableBody[r];
                 var statusColIdx = row.length - 1;
                 if (row[statusColIdx] && row[statusColIdx].text) {
                   var statusText = row[statusColIdx].text.trim();
-                  var bgColor = '#ffffff';
-                  var textColor = '#0f5132';
-
-                  if (statusText.toLowerCase() === 'inactive') {
-                    bgColor = '#ffffff';
-                    textColor = '#842029';
-                  }
-
                   row[statusColIdx] = {
                     text: '   ' + statusText + '   ',
-                    background: bgColor,
-                    color: textColor,
+                    color: statusText.toLowerCase() === 'inactive' ? '#842029' : '#0f5132',
                     bold: true,
                     alignment: 'center',
                     margin: [0, 5, 0, 5]
                   };
                 }
-
                 for (var c = 0; c < row.length; c++) {
-                  if (row[c]) {
-                    row[c].fillColor = '#ffffff';
-                  }
-                  if (c !== statusColIdx && row[c] && row[c].text) {
-                    row[c].margin = [5, 5, 5, 5];
-                  }
+                  if (row[c]) { row[c].fillColor = '#ffffff'; }
+                  if (c !== statusColIdx && row[c] && row[c].text) { row[c].margin = [5, 5, 5, 5]; }
                 }
               }
-
               doc.content[3].layout = {
-                hLineWidth: function (i, node) { return 1; },
-                vLineWidth: function (i, node) { return 1; },
-                hLineColor: function (i, node) { return '#dee2e6'; },
-                vLineColor: function (i, node) { return '#dee2e6'; },
-                fillColor: function (rowIndex, node, columnIndex) {
-                  return '#ffffff';
-                }
+                hLineWidth: function (i) { return 1; },
+                vLineWidth: function (i) { return 1; },
+                hLineColor: function (i) { return '#dee2e6'; },
+                vLineColor: function (i) { return '#dee2e6'; },
+                fillColor: function () { return '#ffffff'; }
               };
             }
           }
@@ -205,19 +165,13 @@ const categoryPage = {
       ],
 
       ajax: {
-        url: base_url + "get_categories_ajax",
+        url: base_url + "get_attributes_ajax",
         type: "POST"
       },
 
       columns: [
-        {
-          data: 0,
-          className: "cat-col-name text-left"
-        },
-        {
-          data: 1,
-          className: "text-left"
-        },
+        { data: 0, className: "cat-col-name" },
+        { data: 1, className: "text-left" },
         {
           data: 2,
           width: "140px",
@@ -243,8 +197,8 @@ const categoryPage = {
 
       language: {
         processing: '<div class="cat-processing"><i class="ti ti-loader-2 cat-spin"></i>&nbsp;Loading...</div>',
-        emptyTable: '<div class="cat-empty">No categories found.</div>',
-        zeroRecords: '<div class="cat-empty">No records match your search.</div>',
+        emptyTable: '<div class="cat-empty text-center">No attributes found.</div>',
+        zeroRecords: '<div class="cat-empty text-center">No records match your search.</div>',
         info: 'Showing _START_ to _END_ of _TOTAL_ entries',
         infoEmpty: 'Showing 0 to 0 of 0 entries',
         infoFiltered: '(filtered from _MAX_ total)',
@@ -263,9 +217,9 @@ const categoryPage = {
       scrollCollapse: true,
       lengthChange: true,
 
-      drawCallback: function (settings) {
+      drawCallback: function () {
         $(".select2").select2();
-        categoryPage.formInitiate();
+        attributePage.formInitiate();
       },
 
       initComplete: function () {
@@ -273,29 +227,27 @@ const categoryPage = {
       }
     });
 
-    // --- Debounced search ---
     var searchTimer;
     $('#search-filter-input').on('keyup input', function () {
       var val = this.value;
       clearTimeout(searchTimer);
       searchTimer = setTimeout(function () {
-        categoryTable.search(val).draw();
+        attributeTable.search(val).draw();
       }, 350);
     });
 
-    // --- Custom Export Buttons ---
     $('#export-csv').on('click', function () {
-      categoryTable.button('.buttons-csv').trigger();
+      attributeTable.button('.buttons-csv').trigger();
     });
 
     $('#export-pdf').on('click', function () {
-      categoryTable.button('.buttons-pdf').trigger();
+      attributeTable.button('.buttons-pdf').trigger();
     });
   },
 
   formInitiate: function () {
     var that = this;
-    $(".addCategories,.update_categories").off('submit').submit(function (e) {
+    $(".addAttributeForm,.update_attributes").off('submit').submit(function (e) {
       e.preventDefault();
       var href = $(this).attr("action");
       var id = $(this).attr("id");

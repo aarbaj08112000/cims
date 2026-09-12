@@ -51,6 +51,12 @@ $route['delete_category'] = 'category/category/delete_category';
 $route['update_categories'] = 'category/category/update_categories';
 $route['add_categories'] = 'category/category/add_categories';
 
+$route['attribute'] = 'attribute/attributes/attribute';
+$route['get_attributes_ajax'] = 'attribute/attributes/get_attributes_ajax';
+$route['delete_attribute'] = 'attribute/attributes/delete_attribute';
+$route['update_attributes'] = 'attribute/attributes/update_attributes';
+$route['add_attribute'] = 'attribute/attributes/add_attribute';
+$route['export_attribute_pdf'] = 'attribute/attributes/export_pdf';
 $route['brand'] = 'brand/brand/brand';
 $route['get_brands_ajax'] = 'brand/brand/get_brands_ajax';
 $route['delete_brand'] = 'brand/brand/delete_brand';
