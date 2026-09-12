@@ -1,7 +1,7 @@
 <div class="container-xxl flex-grow-1 container-p-y">
     <div class="card shadow-sm border-0">
         <div class="card-header bg-primary py-4">
-            <h3 class="mb-0 text-white"><i class="ti ti-books me-2"></i>CIMS System Documentation Guide</h3>
+            <h3 class="mb-0 text-white"><i class="ti ti-books me-2"></i>IMS System Documentation Guide</h3>
             <p class="text-white opacity-75 mb-0 mt-2">Comprehensive operational manual for Cloud Inventory & POS Management</p>
         </div>
         <div class="card-body p-5">
@@ -74,7 +74,7 @@
                     <section id="workflow" class="mb-5 py-3">
                         <h2 class="h4 border-bottom pb-2 mb-4 text-primary">3. Workflow Execution Diagram</h2>
                         <div class="mb-3">
-                            <p><strong>Purpose:</strong> Visual representation of the complete CIMS operational workflow.</p>
+                            <p><strong>Purpose:</strong> Visual representation of the complete IMS operational workflow.</p>
                             <div class="card bg-light border-0">
                                 <div class="card-body text-center p-4">
                                     <div class="mermaid">
@@ -228,7 +228,7 @@
                     </section>
 
                     <div class="border-top pt-4 mt-5">
-                        <p class="text-muted small mb-0">© 2026 CIMS Support. All rights reserved.</p>
+                        <p class="text-muted small mb-0">© 2026 IMS Support. All rights reserved.</p>
                     </div>
 
                 </div>
