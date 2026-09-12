@@ -154,5 +154,11 @@ const salesPage = {
         
         $("#sub_total").val(subTotal.toFixed(2));
         $("#grand_total").val(grandTotal.toFixed(2));
+        if ($("#sub_total_display").length) {
+            $("#sub_total_display").text(subTotal.toFixed(2));
+        }
+        if ($("#grand_total_display").length) {
+            $("#grand_total_display").text(grandTotal.toFixed(2));
+        }
     }
 }

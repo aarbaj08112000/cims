@@ -91,6 +91,9 @@ const purchasePage = {
             grandTotal += parseFloat($(this).val()) || 0;
         });
         $("#grand_total").val(grandTotal.toFixed(2));
+        if ($("#grand_total_display").length) {
+            $("#grand_total_display").text(grandTotal.toFixed(2));
+        }
     },
     formValidate: function (form_id) {
         let flag = false;
