@@ -575,7 +575,7 @@ class Product extends MY_Controller
 
             $desc_html = '<span title="' . htmlspecialchars($row['description']) . '" style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; display:inline-block;">' . htmlspecialchars($row['description']) . '</span>';
 
-            $status_html = ($row['status'] == 'Active') ? '<span class="badge bg-success">Active</span>' : '<span class="badge bg-danger">Inactive</span>';
+            $status_html = ($row['status'] == 'Active') ? '<span class="cat-badge cat-badge-active"><span class="cat-badge-dot"></span>Active</span>' : '<span class="cat-badge cat-badge-inactive"><span class="cat-badge-dot"></span>Inactive</span>';
 
             $action_html = '
             <div class="dropdown text-center">

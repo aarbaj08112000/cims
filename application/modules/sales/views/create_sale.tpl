@@ -155,6 +155,70 @@
     }
 }
 </style>
+<style>
+/* Sales form badge and stat chips - matching create_sales_return style */
+.sale-info-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12.5px;
+    font-weight: 500;
+    background: var(--cat-primary-light);
+    color: var(--cat-primary);
+}
+.sale-info-badge i { font-size: 14px; }
+
+/* Grand total box */
+.grand-total-box {
+    background: linear-gradient(135deg, var(--cat-primary) 0%, var(--cat-primary-hover) 100%);
+    color: #fff;
+    border-radius: var(--cat-radius);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4px;
+}
+.grand-total-box .total-label {
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0.9;
+}
+.grand-total-box .total-value {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+/* Empty state for table */
+.empty-state-row td {
+    padding: 40px 16px !important;
+}
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+.empty-state-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--cat-gray-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: var(--cat-gray-300);
+}
+.empty-state-text {
+    font-size: 14px;
+    color: var(--cat-gray-500);
+    font-weight: 500;
+}
+</style>
 <div class="content-wrapper">
   <div class="container-xxl flex-grow-1 container-p-y">
 
@@ -184,9 +248,10 @@
 
     <form id="salesForm" action="<%$base_url%>save_sale" method="POST">
       <!-- Master Form Card -->
-      <div class="cat-card mb-4">
+      <div class="cat-card mb-4 card p-4">
         <div class="cat-card-header d-flex justify-content-between align-items-center border-bottom pb-3 mb-3">
           <h5 class="mb-0 fw-bold"><i class="ti ti-file-info me-2 text-primary fs-4"></i> Sales Details</h5>
+          <span class="sale-info-badge"><i class="ti ti-shopping-cart"></i> New Sale</span>
         </div>
         <div class="cat-card-body">
           <div class="row g-3">
@@ -221,7 +286,7 @@
 
       <!-- Items Table Card -->
       <div class="cat-table-card mb-4">
-        <div class="card">
+        <div class="card shadow-sm">
           <div class="card-header d-flex justify-content-between align-items-center bg-light">
             <h5 class="mb-0 fw-bold"><i class="ti ti-packages me-2 text-primary fs-4"></i> Ordered Items</h5>
             <button type="button" class="cat-btn cat-btn-primary btn-sm" id="addSaleRow">
@@ -267,32 +332,40 @@
                   </td>
                 </tr>
               </tbody>
-              <tfoot class="bg-light border-top">
-                <tr>
-                  <th colspan="4" class="text-end h6 fw-bold pt-3 pb-2">Subtotal:</th>
-                  <th class="pt-3 pb-2">
-                    <input type="number" name="sub_total" id="sub_total" class="form-control bg-transparent text-end h6 fw-bold mb-0 border-0 shadow-none" readonly value="0">
-                  </th>
-                  <th class="mobile-hide"></th>
-                </tr>
-                <tr>
-                  <th colspan="4" class="text-end h6 fw-bold pt-2 pb-2">Discount Amount:</th>
-                  <th class="pt-2 pb-2">
-                    <input type="number" name="discount" id="discount" class="form-control text-end bg-white" step="0.01" min="0" value="0">
-                  </th>
-                  <th class="mobile-hide"></th>
-                </tr>
-                <tr>
-                  <th colspan="4" class="text-end h5 fw-bold pt-2 pb-3 text-primary">Grand Total:</th>
-                  <th class="pt-2 pb-3">
-                    <input type="number" name="grand_total" id="grand_total" class="form-control bg-transparent text-end text-primary h5 fw-bold mb-0 border-0 shadow-none" readonly value="0">
-                  </th>
-                  <th class="mobile-hide"></th>
-                </tr>
-              </tfoot>
             </table>
+            <!-- Hidden inputs for form submission -->
+            <input type="hidden" name="sub_total" id="sub_total" value="0">
+            <input type="hidden" name="grand_total" id="grand_total" value="0">
           </div>
-          <div class="card-footer text-end mt-3 pb-4">
+
+          <!-- Summary Panel -->
+          <div class="px-4 pb-3 pt-2">
+            <div class="d-flex justify-content-end">
+              <div style="min-width: 340px;">
+                <!-- Subtotal row -->
+                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                  <span class="text-muted fw-500" style="font-size:14px;">Subtotal</span>
+                  <span class="fw-bold" id="sub_total_display" style="font-size:15px;">0.00</span>
+                </div>
+                <!-- Discount row -->
+                <div class="d-flex justify-content-between align-items-center py-2 border-bottom gap-3">
+                  <span class="text-muted fw-500" style="font-size:14px; white-space:nowrap;">Discount Amount</span>
+                  <input type="number" name="discount" id="discount"
+                         class="form-control text-end"
+                         style="max-width:150px; font-size:14px;"
+                         step="0.01" min="0" value="0">
+                </div>
+                <!-- Grand Total gradient box -->
+                <div class="grand-total-box mt-2">
+                  <div class="total-label">
+                    <i class="ti ti-calculator me-2"></i> Grand Total
+                  </div>
+                  <div class="total-value" id="grand_total_display">0.00</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer text-end mt-0 pb-4 border-0">
             <button type="submit" class="cat-btn cat-btn-primary" style="height: 44px; padding: 0 24px; font-size: 15px;">
               <i class="ti ti-check me-2"></i> Generate Sales Bill
             </button>

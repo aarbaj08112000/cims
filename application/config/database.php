@@ -78,7 +78,7 @@ $db['default'] = array(
 	// 'hostname' => 'host.docker.internal', 
 	'hostname' => 'localhost',
 	'username' => 'root',
-	'password' => 'Root@12345678',
+	'password' => 'Root@123',
 	'database' => 'inventory',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
@@ -97,7 +97,7 @@ $db['default'] = array(
 	'port' => 3307
 );
 
-if(isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'inventory.codecrafterinfotech.in') !== false){
+if (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'inventory.codecrafterinfotech.in') !== false) {
 	$db['default']['hostname'] = 'localhost'; // Hostinger requires 'localhost' for UNIX socket
 	$db['default']['username'] = 'u875583157_inventory';
 	$db['default']['password'] = 'Inventory@#2026';

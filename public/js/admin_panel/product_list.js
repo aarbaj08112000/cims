@@ -3,9 +3,12 @@ $(document).ready(function () {
 });
 var table = '';
 var file_name = "product_list";
+
+var pdf_title = "Product List";
 var pdf_title = "product_list";
 let currentBluetoothDevice = null;
 let currentBluetoothCharacteristic = null;
+
 const page = {
   init: function () {
     this.dataTable();
@@ -369,7 +372,7 @@ const page = {
           className: "d-none",
           filename: file_name,
           exportOptions: {
-            columns: [1, 2, 3, 4, 5, 6] // Export barcode, product name, description, price, stock, status
+            columns: [1, 2, 3, 4, 5, 6, 7, 8] // Export barcode, product name, description, price, stock, status
           }
         },
         {
@@ -378,12 +381,123 @@ const page = {
           title: pdf_title,
           filename: file_name,
           exportOptions: {
-            columns: [1, 2, 3, 4, 5, 6]
+            columns: [1, 2, 3, 4, 5, 6, 7, 8],
+            format: {
+              body: function (data, row, column, node) {
+                if (column === 0) { // Barcode / QR Code
+                  var smallMatch = data.match(/<small[^>]*>(.*?)<\/small>/i);
+                  if (smallMatch && smallMatch[1]) {
+                    return smallMatch[1].trim();
+                  }
+                  return data.replace(/<[^>]*>?/gm, '').replace('-', '').trim();
+                }
+                if (column === 7) { // Status
+                  var tmp = document.createElement('div');
+                  tmp.innerHTML = data;
+                  return (tmp.textContent || tmp.innerText || '').trim();
+                }
+                var tmp2 = document.createElement('div');
+                tmp2.innerHTML = data;
+                return (tmp2.textContent || tmp2.innerText || '').trim();
+              }
+            }
           },
           customize: function (doc) {
-            doc.pageMargins = [15, 15, 15, 15];
-            doc.styles.tableHeader.fillColor = '#f8f7fa';
-            doc.styles.tableHeader.color = '#333333';
+            doc.pageMargins = [40, 40, 40, 40];
+
+            if (doc.content[0]) {
+              doc.content[0].text = pdf_title.toUpperCase();
+              doc.content[0].color = '#5b5fc7';
+              doc.content[0].fontSize = 20;
+              doc.content[0].bold = true;
+              doc.content[0].alignment = 'center';
+              doc.content[0].margin = [0, 0, 0, 5];
+            }
+
+            var now = new Date();
+            var dateStr = now.getDate() + ' ' + now.toLocaleString('default', { month: 'short' }) + ' ' + now.getFullYear();
+
+            doc.content.splice(1, 0, {
+              text: 'Generated on: ' + dateStr,
+              color: '#888888',
+              fontSize: 10,
+              alignment: 'center',
+              margin: [0, 0, 0, 15]
+            });
+
+            doc.content.splice(2, 0, {
+              canvas: [
+                {
+                  type: 'line',
+                  x1: 0, y1: 0,
+                  x2: 515, y2: 0,
+                  lineWidth: 2,
+                  lineColor: '#5b5fc7'
+                }
+              ],
+              margin: [0, 0, 0, 20]
+            });
+
+            if (doc.content[3] && doc.content[3].table && doc.content[3].table.body) {
+              var tableBody = doc.content[3].table.body;
+
+              var colCount = tableBody[0].length;
+              doc.content[3].table.widths = ['12%', '18%', '18%', '10%', '10%', '8%', '10%', '14%'];
+
+              var tableHeader = tableBody[0];
+              for (var i = 0; i < tableHeader.length; i++) {
+                tableHeader[i].fillColor = '#eef0f2';
+                tableHeader[i].color = '#333333';
+                tableHeader[i].bold = true;
+                tableHeader[i].margin = [5, 5, 5, 5];
+                if (i === tableHeader.length - 1) {
+                  tableHeader[i].alignment = 'center';
+                }
+              }
+
+              for (var r = 1; r < tableBody.length; r++) {
+                var row = tableBody[r];
+                var statusColIdx = row.length - 1;
+                if (row[statusColIdx] && row[statusColIdx].text) {
+                  var statusText = row[statusColIdx].text.trim();
+                  var bgColor = '#ffffff';
+                  var textColor = '#0f5132';
+
+                  if (statusText.toLowerCase() === 'inactive') {
+                    bgColor = '#ffffff';
+                    textColor = '#842029';
+                  }
+
+                  row[statusColIdx] = {
+                    text: '   ' + statusText + '   ',
+                    background: bgColor,
+                    color: textColor,
+                    bold: true,
+                    alignment: 'center',
+                    margin: [0, 5, 0, 5]
+                  };
+                }
+
+                for (var c = 0; c < row.length; c++) {
+                  if (row[c]) {
+                    row[c].fillColor = '#ffffff';
+                  }
+                  if (c !== statusColIdx && row[c] && row[c].text) {
+                    row[c].margin = [5, 5, 5, 5];
+                  }
+                }
+              }
+
+              doc.content[3].layout = {
+                hLineWidth: function (i, node) { return 1; },
+                vLineWidth: function (i, node) { return 1; },
+                hLineColor: function (i, node) { return '#dee2e6'; },
+                vLineColor: function (i, node) { return '#dee2e6'; },
+                fillColor: function (rowIndex, node, columnIndex) {
+                  return '#ffffff';
+                }
+              };
+            }
           }
         }
       ],
@@ -429,7 +543,7 @@ const page = {
     });
 
     $('#export-pdf').on('click', function () {
-      window.open(base_url + 'product/export_pdf', '_blank');
+      table.button('.buttons-pdf').trigger();
     });
 
     // Custom Search Integration

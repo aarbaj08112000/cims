@@ -26,7 +26,7 @@
             <i class="ti ti-plus"></i> Add User
          </button>
          <div class="dropdown grid-drop-down">
-             <button class="btn btn-secondary top-btn-row btn-seconday " type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" title="Export">
+             <button class="cat-btn cat-btn-primary" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" title="Export">
                <i class=" la-list-ul ti ti-arrow-down-from-arc" ></i>
              </button>
              <ul class="dropdown-menu p-0 mt-1 export-drop-down" aria-labelledby="dropdownMenuButton1" >
@@ -35,7 +35,7 @@
              </ul>
          </div>
          <div class="dropdown grid-drop-down">
-             <button class="btn btn-secondary top-btn-row btn-seconday " type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+             <button class="cat-btn cat-btn-primary" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
                <i class=" la-list-ul ti ti-list-details" ></i>
              </button>
              <ul class="dropdown-menu p-0 mt-1 toggle-grid-btn" aria-labelledby="dropdownMenuButton2" >

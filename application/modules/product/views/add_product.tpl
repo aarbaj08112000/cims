@@ -167,10 +167,21 @@
               <textarea name="description" class="form-control required-input" rows="4" placeholder="Enter Product Description"><%if isset($products[0].description)%><%$products[0].description %><%/if %></textarea>
             </div>
 
-            <div class="mb-3 col-md-6 col-12">
-              <label class="form-label">Product Image <span class="text-danger">*</span></label>
-              <input type="file" name="image" class="form-control required-input" >
-               <input type="hidden" class="form-control required-input" id="product_image" name="product_image" value="<%if isset($products) %><%$products[0].image%><%/if%>">
+                    <div class="mb-3 col-md-6 col-12">
+              <label class="form-label">Product Image <%if !isset($products)%><span class="text-danger">*</span><%/if%></label>
+             
+              <input type="file" name="image" id="imageFileInput" class="form-control <%if !isset($products)%>required-input<%/if%>" accept="image/*">
+              <%if isset($products)%><small class="text-muted"><i class="ti ti-info-circle"></i> Leave empty to keep current image</small><%/if%>
+               <%if isset($products) && $products[0].image != ""%>
+              <div id="imagePreview" class="mb-2">
+                <img src="<%$base_url%>public/uploads/product/product_image/<%$products[0].product_id%>/<%$products[0].image%>"
+                     onerror="this.src='<%$base_url%>public/assets/images/no_image.jpg';"
+                     alt="Current Product Image"
+                     style="max-height:150px; max-width:200px; object-fit:contain; border-radius:8px; border:1px solid #e2e6ef; padding:4px;">
+                <div class="text-muted mt-1" style="font-size:0.78rem;"><i class="ti ti-photo"></i> Current image</div>
+              </div>
+              <%/if%>
+              <input type="hidden" class="form-control required-input" id="product_image" name="product_image" value="<%if isset($products) %><%$products[0].image%><%/if%>">
             </div>
 
             <div class="mb-3 col-12">
