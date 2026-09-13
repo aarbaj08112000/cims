@@ -16,7 +16,8 @@
             <thead>
                 <tr>
                     <th width="10%">#</th>
-                    <th width="70%">Category Name</th>
+                    <th width="50%">Category Name</th>
+                    <th width="20%">Category Code</th>
                     <th width="20%" class="text-center">Status</th>
                 </tr>
             </thead>
@@ -26,6 +27,7 @@
                 <tr>
                     <td><%++%></td>
                     <td><%.category_name%></td>
+                    <td><%.category_code|default:"-"%></td>
                     <td class="text-center">
                         <%if .status == 'Active'%>
                             <span class="badge badge-success">Active</span>

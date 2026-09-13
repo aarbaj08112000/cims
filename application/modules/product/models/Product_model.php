@@ -146,4 +146,48 @@ class Product_model extends CI_Model {
 
         return $this->db->trans_status(); 
     }
+
+    // --- Product Attributes ---
+    public function save_product_attributes($product_id, $attrs) {
+        if (!empty($attrs)) {
+            $this->db->insert_batch('product_attributes', $attrs);
+        }
+    }
+
+    public function get_all_attributes() {
+        $this->db->where('status', 'Active');
+        $this->db->where('is_delete', 0);
+        $this->db->order_by('attribute_name', 'ASC');
+        return $this->db->get('attributes')->result_array();
+    }
+
+    public function get_product_attributes($product_id) {
+        $this->db->where('product_id', $product_id);
+        $this->db->order_by('sort_order', 'ASC');
+        return $this->db->get('product_attributes')->result_array();
+    }
+
+    public function delete_product_attributes($product_id) {
+        $this->db->where('product_id', $product_id);
+        return $this->db->delete('product_attributes');
+    }
+
+    // --- Product Images ---
+    public function save_product_images($product_id, $images) {
+        if (!empty($images)) {
+            $this->db->insert_batch('product_images', $images);
+        }
+    }
+
+    public function get_product_images($product_id) {
+        $this->db->where('product_id', $product_id);
+        $this->db->order_by('sort_order', 'ASC');
+        return $this->db->get('product_images')->result_array();
+    }
+
+    public function delete_product_images($product_id) {
+        $this->db->where('product_id', $product_id);
+        return $this->db->delete('product_images');
+    }
 }
+

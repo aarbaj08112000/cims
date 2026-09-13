@@ -90,7 +90,7 @@ $(document).ready(function () {
           if (success == 1) {
             toaster("success",msg);
             setTimeout(function(){
-              window.location.href = "product";
+              window.location.href = base_url + "product_details/" + response.product_id;
             },1000);
 
           } else {
@@ -127,3 +127,152 @@ $(document).ready(function () {
     calculateSellingPrice();
   });
 });
+
+    // Handle Dynamic Attributes
+    function updateAttributeDropdowns() {
+        // Collect all currently selected values
+        var selectedVals = [];
+        $(".attr-name-select").each(function() {
+            if ($(this).val()) {
+                selectedVals.push($(this).val());
+            }
+        });
+
+        // Loop through all selects
+        $(".attr-name-select").each(function() {
+            var currentVal = $(this).val();
+            // Loop through all options in this select
+            $(this).find("option").each(function() {
+                var optVal = $(this).val();
+                if (optVal) {
+                    // Hide if it's selected in another row, show otherwise
+                    if (selectedVals.includes(optVal) && optVal !== currentVal) {
+                        $(this).hide();
+                    } else {
+                        $(this).show();
+                    }
+                }
+            });
+        });
+    }
+
+    $(document).on("change", ".attr-name-select", function() {
+        updateAttributeDropdowns();
+    });
+
+    $("#add_attribute_btn").on("click", function() {
+        var optionsHtml = '<option value="">Select Attribute</option>';
+        if (typeof master_attributes !== 'undefined') {
+            master_attributes.forEach(function(ma) {
+                optionsHtml += `<option value="${ma.attribute_name}">${ma.attribute_name}</option>`;
+            });
+        }
+
+        var row = `
+        <div class="attribute-row d-flex align-items-center gap-3 mb-3 p-3 rounded-3" style="background:#f8f8ff; border:1px solid #ebe9fe;">
+            <div class="flex-fill">
+                <select name="attr_name[]" class="form-select attr-name-select" style="border-color:#ddd;">
+                    ${optionsHtml}
+                </select>
+            </div>
+            <div class="flex-fill">
+                <input type="text" name="attr_value[]" class="form-control" placeholder="e.g. 16GB, 256GB" style="border-color:#ddd;">
+            </div>
+            <div class="flex-shrink-0">
+                <button type="button" class="remove-attr-btn d-flex align-items-center justify-content-center" title="Remove row"
+                    style="width:34px;height:34px;border-radius:8px;border:1px solid #ffcdd2;background:#fff5f5;color:#ea5455;cursor:pointer;transition:all .2s;">
+                    <i class="ti ti-trash" style="font-size:16px;"></i>
+                </button>
+            </div>
+        </div>`;
+        $("#attributes_container").append(row);
+        updateAttributeDropdowns();
+    });
+
+    $(document).on("click", ".remove-attr-btn", function() {
+        $(this).closest(".attribute-row").remove();
+        updateAttributeDropdowns();
+    });
+
+    // Run on init
+    updateAttributeDropdowns();
+
+    // ─── Multi-Image Upload & Preview ───────────────────────────────────────────
+    var dt = new DataTransfer();
+
+    function updatePrimaryBadges() {
+        var container = $("#multiImagePreviewContainer");
+        container.find(".primary-badge").addClass("d-none");
+        container.find(".img-preview-card").first().find(".primary-badge").removeClass("d-none");
+        // Give first card the primary border via class
+        container.find(".img-preview-card").attr("data-is-primary", "0");
+        container.find(".img-preview-card").first().attr("data-is-primary", "1");
+    }
+
+    $("#multiImageInput").on("change", function(e) {
+        var files = e.target.files;
+        var container = $("#multiImagePreviewContainer");
+
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            if (!file.type.match("image.*")) continue;
+
+            dt.items.add(file);
+
+            (function(fileIndex, theFile) {
+                var reader = new FileReader();
+                reader.onload = function(ev) {
+                    var card = $(`
+                    <div class="img-preview-card new-image-preview" data-index="${fileIndex}" data-is-primary="0">
+                        <img src="${ev.target.result}" class="img-thumb" title="${escape(theFile.name)}">
+                        <span class="primary-badge d-none">&#9733; Primary</span>
+                        <button type="button" class="img-remove-btn remove-new-btn" title="Remove">&times;</button>
+                    </div>`);
+                    container.append(card);
+                    updatePrimaryBadges();
+                };
+                reader.readAsDataURL(theFile);
+            })(dt.items.length - 1, file);
+        }
+        // Sync file input
+        e.target.files = dt.files;
+    });
+
+    // Remove new image
+    $(document).on("click", ".remove-new-btn", function() {
+        var card = $(this).closest(".new-image-preview");
+        var index = parseInt(card.data("index"));
+
+        var newDt = new DataTransfer();
+        for (var i = 0; i < dt.files.length; i++) {
+            if (i !== index) newDt.items.add(dt.files[i]);
+        }
+        dt = newDt;
+        $("#multiImageInput")[0].files = dt.files;
+
+        card.nextAll(".new-image-preview").each(function() {
+            $(this).data("index", parseInt($(this).data("index")) - 1);
+        });
+
+        card.remove();
+        updatePrimaryBadges();
+    });
+
+    // Remove existing image
+    $(document).on("click", ".remove-existing-btn", function() {
+        var card = $(this).closest(".existing-image-preview");
+        var isPrimary = card.data("is-primary");
+        var imageName = card.data("image-name") || "";
+
+        var hidden = `<input type="hidden" name="removed_existing_images[]" value="${imageName}">`;
+        if (isPrimary == "1") {
+            hidden += `<input type="hidden" name="removed_primary_image" value="1">`;
+        }
+        $("#removedExistingImagesContainer").append(hidden);
+
+        card.remove();
+        updatePrimaryBadges();
+    });
+
+    // Init badges on page load (edit mode)
+    updatePrimaryBadges();

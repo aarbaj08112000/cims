@@ -66,7 +66,11 @@ const purchasePage = {
                     if (response.success == 1) {
                         toaster("success", response.msg);
                         setTimeout(function () {
-                            window.location.reload();
+                            if (response.purchase_id) {
+                                window.location.href = base_url + 'purchase_details/' + response.purchase_id;
+                            } else {
+                                window.location.reload();
+                            }
                         }, 1500);
                     } else {
                         toaster("error", response.msg);

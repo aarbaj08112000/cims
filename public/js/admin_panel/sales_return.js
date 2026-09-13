@@ -62,7 +62,7 @@ const salesReturnPage = {
                                 let customer = response.sale.customer_mobile || response.sale.customer_phone_number || 'Walk-in';
                                 $("#billCustomer").text(customer);
                                 $("#billDate").text(response.sale.sales_date);
-                                $("#billAmount").text("₹" + parseFloat(response.sale.grand_total).toFixed(2));
+                                $("#billAmount").text("₹" + parseFloat(response.sale.payable_amount || 0).toFixed(2));
                                 $("#billItems").text(response.items.length);
                                 $("#billInfoPanel").fadeIn(300);
                             }
@@ -91,6 +91,11 @@ const salesReturnPage = {
                 $("#returnItemsCard").hide();
                 $("#billInfoPanel").hide();
             }
+        });
+
+        $(document).on("click", ".remove-return-row", function () {
+            $(this).closest("tr").remove();
+            that.calculateGrandTotal();
         });
 
         // Quantity Change
@@ -153,7 +158,11 @@ const salesReturnPage = {
                     if (response.success == 1) {
                         toaster("success", response.msg);
                         setTimeout(function () {
-                            window.location.href = base_url + "sales_return_list";
+                            if (response.return_id) {
+                                window.location.href = base_url + "sales_return_details/" + response.return_id;
+                            } else {
+                                window.location.href = base_url + "sales_return_list";
+                            }
                         }, 1500);
                     } else {
                         toaster("error", response.msg);
@@ -167,7 +176,9 @@ const salesReturnPage = {
         items.forEach(function (item) {
             html += `<tr>
                 <td>
-                    <strong>${item.product_name}</strong><br>
+                    <strong>${item.product_name}</strong>
+                    ${item.brand_name ? `<span style="color: grey; font-size: 0.85em;"> - ${item.brand_name}</span>` : ''}
+                    <br>
                     <small class="text-muted">${item.product_code}</small>
                     <input type="hidden" name="product_id[]" value="${item.product_id}">
                 </td>
@@ -175,7 +186,7 @@ const salesReturnPage = {
                 <td class="text-center">${item.qty - item.available_qty}</td>
                 <td class="text-center available-qty fw-bold text-primary">${item.available_qty}</td>
                 <td>
-                    <input type="number" name="return_qty[]" class="form-control return-qty text-center" min="0" max="${item.available_qty}" value="0">
+                    <input type="text" name="return_qty[]" class="form-control return-qty onlyNumericInput text-center" value="0">
                 </td>
                 <td class="text-end">
                     ₹${parseFloat(item.sale_price).toFixed(2)}
@@ -183,6 +194,9 @@ const salesReturnPage = {
                 </td>
                 <td class="text-end">
                     <input type="text" name="total[]" class="form-control row-total text-end bg-light fw-bold" value="0.00" readonly>
+                </td>
+                <td class="text-center">
+                    <button type="button" class="text-danger bg-transparent border-0 fs-4 remove-return-row" title="Remove"><i class="ti ti-trash"></i></button>
                 </td>
             </tr>`;
         });
@@ -219,7 +233,7 @@ const salesReturnPage = {
             if (val > 0) returningCount++;
         });
         
-        $("#grand_total_display").text("₹" + grandTotal.toFixed(2));
+        $("#grand_total_display").text(grandTotal.toFixed(2));
         $("#total_return_amount").val(grandTotal.toFixed(2));
         $("#returningCount").text(returningCount);
     },

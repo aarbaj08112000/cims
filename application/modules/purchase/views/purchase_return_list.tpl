@@ -60,7 +60,7 @@
               <td><%$val['added_date']|date_format:'%d-%m-%Y %H:%M' %></td>
               <td class="text-center cat-col-action">
                 <div class="d-flex align-items-center justify-content-center">
-                  <a href="javascript:void(0)" class="view-return-details" data-id="<%$val['return_id']%>" title="View Details">
+                  <a href="<%$base_url%>purchase_return_details/<%$val['return_id']%>" title="View Details">
                     <i class="ti ti-eye text-primary"></i>
                   </a>
                 </div>

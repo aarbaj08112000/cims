@@ -57,7 +57,7 @@
               <td class="fw-bold text-danger"><%$settings.company_currency.value|default:'₹'%><%$return.total_return_amount|number_format:2%></td>
               <td class="text-center cat-col-action">
                 <div class="d-flex align-items-center justify-content-center">
-                  <a href="javascript:void(0)" class="view-return-details" data-id="<%$return.return_id%>" title="View Details">
+                  <a href="<%$base_url%>sales_return_details/<%$return.return_id%>" title="View Details">
                     <i class="ti ti-eye text-primary"></i>
                   </a>
                 </div>

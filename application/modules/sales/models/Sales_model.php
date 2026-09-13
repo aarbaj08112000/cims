@@ -45,7 +45,7 @@ class Sales_model extends CI_Model
     {
         $this->db->select('s.*, COALESCE(NULLIF(s.customer_name,""), c.full_name) as customer_name', FALSE);
         $this->db->from('sales_master s');
-        $this->db->join('customer_master c', 's.customer_phone_number COLLATE utf8mb4_general_ci = c.mobile_number COLLATE utf8mb4_general_ci', 'left', FALSE);
+        $this->db->join('customer_master c', 's.customer_phone_number = c.mobile_number', 'left', FALSE);
         $this->db->where('s.sales_id', $sales_id);
         $query = $this->db->get();
         return $query->row_array();
@@ -53,9 +53,10 @@ class Sales_model extends CI_Model
 
     public function get_sale_items($sales_id)
     {
-        $this->db->select('sd.*, p.name as product_name, p.product_code');
+        $this->db->select('sd.*, p.name as product_name, p.product_code, b.brand_name');
         $this->db->from('sales_details sd');
         $this->db->join('product_master p', 'sd.product_id = p.product_id', 'left');
+        $this->db->join('brands b', 'p.brand_id = b.brand_id', 'left');
         $this->db->where('sd.sales_id', $sales_id);
         $query = $this->db->get();
         return $query->result_array();

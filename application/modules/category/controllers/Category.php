@@ -1,45 +1,50 @@
 ﻿<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class Category extends MY_Controller {
-	public function __construct() {
-        parent::__construct();
-        $this->load->model('Categories_model');
-    }
-	public function index() {
+class Category extends MY_Controller
+{
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->model('Categories_model');
+	}
+	public function index()
+	{
 		$data['base_url'] = base_url();
-		$this->smarty->loadView('login.tpl',$data,'No','No');
+		$this->smarty->loadView('login.tpl', $data, 'No', 'No');
 	}
 	/* add update user module */
-	
+
 	public function category()
-	{ 
+	{
 		$data['categories'] = $this->Categories_model->get_categories();
 		$data['base_url'] = base_url();
 		// pr($data);
-		$this->smarty->loadView('categories.tpl', $data,'Yes','Yes');
+		$this->smarty->loadView('categories.tpl', $data, 'Yes', 'Yes');
 	}
-	
+
 
 	public function add_categories()
 	{
+		$category_count = count($this->Categories_model->get_categories());
 		$ret_arr = [];
 		$msg = '';
 		$success = 1;
 		$data = array(
-			'category_name'       => $this->input->post("category_name"),
-			'parent_category_id'  => $this->input->post("parent_category_id"),
-			'added_date'          => date("Y-m-d H:i:s"),
-			'added_by'            => $this->session->userdata('user_id'),
+			'category_name' => $this->input->post("category_name"),
+			'category_code' => 'CAT-' . date("Ymd") . $category_count + 1,
+			'parent_category_id' => $this->input->post("parent_category_id"),
+			'added_date' => date("Y-m-d H:i:s"),
+			'added_by' => $this->session->userdata('user_id'),
 		);
 		$insert_query = $this->Categories_model->add_categories($data);
 		// pr($insert_query);
 		// pr($this->db->last_query());
 		if ($insert_query > 0) {
 			$msg = 'Category added successfully.';
-		} else if($insert_query == -1){
+		} else if ($insert_query == -1) {
 			$msg = 'Category already exit.';
 			$success = 0;
-		}else {
+		} else {
 			$msg = 'Error occurred while adding the category. Please try again.';
 			$success = 0;
 		}
@@ -55,14 +60,15 @@ class Category extends MY_Controller {
 		$success = 1;
 		$category_id = $this->input->post("category_id");
 		$data = array(
-			'category_name'       => $this->input->post("category_name"),
-			'parent_category_id'  => $this->input->post("parent_category_id"),
-			'updated_date'          => date("Y-m-d H:i:s"),
-			'updated_by'            => $this->session->userdata('user_id'),
-			'status'            => $this->input->post("status"),
+			'category_name' => $this->input->post("category_name"),
+			'category_code' => 'CAT-' . mt_rand(1000, 9999),
+			'parent_category_id' => $this->input->post("parent_category_id"),
+			'updated_date' => date("Y-m-d H:i:s"),
+			'updated_by' => $this->session->userdata('user_id'),
+			'status' => $this->input->post("status"),
 		);
 
-		$update_query = $this->Categories_model->update_categories($data,$category_id);
+		$update_query = $this->Categories_model->update_categories($data, $category_id);
 		// pr($this->db->last_query());
 		if ($update_query) {
 			$msg = 'Category update successfully.';
@@ -75,46 +81,46 @@ class Category extends MY_Controller {
 		$this->output->set_content_type('application/json')->set_output(json_encode($ret_arr));
 	}
 	public function delete_category()
-{
-    $ret_arr = [];
-    $msg = '';
-    $success = 1;
+	{
+		$ret_arr = [];
+		$msg = '';
+		$success = 1;
 
-    $category_id = $this->input->post("category_id");
+		$category_id = $this->input->post("category_id");
 
-    if (!$category_id) {
-        $ret_arr['msg'] = 'Category ID is missing.';
-        $ret_arr['success'] = 0;
-        echo json_encode($ret_arr);
-        return;
-    }
+		if (!$category_id) {
+			$ret_arr['msg'] = 'Category ID is missing.';
+			$ret_arr['success'] = 0;
+			echo json_encode($ret_arr);
+			return;
+		}
 
-    $data = array(
-        'is_delete'    => 1,
-        'updated_date' => date("Y-m-d H:i:s"),
-        'updated_by'   => $this->session->userdata('user_id'),
-    );
+		$data = array(
+			'is_delete' => 1,
+			'updated_date' => date("Y-m-d H:i:s"),
+			'updated_by' => $this->session->userdata('user_id'),
+		);
 
-    
-    $update_query = $this->Categories_model->update_categories($data, $category_id);
 
-    if ($update_query) {
-        $msg = 'Category deleted successfully.';
-    } else {
-        $msg = 'No change made or error occurred. Please try again.';
-        $success = 0;
-    }
+		$update_query = $this->Categories_model->update_categories($data, $category_id);
 
-    $ret_arr['msg'] = $msg;
-    $ret_arr['success'] = $success;
+		if ($update_query) {
+			$msg = 'Category deleted successfully.';
+		} else {
+			$msg = 'No change made or error occurred. Please try again.';
+			$success = 0;
+		}
 
-    $this->output->set_content_type('application/json')->set_output(json_encode($ret_arr));
-}
+		$ret_arr['msg'] = $msg;
+		$ret_arr['success'] = $success;
 
-	
-	
+		$this->output->set_content_type('application/json')->set_output(json_encode($ret_arr));
+	}
 
-	
+
+
+
+
 
 	public function export_pdf()
 	{
@@ -131,7 +137,8 @@ class Category extends MY_Controller {
 		$pdf->stream('Category_Report_' . date('Y-m-d') . '.pdf', array('Attachment' => 0));
 	}
 
-	public function get_categories_ajax() {
+	public function get_categories_ajax()
+	{
 		$postData = $this->input->post();
 		$data = $this->Categories_model->get_categories_ssp($postData);
 		$all_categories = $this->Categories_model->get_categories(); // For the modal dropdown
@@ -150,7 +157,7 @@ class Category extends MY_Controller {
                               <i class="ti ti-trash"></i>
                             </span>';
 
-            $modal_html = '<div class="modal fade" id="updateCategoryModal' . $i . '" tabindex="-1" role="dialog" aria-labelledby="updateCategoryModalLabel' . $i . '" aria-hidden="true">
+			$modal_html = '<div class="modal fade" id="updateCategoryModal' . $i . '" tabindex="-1" role="dialog" aria-labelledby="updateCategoryModalLabel' . $i . '" aria-hidden="true">
                       <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                           <div class="modal-header">
@@ -169,13 +176,13 @@ class Category extends MY_Controller {
                                 <label for="parent_category_id_' . $i . '">Parent Category</label>
                                 <select name="parent_category_id" class="form-control select2" id="parent_category_id_' . $i . '">
                                   <option value="0" ' . ($val['parent_category_id'] == 0 ? 'selected' : '') . '>Select Parent Category</option>';
-            
-            foreach ($all_categories as $p_val) {
-            	$selected = ($p_val['category_id'] == $val['parent_category_id']) ? 'selected' : '';
-            	$modal_html .= '<option value="' . $p_val['category_id'] . '" ' . $selected . '>' . htmlspecialchars($p_val['category_name']) . '</option>';
-            }
 
-            $modal_html .= '      </select>
+			foreach ($all_categories as $p_val) {
+				$selected = ($p_val['category_id'] == $val['parent_category_id']) ? 'selected' : '';
+				$modal_html .= '<option value="' . $p_val['category_id'] . '" ' . $selected . '>' . htmlspecialchars($p_val['category_name']) . '</option>';
+			}
+
+			$modal_html .= '      </select>
                               </div>
 
                               <div class="form-group mb-3">
@@ -195,10 +202,11 @@ class Category extends MY_Controller {
                       </div>
                     </div>';
 
-            $action_html .= $modal_html;
+			$action_html .= $modal_html;
 
 			$row = array();
 			$row[] = htmlspecialchars($val['category_name']);
+			$row[] = htmlspecialchars($val['category_code'] ?? '-');
 			$row[] = $status_html;
 			$row[] = $action_html;
 

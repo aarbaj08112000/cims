@@ -48,9 +48,10 @@ class Purchase_model extends CI_Model {
     }
 
     public function get_purchase_items($purchase_id) {
-        $this->db->select('pd.*, pm.name as product_name, pm.product_code');
+        $this->db->select('pd.*, pm.name as product_name, pm.product_code, b.brand_name');
         $this->db->from('purchase_details pd');
         $this->db->join('product_master pm', 'pd.product_id = pm.product_id', 'left');
+        $this->db->join('brands b', 'pm.brand_id = b.brand_id', 'left');
         $this->db->where('pd.purchase_id', $purchase_id);
         $query = $this->db->get();
         return $query->result_array();

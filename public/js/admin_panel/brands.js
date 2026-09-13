@@ -93,7 +93,7 @@ const brandPage = {
                     filename: brand_file_name,
                     action: newExportAction,
                     exportOptions: {
-                        columns: [0, 1] // Export Brand Name, Status
+                        columns: [0, 1, 2] // Export Brand Name, Code, Status
                     }
                 },
                 {
@@ -103,7 +103,7 @@ const brandPage = {
                     title: brand_pdf_title,
                     action: newExportAction,
                     exportOptions: {
-                        columns: [0, 1] // Export Brand Name, Status
+                        columns: [0, 1, 2] // Export Brand Name, Code, Status
                     },
                     customize: function (doc) {
                         doc.pageMargins = [40, 40, 40, 40];
@@ -219,6 +219,10 @@ const brandPage = {
                 },
                 {
                     data: 1,
+                    className: "text-left"
+                },
+                {
+                    data: 2,
                     width: "140px",
                     className: "cat-col-status",
                     render: function (data) {
@@ -232,7 +236,7 @@ const brandPage = {
                     }
                 },
                 {
-                    data: 2,
+                    data: 3,
                     width: "160px",
                     className: "text-center cat-col-action",
                     orderable: false,

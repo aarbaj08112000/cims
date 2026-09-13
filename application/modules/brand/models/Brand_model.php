@@ -27,7 +27,7 @@ class Brand_model extends CI_Model {
     }
 
     public function get_brands() {
-        $this->db->select('b.brand_id, b.brand_name, b.status'); 
+        $this->db->select('b.brand_id, b.brand_name, b.brand_code, b.status'); 
         $this->db->from('brands as b');
         $this->db->where("b.is_delete", 0);
         
@@ -63,10 +63,10 @@ class Brand_model extends CI_Model {
         // 1 = brand_name
         // 2 = status
         // 3 = action   (orderable:false, searchable:false)
-        $column_search = array(null, 'b.brand_name', 'b.status', null);
-        $column_order  = array(null, 'b.brand_name', 'b.status', null);
+        $column_search = array(null, 'b.brand_name', 'b.brand_code', 'b.status', null);
+        $column_order  = array(null, 'b.brand_name', 'b.brand_code', 'b.status', null);
 
-        $this->db->select('b.brand_id, b.brand_name, b.status');
+        $this->db->select('b.brand_id, b.brand_name, b.brand_code, b.status');
         $this->db->from('brands b');
         $this->db->where("b.is_delete", 0); 
 

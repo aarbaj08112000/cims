@@ -95,6 +95,27 @@ class Sales extends MY_Controller
         echo json_encode($ret_arr);
     }
 
+
+    public function sales_details($sales_id)
+    {
+        $data = $this->_build_invoice_data($sales_id);
+
+        if (empty($data['sale'])) {
+            show_404();
+            return;
+        }
+
+        // Calculate total qty for the overview card
+        $totalQty = 0;
+        foreach ($data['items'] as $item) {
+            $totalQty += $item['qty'];
+        }
+        $data['totalQty'] = $totalQty;
+        $data['base_url'] = base_url();
+
+        $this->smarty->loadView('sales_details.tpl', $data, 'Yes', 'Yes');
+    }
+
     public function sales_details_ajax()
     {
         $sales_id = $this->input->post('sales_id');

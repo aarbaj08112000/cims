@@ -208,7 +208,7 @@
             <tr>
                 <td class="text-muted"><%$sn|string_format:"%02d"%></td>
                 <td>
-                    <div class="fw-bold"><%$item['product_name']%></div>
+                    <div class="fw-bold"><%$item['product_name']%> <%if $item['brand_name']%><span style="color: #6b7280; font-weight: normal;">- <%$item['brand_name']%></span><%/if%></div>
                     <%if $item['product_code']%><div style="font-size: 11px; color: #6b7280; margin-top: 4px;">Code: <%$item['product_code']%></div><%/if%>
                 </td>
                 <td class="text-center"><%$item['qty']%></td>

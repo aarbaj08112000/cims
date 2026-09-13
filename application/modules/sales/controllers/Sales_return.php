@@ -108,12 +108,26 @@ class Sales_return extends MY_Controller {
 
         if ($return_id) {
             $ret_arr['msg'] = 'Sales return processed successfully and stock restored.';
+            $ret_arr['return_id'] = $return_id;
         } else {
             $ret_arr['success'] = 0;
             $ret_arr['msg'] = 'Failed to process sales return.';
         }
 
         echo json_encode($ret_arr);
+    }
+
+    public function return_details($return_id) {
+        $data['return'] = $this->Sales_return_model->get_sales_return_master($return_id);
+        
+        if (empty($data['return'])) {
+            show_404();
+            return;
+        }
+        
+        $data['items'] = $this->Sales_return_model->get_sales_return_items($return_id);
+        $data['base_url'] = base_url();
+        $this->smarty->loadView('sales_return_details.tpl', $data, 'Yes', 'Yes');
     }
 
     public function return_details_ajax() {

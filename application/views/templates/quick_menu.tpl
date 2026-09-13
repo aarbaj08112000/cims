@@ -70,6 +70,11 @@
                                  <i class="ti ti-award me-2 ti-xs"></i> Brands
                               </a>
                            </li>
+                           <li>
+                              <a hijacked="yes" href="attribute" class="quick-link-item d-flex align-items-center border-bottom text-muted">
+                                 <i class="ti ti-adjustments me-2 ti-xs"></i> Attributes
+                              </a>
+                           </li>
                         </ul>
                      </div>
                   </div>

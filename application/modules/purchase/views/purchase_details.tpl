@@ -347,12 +347,16 @@
         </div>
       </div>
       <div class="cat-page-header-right">
-        <a href="<%$base_url%>purchase_list" class="cat-btn cat-btn-outline">
-          <i class="ti ti-arrow-left"></i> Back to List
-        </a>
+        
         <button onclick="window.open('<%$base_url%>purchase/print_pdf/<%$purchase['purchase_id']%>', '_blank')" class="cat-btn cat-btn-primary">
           <i class="ti ti-printer"></i> Print Bill
         </button>
+        <button onclick="window.location.href='<%$base_url%>purchase/print_pdf/<%$purchase['purchase_id']%>?download=1'" class="cat-btn cat-btn-outline-primary">
+          <i class="ti ti-download"></i> Download Bill
+        </button>
+        <a href="<%$base_url%>purchase_list" class="cat-btn cat-btn-outline">
+          <i class="ti ti-arrow-left"></i> Back to List
+        </a>
       </div>
     </div>
 
@@ -604,7 +608,7 @@
             <tr>
               <td><span class="pd-row-num"><%$idx%></span></td>
               <td>
-                <div class="pd-product-name"><%$item['product_name']%></div>
+                <div class="pd-product-name"><%$item['product_name']%> <%if $item['brand_name']%><span class="text-muted" style="font-size: 0.9em; font-weight: normal;">- <%$item['brand_name']%></span><%/if%></div>
                 <div class="pd-product-code"><%$item['product_code']%></div>
               </td>
               <td class="text-center"><span class="pd-qty-badge"><%$item['qty']%></span></td>

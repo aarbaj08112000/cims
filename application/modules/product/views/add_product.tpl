@@ -48,10 +48,24 @@
 
     <!-- Main content -->
     <div class="card bg-white border-0 shadow-sm mb-4 w-100">
-      <div class="card-body">
+      <div class="card-body p-4">
         <form id="product_form" action="javascript:void(0)" method="POST" enctype="multipart/form-data">
-           <div class="row">
-           <!-- Row 1 -->
+
+          <!-- ── Product Information Card ── -->
+          <div class="card shadow-sm rounded-3 mb-4" style="border:1px solid #e3e6f0;">
+            <div class="card-body p-4">
+              <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+                <div class="rounded-2 d-flex align-items-center justify-content-center me-3" style="width:38px;height:38px;background:linear-gradient(135deg,#7367f0,#9e95f5);">
+                  <i class="ti ti-info-square text-white" style="font-size:18px;"></i>
+                </div>
+                <div>
+                  <h6 class="mb-0 fw-bold" style="color:#3d3d3d;">Product Information</h6>
+                  <p class="text-muted small mb-0">Fill in the core product details below</p>
+                </div>
+              </div>
+
+              <div class="row">
+              <!-- Row 1 -->
             <%if isset($products) && count($products) > 0%>
             <div class="mb-3 col-md-4 col-12">
                <label class="form-label">Product Code <span class="text-danger">*</span></label>
@@ -121,7 +135,7 @@
 
             <div class="mb-3 col-md-4 col-12">
               <label class="form-label">Tax Rate (%)</label>
-              <input type="text" step="0.01" name="tax_rate" class="form-control onlyNumericInput" placeholder="e.g. 5, 12, 18" value="<%if isset($products) %><%$products[0].tax_rate%><%/if%>">
+              <input type="text" step="0.01" name="tax_rate" class="form-control onlyNumericInput" placeholder="e.g. 5, 12, 18" value="<%if isset($products) %><%$products[0].tax_rate%><%else%><%$settings['pos_tax_percentage']['value']|default:'0'%><%/if%>" readonly tabindex="-1" style="background-color: #e9ecef; pointer-events: none;">
             </div>
 
              <!-- Row 4 -->
@@ -145,43 +159,144 @@
                </select>
             </div>
 
-             <!-- Row 5 -->
-            <div class="mb-3 col-md-4 col-12">
-               <label class="form-label">Size</label>
-               <input type="text" name="size" class="form-control" placeholder="e.g. S, M, L, XL" value="<%if isset($products) %><%$products[0].size%><%/if%>">
-            </div>
-
-             <div class="mb-3 col-md-4 col-12">
-               <label class="form-label">Color</label>
-               <input type="text" name="color" class="form-control" placeholder="e.g. Red, Blue" value="<%if isset($products) %><%$products[0].color%><%/if%>">
-            </div>
-
-             <div class="mb-3 col-md-4 col-12">
-               <label class="form-label">Material</label>
-               <input type="text" name="material" class="form-control" placeholder="e.g. Cotton, Silk" value="<%if isset($products) %><%$products[0].material%><%/if%>">
-            </div>
-
-
-            <div class="mb-3 col-12">
-              <label class="form-label">Description <span class="text-danger">*</span></label>
-              <textarea name="description" class="form-control required-input" rows="4" placeholder="Enter Product Description"><%if isset($products[0].description)%><%$products[0].description %><%/if %></textarea>
-            </div>
-
-                    <div class="mb-3 col-md-6 col-12">
-              <label class="form-label">Product Image <%if !isset($products)%><span class="text-danger">*</span><%/if%></label>
-             
-              <input type="file" name="image" id="imageFileInput" class="form-control <%if !isset($products)%>required-input<%/if%>" accept="image/*">
-              <%if isset($products)%><small class="text-muted"><i class="ti ti-info-circle"></i> Leave empty to keep current image</small><%/if%>
-               <%if isset($products) && $products[0].image != ""%>
-              <div id="imagePreview" class="mb-2">
-                <img src="<%$base_url%>public/uploads/product/product_image/<%$products[0].product_id%>/<%$products[0].image%>"
-                     onerror="this.src='<%$base_url%>public/assets/images/no_image.jpg';"
-                     alt="Current Product Image"
-                     style="max-height:150px; max-width:200px; object-fit:contain; border-radius:8px; border:1px solid #e2e6ef; padding:4px;">
-                <div class="text-muted mt-1" style="font-size:0.78rem;"><i class="ti ti-photo"></i> Current image</div>
+              <div class="mb-3 col-12">
+                <label class="form-label">Description <span class="text-danger">*</span></label>
+                <textarea name="description" class="form-control required-input" rows="4" placeholder="Enter Product Description"><%if isset($products[0].description)%><%$products[0].description %><%/if %></textarea>
               </div>
-              <%/if%>
-              <input type="hidden" class="form-control required-input" id="product_image" name="product_image" value="<%if isset($products) %><%$products[0].image%><%/if%>">
+
+            </div><!-- /.row -->
+            </div><!-- /.card-body (Product Information) -->
+          </div><!-- /.card (Product Information) -->
+
+            <!-- Attributes Section -->
+            <div class="col-12 mb-4">
+                <div class="card shadow-sm rounded-3" style="border: 1px solid #e3e6f0;">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div>
+                                <h6 class="mb-1 fw-bold" style="color:#7367f0;"><i class="ti ti-adjustments-horizontal me-2"></i>Product Attributes</h6>
+                                <p class="text-muted small mb-0">Specify custom details like Memory, Storage, Material, etc.</p>
+                            </div>
+                            <button type="button" class="btn btn-sm fw-semibold" id="add_attribute_btn"
+                                style="background:linear-gradient(135deg,#7367f0,#9e95f5); color:#fff; border:none; border-radius:8px; padding:7px 18px; box-shadow:0 3px 10px rgba(115,103,240,.35);">
+                                <i class="ti ti-plus me-1"></i> Add Row
+                            </button>
+                        </div>
+
+                        <!-- Header labels -->
+                        <div class="row mb-2 px-1 d-none d-md-flex">
+                            <div class="col-md-5"><span class="small fw-semibold text-muted text-uppercase" style="letter-spacing:.5px;">Name</span></div>
+                            <div class="col-md-6"><span class="small fw-semibold text-muted text-uppercase" style="letter-spacing:.5px;">Value</span></div>
+                            <div class="col-md-1"></div>
+                        </div>
+
+                        <div id="attributes_container">
+                            <%if isset($product_attrs) && $product_attrs|@count > 0%>
+                                <%foreach from=$product_attrs item=attr%>
+                                <div class="attribute-row d-flex align-items-center gap-3 mb-3 p-3 rounded-3" style="background:#f8f8ff; border:1px solid #ebe9fe;">
+                                    <div class="flex-fill">
+                                        <select name="attr_name[]" class="form-select attr-name-select" style="border-color:#ddd;">
+                                            <option value="">Select Attribute</option>
+                                            <%if isset($master_attributes)%>
+                                                <%foreach from=$master_attributes item=ma%>
+                                                    <option value="<%$ma.attribute_name%>" <%if $attr.attr_name == $ma.attribute_name%>selected<%/if%>><%$ma.attribute_name%></option>
+                                                <%/foreach%>
+                                            <%/if%>
+                                        </select>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <input type="text" name="attr_value[]" class="form-control" placeholder="e.g. 16GB, 256GB" value="<%$attr.attr_value%>" style="border-color:#ddd;">
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <button type="button" class="remove-attr-btn d-flex align-items-center justify-content-center" title="Remove row"
+                                            style="width:34px;height:34px;border-radius:8px;border:1px solid #ffcdd2;background:#fff5f5;color:#ea5455;cursor:pointer;transition:all .2s;">
+                                            <i class="ti ti-trash" style="font-size:16px;"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <%/foreach%>
+                            <%else%>
+                                <div class="attribute-row d-flex align-items-center gap-3 mb-3 p-3 rounded-3" style="background:#f8f8ff; border:1px solid #ebe9fe;">
+                                    <div class="flex-fill">
+                                        <select name="attr_name[]" class="form-select attr-name-select" style="border-color:#ddd;">
+                                            <option value="">Select Attribute</option>
+                                            <%if isset($master_attributes)%>
+                                                <%foreach from=$master_attributes item=ma%>
+                                                    <option value="<%$ma.attribute_name%>"><%$ma.attribute_name%></option>
+                                                <%/foreach%>
+                                            <%/if%>
+                                        </select>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <input type="text" name="attr_value[]" class="form-control" placeholder="e.g. 16GB, 256GB" style="border-color:#ddd;">
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <button type="button" class="remove-attr-btn d-flex align-items-center justify-content-center" title="Remove row"
+                                            style="width:34px;height:34px;border-radius:8px;border:1px solid #ffcdd2;background:#fff5f5;color:#ea5455;cursor:pointer;transition:all .2s;">
+                                            <i class="ti ti-trash" style="font-size:16px;"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            <%/if%>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+           
+
+            <div class="col-12 mb-4">
+              <div class="card shadow-sm rounded-3" style="border:1px solid #e3e6f0;">
+                <div class="card-body p-4">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                      <h6 class="mb-1 fw-bold" style="color:#7367f0;"><i class="ti ti-photo-plus me-2"></i>Product Images</h6>
+                      <p class="text-muted small mb-0">First image is the <strong>Primary Image</strong>. Click <span style="color:#ea5455;">×</span> to remove an image before saving.</p>
+                    </div>
+                    <label for="multiImageInput" class="btn btn-sm fw-semibold mb-0" style="background:linear-gradient(135deg,#7367f0,#9e95f5);color:#fff;border:none;border-radius:8px;padding:7px 18px;box-shadow:0 3px 10px rgba(115,103,240,.35);cursor:pointer;">
+                      <i class="ti ti-upload me-1"></i> Browse Images
+                    </label>
+                  </div>
+
+                  <!-- Custom styled file input (hidden, triggered by label) -->
+                  <input type="file" name="multi_images[]" id="multiImageInput" class="d-none" accept="image/*" multiple>
+                  
+                  <!-- Drop-zone visual cue when no images yet -->
+                  <div id="imageDropHint" class="text-center py-4 rounded-3 mb-3" style="border:2px dashed #d0cfff; background:#f8f8ff; display:none !important;">
+                    <i class="ti ti-photo-off" style="font-size:36px; color:#c0bcff;"></i>
+                    <p class="text-muted small mt-2 mb-0">No images selected yet. Click "Browse Images" above.</p>
+                  </div>
+
+                  <!-- Preview container -->
+                  <div id="multiImagePreviewContainer" class="d-flex flex-wrap gap-3">
+                    <%if isset($products)%>
+                      <%if $products[0].image != ""%>
+                      <div class="img-preview-card position-relative existing-image-preview" data-is-primary="1" data-image-name="<%$products[0].image%>">
+                          <img src="<%$base_url%>public/uploads/product/product_image/<%$products[0].product_id%>/<%$products[0].image%>" 
+                               onerror="this.src='<%$base_url%>public/assets/images/no_image.jpg';"
+                               class="img-thumb">
+                          <span class="primary-badge">⭐ Primary</span>
+                          <button type="button" class="img-remove-btn remove-existing-btn" title="Remove">×</button>
+                      </div>
+                      <%/if%>
+                      
+                      <%if isset($product_images) && $product_images|@count > 0%>
+                        <%foreach from=$product_images item=img%>
+                        <div class="img-preview-card position-relative existing-image-preview" data-is-primary="0" data-image-id="<%$img.image_id%>" data-image-name="<%$img.image%>">
+                            <img src="<%$base_url%>public/uploads/product/product_image/<%$products[0].product_id%>/gallery/<%$img.image%>" 
+                                 onerror="this.src='<%$base_url%>public/assets/images/no_image.jpg';"
+                                 class="img-thumb">
+                            <span class="primary-badge d-none">⭐ Primary</span>
+                            <button type="button" class="img-remove-btn remove-existing-btn" title="Remove">×</button>
+                        </div>
+                        <%/foreach%>
+                      <%/if%>
+                    <%/if%>
+                  </div>
+                  
+                  <div id="removedExistingImagesContainer"></div>
+                </div>
+              </div>
             </div>
 
             <div class="mb-3 col-12">
@@ -214,9 +329,78 @@
           width: 22px;
           height: 22px;
       }
+
+      /* ── Attribute row hover ── */
+      .attribute-row { transition: box-shadow .2s; }
+      .attribute-row:hover { box-shadow: 0 2px 12px rgba(115,103,240,.15); }
+      .remove-attr-btn:hover { background:#ea5455 !important; color:#fff !important; border-color:#ea5455 !important; }
+
+      /* ── Image preview cards ── */
+      .img-preview-card {
+        position: relative;
+        width: 130px;
+        height: 130px;
+        border-radius: 12px;
+        overflow: visible;
+        box-shadow: 0 2px 10px rgba(0,0,0,.1);
+        transition: transform .2s, box-shadow .2s;
+        display: inline-block;
+      }
+      .img-preview-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,.15); }
+      .img-thumb {
+        width: 130px;
+        height: 130px;
+        object-fit: cover;
+        border-radius: 12px;
+        border: 2px solid #e3e6f0;
+        display: block;
+      }
+      .img-preview-card[data-is-primary="1"] .img-thumb,
+      .img-preview-card.is-primary .img-thumb {
+        border-color: #7367f0;
+        box-shadow: 0 0 0 3px rgba(115,103,240,.2);
+      }
+      .primary-badge {
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg,#7367f0,#9e95f5);
+        color: #fff;
+        font-size: 0.65rem;
+        font-weight: 700;
+        padding: 2px 10px;
+        border-radius: 20px;
+        white-space: nowrap;
+        box-shadow: 0 2px 6px rgba(115,103,240,.4);
+      }
+      .img-remove-btn {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        width: 24px;
+        height: 24px;
+        background: #ea5455;
+        color: #fff;
+        border: 2px solid #fff;
+        border-radius: 50%;
+        font-size: 16px;
+        line-height: 1;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 6px rgba(234,84,85,.4);
+        transition: background .2s, transform .2s;
+      }
+      .img-remove-btn:hover { background: #c0392b; transform: scale(1.15); }
+
+      /* ── Section card unified border ── */
+      .section-card { border: 1px solid #e3e6f0; border-radius: 12px; }
     </style>
     <script type="text/javascript">
-    var base_url = <%$base_url|@json_encode%>
+    var base_url = <%$base_url|@json_encode%>;
+    var master_attributes = <%if isset($master_attributes)%><%$master_attributes|@json_encode%><%else%>[]<%/if%>;
     </script>
       <link rel="stylesheet" href="<%$base_url%>public/plugin/editor/editor.css">
     <!-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->

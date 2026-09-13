@@ -116,33 +116,43 @@ const app = {
   allowNumber: function () {
     $('.onlyNumericInput').on('keypress', function (event) {
       var charCode = (event.which) ? event.which : event.keyCode;
-
       var value = $(this).val();
+      
       if (value.includes('.') && charCode == 46) {
         event.preventDefault();
       }
-      // Allow only digits (0-9) and some specific control keys
+      
       if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
         event.preventDefault();
       }
-      $(this).val(this.value.replace(/[^0-9.]/g, ''));
-      console.log(this.value.replace(/[^0-9.]/g, ''));
-
+      
+      if (value.includes('.') && charCode >= 48 && charCode <= 57) {
+        var cursorPos = this.selectionStart;
+        var decPos = value.indexOf('.');
+        if (cursorPos > decPos && this.selectionStart === this.selectionEnd) {
+            var decimalPart = value.split('.')[1];
+            if (decimalPart && decimalPart.length >= 3) {
+                event.preventDefault();
+            }
+        }
+      }
     });
+
     $('.onlyNumericInput').on('input', function (event) {
-      var charCode = (event.which) ? event.which : event.keyCode;
-
-      var value = $(this).val();
-      if (value.includes('.') && charCode == 46) {
-        event.preventDefault();
+      var val = this.value.replace(/[^0-9.]/g, '');
+      var parts = val.split('.');
+      if (parts.length > 2) {
+          val = parts[0] + '.' + parts.slice(1).join('');
       }
-      // Allow only digits (0-9) and some specific control keys
-      if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
-        event.preventDefault();
+      if (val.includes('.')) {
+          var splitVal = val.split('.');
+          if (splitVal[1].length > 3) {
+              val = splitVal[0] + '.' + splitVal[1].substring(0, 3);
+          }
       }
-      $(this).val(this.value.replace(/[^0-9.]/g, ''));
-      console.log(this.value.replace(/[^0-9.]/g, ''));
-
+      if (this.value !== val) {
+          $(this).val(val);
+      }
     });
   },
   removeValidationMessage: function () {

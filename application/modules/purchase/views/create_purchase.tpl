@@ -117,7 +117,7 @@
           <div class="card-header d-flex justify-content-between align-items-center bg-light">
             <h5 class="mb-0 fw-bold"><i class="ti ti-packages me-2 text-primary fs-4"></i> Purchase Items</h5>
             <button type="button" class="cat-btn cat-btn-primary btn-sm" id="addRow">
-              <i class="ti ti-plus"></i> Add Row
+              <i class="ti ti-plus"></i> Add Item
             </button>
           </div>
           <div class="table-responsive">
@@ -137,15 +137,15 @@
                     <select name="product_id[]" class="form-control select2 product-select required-input">
                       <option value="">Choose Product</option>
                       <%foreach from=$products item=p%>
-                        <option value="<%$p['product_id']%>" data-price="<%$p['purchase_price']%>"><%$p['name']%> (<%$p['product_code']%>)</option>
+                        <option value="<%$p['product_id']%>" data-price="<%$p['purchase_price']%>"><%$p['name']%> <%if $p['brand_name']%>- <%$p['brand_name']%><%/if%> (<%$p['product_code']%>)</option>
                       <%/foreach%>
                     </select>
                   </td>
                   <td>
-                    <input type="number" name="qty[]" class="form-control qty-input required-input" min="1" value="1">
+                    <input type="text" name="qty[]" class="form-control qty-input required-input onlyNumericInput" value="1">
                   </td>
                   <td>
-                    <input type="number" name="price[]" class="form-control price-input required-input" step="0.01" value="0">
+                    <input type="text" name="price[]" class="form-control price-input required-input onlyNumericInput" value="0">
                   </td>
                   <td>
                     <input type="number" name="total[]" class="form-control bg-light text-end fw-bold total-input" readonly value="0">
@@ -193,15 +193,15 @@
       <select name="product_id[]" class="form-control select2 product-select required-input">
         <option value="">Choose Product</option>
         <%foreach from=$products item=p%>
-          <option value="<%$p['product_id']%>" data-price="<%$p['purchase_price']%>"><%$p['name']%> (<%$p['product_code']%>)</option>
+          <option value="<%$p['product_id']%>" data-price="<%$p['purchase_price']%>"><%$p['name']%> <%if $p['brand_name']%>- <%$p['brand_name']%><%/if%> (<%$p['product_code']%>)</option>
         <%/foreach%>
       </select>
     </td>
     <td>
-      <input type="number" name="qty[]" class="form-control qty-input required-input" min="1" value="1">
+      <input type="text" name="qty[]" class="form-control qty-input required-input onlyNumericInput" value="1">
     </td>
     <td>
-      <input type="number" name="price[]" class="form-control price-input required-input" step="0.01" value="0">
+      <input type="text" name="price[]" class="form-control price-input required-input onlyNumericInput" value="0">
     </td>
     <td>
       <input type="number" name="total[]" class="form-control bg-light text-end fw-bold total-input" readonly value="0">
