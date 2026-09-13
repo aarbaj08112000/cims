@@ -53,7 +53,7 @@
         <%if ($sales) %>
           <%foreach from=$sales item=val %>
            <tr>
-              <td class="fw-medium text-dark"><%$val['bill_no'] %></td>
+              <td class="fw-medium text-dark"><a href="<%base_url('sales_details/')%><%$val['sales_id']%>" class="text-primary text-decoration-none fw-bold"><%$val['bill_no'] %></a></td>
               <td><%$val['customer_phone_number']|default:'Walk-in' %></td>
               <td><%$val['sales_date']|date_format:'%d-%m-%Y' %></td>
               <td class="text-end"><%$val['total_amount']|number_format:2 %></td>
@@ -68,7 +68,7 @@
               </td>
               <td class="text-center cat-col-action">
                 <div class="d-flex align-items-center justify-content-center">
-                  <a href="javascript:void(0)" class="view-sale-details" data-id="<%$val['sales_id']%>" title="View Details">
+                  <a href="<%base_url('sales_details/')%><%$val['sales_id']%>" class="text-decoration-none" title="View Details">
                     <i class="ti ti-eye text-primary me-2"></i>
                   </a>
                   <a href="<%$base_url%>sales/print_invoice/<%$val['sales_id']%>" target="_blank" title="Print Invoice" class="me-2">
@@ -88,14 +88,7 @@
   </div>
 </div>
 
-<!-- Sales Detail Modal -->
-<div class="modal fade" id="salesDetailModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content" id="modal-content-area">
-      <!-- AJAX content will load here -->
-    </div>
-  </div>
-</div>
+
 
 <script type="text/javascript">
   var base_url = <%$base_url|@json_encode%>;

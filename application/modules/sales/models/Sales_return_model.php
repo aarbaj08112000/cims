@@ -9,10 +9,10 @@ class Sales_return_model extends CI_Model {
     }
 
     public function get_sales_returns() {
-        $this->db->select('srm.*, sm.bill_no as original_bill_no, cm.full_name as customer_name');
+        $this->db->select('srm.*, sm.bill_no as original_bill_no, COALESCE(NULLIF(sm.customer_name,""), cm.full_name) as customer_name', FALSE);
         $this->db->from('sales_return_master srm');
         $this->db->join('sales_master sm', 'srm.sales_id = sm.sales_id', 'left');
-        $this->db->join('customer_master cm', 'sm.customer_id = cm.customer_id', 'left');
+        $this->db->join('customer_master cm', 'sm.customer_phone_number = cm.mobile_number', 'left', FALSE);
         $this->db->order_by('srm.return_id', 'DESC');
         $query = $this->db->get();
         return $query->result_array();
@@ -40,19 +40,20 @@ class Sales_return_model extends CI_Model {
     }
 
     public function get_sales_return_master($return_id) {
-        $this->db->select('srm.*, sm.bill_no as original_bill_no, cm.full_name as customer_name, cm.mobile_number, cm.address1');
+        $this->db->select('srm.*, sm.bill_no as original_bill_no, COALESCE(NULLIF(sm.customer_name,""), cm.full_name) as customer_name, cm.mobile_number, cm.address1', FALSE);
         $this->db->from('sales_return_master srm');
         $this->db->join('sales_master sm', 'srm.sales_id = sm.sales_id', 'left');
-        $this->db->join('customer_master cm', 'sm.customer_id = cm.customer_id', 'left');
+        $this->db->join('customer_master cm', 'sm.customer_phone_number = cm.mobile_number', 'left', FALSE);
         $this->db->where('srm.return_id', $return_id);
         $query = $this->db->get();
         return $query->row_array();
     }
 
     public function get_sales_return_items($return_id) {
-        $this->db->select('srd.*, pm.name as product_name, pm.product_code');
+        $this->db->select('srd.*, pm.name as product_name, pm.product_code, b.brand_name');
         $this->db->from('sales_return_details srd');
         $this->db->join('product_master pm', 'srd.product_id = pm.product_id', 'left');
+        $this->db->join('brands b', 'pm.brand_id = b.brand_id', 'left');
         $this->db->where('srd.return_id', $return_id);
         $query = $this->db->get();
         return $query->result_array();
@@ -60,13 +61,14 @@ class Sales_return_model extends CI_Model {
 
     public function get_returnable_items($sales_id) {
         // Get items from the sale with already-returned quantities subtracted
-        $this->db->select('sd.*, pm.name as product_name, pm.product_code,
+        $this->db->select('sd.*, pm.name as product_name, pm.product_code, b.brand_name,
             sd.qty as sold_qty,
             COALESCE((SELECT SUM(srd.qty) FROM sales_return_details srd 
                       JOIN sales_return_master srm ON srd.return_id = srm.return_id 
                       WHERE srm.sales_id = sd.sales_id AND srd.product_id = sd.product_id), 0) as returned_qty');
         $this->db->from('sales_details sd');
         $this->db->join('product_master pm', 'sd.product_id = pm.product_id', 'left');
+        $this->db->join('brands b', 'pm.brand_id = b.brand_id', 'left');
         $this->db->where('sd.sales_id', $sales_id);
         $query = $this->db->get();
         $items = $query->result_array();

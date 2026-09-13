@@ -151,6 +151,12 @@ div:where(.swal2-icon) .swal2-icon-content {
                          <div data-i18n="Attribute">Attribute</div>
                       </a>
                    </li>
+                   <li class="menu-item <%if stripos($current_uri, 'unit_master') !== false%>active<%/if%>">
+                      <a href="unit_master" class="menu-link">
+                         <i class="menu-icon tf-icons bx bx-slider hide"></i>
+                         <div data-i18n="Attribute">Units</div>
+                      </a>
+                   </li>
                    <li class="menu-item <%if stripos($current_uri, 'product') !== false%>active<%/if%>">
                       <a href="product" class="menu-link">
                          <i class="menu-icon tf-icons bx bx-cube hide"></i>

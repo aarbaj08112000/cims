@@ -311,7 +311,7 @@
                     <select name="product_id[]" class="form-control select2 product-select required-input">
                       <option value="">Choose Product</option>
                       <%foreach from=$products item=p%>
-                        <option value="<%$p['product_id']%>" data-price="<%$p['price']%>" data-stock="<%$p['qty']%>"><%$p['name']%> (<%$p['product_code']%>)</option>
+                        <option value="<%$p['product_id']%>" data-price="<%$p['price']%>" data-stock="<%$p['qty']%>"><%$p['name']%><%if $p['brand_name']%> - <%$p['brand_name']%><%/if%> (<%$p['product_code']%>)</option>
                       <%/foreach%>
                     </select>
                   </td>
@@ -319,10 +319,10 @@
                     <input type="text" class="form-control stock-display bg-light text-center" readonly value="0">
                   </td>
                   <td data-label="Quantity">
-                    <input type="number" name="qty[]" class="form-control qty-input required-input text-center" min="1" value="">
+                    <input type="text" name="qty[]" class="form-control qty-input required-input onlyNumericInput text-center" value="">
                   </td>
                   <td data-label="Sale Price">
-                    <input type="number" name="price[]" class="form-control price-input required-input text-end bg-light" step="0.01" value="0" readonly>
+                    <input type="text" name="price[]" class="form-control price-input required-input onlyNumericInput text-end" value="0">
                   </td>
                   <td data-label="Total">
                     <input type="number" name="total[]" class="form-control total-input bg-light text-end fw-bold" readonly value="0">
@@ -382,7 +382,7 @@
       <select name="product_id[]" class="form-control select2 product-select required-input">
         <option value="">Choose Product</option>
         <%foreach from=$products item=p%>
-          <option value="<%$p['product_id']%>" data-price="<%$p['price']%>" data-stock="<%$p['qty']%>"><%$p['name']%> (<%$p['product_code']%>)</option>
+          <option value="<%$p['product_id']%>" data-price="<%$p['price']%>" data-stock="<%$p['qty']%>"><%$p['name']%><%if $p['brand_name']%> - <%$p['brand_name']%><%/if%> (<%$p['product_code']%>)</option>
         <%/foreach%>
       </select>
     </td>
@@ -390,10 +390,10 @@
        <input type="text" class="form-control stock-display bg-light text-center" readonly value="0">
     </td>
     <td data-label="Quantity">
-      <input type="number" name="qty[]" class="form-control qty-input required-input text-center" min="1" value="0">
+      <input type="text" name="qty[]" class="form-control qty-input required-input onlyNumericInput text-center" value="0">
     </td>
     <td data-label="Sale Price">
-      <input type="number" name="price[]" class="form-control price-input required-input text-end bg-light" step="0.01" value="0" readonly>
+      <input type="text" name="price[]" class="form-control price-input required-input onlyNumericInput text-end" value="0">
     </td>
     <td data-label="Total">
       <input type="number" name="total[]" class="form-control total-input bg-light text-end fw-bold" readonly value="0">

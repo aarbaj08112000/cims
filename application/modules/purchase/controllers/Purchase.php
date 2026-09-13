@@ -67,6 +67,7 @@ class Purchase extends MY_Controller {
 
         if ($purchase_id) {
             $ret_arr['msg'] = 'Purchase recorded successfully and stock updated.';
+            $ret_arr['purchase_id'] = $purchase_id;
         } else {
             $ret_arr['success'] = 0;
             $ret_arr['msg'] = 'Failed to save purchase transaction.';

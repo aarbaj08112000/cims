@@ -163,28 +163,6 @@ const purchaseListPage = {
 
 
 
-        // Handle Detail Modal Trigger
-        $(document).on("click", ".view-details", function () {
-            let purchaseId = $(this).data("id");
-            $("#modal-content-area").html('<div class="p-5 text-center"><div class="spinner-border text-primary" role="status"></div><p class="mt-2">Loading Details...</p></div>');
-            $("#purchaseDetailModal").modal("show");
 
-            $.ajax({
-                url: "get_purchase_details_ajax",
-                type: "POST",
-                data: { purchase_id: purchaseId },
-                dataType: "json",
-                success: function (response) {
-                    if (response.success == 1) {
-                        $("#modal-content-area").html(response.html);
-                    } else {
-                        $("#modal-content-area").html('<div class="p-5 text-center text-danger">Failed to load details.</div>');
-                    }
-                },
-                error: function () {
-                    $("#modal-content-area").html('<div class="p-5 text-center text-danger">An error occurred.</div>');
-                }
-            });
-        });
     }
 }

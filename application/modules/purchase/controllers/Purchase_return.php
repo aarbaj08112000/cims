@@ -88,12 +88,26 @@ class Purchase_return extends MY_Controller {
 
         if ($return_id) {
             $ret_arr['msg'] = 'Purchase return recorded successfully and stock updated.';
+            $ret_arr['return_id'] = $return_id;
         } else {
             $ret_arr['success'] = 0;
             $ret_arr['msg'] = 'Failed to save return transaction.';
         }
 
         echo json_encode($ret_arr);
+    }
+
+    public function return_details($return_id) {
+        $data['return'] = $this->Purchase_return_model->get_return_master($return_id);
+        
+        if (empty($data['return'])) {
+            show_404();
+            return;
+        }
+        
+        $data['items'] = $this->Purchase_return_model->get_return_items($return_id);
+        $data['base_url'] = base_url();
+        $this->smarty->loadView('purchase_return_details.tpl', $data, 'Yes', 'Yes');
     }
 
     public function return_details_ajax() {

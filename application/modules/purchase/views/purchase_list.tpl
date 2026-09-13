@@ -68,7 +68,7 @@
               <td><%$val['added_date']|date_format:'%d-%m-%Y %H:%M' %></td>
               <td class="text-center cat-col-action">
                 <div class="d-flex align-items-center justify-content-center">
-                  <a href="javascript:void(0)" class="view-details" data-id="<%$val['purchase_id']%>" title="View Details">
+                  <a href="<%base_url('purchase_details/')%><%$val['purchase_id']%>" title="View Details">
                     <i class="ti ti-eye text-primary"></i>
                   </a>
                 </div>
@@ -82,14 +82,7 @@
   </div>
 </div>
 
-<!-- Purchase Detail Modal -->
-<div class="modal fade" id="purchaseDetailModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content" id="modal-content-area">
-      <!-- AJAX content will load here -->
-    </div>
-  </div>
-</div>
+
 
 <script type="text/javascript">
   var base_url = <%$base_url|@json_encode%>;

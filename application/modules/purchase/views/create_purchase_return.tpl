@@ -236,11 +236,12 @@
                   <th style="width: 14%;" class="text-center">Return Qty <span class="text-danger">*</span></th>
                   <th style="width: 10%;" class="text-end">Price</th>
                   <th style="width: 10%;" class="text-end">Total</th>
+                  <th style="width: 5%;" class="text-center">Action</th>
                 </tr>
               </thead>
               <tbody id="returnItemBody">
                 <tr class="empty-state-row">
-                  <td colspan="7">
+                  <td colspan="8">
                     <div class="empty-state">
                       <div class="empty-state-icon"><i class="ti ti-receipt-off"></i></div>
                       <span class="empty-state-text">No items to display</span>
@@ -259,7 +260,7 @@
                 <i class="ti ti-calculator me-2"></i> Grand Total Return Amount
               </div>
               <div class="total-value">
-                <span id="grand_total_display"><%$settings.company_currency.value|default:'$'%>0.00</span>
+                <span id="grand_total_display">₹0.00</span>
                 <input type="hidden" name="total_return_amount" id="total_return_amount" value="0">
               </div>
             </div>

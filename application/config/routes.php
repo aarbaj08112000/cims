@@ -57,6 +57,13 @@ $route['delete_attribute'] = 'attribute/attributes/delete_attribute';
 $route['update_attributes'] = 'attribute/attributes/update_attributes';
 $route['add_attribute'] = 'attribute/attributes/add_attribute';
 $route['export_attribute_pdf'] = 'attribute/attributes/export_pdf';
+
+// Unit Master
+$route['unit_master'] = 'unit_master/unit_master/unit_master';
+$route['get_units_ajax'] = 'unit_master/unit_master/get_units_ajax';
+$route['add_unit'] = 'unit_master/unit_master/add_unit';
+$route['update_unit'] = 'unit_master/unit_master/update_unit';
+$route['delete_unit'] = 'unit_master/unit_master/delete_unit';
 $route['brand'] = 'brand/brand/brand';
 $route['get_brands_ajax'] = 'brand/brand/get_brands_ajax';
 $route['delete_brand'] = 'brand/brand/delete_brand';
@@ -86,8 +93,11 @@ $route['create_purchase_return'] = 'purchase/purchase_return/create_return';
 $route['save_purchase_return'] = 'purchase/purchase_return/save_return';
 $route['get_purchase_items_for_return'] = 'purchase/purchase_return/get_purchase_items_for_return';
 $route['return_details_ajax'] = 'purchase/purchase_return/return_details_ajax';
+$route['purchase_return_details'] = 'purchase/purchase_return/return_details';
+$route['purchase_return_details/(:num)'] = 'purchase/purchase_return/return_details/$1';
 
 $route['sales_list'] = 'sales/sales/index';
+$route['sales_details/(:num)'] = 'sales/sales/sales_details/$1';
 $route['sales'] = 'sales/sales/index';
 $route['create_sale'] = 'sales/sales/create_sale';
 $route['save_sale'] = 'sales/sales/save_sale';
@@ -109,6 +119,8 @@ $route['create_sales_return/(:num)'] = 'sales/Sales_return/create_sales_return/$
 $route['save_sales_return'] = 'sales/Sales_return/save_sales_return';
 $route['get_sale_items_for_return'] = 'sales/Sales_return/get_sale_items_for_return';
 $route['sales_return_details_ajax'] = 'sales/Sales_return/return_details_ajax';
+$route['sales_return_details'] = 'sales/Sales_return/return_details';
+$route['sales_return_details/(:num)'] = 'sales/Sales_return/return_details/$1';
 
 // Stock Management Routes
 $route['stock'] = 'stock/Stock';

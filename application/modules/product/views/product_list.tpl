@@ -7,7 +7,7 @@
       <div class="cat-page-header-left">
         <div class="cat-page-icon"><i class="ti ti-box"></i></div>
         <div>
-          <h1 class="cat-page-title">Products</h1>
+          <h1 class="cat-page-title">Product Management</h1>
           <nav class="cat-breadcrumb">
             <a href="<%base_url('dashboard')%>">Home</a>
             <i class="ti ti-chevron-right"></i>
@@ -39,7 +39,7 @@
 
     <!-- Main content -->
     <div class="cat-table-card">
-      <div class="table-responsive text-nowrap">
+      <div class="table-responsive">
       <table class="table table-hover mb-0 w-100" id="product_list">
         <thead class="bg-light">
           <tr>

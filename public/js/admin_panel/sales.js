@@ -116,12 +116,13 @@ const salesPage = {
                 success: function (response) {
                     if (response.success == 1) {
                         toaster("success", response.msg);
-                        if (response.sales_id) {
-                            window.open("sales/print_invoice/" + response.sales_id, "_blank");
-                        }
                         setTimeout(function () {
-                            window.location.href = "sales_list";
-                        }, 1500);
+                            if (response.sales_id) {
+                                window.location.href = base_url + "sales_details/" + response.sales_id;
+                            } else {
+                                window.location.href = base_url + "sales_list";
+                            }
+                        }, 1000);
                     } else {
                         toaster("error", response.msg);
                     }

@@ -154,7 +154,7 @@ const purchaseReturnPage = {
                                 let supplier = response.purchase.supplier_name || 'Walk-in';
                                 $("#billSupplier").text(supplier);
                                 $("#billDate").text(response.purchase.purchase_date);
-                                $("#billAmount").text("₹" + parseFloat(response.purchase.grand_total).toFixed(2));
+                                $("#billAmount").text("₹" + parseFloat(response.purchase.payable_amount || 0).toFixed(2));
                                 $("#billItems").text(response.items.length);
                                 $("#billInfoPanel").fadeIn(300);
                             }
@@ -180,6 +180,11 @@ const purchaseReturnPage = {
                 that.calculateGrandTotal();
                 $("#billInfoPanel").hide();
             }
+        });
+
+        $(document).on("click", ".remove-return-row", function () {
+            $(this).closest("tr").remove();
+            that.calculateGrandTotal();
         });
 
         // Calculation on Qty Change
@@ -227,7 +232,11 @@ const purchaseReturnPage = {
                     if (response.success == 1) {
                         toaster("success", response.msg);
                         setTimeout(function () {
-                            window.location.href = "purchase_return_list";
+                            if (response.return_id) {
+                                window.location.href = base_url + "purchase_return_details/" + response.return_id;
+                            } else {
+                                window.location.href = base_url + "purchase_return_list";
+                            }
                         }, 1500);
                     } else {
                         toaster("error", response.msg);
@@ -259,7 +268,9 @@ const purchaseReturnPage = {
             let alreadyReturned = item.qty - item.available_qty;
             html += `<tr>
                 <td>
-                    <strong>${item.product_name}</strong><br>
+                    <strong>${item.product_name}</strong>
+                    ${item.brand_name ? `<span style="color: grey; font-size: 0.85em;"> - ${item.brand_name}</span>` : ''}
+                    <br>
                     <small class="text-muted">${item.product_code}</small>
                     <input type="hidden" name="product_id[]" value="${item.product_id}">
                 </td>
@@ -267,7 +278,7 @@ const purchaseReturnPage = {
                 <td class="text-center">${alreadyReturned}</td>
                 <td class="text-center available-qty font-weight-bold text-primary">${item.available_qty}</td>
                 <td>
-                    <input type="number" name="return_qty[]" class="form-control return-qty-input text-center" min="0" max="${item.available_qty}" value="0">
+                    <input type="text" name="return_qty[]" class="form-control return-qty-input onlyNumericInput text-center" value="0">
                 </td>
                 <td class="text-end">
                     ₹${parseFloat(item.purchase_price).toFixed(2)}
@@ -275,6 +286,9 @@ const purchaseReturnPage = {
                 </td>
                 <td class="text-end">
                     <input type="text" name="total[]" class="form-control row-total-input text-end bg-light fw-bold" readonly value="0.00">
+                </td>
+                <td class="text-center">
+                    <button type="button" class="text-danger bg-transparent border-0 fs-4 remove-return-row" title="Remove"><i class="ti ti-trash"></i></button>
                 </td>
             </tr>`;
         });

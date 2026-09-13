@@ -135,28 +135,6 @@ const salesListPage = {
             salesListTable.button('.buttons-pdf').trigger();
         });
 
-        // Handle Detail Modal Trigger
-        $(document).on("click", ".view-sale-details", function () {
-            let salesId = $(this).data("id");
-            $("#modal-content-area").html('<div class="p-5 text-center"><div class="spinner-border text-primary" role="status"></div><p class="mt-2">Loading Details...</p></div>');
-            $("#salesDetailModal").modal("show");
 
-            $.ajax({
-                url: "sales_details_ajax",
-                type: "POST",
-                data: { sales_id: salesId },
-                dataType: "json",
-                success: function (response) {
-                    if (response.success == 1) {
-                        $("#modal-content-area").html(response.html);
-                    } else {
-                        $("#modal-content-area").html('<div class="p-5 text-center text-danger">Failed to load details.</div>');
-                    }
-                },
-                error: function () {
-                    $("#modal-content-area").html('<div class="p-5 text-center text-danger">An error occurred.</div>');
-                }
-            });
-        });
     }
 }

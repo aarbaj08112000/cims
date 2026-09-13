@@ -28,12 +28,23 @@ class Product extends MY_Controller
     {
         $data['base_url'] = base_url();
         $product_id = $this->uri->segment(2);
-        if ($product_id != "") {
+        if ($product_id != "" && is_numeric($product_id)) {
             $data['products'] = $this->Product_model->get_products_details($product_id);
+            $data['product_attrs'] = $this->Product_model->get_product_attributes($product_id);
+            $data['product_images'] = $this->Product_model->get_product_images($product_id);
         }
         $data['categories'] = $this->Categories_model->get_categories();
         $data['brands'] = $this->Brand_model->get_brands();
-        // pr($data);
+        $data['master_attributes'] = $this->Product_model->get_all_attributes();
+        
+        $this->load->model('settings/Settings_model');
+        $settings_raw = $this->Settings_model->get_all_settings();
+        $settings = [];
+        foreach ($settings_raw as $setting) {
+            $settings[$setting['name']] = $setting;
+        }
+        $data['settings'] = $settings;
+        
         $this->smarty->loadView('add_product.tpl', $data, 'Yes', 'Yes');
     }
 
@@ -44,7 +55,8 @@ class Product extends MY_Controller
         $product_id = $this->uri->segment(2);
         $data['products'] = $this->Product_model->get_products_details($product_id);
         $data['products_image'] = $this->Product_model->get_products_image($product_id);
-        // pr($data);
+        $data['product_attrs'] = $this->Product_model->get_product_attributes($product_id);
+        $data['product_images'] = $this->Product_model->get_product_images($product_id);
         $this->smarty->loadView('product_details.tpl', $data, 'Yes', 'Yes');
     }
 
@@ -74,25 +86,8 @@ class Product extends MY_Controller
         }
         chmod($upload_root, 0777);
 
-        // Handle Image Upload First (to temp location or just validate)
-        if (!empty($_FILES['image']['name'])) {
-            $config = [
-                'upload_path' => $upload_root,
-                'allowed_types' => 'jpg|jpeg|png|gif|webp',
-                'max_size' => 5242880, // 5MB
-                'encrypt_name' => TRUE,
-                'file_ext_tolower' => TRUE
-            ];
-            $this->load->library('upload', $config);
-            if (!$this->upload->do_upload('image')) {
-                $ret_arr['msg'] = $this->upload->display_errors();
-                $ret_arr['success'] = 0;
-                echo json_encode($ret_arr);
-                return;
-            }
-            $upload_data = $this->upload->data();
-            $image_name = $upload_data['file_name'];
-        }
+        // Images and attributes are handled after product creation
+        $image_name = '';
 
         $data = [
             'product_code' => $product_code,
@@ -135,11 +130,71 @@ class Product extends MY_Controller
             }
             chmod($barcode_dir, 0777);
 
-            // 3. Move Image
-            if ($image_name) {
-                $source_path = $upload_root . $image_name;
-                $dest_path = $image_dir . '/' . $image_name;
-                rename($source_path, $dest_path);
+            // 3. Handle Multiple Images
+            $gallery_dir = $image_dir . '/gallery/';
+            if (!is_dir($gallery_dir)) {
+                mkdir($gallery_dir, 0777, true);
+            }
+            chmod($gallery_dir, 0777);
+
+            if (!empty($_FILES['multi_images']['name'][0])) {
+                $images_to_save = [];
+                $files = $_FILES['multi_images'];
+                $file_count = count($files['name']);
+                $primary_image = '';
+                
+                for ($i = 0; $i < $file_count; $i++) {
+                    if ($files['error'][$i] == 0) {
+                        $tmp_name = $files['tmp_name'][$i];
+                        $name = time() . '_' . rand(100,999) . '_' . preg_replace("/[^a-zA-Z0-9.]/", "", $files['name'][$i]);
+                        
+                        // First image is primary
+                        if ($i === 0) {
+                            $dest = $image_dir . '/' . $name;
+                            if (move_uploaded_file($tmp_name, $dest)) {
+                                $primary_image = $name;
+                            }
+                        } else {
+                            $dest = $gallery_dir . $name;
+                            if (move_uploaded_file($tmp_name, $dest)) {
+                                $images_to_save[] = [
+                                    'product_id' => $product_id,
+                                    'image' => $name,
+                                    'is_primary' => 0,
+                                    'sort_order' => $i,
+                                    'added_date' => date('Y-m-d H:i:s')
+                                ];
+                            }
+                        }
+                    }
+                }
+                
+                if (!empty($primary_image)) {
+                    $this->Product_model->update_product(['image' => $primary_image], $product_id);
+                }
+                if (!empty($images_to_save)) {
+                    $this->Product_model->save_product_images($product_id, $images_to_save);
+                }
+            }
+
+            // 3b. Handle Attributes
+            $attr_names = $this->input->post('attr_name');
+            $attr_values = $this->input->post('attr_value');
+            if (!empty($attr_names) && is_array($attr_names)) {
+                $attrs_to_save = [];
+                foreach ($attr_names as $index => $a_name) {
+                    if (!empty(trim($a_name))) {
+                        $attrs_to_save[] = [
+                            'product_id' => $product_id,
+                            'attr_name' => trim($a_name),
+                            'attr_value' => isset($attr_values[$index]) ? trim($attr_values[$index]) : '',
+                            'sort_order' => $index
+                        ];
+                    }
+                }
+                if (!empty($attrs_to_save)) {
+                    $this->Product_model->save_product_attributes($product_id, $attrs_to_save);
+                }
             }
 
             // 4. Generate Barcode (Filesystem only)
@@ -152,6 +207,7 @@ class Product extends MY_Controller
             $this->barcode_gen->generate($barcode_text, $barcode_file);
 
             $ret_arr['msg'] = 'Product added successfully.';
+            $ret_arr['product_id'] = $product_id;
         } else {
             $ret_arr['msg'] = 'Error occurred while adding the Product.';
             $ret_arr['success'] = 0;
@@ -261,10 +317,89 @@ class Product extends MY_Controller
             'updated_by' => $this->session->userdata('user_id'),
         ];
 
+        // Save multiple new images
+        $gallery_dir = $image_dir . '/gallery/';
+        if (!is_dir($gallery_dir)) {
+            mkdir($gallery_dir, 0777, true);
+        }
+        chmod($gallery_dir, 0777);
+        
+        if (!empty($_FILES['multi_images']['name'][0])) {
+            $images_to_save = [];
+            $files = $_FILES['multi_images'];
+            $file_count = count($files['name']);
+            
+            for ($i = 0; $i < $file_count; $i++) {
+                if ($files['error'][$i] == 0) {
+                    $tmp_name = $files['tmp_name'][$i];
+                    $name = time() . '_' . rand(100,999) . '_' . preg_replace("/[^a-zA-Z0-9.]/", "", $files['name'][$i]);
+                    
+                    // If no primary image exists, make the first new image the primary
+                    if (empty($image_path)) {
+                        $dest = $image_dir . '/' . $name;
+                        if (move_uploaded_file($tmp_name, $dest)) {
+                            $image_path = $name;
+                            $data['image'] = $image_path;
+                        }
+                    } else {
+                        $dest = $gallery_dir . $name;
+                        if (move_uploaded_file($tmp_name, $dest)) {
+                            $images_to_save[] = [
+                                'product_id' => $product_id,
+                                'image' => $name,
+                                'is_primary' => 0,
+                                'sort_order' => $i,
+                                'added_date' => date('Y-m-d H:i:s')
+                            ];
+                        }
+                    }
+                }
+            }
+            if (!empty($images_to_save)) {
+                $this->Product_model->save_product_images($product_id, $images_to_save);
+            }
+        }
+        
+        // Re-check: If primary was removed and no new image was uploaded, promote the first gallery image
+        if (empty($image_path)) {
+            $first_gallery = $this->db->where('product_id', $product_id)->order_by('sort_order', 'ASC')->limit(1)->get('product_images')->row_array();
+            if (!empty($first_gallery)) {
+                $promoted_img = $first_gallery['image'];
+                if (file_exists($gallery_dir . $promoted_img)) {
+                    rename($gallery_dir . $promoted_img, $image_dir . '/' . $promoted_img);
+                    $image_path = $promoted_img;
+                    $data['image'] = $image_path;
+                    $this->db->where('image_id', $first_gallery['image_id'])->delete('product_images');
+                }
+            }
+        }
+
+        // Handle Attributes
+        $attr_names = $this->input->post('attr_name');
+        $attr_values = $this->input->post('attr_value');
+        $this->Product_model->delete_product_attributes($product_id); // clear old
+        if (!empty($attr_names) && is_array($attr_names)) {
+            $attrs_to_save = [];
+            foreach ($attr_names as $index => $a_name) {
+                if (!empty(trim($a_name))) {
+                    $attrs_to_save[] = [
+                        'product_id' => $product_id,
+                        'attr_name' => trim($a_name),
+                        'attr_value' => isset($attr_values[$index]) ? trim($attr_values[$index]) : '',
+                        'sort_order' => $index
+                    ];
+                }
+            }
+            if (!empty($attrs_to_save)) {
+                $this->Product_model->save_product_attributes($product_id, $attrs_to_save);
+            }
+        }
+
         $update_query = $this->Product_model->update_product($data, $product_id);
 
         if ($update_query) {
             $ret_arr['msg'] = 'Product updated successfully.';
+            $ret_arr['product_id'] = $product_id;
         } else {
             $ret_arr['msg'] = 'Error occurred while updating the Product.';
             $ret_arr['success'] = 0;
@@ -338,6 +473,84 @@ class Product extends MY_Controller
             'updated_by' => $this->session->userdata('user_id'),
 
         );
+        // Save multiple new images
+        $gallery_dir = $image_dir . '/gallery/';
+        if (!is_dir($gallery_dir)) {
+            mkdir($gallery_dir, 0777, true);
+        }
+        chmod($gallery_dir, 0777);
+        
+        if (!empty($_FILES['multi_images']['name'][0])) {
+            $images_to_save = [];
+            $files = $_FILES['multi_images'];
+            $file_count = count($files['name']);
+            
+            for ($i = 0; $i < $file_count; $i++) {
+                if ($files['error'][$i] == 0) {
+                    $tmp_name = $files['tmp_name'][$i];
+                    $name = time() . '_' . rand(100,999) . '_' . preg_replace("/[^a-zA-Z0-9.]/", "", $files['name'][$i]);
+                    
+                    // If no primary image exists, make the first new image the primary
+                    if (empty($image_path)) {
+                        $dest = $image_dir . '/' . $name;
+                        if (move_uploaded_file($tmp_name, $dest)) {
+                            $image_path = $name;
+                            $data['image'] = $image_path;
+                        }
+                    } else {
+                        $dest = $gallery_dir . $name;
+                        if (move_uploaded_file($tmp_name, $dest)) {
+                            $images_to_save[] = [
+                                'product_id' => $product_id,
+                                'image' => $name,
+                                'is_primary' => 0,
+                                'sort_order' => $i,
+                                'added_date' => date('Y-m-d H:i:s')
+                            ];
+                        }
+                    }
+                }
+            }
+            if (!empty($images_to_save)) {
+                $this->Product_model->save_product_images($product_id, $images_to_save);
+            }
+        }
+        
+        // Re-check: If primary was removed and no new image was uploaded, promote the first gallery image
+        if (empty($image_path)) {
+            $first_gallery = $this->db->where('product_id', $product_id)->order_by('sort_order', 'ASC')->limit(1)->get('product_images')->row_array();
+            if (!empty($first_gallery)) {
+                $promoted_img = $first_gallery['image'];
+                if (file_exists($gallery_dir . $promoted_img)) {
+                    rename($gallery_dir . $promoted_img, $image_dir . '/' . $promoted_img);
+                    $image_path = $promoted_img;
+                    $data['image'] = $image_path;
+                    $this->db->where('image_id', $first_gallery['image_id'])->delete('product_images');
+                }
+            }
+        }
+
+        // Handle Attributes
+        $attr_names = $this->input->post('attr_name');
+        $attr_values = $this->input->post('attr_value');
+        $this->Product_model->delete_product_attributes($product_id); // clear old
+        if (!empty($attr_names) && is_array($attr_names)) {
+            $attrs_to_save = [];
+            foreach ($attr_names as $index => $a_name) {
+                if (!empty(trim($a_name))) {
+                    $attrs_to_save[] = [
+                        'product_id' => $product_id,
+                        'attr_name' => trim($a_name),
+                        'attr_value' => isset($attr_values[$index]) ? trim($attr_values[$index]) : '',
+                        'sort_order' => $index
+                    ];
+                }
+            }
+            if (!empty($attrs_to_save)) {
+                $this->Product_model->save_product_attributes($product_id, $attrs_to_save);
+            }
+        }
+
         $update_query = $this->Product_model->update_product($data, $product_id);
         if ($update_query) {
             $msg = 'Product delete successfully.';
@@ -561,8 +774,16 @@ class Product extends MY_Controller
         foreach ($products as $row) {
             $image_html = '';
             if (!empty($row['image'])) {
-                $img_url = base_url("public/uploads/product/product_image/" . $row['product_id'] . "/" . $row['image'] . "?ver=" . $time);
-                $image_html = '<img src="' . $img_url . '" onerror="this.src=\'' . base_url("public/assets/images/no_image.jpg") . '\';" alt="Product Image" style="width: 50px; height: 50px; object-fit: contain;">';
+                $new_path = FCPATH . "public/uploads/product/product_image/" . $row['product_id'] . "/" . $row['image'];
+                $old_path = FCPATH . "public/uploads/product/" . $row['image'];
+                if (file_exists($new_path)) {
+                    $img_url = base_url("public/uploads/product/product_image/" . $row['product_id'] . "/" . $row['image'] . "?ver=" . $time);
+                } elseif (file_exists($old_path)) {
+                    $img_url = base_url("public/uploads/product/" . $row['image'] . "?ver=" . $time);
+                } else {
+                    $img_url = base_url("public/assets/images/no_image.jpg");
+                }
+                $image_html = '<img src="' . $img_url . '" onerror="this.src=\'' . base_url("public/assets/images/no_image.jpg") . '\';" alt="Product Image" style="width: 50px; height: 50px; object-fit: contain; border-radius: 8px;">';
             } else {
                 $image_html = '<img src="' . base_url("public/assets/images/no_image.jpg") . '" alt="No Image" style="width: 50px; height: 50px; object-fit: contain;">';
             }
@@ -573,7 +794,7 @@ class Product extends MY_Controller
                 $barcode_html = '<img class="list-barcode-img" src="' . $barcode_url . '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'inline\';" alt="' . $row['line_bar_code'] . '" style="width: 120px; height: 80px; object-fit: contain; display:block;margin:auto; transition: transform .2s;"><span style="display:none;">-</span><small>' . $row['line_bar_code'] . '</small>';
             }
 
-            $desc_html = '<span title="' . htmlspecialchars($row['description']) . '" style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; display:inline-block;">' . htmlspecialchars($row['description']) . '</span>';
+            $desc_html = '<span title="' . htmlspecialchars($row['description']) . '" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-width: 280px; white-space: normal; line-height: 1.45; font-size:.85rem; color:#555;">' . htmlspecialchars($row['description']) . '</span>';
 
             $status_html = ($row['status'] == 'Active') ? '<span class="cat-badge cat-badge-active"><span class="cat-badge-dot"></span>Active</span>' : '<span class="cat-badge cat-badge-inactive"><span class="cat-badge-dot"></span>Inactive</span>';
 
@@ -595,7 +816,7 @@ class Product extends MY_Controller
             $data[] = array(
                 $image_html,
                 $barcode_html,
-                htmlspecialchars($row['name']),
+                '<a href="' . base_url('product_details/' . $row['product_id']) . '" style="font-weight:600; color:#7367f0; text-decoration:none;" onmouseover="this.style.textDecoration=\'underline\'" onmouseout="this.style.textDecoration=\'none\'">' . htmlspecialchars($row['name']) . '</a>',
                 $desc_html,
                 $row['price'],
                 $row['purchase_price'],

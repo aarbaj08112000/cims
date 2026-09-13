@@ -50,19 +50,21 @@ class Purchase_return_model extends CI_Model {
     }
 
     public function get_return_items($return_id) {
-        $this->db->select('prd.*, p.name as product_name, p.product_code');
+        $this->db->select('prd.*, p.name as product_name, p.product_code, b.brand_name');
         $this->db->from('purchase_return_details prd');
         $this->db->join('product_master p', 'prd.product_id = p.product_id', 'left');
+        $this->db->join('brands b', 'p.brand_id = b.brand_id', 'left');
         $this->db->where('prd.return_id', $return_id);
         $query = $this->db->get();
         return $query->result_array();
     }
 
     public function get_returnable_items($purchase_id) {
-        $this->db->select('pd.*, p.name as product_name, p.product_code, 
+        $this->db->select('pd.*, p.name as product_name, p.product_code, b.brand_name,
             (pd.qty - COALESCE(SUM(prd.qty), 0)) as available_qty');
         $this->db->from('purchase_details pd');
         $this->db->join('product_master p', 'pd.product_id = p.product_id', 'left');
+        $this->db->join('brands b', 'p.brand_id = b.brand_id', 'left');
         $this->db->join('purchase_return_master prm', 'pd.purchase_id = prm.purchase_id', 'left');
         $this->db->join('purchase_return_details prd', 'prm.return_id = prd.return_id AND pd.product_id = prd.product_id', 'left');
         $this->db->where('pd.purchase_id', $purchase_id);
