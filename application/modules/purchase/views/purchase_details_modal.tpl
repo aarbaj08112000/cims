@@ -1,7 +1,7 @@
 <div class="modal-header border-bottom pb-3">
     <h5 class="modal-title fw-bold d-flex align-items-center text-dark">
         <i class="ti ti-receipt fs-4 me-2 text-primary"></i> 
-        Purchase Bill: <a href="<%base_url('purchase_details/')%><%$purchase['purchase_id']%>" class="text-primary ms-2 text-decoration-underline"><%$purchase['bill_no']%></a>
+        Purchase Bill: <a href="<%base_url('purchase_details/')%><%$purchase['purchase_id']|encode_id%>" class="text-primary ms-2 text-decoration-underline"><%$purchase['bill_no']%></a>
     </h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>

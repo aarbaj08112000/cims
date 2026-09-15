@@ -27,7 +27,7 @@ class Product extends MY_Controller
     public function add_product()
     {
         $data['base_url'] = base_url();
-        $product_id = $this->uri->segment(2);
+        $product_id = decode_id($this->uri->segment(2));
         if ($product_id != "" && is_numeric($product_id)) {
             $data['products'] = $this->Product_model->get_products_details($product_id);
             $data['product_attrs'] = $this->Product_model->get_product_attributes($product_id);
@@ -52,7 +52,7 @@ class Product extends MY_Controller
     public function product_details()
     {
         $data['base_url'] = base_url();
-        $product_id = $this->uri->segment(2);
+        $product_id = decode_id($this->uri->segment(2));
         $data['products'] = $this->Product_model->get_products_details($product_id);
         $data['products_image'] = $this->Product_model->get_products_image($product_id);
         $data['product_attrs'] = $this->Product_model->get_product_attributes($product_id);
@@ -207,7 +207,7 @@ class Product extends MY_Controller
             $this->barcode_gen->generate($barcode_text, $barcode_file);
 
             $ret_arr['msg'] = 'Product added successfully.';
-            $ret_arr['product_id'] = $product_id;
+            $ret_arr['product_id'] = encode_id($product_id);
         } else {
             $ret_arr['msg'] = 'Error occurred while adding the Product.';
             $ret_arr['success'] = 0;
@@ -399,7 +399,7 @@ class Product extends MY_Controller
 
         if ($update_query) {
             $ret_arr['msg'] = 'Product updated successfully.';
-            $ret_arr['product_id'] = $product_id;
+            $ret_arr['product_id'] = encode_id($product_id);
         } else {
             $ret_arr['msg'] = 'Error occurred while updating the Product.';
             $ret_arr['success'] = 0;
@@ -804,7 +804,7 @@ class Product extends MY_Controller
                     <i class="ti ti-dots-vertical text-muted"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" style="">
-                    <li><a class="dropdown-item" href="' . base_url('product_details/') . $row['product_id'] . '"><i class="ti ti-eye me-1"></i> View Details</a></li>
+                    <li><a class="dropdown-item" href="' . base_url('product_details/') . encode_id($row['product_id']) . '"><i class="ti ti-eye me-1"></i> View Details</a></li>
                     <li><a class="dropdown-item" href="' . base_url('update_product/') . $row['product_id'] . '"><i class="ti ti-pencil me-1"></i> Edit</a></li>
                     <li><a class="dropdown-item update_stock" href="javascript:void(0);" data-id="' . $row['product_id'] . '"><i class="ti ti-box me-1"></i> Update Stock</a></li>
                     <li><a class="dropdown-item regenerate_barcode" href="javascript:void(0);" data-id="' . $row['product_id'] . '"><i class="ti ti-refresh me-1"></i> Regenerate Barcode</a></li>
@@ -816,7 +816,7 @@ class Product extends MY_Controller
             $data[] = array(
                 $image_html,
                 $barcode_html,
-                '<a href="' . base_url('product_details/' . $row['product_id']) . '" style="font-weight:600; color:#7367f0; text-decoration:none;" onmouseover="this.style.textDecoration=\'underline\'" onmouseout="this.style.textDecoration=\'none\'">' . htmlspecialchars($row['name']) . '</a>',
+                '<a href="' . base_url('product_details/' . encode_id($row['product_id'])) . '" style="font-weight:600; color:#7367f0; text-decoration:none;" onmouseover="this.style.textDecoration=\'underline\'" onmouseout="this.style.textDecoration=\'none\'">' . htmlspecialchars($row['name']) . '</a>',
                 $desc_html,
                 $row['price'],
                 $row['purchase_price'],

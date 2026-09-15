@@ -83,8 +83,8 @@ $route['delete_supplier'] = 'supplier/supplier/delete_supplier';
 $route['create_purchase'] = 'purchase/purchase/create_purchase';
 $route['save_purchase'] = 'purchase/purchase/save_purchase';
 $route['purchase_list'] = 'purchase/purchase/index';
-$route['purchase_details/(:num)'] = 'purchase/purchase/purchase_details/$1';
-$route['purchase/print_pdf/(:num)'] = 'purchase/purchase/print_pdf/$1';
+$route['purchase_details/(:any)'] = 'purchase/purchase/purchase_details/$1';
+$route['purchase/print_pdf/(:any)'] = 'purchase/purchase/print_pdf/$1';
 $route['get_purchase_details_ajax'] = 'purchase/purchase/get_purchase_details_ajax';
 
 $route['purchase_return_list'] = 'purchase/purchase_return/index';
@@ -94,16 +94,16 @@ $route['save_purchase_return'] = 'purchase/purchase_return/save_return';
 $route['get_purchase_items_for_return'] = 'purchase/purchase_return/get_purchase_items_for_return';
 $route['return_details_ajax'] = 'purchase/purchase_return/return_details_ajax';
 $route['purchase_return_details'] = 'purchase/purchase_return/return_details';
-$route['purchase_return_details/(:num)'] = 'purchase/purchase_return/return_details/$1';
+$route['purchase_return_details/(:any)'] = 'purchase/purchase_return/return_details/$1';
 
 $route['sales_list'] = 'sales/sales/index';
-$route['sales_details/(:num)'] = 'sales/sales/sales_details/$1';
+$route['sales_details/(:any)'] = 'sales/sales/sales_details/$1';
 $route['sales'] = 'sales/sales/index';
 $route['create_sale'] = 'sales/sales/create_sale';
 $route['save_sale'] = 'sales/sales/save_sale';
 $route['sales_details_ajax'] = 'sales/Sales/sales_details_ajax';
-$route['sales/download_invoice/(:num)'] = 'sales/sales/download_invoice/$1';
-$route['sales/print_invoice/(:num)'] = 'sales/sales/print_invoice/$1';
+$route['sales/download_invoice/(:any)'] = 'sales/sales/download_invoice/$1';
+$route['sales/print_invoice/(:any)'] = 'sales/sales/print_invoice/$1';
 
 // POS Billing Routes
 $route['pos'] = 'sales/Pos/index';
@@ -120,7 +120,7 @@ $route['save_sales_return'] = 'sales/Sales_return/save_sales_return';
 $route['get_sale_items_for_return'] = 'sales/Sales_return/get_sale_items_for_return';
 $route['sales_return_details_ajax'] = 'sales/Sales_return/return_details_ajax';
 $route['sales_return_details'] = 'sales/Sales_return/return_details';
-$route['sales_return_details/(:num)'] = 'sales/Sales_return/return_details/$1';
+$route['sales_return_details/(:any)'] = 'sales/Sales_return/return_details/$1';
 
 // Stock Management Routes
 $route['stock'] = 'stock/Stock';

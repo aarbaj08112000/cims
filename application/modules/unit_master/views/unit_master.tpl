@@ -64,7 +64,7 @@
         <thead>
           <tr>
             <th>Unit Name</th>
-            <th>Unit Code</th>
+            <th class="text-left">Unit Code</th>
             <th width="140">Status</th>
             <th width="160" class="text-center">Action</th>
           </tr>
