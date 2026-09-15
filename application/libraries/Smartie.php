@@ -42,6 +42,8 @@ class Smartie extends Smarty {
         $this->assign( 'APPPATH', APPPATH );   // path to application directory
         $this->assign( 'BASEPATH', BASEPATH ); // path to system directory
 
+        $this->registerPlugin('modifier', 'encode_id', 'encode_id');
+        $this->registerPlugin('modifier', 'decode_id', 'decode_id');
         log_message('debug', "Smarty Class Initialized");
     }
 

@@ -160,7 +160,7 @@
         <button onclick="window.open('<%$base_url%>sales/print_invoice/<%$sale['sales_id']%>', '_blank')" class="cat-btn cat-btn-primary">
           <i class="ti ti-printer"></i> Print Invoice
         </button>
-        <button onclick="window.location.href='<%$base_url%>sales/download_invoice/<%$sale['sales_id']%>'" class="cat-btn cat-btn-outline-primary">
+        <button onclick="window.location.href='<%$base_url%>sales/download_invoice/<%$sale['sales_id']|encode_id%>'" class="cat-btn cat-btn-outline-primary">
           <i class="ti ti-download"></i> Download Invoice
         </button>
         <a href="<%$base_url%>sales_list" class="cat-btn cat-btn-outline">

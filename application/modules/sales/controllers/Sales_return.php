@@ -108,7 +108,7 @@ class Sales_return extends MY_Controller {
 
         if ($return_id) {
             $ret_arr['msg'] = 'Sales return processed successfully and stock restored.';
-            $ret_arr['return_id'] = $return_id;
+            $ret_arr['return_id'] = encode_id($return_id);
         } else {
             $ret_arr['success'] = 0;
             $ret_arr['msg'] = 'Failed to process sales return.';
@@ -117,7 +117,9 @@ class Sales_return extends MY_Controller {
         echo json_encode($ret_arr);
     }
 
-    public function return_details($return_id) {
+    public function return_details($return_id = '') {
+        $return_id = !empty($return_id) ? $return_id : $this->uri->segment(2);
+        $return_id = decode_id($return_id);
         $data['return'] = $this->Sales_return_model->get_sales_return_master($return_id);
         
         if (empty($data['return'])) {
@@ -131,7 +133,7 @@ class Sales_return extends MY_Controller {
     }
 
     public function return_details_ajax() {
-        $return_id = $this->input->post('return_id');
+        $return_id = decode_id($this->input->post('return_id'));
         $data['return'] = $this->Sales_return_model->get_sales_return_master($return_id);
         $data['items'] = $this->Sales_return_model->get_sales_return_items($return_id);
         

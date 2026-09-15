@@ -21,12 +21,67 @@ const user_app = {
             dom: 'Brt<"cat-dt-footer"<"cat-dt-info"i><"cat-dt-controls"<"cat-dt-length"l><"cat-dt-paging"p>>>',
             buttons: [
                 {
-                    extend: "csv",
+                    extend: "excel",
                     className: "d-none",
                     filename: file_name,
+                    title: "User Management",
                     exportOptions: {
-                        columns: [0, 1, 3, 4] // Full Name, Email, Role, Status (no Password, no Action)
-                    }
+                        columns: [0, 1, 3, 4]
+                    },
+          customize: function (xlsx) {
+            var sheet  = xlsx.xl.worksheets['sheet1.xml'];
+            var styles = xlsx.xl['styles.xml'];
+
+            var themeColor   = '5B5FC7';
+            var themeLighter = '9B9ED8';
+            var white        = 'FFFFFF';
+            var borderColor  = 'C5C5D8';
+
+            var fillsEl = $('fills', styles);
+            var fCount  = parseInt(fillsEl.attr('count'));
+            fillsEl.append('<fill><patternFill patternType="solid"><fgColor rgb="' + themeLighter + '"/><bgColor indexed="64"/></patternFill></fill>');
+            var titleFillId = fCount++;
+            fillsEl.append('<fill><patternFill patternType="solid"><fgColor rgb="' + themeColor + '"/><bgColor indexed="64"/></patternFill></fill>');
+            var headerFillId = fCount++;
+            fillsEl.attr('count', fCount);
+
+            var fontsEl = $('fonts', styles);
+            var ftCount = parseInt(fontsEl.attr('count'));
+            fontsEl.append('<font><b/><sz val="13"/><color rgb="' + white + '"/><name val="Calibri"/></font>');
+            var titleFontId = ftCount++;
+            fontsEl.append('<font><b/><sz val="11"/><color rgb="' + white + '"/><name val="Calibri"/></font>');
+            var headerFontId = ftCount++;
+            fontsEl.attr('count', ftCount);
+
+            var bordersEl = $('borders', styles);
+            var bCount    = parseInt(bordersEl.attr('count'));
+            var medBorder = '<border><left style="medium"><color rgb="' + borderColor + '"/></left><right style="medium"><color rgb="' + borderColor + '"/></right><top style="medium"><color rgb="' + borderColor + '"/></top><bottom style="medium"><color rgb="' + borderColor + '"/></bottom><diagonal/></border>';
+            bordersEl.append(medBorder);
+            var dataBorderId = bCount++;
+            bordersEl.attr('count', bCount);
+
+            var cellXfsEl = $('cellXfs', styles);
+            var xfCount   = parseInt(cellXfsEl.attr('count'));
+            cellXfsEl.append('<xf numFmtId="0" fontId="' + titleFontId  + '" fillId="' + titleFillId  + '" borderId="' + dataBorderId + '" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf>');
+            var titleStyleId = xfCount++;
+            cellXfsEl.append('<xf numFmtId="0" fontId="' + headerFontId + '" fillId="' + headerFillId + '" borderId="' + dataBorderId + '" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf>');
+            var headerStyleId = xfCount++;
+            cellXfsEl.append('<xf numFmtId="0" fontId="0" fillId="0" borderId="' + dataBorderId + '" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="center"/></xf>');
+            var dataStyleId = xfCount++;
+            cellXfsEl.attr('count', xfCount);
+
+            var rows = $('row', sheet);
+            rows.eq(0).find('c').attr('s', titleStyleId);
+            rows.eq(1).find('c').attr('s', headerStyleId);
+            rows.each(function (i) { if (i >= 2) { $(this).find('c').attr('s', dataStyleId); } });
+
+            $('sheetData', sheet).after('<mergeCells count="1"><mergeCell ref="A1:D1"/></mergeCells>');
+            rows.eq(0).attr({ ht: '28', customHeight: '1' });
+            rows.eq(1).attr({ ht: '20', customHeight: '1' });
+
+            $('cols', sheet).remove();
+            $('sheetData', sheet).before('<cols><col min="1" max="1" width="30" customWidth="1"/><col min="2" max="2" width="30" customWidth="1"/><col min="3" max="3" width="20" customWidth="1"/><col min="4" max="4" width="20" customWidth="1"/></cols>');
+          }
                 },
                 {
                     extend: "pdf",
@@ -169,6 +224,10 @@ const user_app = {
                     $("body").addClass("grid-layout");
                 }
             }
+        });
+
+        $('#downloadExcelBtn').on('click', function () {
+            table.button('.buttons-excel').trigger();
         });
 
         var searchTimer;

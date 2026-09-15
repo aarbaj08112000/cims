@@ -86,7 +86,7 @@ class Sales extends MY_Controller
 
         if ($sales_id) {
             $ret_arr['msg'] = 'Sales bill saved successfully and stock deducted.';
-            $ret_arr['sales_id'] = $sales_id;
+            $ret_arr['sales_id'] = encode_id($sales_id);
         } else {
             $ret_arr['success'] = 0;
             $ret_arr['msg'] = 'Failed to save sales transaction.';
@@ -96,8 +96,10 @@ class Sales extends MY_Controller
     }
 
 
-    public function sales_details($sales_id)
+    public function sales_details($sales_id = '')
     {
+        $sales_id = !empty($sales_id) ? $sales_id : $this->uri->segment(2);
+        $sales_id = decode_id($sales_id);
         $data = $this->_build_invoice_data($sales_id);
 
         if (empty($data['sale'])) {
@@ -118,7 +120,7 @@ class Sales extends MY_Controller
 
     public function sales_details_ajax()
     {
-        $sales_id = $this->input->post('sales_id');
+        $sales_id = decode_id($this->input->post('sales_id'));
         $data['sale'] = $this->Sales_model->get_sale_master($sales_id);
         $data['items'] = $this->Sales_model->get_sale_items($sales_id);
 
@@ -197,8 +199,9 @@ class Sales extends MY_Controller
      * Download Invoice as PDF via dompdf
      * Route: sales/download_invoice/{id}
      */
-    public function download_invoice($sales_id)
+    public function download_invoice($sales_id = '')
     {
+        $sales_id = decode_id($sales_id);
         $get_data = $this->input->get();
         $data = $this->_build_invoice_data($sales_id);
 
@@ -220,8 +223,9 @@ class Sales extends MY_Controller
      * Open Invoice in browser for printing (triggers window.print())
      * Route: sales/print_invoice/{id}
      */
-    public function print_invoice($sales_id)
+    public function print_invoice($sales_id = '')
     {
+        $sales_id = decode_id($sales_id);
         $data = $this->_build_invoice_data($sales_id);
 
         if (empty($data['sale'])) {

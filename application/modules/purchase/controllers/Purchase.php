@@ -67,7 +67,7 @@ class Purchase extends MY_Controller {
 
         if ($purchase_id) {
             $ret_arr['msg'] = 'Purchase recorded successfully and stock updated.';
-            $ret_arr['purchase_id'] = $purchase_id;
+            $ret_arr['purchase_id'] = encode_id($purchase_id);
         } else {
             $ret_arr['success'] = 0;
             $ret_arr['msg'] = 'Failed to save purchase transaction.';
@@ -76,9 +76,10 @@ class Purchase extends MY_Controller {
         echo json_encode($ret_arr);
     }
 
-    public function purchase_details() {
+    public function purchase_details($param = '') {
         $data['base_url'] = base_url();
-        $purchase_id = $this->uri->segment(2);
+        $param = !empty($param) ? $param : $this->uri->segment(2);
+        $purchase_id = decode_id($param);
         
         if (empty($purchase_id)) {
             redirect('purchase_list');
@@ -118,7 +119,7 @@ class Purchase extends MY_Controller {
     }
 
     public function print_pdf($purchase_id) {
-        $purchase_id = (int)$purchase_id;
+        $purchase_id = decode_id($purchase_id);
         if (empty($purchase_id)) {
             show_404();
             return;

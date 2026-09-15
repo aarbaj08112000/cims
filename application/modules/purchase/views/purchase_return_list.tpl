@@ -22,8 +22,8 @@
           <i class="ti ti-search"></i>
           <input type="text" id="search-filter-input" placeholder="Search Returns..." />
         </div>
-        <button type="button" id="export-csv" class="cat-btn cat-btn-outline" title="Export CSV">
-          <i class="ti ti-file-type-csv"></i> Export CSV
+        <button type="button" id="export-excel" class="cat-btn cat-btn-outline" title="Export Excel">
+          <i class="ti ti-file-spreadsheet"></i> Export Excel
         </button>
         <button type="button" id="export-pdf" class="cat-btn cat-btn-outline-red" title="Export PDF">
           <i class="ti ti-file-type-pdf"></i> Export PDF
@@ -60,7 +60,7 @@
               <td><%$val['added_date']|date_format:'%d-%m-%Y %H:%M' %></td>
               <td class="text-center cat-col-action">
                 <div class="d-flex align-items-center justify-content-center">
-                  <a href="<%$base_url%>purchase_return_details/<%$val['return_id']%>" title="View Details">
+                  <a href="<%$base_url%>purchase_return_details/<%$val['return_id']|encode_id%>" title="View Details">
                     <i class="ti ti-eye text-primary"></i>
                   </a>
                 </div>
@@ -86,4 +86,4 @@
 <script type="text/javascript">
   var base_url = <%$base_url|@json_encode%>;
 </script>
-<script src="<%$base_url%>public/js/admin_panel/purchase_return.js"></script>
+<script src="<%$base_url%>public/js/admin_panel/purchase_return.js?v=6"></script>

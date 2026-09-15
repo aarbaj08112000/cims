@@ -20,8 +20,8 @@
         </div>
       </div>
       <div class="cat-page-header-right">
-        <button id="btn-export-csv" class="cat-btn cat-btn-outline">
-          <i class="ti ti-file-type-csv"></i> Export CSV
+        <button id="btn-export-excel" class="cat-btn cat-btn-outline">
+          <i class="ti ti-file-spreadsheet"></i> Export Excel
         </button>
         <button id="btn-export-pdf" class="cat-btn cat-btn-outline-red">
           <i class="ti ti-file-type-pdf"></i> Export PDF
@@ -90,4 +90,4 @@
 <script type="text/javascript">
   var base_url = <%$base_url|@json_encode%>;
 </script>
-<script src="<%$base_url%>public/js/admin_panel/stock_adjustment_report.js"></script>
+<script src="<%$base_url%>public/js/admin_panel/stock_adjustment_report.js?v=2"></script>

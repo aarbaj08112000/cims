@@ -24,8 +24,8 @@
           <i class="ti ti-search"></i>
           <input type="text" id="search-filter-input" placeholder="Search report..." />
         </div>
-        <button type="button" id="export-csv" class="cat-btn cat-btn-outline" title="Export CSV">
-          <i class="ti ti-file-spreadsheet"></i> Export CSV
+        <button type="button" id="export-excel" class="cat-btn cat-btn-outline" title="Export Excel">
+          <i class="ti ti-file-spreadsheet"></i> Export Excel
         </button>
         <button type="button" id="export-pdf" class="cat-btn cat-btn-outline-red" title="Export PDF">
           <i class="ti ti-file-type-pdf"></i> Export PDF
@@ -75,6 +75,6 @@
 <script type="text/javascript">
   var base_url = <%$base_url|@json_encode%>;
 </script>
-<script src="<%$base_url%>public/js/admin_panel/stock_valuation_report.js"></script>
+<script src="<%$base_url%>public/js/admin_panel/stock_valuation_report.js?v=2"></script>
 
 

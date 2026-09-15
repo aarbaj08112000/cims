@@ -1,9 +1,15 @@
 <link rel="stylesheet" href="<%$base_url%>public/css/category_ui.css" />
+<style>
+/* Make entire month input clickable */
+#report_month_filter {
+    cursor: pointer;
+}
+</style>
 <div class="content-wrapper">
   <div class="container-xxl flex-grow-1 container-p-y">
     <!-- Page Header -->
     <div class="cat-page-header">
-      <div class="cat-page-header-left">
+            <div class="cat-page-header-left">
         <div class="cat-page-icon">
           <i class="ti ti-chart-pie"></i>
         </div>
@@ -18,21 +24,32 @@
           </nav>
         </div>
       </div>
+      <div class="cat-page-header-right d-flex align-items-center">
+        <input type="month" id="report_month_filter" class="form-control me-3" style="width: 200px; border-radius: 8px; font-weight: 500;" value="<%$current_month%>">
+      </div>
+
     </div>
 
     <!-- Stats Row -->
-    <div class="row mb-5 g-4 card-stats-row">
+    <div class="d-flex align-items-center mb-4">
+        <div class="rounded p-2 me-3" style="background-color: rgba(115, 103, 240, 0.1); color: #7367f0; display: inline-flex;">
+            <i class="ti ti-chart-bar fs-4"></i>
+        </div>
+        <h4 class="text-primary fw-bold mb-0 me-3" style="letter-spacing: 0.5px;">Overall Values</h4>
+        <div class="flex-grow-1" style="height: 2px; background: linear-gradient(90deg, rgba(115, 103, 240, 0.15) 0%, rgba(255,255,255,0) 100%); border-radius: 2px;"></div>
+    </div>
+    <div class="row mb-4 g-4 card-stats-row">
         <!-- Total Sales Card -->
         <div class="col-lg-3 col-md-6">
           <div class="card card-stat-item border-0 shadow-lg h-100 overflow-hidden bg-primary-gradient">
-            <div class="card-body p-4 position-relative">
+            <div class="card-body p-3 position-relative">
               <div class="d-flex justify-content-between align-items-start">
                 <div>
                   <h6 class="text-white opacity-75 fw-medium mb-1">TOTAL SALES</h6>
                   <h3 class="text-white mb-0 display-6 fw-bold"><%$stats['total_sales']|number_format:2%></h3>
                 </div>
                 <div class="stat-icon-wrapper bg-white-transparent rounded-circle d-flex align-items-center justify-content-center">
-                  <i class="ti ti-currency-dollar text-white fs-2"></i>
+                  <i class="ti ti-currency-dollar text-white fs-3"></i>
                 </div>
               </div>
               <div class="mt-3">
@@ -46,14 +63,14 @@
         <!-- Total Purchases Card -->
         <div class="col-lg-3 col-md-6">
           <div class="card card-stat-item border-0 shadow-lg h-100 overflow-hidden bg-info-gradient">
-            <div class="card-body p-4 position-relative">
+            <div class="card-body p-3 position-relative">
               <div class="d-flex justify-content-between align-items-start">
                 <div>
                   <h6 class="text-white opacity-75 fw-medium mb-1">TOTAL PURCHASES</h6>
                   <h3 class="text-white mb-0 display-6 fw-bold"><%$stats['total_purchases']|number_format:2%></h3>
                 </div>
                 <div class="stat-icon-wrapper bg-white-transparent rounded-circle d-flex align-items-center justify-content-center">
-                  <i class="ti ti-shopping-cart text-white fs-2"></i>
+                  <i class="ti ti-shopping-cart text-white fs-3"></i>
                 </div>
               </div>
               <div class="mt-3">
@@ -67,14 +84,14 @@
         <!-- Inventory Value Card -->
         <div class="col-lg-3 col-md-6">
           <div class="card card-stat-item border-0 shadow-lg h-100 overflow-hidden bg-success-gradient">
-            <div class="card-body p-4 position-relative">
+            <div class="card-body p-3 position-relative">
               <div class="d-flex justify-content-between align-items-start">
                 <div>
                   <h6 class="text-white opacity-75 fw-medium mb-1">INVENTORY VALUE</h6>
                   <h3 class="text-white mb-0 display-6 fw-bold"><%$stats['total_valuation']|number_format:2%></h3>
                 </div>
                 <div class="stat-icon-wrapper bg-white-transparent rounded-circle d-flex align-items-center justify-content-center">
-                  <i class="ti ti-building-warehouse text-white fs-2"></i>
+                  <i class="ti ti-building-warehouse text-white fs-3"></i>
                 </div>
               </div>
               <div class="mt-3">
@@ -88,14 +105,14 @@
         <!-- Low Stock Items Card -->
         <div class="col-lg-3 col-md-6">
           <div class="card card-stat-item border-0 shadow-lg h-100 overflow-hidden bg-danger-gradient">
-            <div class="card-body p-4 position-relative">
+            <div class="card-body p-3 position-relative">
               <div class="d-flex justify-content-between align-items-start">
                 <div>
                   <h6 class="text-white opacity-75 fw-medium mb-1">LOW STOCK</h6>
                   <h3 class="text-white mb-0 display-6 fw-bold"><%$stats['low_stock_count']%></h3>
                 </div>
                 <div class="stat-icon-wrapper bg-white-transparent rounded-circle d-flex align-items-center justify-content-center">
-                  <i class="ti ti-alert-triangle text-white fs-2"></i>
+                  <i class="ti ti-alert-triangle text-white fs-3"></i>
                 </div>
               </div>
               <div class="mt-3">
@@ -106,6 +123,115 @@
           </div>
         </div>
       </div>
+
+<!-- Grand Totals Row -->
+<div class="card bg-white shadow-sm border-0 mb-4" style="border-radius: 16px;">
+    <div class="card-body p-4">
+        <div class="d-flex align-items-center mb-4">
+        <div class="rounded p-2 me-3 d-flex align-items-center justify-content-center" style="background-color: #fff; color: #7367f0; border: 1px solid rgba(0,0,0,0.08); width: 42px; height: 42px;">
+            <i class="ti ti-calendar-event fs-4"></i>
+        </div>
+        <div>
+            <h4 class="text-primary fw-bold mb-0" id="dynamic-month-title" style="letter-spacing: 0.5px;"><span id="dynamic-month-name" class="text-capitalize"><%$current_month|date_format:"%B"%></span> Month Value</h4>
+            <div class="text-muted mt-1" style="font-size: 0.8rem;">Monthly summary of your key business metrics.</div>
+        </div>
+    </div>
+        <div class="row mb-2 g-4">
+        <!-- Sales Card -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card bg-white shadow-sm h-100" style="border-radius: 12px; border: 1px solid rgba(0,0,0,0.05);">
+                <div class="card-body p-4 pb-3">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="rounded p-2 me-3 d-flex align-items-center justify-content-center" style="background-color: rgba(115, 103, 240, 0.1); color: #7367f0; width: 48px; height: 48px;">
+                                <i class="ti ti-currency-rupee fs-3"></i>
+                            </div>
+                            <div>
+                                <h6 class="text-muted fw-semibold mb-1" style="font-size: 0.75rem; letter-spacing: 0.5px; text-transform: uppercase;">Sales Grand Total</h6>
+                                <h3 class="text-dark fw-bold mb-0" id="card-sales-total" style="font-size: 1.8rem; letter-spacing: -0.5px;">₹<%$current_sales_total|number_format:2%></h3>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <div class="text-success fw-bold d-flex align-items-center justify-content-end" style="font-size: 0.85rem;"><i class="ti ti-trending-up me-1"></i> +12%</div>
+                            <div class="text-muted" style="font-size: 0.7rem;">vs last month</div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress mb-3" style="height: 6px; border-radius: 6px; background-color: rgba(115, 103, 240, 0.1);">
+                        <div class="progress-bar" role="progressbar" style="width: 75%; background-color: #7367f0; border-radius: 6px;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    
+                    <div class="pt-3 border-top border-light d-flex align-items-center text-muted" style="font-size: 0.8rem;">
+                        <i class="ti ti-receipt me-2 fs-6"></i> Total revenue generated this month
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Purchase Card -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card bg-white shadow-sm h-100" style="border-radius: 12px; border: 1px solid rgba(0,0,0,0.05);">
+                <div class="card-body p-4 pb-3">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="rounded p-2 me-3 d-flex align-items-center justify-content-center" style="background-color: rgba(0, 207, 232, 0.1); color: #00cfe8; width: 48px; height: 48px;">
+                                <i class="ti ti-shopping-cart fs-3"></i>
+                            </div>
+                            <div>
+                                <h6 class="text-muted fw-semibold mb-1" style="font-size: 0.75rem; letter-spacing: 0.5px; text-transform: uppercase;">Purchase Grand Total</h6>
+                                <h3 class="text-dark fw-bold mb-0" id="card-purchase-total" style="font-size: 1.8rem; letter-spacing: -0.5px;">₹<%$current_purchase_total|number_format:2%></h3>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <div class="text-success fw-bold d-flex align-items-center justify-content-end" style="font-size: 0.85rem;"><i class="ti ti-trending-up me-1"></i> +8%</div>
+                            <div class="text-muted" style="font-size: 0.7rem;">vs last month</div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress mb-3" style="height: 6px; border-radius: 6px; background-color: rgba(0, 207, 232, 0.1);">
+                        <div class="progress-bar" role="progressbar" style="width: 65%; background-color: #00cfe8; border-radius: 6px;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    
+                    <div class="pt-3 border-top border-light d-flex align-items-center text-muted" style="font-size: 0.8rem;">
+                        <i class="ti ti-shopping-cart-plus me-2 fs-6"></i> Total amount spent on purchases
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory Card -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card bg-white shadow-sm h-100" style="border-radius: 12px; border: 1px solid rgba(0,0,0,0.05);">
+                <div class="card-body p-4 pb-3">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="rounded p-2 me-3 d-flex align-items-center justify-content-center" style="background-color: rgba(40, 199, 111, 0.1); color: #28c76f; width: 48px; height: 48px;">
+                                <i class="ti ti-building-warehouse fs-3"></i>
+                            </div>
+                            <div>
+                                <h6 class="text-muted fw-semibold mb-1" style="font-size: 0.75rem; letter-spacing: 0.5px; text-transform: uppercase;">Inventory Valuation</h6>
+                                <h3 class="text-dark fw-bold mb-0" id="card-inventory-total" style="font-size: 1.8rem; letter-spacing: -0.5px;">₹<%$stats['total_valuation']|number_format:2%></h3>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <div class="text-success fw-bold d-flex align-items-center justify-content-end" style="font-size: 0.85rem;"><i class="ti ti-trending-up me-1"></i> +5%</div>
+                            <div class="text-muted" style="font-size: 0.7rem;">vs last month</div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress mb-3" style="height: 6px; border-radius: 6px; background-color: rgba(40, 199, 111, 0.1);">
+                        <div class="progress-bar" role="progressbar" style="width: 50%; background-color: #28c76f; border-radius: 6px;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    
+                    <div class="pt-3 border-top border-light d-flex align-items-center text-muted" style="font-size: 0.8rem;">
+                        <i class="ti ti-stack me-2 fs-6"></i> Total value of current stock
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
 
     <div class="row">
         <div class="col-12">
@@ -338,4 +464,25 @@
 <script type="text/javascript">
   var base_url = <%$base_url|@json_encode%>;
 </script>
-<script src="<%$base_url%>public/js/admin_panel/reports.js"></script>
+<script src="<%$base_url%>public/js/admin_panel/reports.js?v=4"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var monthFilter = document.getElementById('report_month_filter');
+    if (monthFilter) {
+        monthFilter.addEventListener('click', function(e) {
+            try {
+                if (typeof this.showPicker === 'function') {
+                    this.showPicker();
+                }
+            } catch (err) {
+                // Ignore if showPicker fails
+            }
+        });
+        // Prevent keyboard from popping up on mobile since it's a picker
+        monthFilter.addEventListener('focus', function(e) {
+            e.preventDefault();
+        });
+    }
+});
+</script>

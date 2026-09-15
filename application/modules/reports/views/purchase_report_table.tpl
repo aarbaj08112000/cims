@@ -10,7 +10,6 @@
     </thead>
     <tbody>
         <%if $purchases%>
-            <%assign var="total_val" value=0%>
             <%foreach from=$purchases item=row%>
                 <tr>
                     <td><%$row['bill_no']%></td>
@@ -19,17 +18,7 @@
                     <td>Cash</td>
                     <td class="text-end"><%$row['total_amount']|number_format:2%></td>
                 </tr>
-                <%assign var="total_val" value=$total_val + $row['total_amount']%>
             <%/foreach%>
         <%/if%>
     </tbody>
-    <%if $purchases%>
-    <tfoot>
-        <tr>
-            <th colspan="4" class="text-end fw-bold">GRAND TOTAL:</th>
-            <th class="text-end fw-bold"><%$total_val|number_format:2%></th>
-        </tr>
-    </tfoot>
-    <%/if%>
 </table>
-

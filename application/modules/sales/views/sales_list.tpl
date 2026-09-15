@@ -22,8 +22,8 @@
           <i class="ti ti-search"></i>
           <input type="text" id="search-filter-input" placeholder="Search Sales..." />
         </div>
-        <button type="button" id="export-csv" class="cat-btn cat-btn-outline" title="Export CSV">
-          <i class="ti ti-file-type-csv"></i> Export CSV
+        <button type="button" id="export-excel" class="cat-btn cat-btn-outline" title="Export Excel">
+          <i class="ti ti-file-spreadsheet"></i> Export Excel
         </button>
         <button type="button" id="export-pdf" class="cat-btn cat-btn-outline-red" title="Export PDF">
           <i class="ti ti-file-type-pdf"></i> Export PDF
@@ -53,7 +53,7 @@
         <%if ($sales) %>
           <%foreach from=$sales item=val %>
            <tr>
-              <td class="fw-medium text-dark"><a href="<%base_url('sales_details/')%><%$val['sales_id']%>" class="text-primary text-decoration-none fw-bold"><%$val['bill_no'] %></a></td>
+              <td class="fw-medium text-dark"><a href="<%base_url('sales_details/')%><%$val['sales_id']|encode_id%>" class="text-primary text-decoration-none fw-bold"><%$val['bill_no'] %></a></td>
               <td><%$val['customer_phone_number']|default:'Walk-in' %></td>
               <td><%$val['sales_date']|date_format:'%d-%m-%Y' %></td>
               <td class="text-end"><%$val['total_amount']|number_format:2 %></td>
@@ -68,13 +68,13 @@
               </td>
               <td class="text-center cat-col-action">
                 <div class="d-flex align-items-center justify-content-center">
-                  <a href="<%base_url('sales_details/')%><%$val['sales_id']%>" class="text-decoration-none" title="View Details">
+                  <a href="<%base_url('sales_details/')%><%$val['sales_id']|encode_id%>" class="text-decoration-none" title="View Details">
                     <i class="ti ti-eye text-primary me-2"></i>
                   </a>
-                  <a href="<%$base_url%>sales/print_invoice/<%$val['sales_id']%>" target="_blank" title="Print Invoice" class="me-2">
+                  <a href="<%$base_url%>sales/print_invoice/<%$val['sales_id']|encode_id%>" target="_blank" title="Print Invoice" class="me-2">
                     <i class="ti ti-printer text-success"></i>
                   </a>
-                  <a href="<%$base_url%>sales/download_invoice/<%$val['sales_id']%>" title="Download Invoice">
+                  <a href="<%$base_url%>sales/download_invoice/<%$val['sales_id']|encode_id%>" title="Download Invoice">
                     <i class="ti ti-download text-info"></i>
                   </a>
                 </div>
@@ -93,4 +93,4 @@
 <script type="text/javascript">
   var base_url = <%$base_url|@json_encode%>;
 </script>
-<script src="<%$base_url%>public/js/admin_panel/sales_list.js"></script>
+<script src="<%$base_url%>public/js/admin_panel/sales_list.js?v=7"></script>

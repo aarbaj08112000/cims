@@ -170,5 +170,21 @@ function NoDataFoundMessage($module_name =""){
     return $html;
 }
 
+function encode_id($id) {
+    if (empty($id) && $id !== 0 && $id !== '0') return '';
+    return rtrim(strtr(base64_encode((string)$id), '+/', '-_'), '=');
+}
 
+function decode_id($str) {
+    if (empty($str)) return 0;
+    if (is_numeric($str)) {
+        return (int)$str;
+    }
+    $remainder = strlen($str) % 4;
+    if ($remainder) {
+        $str .= str_repeat('=', 4 - $remainder);
+    }
+    $decoded = base64_decode(strtr($str, '-_', '+/'));
+    return is_numeric($decoded) ? (int)$decoded : 0;
+}
 ?>

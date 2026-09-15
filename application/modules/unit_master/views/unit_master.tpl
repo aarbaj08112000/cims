@@ -22,8 +22,8 @@
           <i class="ti ti-search"></i>
           <input type="text" id="search-filter-input" placeholder="Search units..." />
         </div>
-        <button type="button" id="export-csv" class="cat-btn cat-btn-outline" title="Export CSV">
-          <i class="ti ti-file-spreadsheet"></i> Export CSV
+        <button type="button" id="export-excel" class="cat-btn cat-btn-outline" title="Export Excel">
+          <i class="ti ti-file-spreadsheet"></i> Export Excel
         </button>
         <button type="button" id="export-pdf" class="cat-btn cat-btn-outline-red" title="Export PDF">
           <i class="ti ti-file-type-pdf"></i> Export PDF
@@ -64,7 +64,7 @@
         <thead>
           <tr>
             <th>Unit Name</th>
-            <th>Unit Code</th>
+            <th class="text-left">Unit Code</th>
             <th width="140">Status</th>
             <th width="160" class="text-center">Action</th>
           </tr>
@@ -79,5 +79,5 @@
   <script type="text/javascript">
     var base_url = <%$base_url|@json_encode%>
   </script>
-  <script src="<%$base_url%>public/js/admin_panel/unit_master.js"></script>
+  <script src="<%$base_url%>public/js/admin_panel/unit_master.js?v=4"></script>
 </div>

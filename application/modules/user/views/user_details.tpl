@@ -30,7 +30,7 @@
                <i class=" la-list-ul ti ti-arrow-down-from-arc" ></i>
              </button>
              <ul class="dropdown-menu p-0 mt-1 export-drop-down" aria-labelledby="dropdownMenuButton1" >
-               <li class="csv"  id="downloadCSVBtn" title="CSV"><label class="hide">CSV</label> <i class="ti ti-file-type-csv" style="color: black"></i></li>
+               <li class="csv"  id="downloadExcelBtn" title="Excel"><label class="hide">Excel</label> <i class="ti ti-file-spreadsheet" style="color: black"></i></li>
                <li class="pdf " id="downloadPDFBtn" title="PDF"><label class="hide">PDF</label><i class="ti ti-file-type-pdf" style="color: black"></i></li>
              </ul>
          </div>
@@ -330,4 +330,4 @@
    var no_data_message = <%$no_data_message|@json_encode%>;
    var module_name = "User";
 </script>
-<script src="<%$base_url%>public/js/admin/user_list.js"></script>
+<script src="<%$base_url%>public/js/admin/user_list.js?v=9"></script>

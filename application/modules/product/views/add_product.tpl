@@ -378,20 +378,25 @@
         position: absolute;
         top: -8px;
         right: -8px;
-        width: 24px;
-        height: 24px;
+        width: 22px;
+        height: 22px;
+        min-width: 22px;
+        min-height: 22px;
         background: #ea5455;
         color: #fff;
         border: 2px solid #fff;
-        border-radius: 50%;
-        font-size: 16px;
-        line-height: 1;
+        border-radius: 50% !important;
+        font-size: 14px;
+        line-height: 22px;
+        padding: 0;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 2px 6px rgba(234,84,85,.4);
+        box-shadow: 0 2px 6px rgba(234,84,85,.45);
         transition: background .2s, transform .2s;
+        z-index: 10;
+        overflow: hidden;
       }
       .img-remove-btn:hover { background: #c0392b; transform: scale(1.15); }
 
