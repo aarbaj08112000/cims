@@ -9,7 +9,7 @@ const reportsPage = {
         this.loadSalesReport();
         this.bindEvents();
     },
-    bindEvents: function () {
+        bindEvents: function () {
         let that = this;
 
         // Tab Switches
@@ -23,20 +23,41 @@ const reportsPage = {
             that.loadStockReport();
         });
 
-        // Filter button bindings removed as filters are hidden
-        // $('#filter-sales-btn').on('click', function () {
-        //     that.loadSalesReport();
-        // });
-        // $('#filter-purchase-btn').on('click', function () {
-        //     that.loadPurchaseReport();
-        // });
-        // $('#refresh-stock-btn').on('click', function () {
-        //     that.loadStockReport();
-        // });
+        $('#report_month_filter').on('change', function() {
+            that.updateMonthlySummary();
+            if ($('#navs-sales').hasClass('active')) {
+                that.loadSalesReport();
+            } else if ($('#navs-purchase').hasClass('active')) {
+                that.loadPurchaseReport();
+            } else {
+                that.loadStockReport();
+            }
+        });
     },
-    loadSalesReport: function () {
-        let from_date = $('#sales_from_date').val();
-        let to_date = $('#sales_to_date').val();
+
+    updateMonthlySummary: function() {
+        let month = $('#report_month_filter').val();
+        if (month) {
+            let d = new Date(month.split('-')[0], month.split('-')[1] - 1);
+            let monthName = d.toLocaleString('default', { month: 'long' }).toLowerCase();
+            $('#dynamic-month-name').text(monthName);
+        }
+        $.ajax({
+            type: "POST",
+            url: base_url + "get_monthly_summary_ajax",
+            data: { month: month },
+            dataType: "json",
+            success: function(response) {
+                if (response.success == 1) {
+                    $('#card-sales-total').text('₹' + response.sales_total);
+                    $('#card-purchase-total').text('₹' + response.purchase_total);
+                    $('#card-inventory-total').text('₹' + response.inventory_total);
+                }
+            }
+        });
+    },
+            loadSalesReport: function () {
+        let month = $('#report_month_filter').val();
         let container = $('#sales-report-container');
 
         container.html('<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>');
@@ -44,7 +65,7 @@ const reportsPage = {
         $.ajax({
             type: "POST",
             url: base_url + "get_sales_report_ajax",
-            data: { from_date: from_date, to_date: to_date },
+            data: { month: month },
             dataType: "json",
             success: function (response) {
                 if (response.success == 1) {
@@ -54,9 +75,8 @@ const reportsPage = {
             }
         });
     },
-    loadPurchaseReport: function () {
-        let from_date = $('#purchase_from_date').val();
-        let to_date = $('#purchase_to_date').val();
+        loadPurchaseReport: function () {
+        let month = $('#report_month_filter').val();
         let container = $('#purchase-report-container');
 
         container.html('<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>');
@@ -64,7 +84,7 @@ const reportsPage = {
         $.ajax({
             type: "POST",
             url: base_url + "get_purchase_report_ajax",
-            data: { from_date: from_date, to_date: to_date },
+            data: { month: month },
             dataType: "json",
             success: function (response) {
                 if (response.success == 1) {

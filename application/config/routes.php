@@ -146,3 +146,5 @@ $route['documentation'] = 'documentation/Documentation';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
+$route['get_monthly_summary_ajax'] = 'reports/Reports/get_monthly_summary_ajax';

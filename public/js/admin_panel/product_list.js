@@ -1,6 +1,27 @@
 $(document).ready(function () {
   page.init();
 });
+
+function newExportAction(e, dt, button, config) {
+  var self = this;
+  var oldStart = dt.settings()[0]._iDisplayStart;
+  dt.one('preXhr', function (e, s, data) {
+    data.start = 0;
+    data.length = -1;
+    dt.one('preDraw', function (e, settings) {
+      if (button[0].className.indexOf('buttons-excel') >= 0) {
+        $.fn.dataTable.ext.buttons.excelHtml5.action.call(self, e, dt, button, config);
+      } else if (button[0].className.indexOf('buttons-pdf') >= 0) {
+        $.fn.dataTable.ext.buttons.pdfHtml5.action.call(self, e, dt, button, config);
+      }
+      dt.one('preXhr', function (e, s, data) { settings._iDisplayStart = oldStart; data.start = oldStart; });
+      setTimeout(dt.ajax.reload, 0);
+      return false;
+    });
+  });
+  dt.ajax.reload();
+}
+
 var table = '';
 var file_name = "product_list";
 
@@ -368,11 +389,82 @@ const page = {
       dom: 'Brt<"cat-dt-footer"<"cat-dt-info"i><"cat-dt-controls"<"cat-dt-length"l><"cat-dt-paging"p>>>',
       buttons: [
         {
-          extend: "csv",
+          extend: "excel",
           className: "d-none",
           filename: file_name,
+          title: "Product List",
+          action: newExportAction,
           exportOptions: {
-            columns: [1, 2, 3, 4, 5, 6, 7, 8] // Export barcode, product name, description, price, stock, status
+            columns: [1, 2, 3, 4, 5, 6, 7, 8],
+            format: {
+              body: function (data, row, column, node) {
+                if (column === 0) { // Barcode
+                  var smallMatch = data.match(/<small[^>]*>(.*?)<\/small>/i);
+                  if (smallMatch && smallMatch[1]) { return smallMatch[1].trim(); }
+                  return data.replace(/<[^>]*>?/gm, '').replace('-', '').trim();
+                }
+                if (column === 7) { // Status
+                  var tmp = document.createElement('div'); tmp.innerHTML = data;
+                  return (tmp.textContent || tmp.innerText || '').trim();
+                }
+                var tmp2 = document.createElement('div'); tmp2.innerHTML = data;
+                return (tmp2.textContent || tmp2.innerText || '').trim();
+              }
+            }
+          },
+          customize: function (xlsx) {
+            var sheet  = xlsx.xl.worksheets['sheet1.xml'];
+            var styles = xlsx.xl['styles.xml'];
+
+            var themeColor   = '5B5FC7';
+            var themeLighter = '9B9ED8';
+            var white        = 'FFFFFF';
+            var borderColor  = 'C5C5D8';
+
+            var fillsEl = $('fills', styles);
+            var fCount  = parseInt(fillsEl.attr('count'));
+            fillsEl.append('<fill><patternFill patternType="solid"><fgColor rgb="' + themeLighter + '"/><bgColor indexed="64"/></patternFill></fill>');
+            var titleFillId = fCount++;
+            fillsEl.append('<fill><patternFill patternType="solid"><fgColor rgb="' + themeColor + '"/><bgColor indexed="64"/></patternFill></fill>');
+            var headerFillId = fCount++;
+            fillsEl.attr('count', fCount);
+
+            var fontsEl = $('fonts', styles);
+            var ftCount = parseInt(fontsEl.attr('count'));
+            fontsEl.append('<font><b/><sz val="13"/><color rgb="' + white + '"/><name val="Calibri"/></font>');
+            var titleFontId = ftCount++;
+            fontsEl.append('<font><b/><sz val="11"/><color rgb="' + white + '"/><name val="Calibri"/></font>');
+            var headerFontId = ftCount++;
+            fontsEl.attr('count', ftCount);
+
+            var bordersEl = $('borders', styles);
+            var bCount    = parseInt(bordersEl.attr('count'));
+            var medBorder = '<border><left style="medium"><color rgb="' + borderColor + '"/></left><right style="medium"><color rgb="' + borderColor + '"/></right><top style="medium"><color rgb="' + borderColor + '"/></top><bottom style="medium"><color rgb="' + borderColor + '"/></bottom><diagonal/></border>';
+            bordersEl.append(medBorder);
+            var dataBorderId = bCount++;
+            bordersEl.attr('count', bCount);
+
+            var cellXfsEl = $('cellXfs', styles);
+            var xfCount   = parseInt(cellXfsEl.attr('count'));
+            cellXfsEl.append('<xf numFmtId="0" fontId="' + titleFontId  + '" fillId="' + titleFillId  + '" borderId="' + dataBorderId + '" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf>');
+            var titleStyleId = xfCount++;
+            cellXfsEl.append('<xf numFmtId="0" fontId="' + headerFontId + '" fillId="' + headerFillId + '" borderId="' + dataBorderId + '" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf>');
+            var headerStyleId = xfCount++;
+            cellXfsEl.append('<xf numFmtId="0" fontId="0" fillId="0" borderId="' + dataBorderId + '" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="center"/></xf>');
+            var dataStyleId = xfCount++;
+            cellXfsEl.attr('count', xfCount);
+
+            var rows = $('row', sheet);
+            rows.eq(0).find('c').attr('s', titleStyleId);
+            rows.eq(1).find('c').attr('s', headerStyleId);
+            rows.each(function (i) { if (i >= 2) { $(this).find('c').attr('s', dataStyleId); } });
+
+            $('sheetData', sheet).after('<mergeCells count="1"><mergeCell ref="A1:H1"/></mergeCells>');
+            rows.eq(0).attr({ ht: '28', customHeight: '1' });
+            rows.eq(1).attr({ ht: '20', customHeight: '1' });
+
+            $('cols', sheet).remove();
+            $('sheetData', sheet).before('<cols><col min="1" max="1" width="20" customWidth="1"/><col min="2" max="2" width="30" customWidth="1"/><col min="3" max="3" width="25" customWidth="1"/><col min="4" max="4" width="15" customWidth="1"/><col min="5" max="5" width="15" customWidth="1"/><col min="6" max="6" width="15" customWidth="1"/><col min="7" max="7" width="15" customWidth="1"/><col min="8" max="8" width="15" customWidth="1"/></cols>');
           }
         },
         {
@@ -538,8 +630,8 @@ const page = {
     });
 
     // Custom Export Buttons Integration
-    $('#export-csv').on('click', function () {
-      table.button('.buttons-csv').trigger();
+    $('#export-excel').on('click', function () {
+      table.button('.buttons-excel').trigger();
     });
 
     $('#export-pdf').on('click', function () {

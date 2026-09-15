@@ -17,8 +17,8 @@
         </div>
       </div>
       <div class="cat-page-header-right">
-        <button type="button" id="export-csv" class="cat-btn cat-btn-outline" title="Export CSV">
-          <i class="ti ti-file-type-csv"></i> Export CSV
+        <button type="button" id="export-excel" class="cat-btn cat-btn-outline" title="Export Excel">
+          <i class="ti ti-file-spreadsheet"></i> Export Excel
         </button>
         <button type="button" id="export-pdf" class="cat-btn cat-btn-outline-red" title="Export PDF">
           <i class="ti ti-file-type-pdf"></i> Export PDF
@@ -31,7 +31,7 @@
 
     <!-- Summary Cards -->
     <div class="row g-3 mb-4">
-      <div class="col-md-3">
+      <div class="col-xl col-md-4 col-sm-6">
           <div class="adj-summary-card">
               <div class="adj-summary-icon" style="background:#e8e6fb; color:#7367f0;">
                   <i class="ti ti-list-details"></i>
@@ -42,7 +42,18 @@
               </div>
           </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-xl col-md-4 col-sm-6">
+          <div class="adj-summary-card">
+              <div class="adj-summary-icon" style="background:#e8f8f0; color:#5b5fc7;">
+                  <i class="ti ti-report-money"></i>
+              </div>
+              <div>
+                  <div style="font-size:0.75rem; font-weight:600; color:var(--cat-light); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Total Amount</div>
+                  <div id="kpi-total-amount" style="font-size:1.6rem; font-weight:800; color:var(--cat-dark); line-height:1;">₹<%$summary.grand_total|number_format:0|default:'0'%></div>
+              </div>
+          </div>
+      </div>
+      <div class="col-xl col-md-4 col-sm-6">
           <div class="adj-summary-card">
               <div class="adj-summary-icon" style="background:#e8f8f0; color:#27ae60;">
                   <i class="ti ti-cash"></i>
@@ -53,7 +64,7 @@
               </div>
           </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-xl col-md-4 col-sm-6">
           <div class="adj-summary-card">
               <div class="adj-summary-icon" style="background:#fff0e1; color:#fd7e14;">
                   <i class="ti ti-device-mobile"></i>
@@ -64,13 +75,13 @@
               </div>
           </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-xl col-md-4 col-sm-6">
           <div class="adj-summary-card">
               <div class="adj-summary-icon" style="background:#fdecea; color:#e74c3c;">
                   <i class="ti ti-credit-card"></i>
               </div>
               <div>
-                  <div style="font-size:0.75rem; font-weight:600; color:var(--cat-light); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Other (Card) Total</div>
+                  <div style="font-size:0.75rem; font-weight:600; color:var(--cat-light); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Other Total</div>
                   <div id="kpi-total-card" style="font-size:1.6rem; font-weight:800; color:var(--cat-dark); line-height:1;">₹<%$summary.total_card|number_format:0%></div>
               </div>
           </div>
@@ -82,11 +93,11 @@
       <form method="POST" action="<%$base_url%>purchase_report" id="filter-form">
       <div class="card-body p-3">
         <div class="row g-3 align-items-end">
-          <div class="col-md-3">
+          <div class="col-xl col-md-4 col-sm-6">
             <label class="form-label fw-semibold text-muted" style="font-size:0.78rem; text-transform:uppercase; letter-spacing:.5px;">From Date</label>
             <input type="date" name="from_date" class="form-control" value="<%$from_date%>">
           </div>
-          <div class="col-md-3">
+          <div class="col-xl col-md-4 col-sm-6">
             <label class="form-label fw-semibold text-muted" style="font-size:0.78rem; text-transform:uppercase; letter-spacing:.5px;">To Date</label>
             <input type="date" name="to_date" class="form-control" value="<%$to_date%>">
           </div>
@@ -127,7 +138,7 @@
 <script type="text/javascript">
   var base_url = <%$base_url|@json_encode%>;
 </script>
-<script src="<%$base_url%>public/js/admin_panel/purchase_report.js"></script>
+<script src="<%$base_url%>public/js/admin_panel/purchase_report.js?v=5"></script>
 <style>
   @media print {
     .cat-btn, .cat-search-box, .cat-page-header-right, form, .sidebar, .navbar, .cat-breadcrumb { display: none !important; }

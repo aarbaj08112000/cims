@@ -49,8 +49,8 @@ function newExportAction(e, dt, button, config) {
         data.length = -1;
         dt.one('preDraw', function (e, settings) {
             // Call the original action function
-            if (button[0].className.indexOf('buttons-csv') >= 0) {
-                $.fn.dataTable.ext.buttons.csvHtml5.action.call(self, e, dt, button, config);
+            if (button[0].className.indexOf('buttons-excel') >= 0) {
+                $.fn.dataTable.ext.buttons.excelHtml5.action.call(self, e, dt, button, config);
             } else if (button[0].className.indexOf('buttons-pdf') >= 0) {
                 $.fn.dataTable.ext.buttons.pdfHtml5.action.call(self, e, dt, button, config);
             }
@@ -88,13 +88,76 @@ const brandPage = {
 
             buttons: [
                 {
-                    extend: 'csv',
+                    extend: 'excel',
                     className: 'd-none',
                     filename: brand_file_name,
+                    title: 'Brand List',
                     action: newExportAction,
-                    exportOptions: {
-                        columns: [0, 1, 2] // Export Brand Name, Code, Status
-                    }
+                    exportOptions: { columns: [0, 1, 2] },
+
+          customize: function (xlsx) {
+            var sheet  = xlsx.xl.worksheets['sheet1.xml'];
+            var styles = xlsx.xl['styles.xml'];
+
+            var themeColor   = '5B5FC7';
+            var themeLighter = '9B9ED8';
+            var white        = 'FFFFFF';
+            var borderColor  = 'C5C5D8';
+
+            // FILLS
+            var fillsEl = $('fills', styles);
+            var fCount  = parseInt(fillsEl.attr('count'));
+            fillsEl.append('<fill><patternFill patternType="solid"><fgColor rgb="' + themeLighter + '"/><bgColor indexed="64"/></patternFill></fill>');
+            var titleFillId = fCount++;
+            fillsEl.append('<fill><patternFill patternType="solid"><fgColor rgb="' + themeColor + '"/><bgColor indexed="64"/></patternFill></fill>');
+            var headerFillId = fCount++;
+            fillsEl.attr('count', fCount);
+
+            // FONTS
+            var fontsEl = $('fonts', styles);
+            var ftCount = parseInt(fontsEl.attr('count'));
+            fontsEl.append('<font><b/><sz val="13"/><color rgb="' + white + '"/><name val="Calibri"/></font>');
+            var titleFontId = ftCount++;
+            fontsEl.append('<font><b/><sz val="11"/><color rgb="' + white + '"/><name val="Calibri"/></font>');
+            var headerFontId = ftCount++;
+            fontsEl.attr('count', ftCount);
+
+            // BORDERS
+            var bordersEl = $('borders', styles);
+            var bCount    = parseInt(bordersEl.attr('count'));
+            var medBorder = '<border><left style="medium"><color rgb="' + borderColor + '"/></left><right style="medium"><color rgb="' + borderColor + '"/></right><top style="medium"><color rgb="' + borderColor + '"/></top><bottom style="medium"><color rgb="' + borderColor + '"/></bottom><diagonal/></border>';
+            bordersEl.append(medBorder);
+            var dataBorderId = bCount++;
+            bordersEl.attr('count', bCount);
+
+            // CELL XFS
+            var cellXfsEl = $('cellXfs', styles);
+            var xfCount   = parseInt(cellXfsEl.attr('count'));
+            cellXfsEl.append('<xf numFmtId="0" fontId="' + titleFontId + '" fillId="' + titleFillId + '" borderId="' + dataBorderId + '" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf>');
+            var titleStyleId = xfCount++;
+            cellXfsEl.append('<xf numFmtId="0" fontId="' + headerFontId + '" fillId="' + headerFillId + '" borderId="' + dataBorderId + '" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf>');
+            var headerStyleId = xfCount++;
+            cellXfsEl.append('<xf numFmtId="0" fontId="0" fillId="0" borderId="' + dataBorderId + '" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="center"/></xf>');
+            var dataStyleId = xfCount++;
+            cellXfsEl.attr('count', xfCount);
+
+            // APPLY STYLES
+            var rows = $('row', sheet);
+            rows.eq(0).find('c').attr('s', titleStyleId);
+            rows.eq(1).find('c').attr('s', headerStyleId);
+            rows.each(function (i) { if (i >= 2) { $(this).find('c').attr('s', dataStyleId); } });
+
+            // MERGE TITLE ROW
+            $('sheetData', sheet).after('<mergeCells count="1"><mergeCell ref="A1:C1"/></mergeCells>');
+
+            // ROW HEIGHTS
+            rows.eq(0).attr({ ht: '28', customHeight: '1' });
+            rows.eq(1).attr({ ht: '20', customHeight: '1' });
+
+            // COLUMN WIDTHS
+            $('cols', sheet).remove();
+            $('sheetData', sheet).before('<cols><col min="1" max="1" width="30" customWidth="1"/><col min="2" max="2" width="22" customWidth="1"/><col min="3" max="3" width="15" customWidth="1"/></cols>');
+          }
                 },
                 {
                     extend: 'pdf',
@@ -287,8 +350,8 @@ const brandPage = {
         });
 
         // --- Custom Export Buttons ---
-        $('#export-csv').on('click', function () {
-            brandTable.button('.buttons-csv').trigger();
+        $('#export-excel').on('click', function () {
+            brandTable.button('.buttons-excel').trigger();
         });
 
         $('#export-pdf').on('click', function () {

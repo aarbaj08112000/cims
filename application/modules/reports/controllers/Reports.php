@@ -8,10 +8,19 @@ class Reports extends MY_Controller {
         $this->load->model('Reports_model');
     }
 
-    public function index() {
+        public function index() {
         $data['stats'] = $this->Reports_model->get_summary_stats();
+        
+        $from_date = date('Y-m-01');
+        $to_date = date('Y-m-t');
+        $sales = $this->Reports_model->get_sales_summary($from_date, $to_date);
+        $purchases = $this->Reports_model->get_purchase_summary($from_date, $to_date);
+        
+        $data['current_sales_total'] = $sales['grand_total'];
+        $data['current_purchase_total'] = $purchases['grand_total'];
+        $data['current_month'] = date('Y-m');
+        
         $data['base_url'] = base_url();
-        // Default reports can be pre-loaded if needed, but we'll use AJAX for performance
         $this->smarty->loadView('reports_list.tpl', $data, 'Yes', 'Yes');
     }
 
@@ -68,9 +77,18 @@ class Reports extends MY_Controller {
     /**
      * AJAX: Get Sales Report
      */
-    public function get_sales_report_ajax() {
-        $from_date = $this->input->post('from_date') ?: date('Y-m-01');
-        $to_date = $this->input->post('to_date') ?: date('Y-m-t');
+        public function get_sales_report_ajax() {
+        $month = $this->input->post('month');
+        if (!empty($month)) {
+            $from_date = $month . '-01';
+            $to_date = date('Y-m-t', strtotime($from_date));
+            // Add time to to_date to include all of the last day
+            $to_date .= ' 23:59:59';
+            $from_date .= ' 00:00:00';
+        } else {
+            $from_date = $this->input->post('from_date') ?: '';
+            $to_date = $this->input->post('to_date') ?: '';
+        }
         
         $data['sales'] = $this->Reports_model->get_sales_report($from_date, $to_date);
         $html = $this->smarty->fetch('sales_report_table.tpl', $data);
@@ -90,9 +108,17 @@ class Reports extends MY_Controller {
     /**
      * AJAX: Get Purchase Report
      */
-    public function get_purchase_report_ajax() {
-        $from_date = $this->input->post('from_date') ?: date('Y-m-01');
-        $to_date = $this->input->post('to_date') ?: date('Y-m-t');
+        public function get_purchase_report_ajax() {
+        $month = $this->input->post('month');
+        if (!empty($month)) {
+            $from_date = $month . '-01';
+            $to_date = date('Y-m-t', strtotime($from_date));
+            $to_date .= ' 23:59:59';
+            $from_date .= ' 00:00:00';
+        } else {
+            $from_date = $this->input->post('from_date') ?: '';
+            $to_date = $this->input->post('to_date') ?: '';
+        }
         
         $data['purchases'] = $this->Reports_model->get_purchase_report($from_date, $to_date);
         $html = $this->smarty->fetch('purchase_report_table.tpl', $data);
@@ -151,5 +177,22 @@ class Reports extends MY_Controller {
 
         echo json_encode(['success' => 1, 'html' => $html]);
     }
-}
 
+    public function get_monthly_summary_ajax() {
+        $month = $this->input->post('month') ?: date('Y-m');
+        $from_date = $month . '-01';
+        $to_date = date('Y-m-t', strtotime($from_date));
+        
+        $sales = $this->Reports_model->get_sales_summary($from_date, $to_date);
+        $purchases = $this->Reports_model->get_purchase_summary($from_date, $to_date);
+        $stats = $this->Reports_model->get_summary_stats();
+        
+        echo json_encode([
+            'success' => 1,
+            'sales_total' => number_format((float)$sales['grand_total'], 2, '.', ','),
+            'purchase_total' => number_format((float)$purchases['grand_total'], 2, '.', ','),
+            'inventory_total' => number_format((float)$stats['total_valuation'], 2, '.', ',')
+        ]);
+    }
+
+}
