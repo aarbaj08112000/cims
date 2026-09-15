@@ -166,12 +166,12 @@
 /* ══ Barcode Section ═════════════════════════════════════════════ */
 .pd-barcode-wrap {
   background: #fff; border-radius: 12px;
-  border: 1px solid #e8e5ff; padding: 18px;
+  border: 1px solid #e8e5ff; padding: 24px 18px;
   text-align: center;
 }
-.pd-barcode-wrap img { max-height: 70px; object-fit: contain; }
+.pd-barcode-wrap img { max-height: 140px; width: 100%; object-fit: contain; }
 .pd-barcode-code {
-  font-family: monospace; font-size: .8rem; color: #888; margin-top: 6px;
+  font-family: monospace; font-size: .9rem; color: #666; margin-top: 10px; letter-spacing: 1px;
 }
 </style>
 
@@ -185,7 +185,7 @@
           <i class="ti ti-box"></i>
         </div>
         <div>
-          <h1 class="cat-page-title"><%$products[0]['name']%></h1>
+          
           <div class="text-muted small mt-1">Product Details</div>
           <nav class="cat-breadcrumb">
             <a href="<%$base_url%>">Home</a>

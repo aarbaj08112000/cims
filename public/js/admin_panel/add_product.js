@@ -209,15 +209,32 @@ $(document).ready(function () {
         container.find(".img-preview-card").first().attr("data-is-primary", "1");
     }
 
+    var MAX_IMAGES = 5;
+
     $("#multiImageInput").on("change", function(e) {
         var files = e.target.files;
         var container = $("#multiImagePreviewContainer");
 
+        // Count current images (existing + new)
+        var currentCount = container.find(".img-preview-card").length;
+        var allowed = MAX_IMAGES - currentCount;
+
+        if (files.length > allowed) {
+            toaster("warning", "You can upload a maximum of " + MAX_IMAGES + " images. Only " + (allowed > 0 ? allowed : 0) + " slot(s) remaining.");
+            if (allowed <= 0) {
+                this.value = "";
+                return;
+            }
+        }
+
+        var addedCount = 0;
         for (var i = 0; i < files.length; i++) {
+            if (addedCount >= allowed) break;
             var file = files[i];
             if (!file.type.match("image.*")) continue;
 
             dt.items.add(file);
+            addedCount++;
 
             (function(fileIndex, theFile) {
                 var reader = new FileReader();

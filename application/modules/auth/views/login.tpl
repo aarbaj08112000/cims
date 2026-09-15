@@ -15,8 +15,8 @@
       <link rel="stylesheet" href="<%$base_url%>public/css/tabler_css/tabler_icons.css">
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
       <!-- toaster -->
-       <link rel="stylesheet" href="public/css/toaster/custom_toaster.css" />
-        <link rel="stylesheet" href="public/css/fontawesome/font_awesome.css">
+       <link rel="stylesheet" href="<%$base_url%>public/css/toaster/custom_toaster.css" />
+        <link rel="stylesheet" href="<%$base_url%>public/css/fontawesome/font_awesome.css">
      <!-- toaster -->
    
     <style>
@@ -293,7 +293,7 @@
         }
     </style>
 </head>
-   <body>
+   <body class="outer-div-box">
       <div class="split-layout">
          
          <!-- Left Graphic Section -->
@@ -415,6 +415,6 @@
 <script type="text/javascript">
   var base_url = <%$base_url|@json_encode%>;
 </script>
- <script src="public/js/toaster/custom_toaster.js"></script>
+ <script src="<%$base_url%>public/js/toaster/custom_toaster.js"></script>
 <script src="<%$base_url%>public/js/login.js"></script>
 </html>
