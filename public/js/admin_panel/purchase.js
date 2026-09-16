@@ -10,7 +10,7 @@ const purchasePage = {
     initSelect2: function (selector = ".select2") {
         $(selector).select2();
     },
-    bindEvents: function () {
+    bindEvents: function() {
         let that = this;
 
         // Add Row
@@ -28,20 +28,47 @@ const purchasePage = {
                 $(this).closest("tr").remove();
                 that.calculateGrandTotal();
             } else {
-                toaster("error", "At least one item is required.");
+                toaster("info", "At least one item is required.");
             }
         });
 
-        // Product Selection - Auto-fill price
+        // Product Selection - Auto-fill price and set initial Qty
         $(document).on("change", ".product-select", function () {
+            let row = $(this).closest("tr");
             let price = $(this).find(":selected").data("price") || 0;
-            $(this).closest("tr").find(".price-input").val(price);
-            that.calculateRowTotal($(this).closest("tr"));
+            row.find(".price-input").val(price);
+            
+            if ($(this).val() !== "") {
+                let currentQty = parseFloat(row.find(".qty-input").val()) || 0;
+                if (currentQty <= 0) {
+                    row.find(".qty-input").val(1).removeClass("is-invalid");
+                    row.find(".qty-input").closest(".form-group, td").find("label.error").remove();
+                }
+            }
+            that.calculateRowTotal(row);
         });
 
         // Qty or Price Change
         $(document).on("input", ".qty-input, .price-input", function () {
-            that.calculateRowTotal($(this).closest("tr"));
+            let row = $(this).closest("tr");
+            let qtyInput = row.find(".qty-input");
+            let qtyVal = qtyInput.val();
+            let qty = parseFloat(qtyVal) || 0;
+
+            if (qty <= 0 && qtyVal !== "") {
+                toaster("warning", "Quantity cannot be 0 or negative!");
+                qtyInput.addClass("is-invalid");
+                if (qtyInput.closest(".form-group, td").find("label.error").length == 0) {
+                    qtyInput.after("<label class='error text-danger' style='font-size: 11px; display: block;'>Quantity must be > 0</label>");
+                } else {
+                    qtyInput.closest(".form-group, td").find("label.error").text("Quantity must be > 0");
+                }
+            } else if (qty > 0) {
+                qtyInput.removeClass("is-invalid");
+                qtyInput.closest(".form-group, td").find("label.error").remove();
+            }
+
+            that.calculateRowTotal(row);
         });
 
         // Form Submission
@@ -50,7 +77,26 @@ const purchasePage = {
             let form = $(this);
             let id = form.attr("id");
 
-            if (that.formValidate(id)) {
+            let formHasErrors = that.formValidate(id);
+
+            let zeroQty = false;
+            $("#" + id + " .qty-input").each(function () {
+                let qty = parseFloat($(this).val()) || 0;
+                if (qty <= 0) {
+                    zeroQty = true;
+                    $(this).addClass("is-invalid");
+                    if ($(this).closest(".form-group, td").find("label.error").length == 0) {
+                        $(this).after("<label class='error text-danger' style='font-size: 11px; display: block;'>Quantity must be > 0</label>");
+                    } else {
+                        $(this).closest(".form-group, td").find("label.error").text("Quantity must be > 0");
+                    }
+                }
+            });
+
+            if (formHasErrors || zeroQty) {
+                if (zeroQty) {
+                    toaster("error", "Quantity must be greater than 0 for all items.");
+                }
                 return;
             }
 
@@ -71,16 +117,16 @@ const purchasePage = {
                             } else {
                                 window.location.reload();
                             }
-                        }, 1500);
-                    } else {
-                        toaster("error", response.msg);
-                    }
-                },
-                error: function () {
-                    toaster("error", "An error occurred during submission.");
+                    }, 1500);
+                } else {
+                    toaster("error", response.msg);
                 }
-            });
+            },
+            error: function () {
+                toaster("error", "An error occurred during submission.");
+            }
         });
+    });
     },
     calculateRowTotal: function (row) {
         let qty = parseFloat(row.find(".qty-input").val()) || 0;
@@ -89,7 +135,7 @@ const purchasePage = {
         row.find(".total-input").val(total.toFixed(2));
         this.calculateGrandTotal();
     },
-    calculateGrandTotal: function () {
+    calculateGrandTotal: function() {
         let grandTotal = 0;
         $(".total-input").each(function () {
             grandTotal += parseFloat($(this).val()) || 0;
@@ -106,7 +152,7 @@ const purchasePage = {
             if (value == '' || value == null) {
                 flag = true;
                 $(this).addClass("is-invalid");
-                if ($(this).closest(".form-group, td").find("label.error").length == 0) {
+                if ($(this).closett(".form-group, td").find("label.error").length == 0) {
                     $(this).after("<label class='error text-danger' style='font-size: 11px; display: block;'>Required</label>");
                 }
             } else {
@@ -116,4 +162,4 @@ const purchasePage = {
         });
         return flag;
     }
-}
+};
