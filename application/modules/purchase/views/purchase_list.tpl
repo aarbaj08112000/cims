@@ -69,7 +69,7 @@
               <td class="text-center cat-col-action">
                 <div class="d-flex align-items-center justify-content-center">
                   <a href="<%base_url('purchase_details/')%><%$val['purchase_id']|encode_id%>" title="View Details">
-                    <i class="ti ti-eye text-primary"></i>
+                    <i class="ti ti-eye edit-part"></i>
                   </a>
                 </div>
               </td>

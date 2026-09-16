@@ -146,5 +146,6 @@ $route['documentation'] = 'documentation/Documentation';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
-
-$route['get_monthly_summary_ajax'] = 'reports/Reports/get_monthly_summary_ajax';
+$route['product_log_report'] = 'reports/Reports/product_log_report';
+$route['reports/get_product_logs_ajax'] = 'reports/Reports/get_product_logs_ajax';
+$route['reports/get_product_log_stats_ajax'] = 'reports/Reports/get_product_log_stats_ajax';

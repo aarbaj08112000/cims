@@ -10,7 +10,7 @@ const salesPage = {
     initSelect2: function (selector = ".select2") {
         $(selector).select2();
     },
-    bindEvents: function () {
+    bindEvents: function() {
         let that = this;
 
         // Add Row
@@ -41,7 +41,7 @@ const salesPage = {
             row.find(".stock-display").val(stock);
             
             if($(this).val() != "") {
-                if(row.find(".qty-input").val() == 0 || row.find(".qty-input").val() == "") {
+                if(parseFloat(row.find(".qty-input").val()) <= 0 || row.find(".qty-input").val() == "") {
                     row.find(".qty-input").val(1);
                     row.find(".qty-input").removeClass("is-invalid");
                 }
@@ -55,14 +55,19 @@ const salesPage = {
         // Qty/Price Change
         $(document).on("input", ".qty-input, .price-input", function () {
             let row = $(this).closest("tr");
-            let qty = parseFloat(row.find(".qty-input").val()) || 0;
+            let qtyInput = row.find(".qty-input");
+            let qtyVal = qtyInput.val();
+            let qty = parseFloat(qtyVal) || 0;
             let stock = parseFloat(row.find(".stock-display").val()) || 0;
 
-            if (qty > stock) {
+            if (qty <= 0 && qtyVal !== "") {
+                toaster("warning", "Quantity cannot be 0 or negative!");
+                qtyInput.addClass("is-invalid");
+            } else if (qty > stock) {
                 toaster("warning", "Quantity exceeds available stock!");
-                row.find(".qty-input").addClass("is-invalid");
+                qtyInput.addClass("is-invalid");
             } else {
-                row.find(".qty-input").removeClass("is-invalid");
+                qtyInput.removeClass("is-invalid");
             }
 
             that.calculateRowTotal(row);
@@ -89,13 +94,20 @@ const salesPage = {
                 }
             });
 
-            // Stock Check
+            // Qty and Stock Check
             $(".qty-input").each(function () {
                 let row = $(this).closest("tr");
                 let qty = parseFloat($(this).val()) || 0;
                 let stock = parseFloat(row.find(".stock-display").val()) || 0;
+                if (qty <= 0) {
+                    toaster("error", "Quantity must be greater than 0 for all items.");
+                    $(this).addClass("is-invalid");
+                    invalid = true;
+                    return false;
+                }
                 if (qty > stock) {
                     toaster("error", "Some items exceed available stock.");
+                    $(this).addClass("is-invalid");
                     invalid = true;
                     return false;
                 }
@@ -122,13 +134,13 @@ const salesPage = {
                             } else {
                                 window.location.href = base_url + "sales_list";
                             }
-                        }, 1000);
-                    } else {
-                        toaster("error", response.msg);
-                    }
+                    }, 1000);
+                } else {
+                    toaster("info", response.msg);
                 }
-            });
+            }
         });
+    });
     },
     calculateRowTotal: function (row) {
         let qty = parseFloat(row.find(".qty-input").val()) || 0;
@@ -137,7 +149,7 @@ const salesPage = {
         row.find(".total-input").val(total.toFixed(2));
         this.calculateGrandTotal();
     },
-    calculateGrandTotal: function () {
+    calculateGrandTotal: function() {
         let subTotal = 0;
         $(".total-input").each(function () {
             subTotal += parseFloat($(this).val()) || 0;
@@ -147,11 +159,11 @@ const salesPage = {
         
         // Ensure discount doesn't exceed subtotal
         if (discount > subTotal) {
-            discount = subTotal;
+            discount = subtotal;
             $("#discount").val(discount.toFixed(2));
         }
 
-        let grandTotal = subTotal - discount;
+        let grandTotal = subtotal - discount;
         
         $("#sub_total").val(subTotal.toFixed(2));
         $("#grand_total").val(grandTotal.toFixed(2));
@@ -162,4 +174,4 @@ const salesPage = {
             $("#grand_total_display").text(grandTotal.toFixed(2));
         }
     }
-}
+};

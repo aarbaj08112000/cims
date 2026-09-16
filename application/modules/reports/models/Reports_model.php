@@ -129,7 +129,7 @@ class Reports_model extends CI_Model {
             ];
         }
         return [
-            'draw' => isset($postData['draw']) ? intval($postData['draw']) : 0,
+            "draw" => isset($postData["draw"]) ? intval($postData["draw"]) : 0,
             'recordsTotal' => $recordsTotal,
             'recordsFiltered' => $recordsFiltered,
             'grand_total' => $sumTotal ? number_format($sumTotal, 2) : '0.00',
@@ -275,7 +275,7 @@ class Reports_model extends CI_Model {
         }
 
         return [
-            'draw' => isset($postData['draw']) ? intval($postData['draw']) : 0,
+            "draw" => isset($postData["draw"]) ? intval($postData["draw"]) : 0,
             'recordsTotal' => $recordsTotal,
             'recordsFiltered' => $recordsFiltered,
             'grand_total' => $sumTotal ? number_format($sumTotal, 2) : '0.00',
@@ -394,7 +394,7 @@ class Reports_model extends CI_Model {
         }
 
         return [
-            'draw' => intval($postData['draw']),
+            "draw" => intval($postData["draw"]),
             'recordsTotal' => $recordsTotal,
             'recordsFiltered' => $recordsFiltered,
             'data' => $rows
@@ -464,6 +464,251 @@ class Reports_model extends CI_Model {
         $this->db->order_by('sm.stock_id', 'DESC');
         return $this->db->get()->result_array();
     }
+
+    /**
+     * Server-side DataTables for Product Activity Log Report
+     */
+    public function get_product_logs_datatables($postData) {
+        $from_date   = isset($postData['from_date']) ? $postData['from_date'] : '';
+        $to_date     = isset($postData['to_date']) ? $postData['to_date'] : '';
+        $product_id  = isset($postData['product_id']) ? $postData['product_id'] : '';
+        $action_type = isset($postData['action_type']) ? $postData['action_type'] : '';
+        $created_by  = isset($postData['created_by']) ? $postData['created_by'] : '';
+
+        $columns = [
+            0 => 'pal.id',
+            1 => 'pal.created_at',
+            2 => 'pal.product_name',
+            3 => 'pal.action_type',
+            4 => 'pal.qty_change',
+            5 => 'pal.price_change',
+            6 => 'pal.reference_no',
+            7 => 'pal.user_name',
+            8 => 'pal.id'
+        ];
+
+        $this->db->from('product_activity_logs pal');
+
+        if (!empty($from_date)) {
+            $this->db->where('DATE(pal.created_at) >=', $from_date);
+        }
+        if (!empty($to_date)) {
+            $this->db->where('DATE(pal.created_at) <=', $to_date);
+        }
+        if (!empty($product_id)) {
+            $this->db->where('pal.product_id', $product_id);
+        }
+        if (!empty($action_type)) {
+            $this->db->where('pal.action_type', $action_type);
+        }
+        if (!empty($created_by)) {
+            $this->db->where('pal.created_by', $created_by);
+        }
+
+        $db_total = clone $this->db;
+        $db_total->select('COUNT(pal.id) as count');
+        $query_total = $db_total->get();
+        $recordsTotal = ($query_total && $query_total->num_rows() > 0) ? (int)$query_total->row()->count : 0;
+
+        if (!empty($postData['search']['value'])) {
+            $search = trim($postData['search']['value']);
+            $this->db->group_start();
+            $this->db->like('pal.product_name', $search);
+            $this->db->or_like('pal.action_type', $search);
+            $this->db->or_like('pal.reference_no', $search);
+            $this->db->or_like('pal.user_name', $search);
+            $this->db->or_like('pal.remarks', $search);
+            $this->db->group_end();
+        }
+
+        $db_filtered = clone $this->db;
+        $db_filtered->select('COUNT(pal.id) as count');
+        $query_filtered = $db_filtered->get();
+        $recordsFiltered = ($query_filtered && $query_filtered->num_rows() > 0) ? (int)$query_filtered->row()->count : 0;
+
+        if (isset($postData['order'][0]['column'])) {
+            $colIdx = (int)$postData['order'][0]['column'];
+            $colName = isset($columns[$colIdx]) ? $columns[$colIdx] : 'pal.id';
+            $dir = (isset($postData['order'][0]['dir']) && strtolower($postData['order'][0]['dir']) === 'asc') ? 'ASC' : 'DESC';
+            $this->db->order_by($colName, $dir);
+        } else {
+            $this->db->order_by('pal.id', 'DESC');
+        }
+
+        $start  = isset($postData['start']) ? (int)$postData['start'] : 0;
+        $length = isset($postData['length']) ? (int)$postData['length'] : 10;
+        if ($length > 0) {
+            $this->db->limit($length, $start);
+        }
+
+        $this->db->select('pal.*');
+        $query = $this->db->get();
+        $logs = $query ? $query->result_array() : [];
+
+        $rows = [];
+        $i = $start + 1;
+        foreach ($logs as $log) {
+            $action_badge = '';
+            switch ($log['action_type']) {
+                case 'created':
+                    $action_badge = '<span class="badge bg-label-success"><i class="bx bx-plus-circle me-1"></i> Created</span>';
+                    break;
+                case 'updated':
+                    $action_badge = '<span class="badge bg-label-warning"><i class="bx bx-edit me-1"></i> Updated</span>';
+                    break;
+                case 'stock_added':
+                    $action_badge = '<span class="badge bg-label-info"><i class="bx bx-import me-1"></i> Stock In</span>';
+                    break;
+                case 'stock_removed':
+                    $action_badge = '<span class="badge bg-label-danger"><i class="bx bx-export me-1"></i> Stock Out</span>';
+                    break;
+                case 'stock_adjusted':
+                    $action_badge = '<span class="badge bg-label-primary"><i class="bx bx-slider me-1"></i> Adjusted</span>';
+                    break;
+                case 'sale':
+                    $action_badge = '<span class="badge bg-label-success"><i class="bx bx-cart me-1"></i> Sale</span>';
+                    break;
+                case 'sale_return':
+                    $action_badge = '<span class="badge bg-label-warning"><i class="bx bx-undo me-1"></i> Sale Return</span>';
+                    break;
+                case 'purchase':
+                    $action_badge = '<span class="badge bg-label-primary"><i class="bx bx-shopping-bag me-1"></i> Purchase</span>';
+                    break;
+                case 'purchase_return':
+                    $action_badge = '<span class="badge bg-label-secondary"><i class="bx bx-revision me-1"></i> Purchase Return</span>';
+                    break;
+                case 'deleted':
+                    $action_badge = '<span class="badge bg-label-danger"><i class="bx bx-trash me-1"></i> Deleted</span>';
+                    break;
+                case 'restored':
+                    $action_badge = '<span class="badge bg-label-info"><i class="bx bx-refresh me-1"></i> Restored</span>';
+                    break;
+                default:
+                    $action_badge = '<span class="badge bg-label-secondary">' . htmlspecialchars($log['action_type']) . '</span>';
+            }
+
+            $qty = (float)$log['qty_change'];
+            $qty_display = '-';
+            if ($qty > 0) {
+                $qty_display = '<span class="text-success fw-semibold">+' . number_format($qty, 2) . '</span>';
+            } elseif ($qty < 0) {
+                $qty_display = '<span class="text-danger fw-semibold">' . number_format($qty, 2) . '</span>';
+            }
+
+            $price = (float)$log['price_change'];
+            $price_display = ($price != 0) ? 'Ê[' . number_format(abs($price), 2) : '-;';
+
+            $old_json = htmlspecialchars(json_encode(json_decode($log['old_values'] ?? '[]')), ENT_QUOTES, 'UTF-8');
+            $new_json = htmlspecialchars(json_encode(json_decode($log['new_values'] ?? '[]')), ENT_QUOTES, 'UTF-8');
+            $remarks_safe = htmlspecialchars($log['remarks'] ?? '', ENT_QUOTES, 'UTF-8');
+
+            $action_btn = '<button type="button" class="btn btn-sm btn-icon btn-outline-primary view-log-details" '
+                . 'data-id="' . $log['id'] . '" '
+                . 'data-title="' . htmlspecialchars($log['product_name']) . ' - ' . ucfirst($log['action_type']) . '" '
+                . 'data-old="' . $old_json . '" '
+                . 'data-new="' . $new_json . '" '
+                . 'data-remarks="' . $remarks_safe . '" '
+                . 'data-bs-toggle="tooltip" title="View Details">'
+                . '<i class="bx bx-show-alt"></i></button>';
+
+            $rows[] = [
+                'sr_no'        => $i++,
+                'created_at'   => '<span class="fw-medium">' . date('d M Y', strtotime($log['created_at'])) . '</span><br><small class="text-muted">' . date('h:i A', strtotime($log['created_at'])) . '</small>',
+                'product_name' => '<span class="fw-bold text-heading">' . htmlspecialchars($log['product_name']) . '</span>',
+                'action_type'  => $action_badge,
+                'qty_change'   => $qty_display,
+                'price_change' => $price_display,
+                'old_values' => !empty($log['old_values']) ? '<span class="badge bg-label-secondary">' . htmlspecialchars($log['old_values']) . '</span>' : '-',
+                'user_name'    => '<span class="fw-medium">' . htmlspecialchars($log['user_name'] ?? 'System Admin') . '</span>',
+                'actions'      => $action_btn
+            ];
+        }
+
+        return [
+            "draw"            => isset($postData["draw"]) ? (int)$postData["draw"] : 1,
+            'recordsTotal'    => $recordsTotal,
+            'recordsFiltered' => $recordsFiltered,
+            'data'            => $rows
+        ];
+    }
+
+    /**
+     * Get Product Log Stats (Summary Cards)
+     */
+        public function get_product_log_stats_filtered($from_date = '', $to_date = '', $product_id = '', $action_type = '', $created_by = '') {
+        $this->db->from('product_activity_logs pal');
+
+        if (!empty($from_date)) {
+            $this->db->where('DATE(pal.created_at) >=', $from_date);
+        }
+        if (!empty($to_date)) {
+            $this->db->where('DATE(pal.created_at) <=', $to_date);
+        }
+        if (!empty($product_id)) {
+            $this->db->where('pal.product_id', $product_id);
+        }
+        if (!empty($action_type)) {
+            $this->db->where('pal.action_type', $action_type);
+        }
+        if (!empty($created_by)) {
+            $this->db->where('pal.created_by', $created_by);
+        }
+
+        $query = $this->db->get();
+        $logs = $query ? $query->result_array() : [];
+
+        $total = count($logs);
+        $stock_in = 0;
+        $stock_out = 0;
+        $updates = 0;
+
+        foreach ($logs as $l) {
+            if (in_array($l['action_type'], array('stock_added', 'purchase', 'sale_return', 'created', 'restored'))) {
+                $stock_in++;
+            } elseif (in_array($l['action_type'], array('stock_removed', 'sale', 'purchase_return', 'deleted'))) {
+                $stock_out++;
+            }
+            if ($l['action_type'] === 'updated' || $l['price_change'] != 0) {
+                $updates++;
+            }
+        }
+
+        return array(
+            'total_activities'   => $total,
+            'stock_in_events'    => $stock_in,
+            'stock_out_events'   => $stock_out,
+            'price_detail_edits' => $updates
+        );
+    }
+
+    public function get_all_products_list() {
+        $this->db->select('product_id as id, name as product_name, product_code');
+        $this->db->from('product_master');
+        $this->db->where('is_delete', '0');
+        $this->db->order_by('name', 'ASC');
+        $query = $this->db->get();
+        return $query ? $query->result_array() : [];
+    }
+
+    /**
+     * Get All Users Dropdown List
+     */
+    public function get_all_users_list() {
+        $this->db->select('id, user_name');
+        $this->db->from('userinfo');
+        $this->db->where('status !=', 'Block');
+        $this->db->order_by('user_name', 'ASC');
+        $query = $this->db->get();
+        $users = $query ? $query->result_array() : [];
+
+        if (empty($users)) {
+            $this->db->select('id, name as user_name');
+            $this->db->from('users');
+            $this->db->order_by('name', 'ASC');
+            $query2 = $this->db->get();
+            $users = $query2 ? $query2->result_array() : [];
+        }
+
+        return $users;
+    }
 }
-
-

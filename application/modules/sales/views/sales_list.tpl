@@ -69,13 +69,13 @@
               <td class="text-center cat-col-action">
                 <div class="d-flex align-items-center justify-content-center">
                   <a href="<%base_url('sales_details/')%><%$val['sales_id']|encode_id%>" class="text-decoration-none" title="View Details">
-                    <i class="ti ti-eye text-primary me-2"></i>
+                    <i class="ti ti-eye edit-part"></i>
                   </a>
-                  <a href="<%$base_url%>sales/print_invoice/<%$val['sales_id']|encode_id%>" target="_blank" title="Print Invoice" class="me-2">
-                    <i class="ti ti-printer text-success"></i>
+                  <a href="<%$base_url%>sales/print_invoice/<%$val['sales_id']|encode_id%>" target="_blank" title="Print Invoice" class="text-decoration-none">
+                    <i class="ti ti-printer"></i>
                   </a>
-                  <a href="<%$base_url%>sales/download_invoice/<%$val['sales_id']|encode_id%>" title="Download Invoice">
-                    <i class="ti ti-download text-info"></i>
+                  <a href="<%$base_url%>sales/download_invoice/<%$val['sales_id']|encode_id%>" title="Download Invoice" class="text-decoration-none">
+                    <i class="ti ti-download"></i>
                   </a>
                 </div>
               </td>

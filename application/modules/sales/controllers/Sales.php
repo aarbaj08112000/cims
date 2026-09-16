@@ -7,6 +7,7 @@ class Sales extends MY_Controller
     public function __construct()
     {
         parent::__construct();
+        $this->load->helper('product_log');
         $this->load->model('Sales_model');
         $this->load->model('customer/Customer_model');
     }
@@ -85,6 +86,16 @@ class Sales extends MY_Controller
         $sales_id = $this->Sales_model->save_sale($master_data, $details_data);
 
         if ($sales_id) {
+            foreach ($details_data as $detail) {
+                log_product_activity([
+                    'product_id'   => $detail['product_id'],
+                    'action_type'  => 'sale',
+                    'qty_change'   => -floatval($detail['qty']),
+                    'price_change' => floatval($detail['sale_price']),
+                    'reference_no' => $bill_no,
+                    'remarks'      => 'Sold in Invoice #' . $bill_no . ($customer_name ? ' to ' . $customer_name : '')
+                ]);
+            }
             $ret_arr['msg'] = 'Sales bill saved successfully and stock deducted.';
             $ret_arr['sales_id'] = encode_id($sales_id);
         } else {
