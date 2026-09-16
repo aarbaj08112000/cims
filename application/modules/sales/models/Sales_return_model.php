@@ -12,7 +12,7 @@ class Sales_return_model extends CI_Model {
         $this->db->select('srm.*, sm.bill_no as original_bill_no, COALESCE(NULLIF(sm.customer_name,""), cm.full_name) as customer_name', FALSE);
         $this->db->from('sales_return_master srm');
         $this->db->join('sales_master sm', 'srm.sales_id = sm.sales_id', 'left');
-        $this->db->join('customer_master cm', 'sm.customer_phone_number COLLATE utf8mb4_unicode_ci = cm.mobile_number COLLATE utf8mb4_unicode_ci', 'left', FALSE);
+        $this->db->join('customer_master cm', 'CONVERT(sm.customer_phone_number USING utf8mb4) = CONVERT(cm.mobile_number USING utf8mb4)', 'left', FALSE);
         $this->db->order_by('srm.return_id', 'DESC');
         $query = $this->db->get();
         return $query->result_array();
@@ -43,7 +43,7 @@ class Sales_return_model extends CI_Model {
         $this->db->select('srm.*, sm.bill_no as original_bill_no, COALESCE(NULLIF(sm.customer_name,""), cm.full_name) as customer_name, cm.mobile_number, cm.address1', FALSE);
         $this->db->from('sales_return_master srm');
         $this->db->join('sales_master sm', 'srm.sales_id = sm.sales_id', 'left');
-        $this->db->join('customer_master cm', 'sm.customer_phone_number COLLATE utf8mb4_unicode_ci = cm.mobile_number COLLATE utf8mb4_unicode_ci', 'left', FALSE);
+        $this->db->join('customer_master cm', 'CONVERT(sm.customer_phone_number USING utf8mb4) = CONVERT(cm.mobile_number USING utf8mb4)', 'left', FALSE);
         $this->db->where('srm.return_id', $return_id);
         $query = $this->db->get();
         return $query->row_array();

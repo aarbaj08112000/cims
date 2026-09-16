@@ -42,6 +42,10 @@
   margin-bottom: 22px;
 }
 
+.text-green {
+  color: var(--cat-success);
+}
+
 .cat-page-header-left {
   display: flex;
   align-items: center;
@@ -248,11 +252,13 @@
   font-family: var(--cat-font);
   font-size: 14px;
 }
+
 @media (min-width: 768px) {
   .cat-table-card table.dataTable {
     table-layout: fixed !important;
   }
 }
+
 @media (max-width: 767px) {
   .cat-table-card table.dataTable {
     width: 800px !important;
@@ -671,8 +677,8 @@
 }
 
 /* Hide the default DataTables built-in loading animation (dots) — keep only custom cat-processing */
-.dataTables_processing > div:first-child,
-.dataTables_processing > div:last-child {
+.dataTables_processing>div:first-child,
+.dataTables_processing>div:last-child {
   display: none !important;
 }
 
@@ -788,11 +794,13 @@
     overflow-x: auto;
     width: 100%;
     gap: 6px;
-    padding-bottom: 4px; /* for scrollbar if needed */
+    padding-bottom: 4px;
+    /* for scrollbar if needed */
   }
 
   .cat-page-header-right::-webkit-scrollbar {
-    height: 0px; /* Hide scrollbar visually */
+    height: 0px;
+    /* Hide scrollbar visually */
   }
 
   .cat-search-box {
@@ -865,6 +873,7 @@ body.grid-layout .cat-dt-footer {
   background: transparent !important;
   border-top-color: transparent !important;
 }
+
 /* Hide table body rows while DataTables is processing (loader showing) */
 .dataTables_wrapper.processing tbody tr {
   visibility: hidden !important;

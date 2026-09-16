@@ -45,7 +45,7 @@ class Sales_model extends CI_Model
     {
         $this->db->select('s.*, COALESCE(NULLIF(s.customer_name,""), c.full_name) as customer_name', FALSE);
         $this->db->from('sales_master s');
-        $this->db->join('customer_master c', 's.customer_phone_number COLLATE utf8mb4_unicode_ci = c.mobile_number COLLATE utf8mb4_unicode_ci', 'left', FALSE);
+        $this->db->join('customer_master c', 'CONVERT(s.customer_phone_number USING utf8mb4) = CONVERT(c.mobile_number USING utf8mb4)', 'left', FALSE);
         $this->db->where('s.sales_id', $sales_id);
         $query = $this->db->get();
         return $query->row_array();

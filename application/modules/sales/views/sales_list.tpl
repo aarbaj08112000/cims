@@ -58,7 +58,7 @@
               <td><%$val['sales_date']|date_format:'%d-%m-%Y' %></td>
               <td class="text-end"><%$val['total_amount']|number_format:2 %></td>
               <td class="text-end text-danger"><%$val['discount_amount']|number_format:2 %></td>
-              <td class="fw-bold text-success text-end"><%$val['payable_amount']|number_format:2 %></td>
+              <td class="fw-bold text-green text-end"><%$val['payable_amount']|number_format:2 %></td>
               <td class="cat-col-status text-center">
                 <%if $val['payment_mode'] == 'Cash' %>
                   <span class="cat-badge cat-badge-active"><%$val['payment_mode']%></span>

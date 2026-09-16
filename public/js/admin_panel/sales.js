@@ -157,13 +157,13 @@ const salesPage = {
         
         let discount = parseFloat($("#discount").val()) || 0;
         
-        // Ensure discount doesn't exceed subtotal
+        // Ensure discount doesn't exceed subTotal
         if (discount > subTotal) {
-            discount = subtotal;
+            discount = subTotal;
             $("#discount").val(discount.toFixed(2));
         }
 
-        let grandTotal = subtotal - discount;
+        let grandTotal = subTotal - discount;
         
         $("#sub_total").val(subTotal.toFixed(2));
         $("#grand_total").val(grandTotal.toFixed(2));
