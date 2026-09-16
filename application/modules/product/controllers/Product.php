@@ -5,6 +5,7 @@ class Product extends MY_Controller
     public function __construct()
     {
         parent::__construct();
+        $this->load->helper('product_log');
         $this->load->model('Product_model');
         $this->load->model('category/Categories_model');
         $this->load->model('brand/Brand_model');
@@ -206,7 +207,16 @@ class Product extends MY_Controller
 
             $this->barcode_gen->generate($barcode_text, $barcode_file);
 
-            $ret_arr['msg'] = 'Product added successfully.';
+            log_product_activity([
+            'product_id'   => $product_id,
+            'product_name' => $name,
+            'action_type'  => 'created',
+            'qty_change'   => floatval($qty),
+            'price_change' => floatval($price),
+            'remarks'      => 'New product added with stock ' . $qty . ' and sale price ₹' . $price,
+            'new_values'   => ['name' => $name, 'price' => $price, 'purchase_price' => $purchase_price, 'qty' => $qty, 'unit' => $unit]
+        ]);
+        $ret_arr['msg'] = 'Product added successfully.';
             $ret_arr['product_id'] = encode_id($product_id);
         } else {
             $ret_arr['msg'] = 'Error occurred while adding the Product.';

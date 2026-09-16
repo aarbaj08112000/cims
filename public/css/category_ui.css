@@ -423,10 +423,14 @@
    Only apply to direct table action icons, NOT inside dropdown menus
    ==================================================== */
 
-/* Edit icon - exclude dropdown menus and .cat-btn buttons */
+/* Edit / View icon - exclude dropdown menus and .cat-btn buttons */
 .cat-table-card :not(.dropdown-menu):not(.cat-btn)>.ti-edit,
 .cat-table-card :not(.dropdown-menu):not(.cat-btn)>i.ti-edit,
-.cat-table-card>tbody>tr>td>.ti-edit {
+.cat-table-card :not(.dropdown-menu):not(.cat-btn)>.ti-eye,
+.cat-table-card :not(.dropdown-menu):not(.cat-btn)>i.ti-eye,
+.cat-table-card>tbody>tr>td>.edit-part,
+.cat-table-card>tbody>tr>td>.ti-edit,
+.cat-table-card>tbody>tr>td>.ti-eye {
   display: inline-flex !important;
   align-items: center;
   justify-content: center;
@@ -444,7 +448,11 @@
 
 .cat-table-card :not(.dropdown-menu):not(.cat-btn)>.ti-edit:hover,
 .cat-table-card :not(.dropdown-menu):not(.cat-btn)>i.ti-edit:hover,
-.cat-table-card>tbody>tr>td>.ti-edit:hover {
+.cat-table-card :not(.dropdown-menu):not(.cat-btn)>.ti-eye:hover,
+.cat-table-card :not(.dropdown-menu):not(.cat-btn)>i.ti-eye:hover,
+.cat-table-card>tbody>tr>td>.edit-part:hover,
+.cat-table-card>tbody>tr>td>.ti-edit:hover,
+.cat-table-card>tbody>tr>td>.ti-eye:hover {
   background: var(--cat-primary);
   color: var(--cat-white);
   box-shadow: 0 3px 10px rgba(91, 95, 199, 0.3);
@@ -496,8 +504,7 @@
 }
 
 /* Reset icon styles inside dropdown menus */
-.cat-table-card .dropdown-menu i.ti-edit,
-.cat-table-card .dropdown-menu i.ti-trash {
+.cat-table-card .dropdown-menu i {
   display: inline !important;
   width: auto !important;
   height: auto !important;
@@ -861,4 +868,60 @@ body.grid-layout .cat-dt-footer {
 /* Hide table body rows while DataTables is processing (loader showing) */
 .dataTables_wrapper.processing tbody tr {
   visibility: hidden !important;
+}
+
+/* Print icon style */
+.cat-table-card :not(.dropdown-menu):not(.cat-btn)>.ti-printer,
+.cat-table-card :not(.dropdown-menu):not(.cat-btn)>i.ti-printer,
+.cat-table-card>tbody>tr>td>.ti-printer {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(40, 199, 111, 0.12);
+  color: #28c76f;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-right: 4px;
+  text-decoration: none;
+}
+
+.cat-table-card :not(.dropdown-menu):not(.cat-btn)>.ti-printer:hover,
+.cat-table-card :not(.dropdown-menu):not(.cat-btn)>i.ti-printer:hover,
+.cat-table-card>tbody>tr>td>.ti-printer:hover {
+  background: #28c76f;
+  color: #ffffff;
+  box-shadow: 0 3px 10px rgba(40, 199, 111, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Download icon style */
+.cat-table-card :not(.dropdown-menu):not(.cat-btn)>.ti-download,
+.cat-table-card :not(.dropdown-menu):not(.cat-btn)>i.ti-download,
+.cat-table-card>tbody>tr>td>.ti-download {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(0, 207, 234, 0.12);
+  color: #00cfe8;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-right: 4px;
+  text-decoration: none;
+}
+
+.cat-table-card :not(.dropdown-menu):not(.cat-btn)>.ti-download:hover,
+.cat-table-card :not(.dropdown-menu):not(.cat-btn)>i.ti-download:hover,
+.cat-table-card>tbody>tr>td>.ti-download:hover {
+  background: #00cfe8;
+  color: #ffffff;
+  box-shadow: 0 3px 10px rgba(0, 207, 234, 0.3);
+  transform: translateY(-1px);
 }

@@ -5,6 +5,7 @@ class Purchase extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
+        $this->load->helper('product_log');
         $this->load->model('Purchase_model');
         $this->load->model('supplier/Supplier_model');
         $this->load->model('product/Product_model');
@@ -66,6 +67,16 @@ class Purchase extends MY_Controller {
         $purchase_id = $this->Purchase_model->save_purchase($master_data, $details_data);
 
         if ($purchase_id) {
+            foreach ($details_data as $detail) {
+                log_product_activity([
+                    'product_id'   => $detail['product_id'],
+                    'action_type'  => 'purchase',
+                    'qty_change'   => floatval($detail['qty']),
+                    'price_change' => floatval($detail['purchase_price']),
+                    'reference_no' => $bill_no,
+                    'remarks'      => 'Stock added via Purchase Bill #' . $bill_no
+                ]);
+            }
             $ret_arr['msg'] = 'Purchase recorded successfully and stock updated.';
             $ret_arr['purchase_id'] = encode_id($purchase_id);
         } else {

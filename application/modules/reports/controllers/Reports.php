@@ -195,4 +195,50 @@ class Reports extends MY_Controller {
         ]);
     }
 
+    /**
+     * Dedicated Product Log Report Page
+     */
+    public function product_log_report() {
+        $from_date   = $this->input->get('from_date') !== NULL ? $this->input->get('from_date') : date('Y-m-01');
+        $to_date     = $this->input->get('to_date') !== NULL? $this->input->get('to_date') : date('Y-m-d');
+        $product_id  = $this->input->get('product_id')  ?: '';
+        $action_type = $this->input->get('action_type') ?: '';
+        $created_by  = $this->input->get('created_by')  ?: '';
+
+        $data['products']    = $this->Reports_model->get_all_products_list();
+        $data['users']       = $this->Reports_model->get_all_users_list();
+        $data['from_date']   = $from_date;
+        $data['to_date']     = $to_date;
+        $data['product_id']  = $product_id;
+        $data['action_type'] = $action_type;
+        $data['created_by']  = $created_by;
+        $data['stats']       = $this->Reports_model->get_product_log_stats_filtered($from_date, $to_date, $product_id, $action_type, $created_by);
+        $data['base_url']    = base_url();
+
+        $this->smarty->loadView('product_log_report.tpl', $data, 'Yes', 'Yes');
+    }
+
+    /**
+     * AJAX: Server-side DataTables for Product Activity Logs
+     */
+    public function get_product_logs_ajax() {
+        $postData = $this->input->post();
+        $result = $this->Reports_model->get_product_logs_datatables($postData);
+        echo json_encode($result);
+    }
+
+    /**
+     * AJAX: Get Updated Product Log Stats Summary Cards
+     */
+    public function get_product_log_stats_ajax() {
+        $from_date   = $this->input->post('from_date')   ?: '';
+        $to_date     = $this->input->post('to_date')     ?: '';
+        $product_id  = $this->input->post('product_id')  ?: '';
+        $action_type = $this->input->post('action_type') ?: '';
+        $created_by  = $this->input->post('created_by')  ?: '';
+
+        $stats = $this->Reports_model->get_product_log_stats_filtered($from_date, $to_date, $product_id, $action_type, $created_by);
+        echo json_encode(['success' => 1, 'stats' => $stats]);
+    }
+
 }

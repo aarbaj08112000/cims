@@ -400,8 +400,8 @@ const page = {
               body: function (data, row, column, node) {
                 if (column === 0) { // Barcode
                   var smallMatch = data.match(/<small[^>]*>(.*?)<\/small>/i);
-                  if (smallMatch && smallMatch[1]) { return smallMatch[1].trim(); }
-                  return data.replace(/<[^>]*>?/gm, '').replace('-', '').trim();
+                  var val = (smallMatch && smallMatch[1]) ? smallMatch[1].trim() : data.replace(/<[^>]*>?/gm, '').replace('-', '').trim();
+                  return '\u200B' + val;
                 }
                 if (column === 7) { // Status
                   var tmp = document.createElement('div'); tmp.innerHTML = data;
@@ -450,6 +450,8 @@ const page = {
             var titleStyleId = xfCount++;
             cellXfsEl.append('<xf numFmtId="0" fontId="' + headerFontId + '" fillId="' + headerFillId + '" borderId="' + dataBorderId + '" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf>');
             var headerStyleId = xfCount++;
+            cellXfsEl.append('<xf numFmtId="49" fontId="0" fillId="0" borderId="' + dataBorderId + '" xfId="0" applyNumberFormat="1" applyBorder="1" applyAlignment="1"><alignment vertical="center"/></xf>');
+            var barcodeStyleId = xfCount++;
             cellXfsEl.append('<xf numFmtId="0" fontId="0" fillId="0" borderId="' + dataBorderId + '" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="center"/></xf>');
             var dataStyleId = xfCount++;
             cellXfsEl.attr('count', xfCount);
@@ -457,7 +459,12 @@ const page = {
             var rows = $('row', sheet);
             rows.eq(0).find('c').attr('s', titleStyleId);
             rows.eq(1).find('c').attr('s', headerStyleId);
-            rows.each(function (i) { if (i >= 2) { $(this).find('c').attr('s', dataStyleId); } });
+            rows.each(function (i) {
+              if (i >= 2) {
+                $(this).find('c').attr('s', dataStyleId);
+                $(this).find('c[r^="A"]').attr({ 's': barcodeStyleId, 't': 'inlineStr' });
+              }
+            });
 
             $('sheetData', sheet).after('<mergeCells count="1"><mergeCell ref="A1:H1"/></mergeCells>');
             rows.eq(0).attr({ ht: '28', customHeight: '1' });
