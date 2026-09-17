@@ -137,7 +137,7 @@
                     <select name="product_id[]" class="form-control select2 product-select required-input">
                       <option value="">Choose Product</option>
                       <%foreach from=$products item=p%>
-                        <option value="<%$p['product_id']%>" data-price="<%$p['purchase_price']%>"><%$p['name']%> <%if $p['brand_name']%>- <%$p['brand_name']%><%/if%> (<%$p['product_code']%>)</option>
+                        <option value="<%$p['product_id']%>" data-price="<%$p['purchase_price']%>" data-currency="<%$p['purchase_currency_symbol']%>"><%$p['name']%> <%if $p['brand_name']%>- <%$p['brand_name']%><%/if%> (<%$p['product_code']%>)</option>
                       <%/foreach%>
                     </select>
                   </td>
@@ -145,10 +145,16 @@
                     <input type="text" name="qty[]" class="form-control qty-input required-input onlyNumericInput" value="1">
                   </td>
                   <td>
-                    <input type="text" name="price[]" class="form-control price-input required-input onlyNumericInput" value="0">
+                    <div class="input-group">
+                      <span class="input-group-text currency-symbol"></span>
+                      <input type="text" name="price[]" class="form-control price-input required-input onlyNumericInput" value="0">
+                    </div>
                   </td>
                   <td>
-                    <input type="number" name="total[]" class="form-control bg-light text-end fw-bold total-input" readonly value="0">
+                    <div class="input-group">
+                      <span class="input-group-text currency-symbol"></span>
+                      <input type="text" name="total[]" class="form-control bg-light text-end fw-bold total-input" readonly value="0">
+                    </div>
                   </td>
                   <td class="text-center">
                     <button type="button" class="btn-icon-danger remove-row" title="Remove"><i class="ti ti-trash"></i></button>
@@ -193,7 +199,7 @@
       <select name="product_id[]" class="form-control select2 product-select required-input">
         <option value="">Choose Product</option>
         <%foreach from=$products item=p%>
-          <option value="<%$p['product_id']%>" data-price="<%$p['purchase_price']%>"><%$p['name']%> <%if $p['brand_name']%>- <%$p['brand_name']%><%/if%> (<%$p['product_code']%>)</option>
+          <option value="<%$p['product_id']%>" data-price="<%$p['purchase_price']%>" data-currency="<%$p['purchase_currency_symbol']%>"><%$p['name']%> <%if $p['brand_name']%>- <%$p['brand_name']%><%/if%> (<%$p['product_code']%>)</option>
         <%/foreach%>
       </select>
     </td>
@@ -201,10 +207,16 @@
       <input type="text" name="qty[]" class="form-control qty-input required-input onlyNumericInput" value="1">
     </td>
     <td>
-      <input type="text" name="price[]" class="form-control price-input required-input onlyNumericInput" value="0">
+      <div class="input-group">
+        <span class="input-group-text currency-symbol"></span>
+        <input type="text" name="price[]" class="form-control price-input required-input onlyNumericInput" value="0">
+      </div>
     </td>
     <td>
-      <input type="number" name="total[]" class="form-control bg-light text-end fw-bold total-input" readonly value="0">
+      <div class="input-group">
+        <span class="input-group-text currency-symbol"></span>
+        <input type="text" name="total[]" class="form-control bg-light text-end fw-bold total-input" readonly value="0">
+      </div>
     </td>
     <td class="text-center">
       <button type="button" class="btn-icon-danger remove-row" title="Remove"><i class="ti ti-trash"></i></button>

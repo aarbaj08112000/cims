@@ -379,7 +379,7 @@
                     <div class="month-summary-box">
                         <div class="summary-item">
                             <span class="label"><i class="ti ti-calendar-event me-1"></i> This Month Sales</span>
-                            <span class="value text-primary"><%$settings.company_currency.value|default:"$"%><%$curr_month_stats.month_sales|default:0|number_format:2%></span>
+                            <span class="value text-primary"><%$curr_month_stats.month_sales|default:0|number_format:2%></span>
                         </div>
                         <div class="summary-divider"></div>
                         <div class="summary-item">
@@ -450,8 +450,8 @@
                                 <tr>
                                     <td class="ps-4 fw-semibold">#<%$sale.sales_id%></td>
                                     <td><%$sale.customer_name|default:'Walk-in'%></td>
-                                    <td><%$sale.sales_date|date_format:"%d %b"%></td>
-                                    <td class="text-end pe-4 fw-bold text-dark"><%$settings.company_currency.value%><%$sale.total_amount|number_format:2%></td>
+                                    <td><%$sale.sales_date|defaultDateFormat%></td>
+                                    <td class="text-end pe-4 fw-bold text-dark"><%if $sale.currency_symbol%><%$sale.currency_symbol%> <%else%><%$settings.company_currency.value%><%/if%><%$sale.total_amount|number_format:2%></td>
                                 </tr>
                                 <%/foreach%>
                             </tbody>
@@ -626,7 +626,7 @@
                 title: { text: 'Monthly Revenue', style: { color: '#7367f0', fontWeight: 700, fontSize: '12px' } },
                 labels: {
                     style: { colors: '#82868b', fontWeight: 600 },
-                    formatter: function(val) { return '<%$settings.company_currency.value|default:"$"%>' + val.toLocaleString(); }
+                    formatter: function(val) { return val.toLocaleString(); }
                 }
             }, {
                 opposite: true,
@@ -757,7 +757,7 @@
                 theme: 'light',
                 y: {
                     formatter: function(val) {
-                        return '<%$settings.company_currency.value|default:"$"%>' + val.toLocaleString();
+                        return val.toLocaleString();
                     }
                 }
             }

@@ -61,9 +61,10 @@ class Customer_model extends CI_Model {
     }
 
      public function get_products(){
-        $this->db->select('p.*, b.brand_name');
+        $this->db->select('p.*, b.brand_name, curr_sell.currency_symbol as selling_currency_symbol');
         $this->db->from('product_master as p');
         $this->db->join('brands b', 'p.brand_id = b.brand_id', 'left');
+        $this->db->join('currency_master as curr_sell', 'p.selling_currency_id = curr_sell.currency_id', 'left');
         $this->db->where('p.is_delete', "0");
         $result_obj = $this->db->get();
         $ret_data = is_object($result_obj) ? $result_obj->result_array() : [];

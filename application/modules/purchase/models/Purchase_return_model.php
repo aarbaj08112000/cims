@@ -30,7 +30,7 @@ class Purchase_return_model extends CI_Model {
     }
 
     public function get_returns() {
-        $this->db->select('prm.*, pm.bill_no as original_bill_no, sm.supplier_name');
+        $this->db->select('prm.*, pm.bill_no as original_bill_no, sm.supplier_name, (SELECT curr.currency_symbol FROM purchase_return_details prd JOIN product_master p ON p.product_id = prd.product_id JOIN currency_master curr ON curr.currency_id = p.purchase_currency_id WHERE prd.return_id = prm.return_id LIMIT 1) as currency_symbol', FALSE);
         $this->db->from('purchase_return_master prm');
         $this->db->join('purchase_master pm', 'prm.purchase_id = pm.purchase_id', 'left');
         $this->db->join('supplier_master sm', 'pm.supplier_id = sm.supplier_id', 'left');
@@ -40,7 +40,7 @@ class Purchase_return_model extends CI_Model {
     }
 
     public function get_return_master($return_id) {
-        $this->db->select('prm.*, pm.bill_no as original_bill_no, sm.supplier_name, sm.phone, sm.address');
+        $this->db->select('prm.*, pm.bill_no as original_bill_no, sm.supplier_name, sm.phone, sm.address, (SELECT curr.currency_symbol FROM purchase_return_details prd JOIN product_master p ON p.product_id = prd.product_id JOIN currency_master curr ON curr.currency_id = p.purchase_currency_id WHERE prd.return_id = prm.return_id LIMIT 1) as currency_symbol', FALSE);
         $this->db->from('purchase_return_master prm');
         $this->db->join('purchase_master pm', 'prm.purchase_id = pm.purchase_id', 'left');
         $this->db->join('supplier_master sm', 'pm.supplier_id = sm.supplier_id', 'left');
@@ -50,9 +50,10 @@ class Purchase_return_model extends CI_Model {
     }
 
     public function get_return_items($return_id) {
-        $this->db->select('prd.*, p.name as product_name, p.product_code, b.brand_name');
+        $this->db->select('prd.*, p.name as product_name, p.product_code, b.brand_name, curr.currency_symbol');
         $this->db->from('purchase_return_details prd');
         $this->db->join('product_master p', 'prd.product_id = p.product_id', 'left');
+        $this->db->join('currency_master curr', 'curr.currency_id = p.purchase_currency_id', 'left');
         $this->db->join('brands b', 'p.brand_id = b.brand_id', 'left');
         $this->db->where('prd.return_id', $return_id);
         $query = $this->db->get();
@@ -61,9 +62,10 @@ class Purchase_return_model extends CI_Model {
 
     public function get_returnable_items($purchase_id) {
         $this->db->select('pd.*, p.name as product_name, p.product_code, b.brand_name,
-            (pd.qty - COALESCE(SUM(prd.qty), 0)) as available_qty');
+            (pd.qty - COALESCE(SUM(prd.qty), 0)) as available_qty, curr.currency_symbol');
         $this->db->from('purchase_details pd');
         $this->db->join('product_master p', 'pd.product_id = p.product_id', 'left');
+        $this->db->join('currency_master curr', 'curr.currency_id = p.purchase_currency_id', 'left');
         $this->db->join('brands b', 'p.brand_id = b.brand_id', 'left');
         $this->db->join('purchase_return_master prm', 'pd.purchase_id = prm.purchase_id', 'left');
         $this->db->join('purchase_return_details prd', 'prm.return_id = prd.return_id AND pd.product_id = prd.product_id', 'left');

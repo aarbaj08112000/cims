@@ -619,9 +619,9 @@ a,
     color: var(--primary-color) !important;
 }
 
-a:hover {
+/* a:hover {
     color: var(--primary-hover) !important;
-}
+} */
 
 /* Form Focus & Input Highlights */
 input:focus,

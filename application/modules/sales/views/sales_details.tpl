@@ -185,7 +185,7 @@
           <div class="pd-stat-icon green"><i class="ti ti-currency-rupee"></i></div>
           <div>
             <div class="pd-stat-label">Grand Total</div>
-            <div class="pd-stat-value">₹ <%$sale['payable_amount']|number_format:2%></div>
+            <div class="pd-stat-value"><%$sale['currency_symbol']|default:''%> <%$sale['payable_amount']|number_format:2%></div>
           </div>
         </div>
       </div>
@@ -237,21 +237,21 @@
               <div class="pd-info-icon"><i class="ti ti-currency-rupee"></i></div>
               <div class="pd-info-content">
                 <div class="pd-info-label">Total Amount</div>
-                <div class="pd-info-value" style="color: var(--pd-primary);">₹ <%$sale['total_amount']|number_format:2%></div>
+                <div class="pd-info-value" style="color: var(--pd-primary);"><%$sale['currency_symbol']|default:''%> <%$sale['total_amount']|number_format:2%></div>
               </div>
             </div>
             <div class="pd-info-row">
               <div class="pd-info-icon red"><i class="ti ti-discount"></i></div>
               <div class="pd-info-content">
                 <div class="pd-info-label">Discount</div>
-                <div class="pd-info-value" style="color: var(--pd-danger);">- ₹ <%$sale['discount_amount']|number_format:2%></div>
+                <div class="pd-info-value" style="color: var(--pd-danger);">- <%$sale['currency_symbol']|default:''%> <%$sale['discount_amount']|number_format:2%></div>
               </div>
             </div>
             <div class="pd-info-row">
               <div class="pd-info-icon green"><i class="ti ti-check"></i></div>
               <div class="pd-info-content">
                 <div class="pd-info-label">Payable Amount</div>
-                <div class="pd-info-value" style="color: var(--pd-success); font-size: 1.05rem;">₹ <%$sale['payable_amount']|number_format:2%></div>
+                <div class="pd-info-value" style="color: var(--pd-success); font-size: 1.05rem;"><%$sale['currency_symbol']|default:''%> <%$sale['payable_amount']|number_format:2%></div>
               </div>
             </div>
           </div>
@@ -331,7 +331,7 @@
               <div class="pd-info-icon purple"><i class="ti ti-currency-rupee"></i></div>
               <div class="pd-info-content">
                 <div class="pd-info-label">Sale Value</div>
-                <div class="pd-info-value" style="color: var(--pd-primary); font-size: 1.05rem;">₹ <%$sale['payable_amount']|number_format:2%></div>
+                <div class="pd-info-value" style="color: var(--pd-primary); font-size: 1.05rem;"><%$sale['currency_symbol']|default:''%> <%$sale['payable_amount']|number_format:2%></div>
               </div>
             </div>
           </div>
@@ -367,8 +367,8 @@
                 <div class="pd-product-code"><%$item['product_code']%></div>
               </td>
               <td class="text-center"><span class="pd-qty-badge"><%$item['qty']%></span></td>
-              <td class="text-end pd-price">₹ <%$item['sale_price']|number_format:2%></td>
-              <td class="text-end pd-price">₹ <%$item['total_amount']|number_format:2%></td>
+              <td class="text-end pd-price"><%$item['currency_symbol']|default:''%> <%$item['sale_price']|number_format:2%></td>
+              <td class="text-end pd-price"><%$item['currency_symbol']|default:''%> <%$item['total_amount']|number_format:2%></td>
             </tr>
             <%assign var='idx' value=$idx+1%>
             <%/foreach%>
@@ -378,16 +378,16 @@
       <%if $sale['discount_amount'] > 0%>
       <div class="pd-discount-row">
         <span class="label">Subtotal</span>
-        <span class="value" style="color:var(--pd-gray-700);">₹ <%$sale['total_amount']|number_format:2%></span>
+        <span class="value" style="color:var(--pd-gray-700);"><%$sale['currency_symbol']|default:''%> <%$sale['total_amount']|number_format:2%></span>
       </div>
       <div class="pd-discount-row">
         <span class="label">Discount</span>
-        <span class="value">- ₹ <%$sale['discount_amount']|number_format:2%></span>
+        <span class="value">- <%$sale['currency_symbol']|default:''%> <%$sale['discount_amount']|number_format:2%></span>
       </div>
       <%/if%>
       <div class="pd-grand-total">
         <span class="pd-grand-total-label">Grand Total</span>
-        <span class="pd-grand-total-value">₹ <%$sale['payable_amount']|number_format:2%></span>
+        <span class="pd-grand-total-value"><%$sale['currency_symbol']|default:''%> <%$sale['payable_amount']|number_format:2%></span>
       </div>
     </div>
 

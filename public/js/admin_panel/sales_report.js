@@ -1,4 +1,33 @@
 ﻿$(document).ready(function () {
+    if ($.fn.daterangepicker) {
+        var fromDate = $('#filter_from_date').val();
+        var toDate = $('#filter_to_date').val();
+        $('#date_range_picker').daterangepicker({
+            autoUpdateInput: false,
+            open: 'left',
+            dropdownParent: $('#filterOffcanvas'),
+            startDate: fromDate ? moment(fromDate, 'YYYY-MM-DD') : moment().startOf('month'),
+            endDate: toDate ? moment(toDate, 'YYYY-MM-DD') : moment().endOf('month'),
+            maxDate: moment(),
+            locale: {
+                format: 'YYYY-MM-DD',
+                cancelLabel: 'Clear'
+            }
+        });
+        if (fromDate && toDate) {
+            $('#date_range_picker').val(fromDate + ' ~ ' + toDate);
+        }
+        $('#date_range_picker').on('apply.daterangepicker', function(eve, picker) {
+            $(this).val(picker.startDate.format('YYYY-MM-DD') + ' ~ ' + picker.endDate.format('YYYY-MM-DD'));
+            $('#filter_from_date').val(picker.startDate.format('YYYY-MM-DD'));
+            $('#filter_to_date').val(picker.endDate.format('YYYY-MM-DD'));
+        });
+        $('#date_range_picker').on('cancel.daterangepicker', function(eve, picker) {
+            $(this).val('');
+            $('#filter_from_date, #filter_to_date, #date_range_picker').val('');
+        });
+    }
+
     salesReport.init();
 });
 
@@ -38,10 +67,10 @@ const salesReport = {
                 var json = api.ajax.json();
                 if (json) {
                     if (json.total_entries !== undefined) $('#kpi-total-entries').text(json.total_entries);
-                    if (json.total_cash !== undefined) $('#kpi-total-cash').text('₹' + json.total_cash);
-                    if (json.total_upi !== undefined) $('#kpi-total-upi').text('₹' + json.total_upi);
-                    if (json.total_card !== undefined) $('#kpi-total-card').text('₹' + json.total_card);
-                    if (json.grand_total !== undefined) $('#kpi-total-amount').text('₹' + json.grand_total);
+                    if (json.total_cash !== undefined) $('#kpi-total-cash').text(json.total_cash);
+                    if (json.total_upi !== undefined) $('#kpi-total-upi').text(json.total_upi);
+                    if (json.total_card !== undefined) $('#kpi-total-card').text(json.total_card);
+                    if (json.grand_total !== undefined) $('#kpi-total-amount').text(json.grand_total);
                 }
             },
 
@@ -231,7 +260,12 @@ const salesReport = {
         // --- Filter Form Submission ---
         $('#filter-form').on('submit', function (e) {
             e.preventDefault();
-            salesReportTable.draw(); // This will trigger AJAX request and update table + KPIs
+            salesReportTable.draw();
+            var el = document.getElementById("filterOffcanvas");
+            if (el && window.bootstrap) {
+                var instance = bootstrap.Offcanvas.getInstance(el) || new bootstrap.Offcanvas(el);
+                instance.hide();
+            }
         });
 
         // --- Custom Export Buttons Integration ---
@@ -245,3 +279,9 @@ const salesReport = {
     }
 };
 
+
+
+    $(document).on('click', '#btn-reset-filter', function() {
+        $('#filter_from_date, #filter_to_date, #date_range_picker, #search-filter-input').val('');
+        $('#filter-form').submit();
+    });

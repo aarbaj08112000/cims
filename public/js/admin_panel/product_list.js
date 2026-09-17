@@ -324,52 +324,40 @@ const page = {
 
     $(document).on("click", ".update_stock", function () {
       var product_id = $(this).data("id");
+      // Store product_id in offcanvas for form submission
+      $("#updateStockOffcanvas").data("product-id", product_id);
+      // Reset form fields
+      $("#update_stock_qty").val("");
+      $("#update_stock_remarks").val("");
+      // Open offcanvas
+      var offcanvas = new bootstrap.Offcanvas(document.getElementById("updateStockOffcanvas"));
+      offcanvas.show();
+    });
 
-      Swal.fire({
-        title: 'Update Stock',
-        html:
-          '<div style="text-align: left; margin-top: 10px;">' +
-          '<label for="swal-input1" style="display: block; margin-bottom: 5px; font-weight: bold;">Quantity</label>' +
-          '<input id="swal-input1" class="swal2-input" placeholder="Enter Quantity" type="number" style="width: 100%; margin: 0 0 15px 0 !important; box-sizing: border-box;">' +
-          '<label for="swal-input2" style="display: block; margin-bottom: 5px; font-weight: bold;">Remarks</label>' +
-          '<textarea id="swal-input2" class="swal2-textarea" placeholder="Remarks (optional)" style="width: 100%; margin: 0 !important; box-sizing: border-box;"></textarea>' +
-          '</div>',
-        focusConfirm: false,
-        showCancelButton: true,
-        confirmButtonText: 'Update',
-        preConfirm: () => {
-          const qty = document.getElementById('swal-input1').value;
-          const remarks = document.getElementById('swal-input2').value;
-          if (!qty || qty <= 0) {
-            Swal.showValidationMessage('Please enter a valid quantity');
+    // Handle Update Stock form submit from offcanvas
+    $(document).on("submit", "#updateStockForm", function (e) {
+      e.preventDefault();
+      var product_id = $("#updateStockOffcanvas").data("product-id");
+      var qty = $("#update_stock_qty").val();
+      var remarks = $("#update_stock_remarks").val();
+      if (!qty) {
+        $("#update_stock_qty").addClass("is-invalid");
+        return;
+      }
+      $.ajax({
+        url: base_url + "update_stock",
+        type: "POST",
+        data: { product_id: product_id, qty: qty, remarks: remarks },
+        dataType: "json",
+        success: function (response) {
+          if (response.success == 1) {
+            bootstrap.Offcanvas.getInstance(document.getElementById("updateStockOffcanvas")).hide();
+            Swal.fire({ icon: "success", title: "Updated!", text: response.msg, timer: 1500, showConfirmButton: false }).then(() => { location.reload(); });
+          } else {
+            Swal.fire("Error!", response.msg, "error");
           }
-          return { qty: qty, remarks: remarks };
-        }
-      }).then((result) => {
-        if (result.isConfirmed) {
-          $.ajax({
-            url: base_url + "update_stock",
-            type: "POST",
-            data: {
-              product_id: product_id,
-              qty: result.value.qty,
-              remarks: result.value.remarks
-            },
-            dataType: "json",
-            success: function (response) {
-              if (response.success == 1) {
-                Swal.fire("Updated!", response.msg, "success").then(() => {
-                  location.reload();
-                });
-              } else {
-                Swal.fire("Error!", response.msg, "error");
-              }
-            },
-            error: function () {
-              Swal.fire("Error!", "Something went wrong.", "error");
-            }
-          });
-        }
+        },
+        error: function () { Swal.fire("Error!", "Something went wrong.", "error"); }
       });
     });
 

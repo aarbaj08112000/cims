@@ -68,7 +68,64 @@
     </div>
 
 
-    <script type="text/javascript">
+    
+<!-- Update Stock Offcanvas (Right Sidebar) -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="updateStockOffcanvas" aria-labelledby="updateStockOffcanvasLabel" style="width: 400px;">
+  <!-- Gradient Header -->
+  <div class="offcanvas-header border-bottom-0 py-4" style="background: linear-gradient(135deg, #4f46e5 0%, #2b3252 100%);">
+    <div class="d-flex align-items-center gap-3">
+      <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 42px; height: 42px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);">
+        <i class="ti ti-adjustments text-white fs-4"></i>
+      </div>
+      <div>
+        <h5 class="offcanvas-title mb-0 text-white fw-bold" id="updateStockOffcanvasLabel">Update Stock</h5>
+        <small class="text-white-50">Add or reduce product stock</small>
+      </div>
+    </div>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"
+      style="background-color: rgba(255,255,255,0.1); border-radius: 50%; padding: 0.5rem; opacity: 1;"></button>
+  </div>
+
+  <!-- Body -->
+  <div class="offcanvas-body p-4">
+    <form id="updateStockForm">
+
+      <!-- Quantity -->
+      <div class="mb-4">
+        <label class="form-label fw-semibold text-dark mb-2">Quantity <span class="text-danger">*</span></label>
+        <div class="input-group input-group-merge">
+          <span class="input-group-text"><i class="ti ti-math-symbols"></i></span>
+          <input type="number" id="update_stock_qty" class="form-control" step="1" placeholder="Enter quantity to add/reduce">
+        </div>
+        <div class="form-text mt-1 text-muted">
+          <i class="ti ti-info-circle me-1"></i> E.g.
+          <span class="text-success fw-medium">+5</span> to add stock,
+          <span class="text-danger fw-medium">-3</span> to reduce stock.
+        </div>
+      </div>
+
+      <!-- Remarks -->
+      <div class="mb-4">
+        <label class="form-label fw-semibold text-dark mb-2">Remarks</label>
+        <div class="input-group input-group-merge">
+          <span class="input-group-text align-items-start pt-2"><i class="ti ti-notes"></i></span>
+          <textarea id="update_stock_remarks" class="form-control" rows="3" placeholder="Reason for adjustment (optional)..."></textarea>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="d-flex gap-3 mt-4 pt-3 border-top">
+        <button type="button" class="btn btn-label-secondary flex-fill fw-medium" data-bs-dismiss="offcanvas">Cancel</button>
+        <button type="submit" class="btn btn-primary flex-fill fw-medium shadow-sm">
+          <i class="ti ti-device-floppy me-2"></i>Save Update
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<script type="text/javascript">
     var base_url = <%$base_url|@json_encode%>
     </script>
 

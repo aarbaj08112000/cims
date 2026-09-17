@@ -7,10 +7,12 @@ class Product_model extends CI_Model {
         parent::__construct();
     }
     public function get_products_ssp($start, $length, $search, $order_col, $order_dir) {
-        $this->db->select("p.*, c.category_name, b.brand_name");
+        $this->db->select("p.*, c.category_name, b.brand_name, curr_sell.currency_symbol as selling_currency_symbol, curr_purch.currency_symbol as purchase_currency_symbol");
         $this->db->from("product_master as p");
         $this->db->join("categories as c", "p.category_id = c.category_id", "left");
         $this->db->join("brands as b", "p.brand_id = b.brand_id", "left");
+        $this->db->join("currency_master as curr_sell", "p.selling_currency_id = curr_sell.currency_id", "left");
+        $this->db->join("currency_master as curr_purch", "p.purchase_currency_id = curr_purch.currency_id", "left");
         $this->db->where("p.is_delete", "0");
 
         if (!empty($search)) {
@@ -45,6 +47,11 @@ class Product_model extends CI_Model {
         return is_object($result_obj) ? $result_obj->result_array() : [];
     }
 
+    public function get_active_currencies() {
+        $this->db->where('status', 'Active');
+        return $this->db->get('currency_master')->result_array();
+    }
+
     public function get_products_ssp_count($search = null) {
         $this->db->from("product_master as p");
         $this->db->where("p.is_delete", "0");
@@ -59,18 +66,22 @@ class Product_model extends CI_Model {
     }
 
      public function get_products(){
-        $this->db->select('p.*');
+        $this->db->select('p.*, b.brand_name, curr_purch.currency_symbol as purchase_currency_symbol');
         $this->db->from('product_master as p');
+        $this->db->join('brands b', 'p.brand_id = b.brand_id', 'left');
+        $this->db->join('currency_master as curr_purch', 'p.purchase_currency_id = curr_purch.currency_id', 'left');
         $this->db->where('p.is_delete', "0");
         $result_obj = $this->db->get();
         $ret_data = is_object($result_obj) ? $result_obj->result_array() : [];
         return $ret_data;
     }
     public function get_products_details($product_id = 0){
-        $this->db->select('p.*, c.category_name, b.brand_name');
+        $this->db->select('p.*, c.category_name, b.brand_name, curr_sell.currency_symbol as selling_currency_symbol, curr_purch.currency_symbol as purchase_currency_symbol');
         $this->db->from('product_master as p');
         $this->db->join('categories as c', 'p.category_id = c.category_id', 'left');
         $this->db->join('brands as b', 'p.brand_id = b.brand_id', 'left');
+        $this->db->join("currency_master as curr_sell", "p.selling_currency_id = curr_sell.currency_id", "left");
+        $this->db->join("currency_master as curr_purch", "p.purchase_currency_id = curr_purch.currency_id", "left");
         $this->db->where('p.product_id', $product_id);
         $result_obj = $this->db->get();
         $ret_data = is_object($result_obj) ? $result_obj->result_array() : [];

@@ -40,7 +40,8 @@
         <thead class="bg-light">
            <tr>
               <th>Invoice No</th>
-              <th>Customer</th>
+              <th>Customer Name</th>
+              <th>Mobile No</th>
               <th>Sales Date</th>
               <th class="text-end">Total Amount</th>
               <th class="text-end">Discount</th>
@@ -54,11 +55,12 @@
           <%foreach from=$sales item=val %>
            <tr>
               <td class="fw-medium text-dark"><a href="<%base_url('sales_details/')%><%$val['sales_id']|encode_id%>" class="text-primary text-decoration-none fw-bold"><%$val['bill_no'] %></a></td>
-              <td><%$val['customer_phone_number']|default:'Walk-in' %></td>
-              <td><%$val['sales_date']|date_format:'%d-%m-%Y' %></td>
-              <td class="text-end"><%$val['total_amount']|number_format:2 %></td>
-              <td class="text-end text-danger"><%$val['discount_amount']|number_format:2 %></td>
-              <td class="fw-bold text-green text-end"><%$val['payable_amount']|number_format:2 %></td>
+              <td><%$val['customer_name']|default:'Walk-in' %></td>
+              <td><%$val['customer_phone_number']|default:'-'%></td>
+              <td><%$val['sales_date']|defaultDateFormat%></td>
+              <td class="text-end"><%$val['currency_symbol']%> <%$val['total_amount']|number_format:2 %></td>
+              <td class="text-end text-danger"><%$val['currency_symbol']%> <%$val['discount_amount']|number_format:2 %></td>
+              <td class="fw-bold text-green text-end"><%$val['currency_symbol']%> <%$val['payable_amount']|number_format:2 %></td>
               <td class="cat-col-status text-center">
                 <%if $val['payment_mode'] == 'Cash' %>
                   <span class="cat-badge cat-badge-active"><%$val['payment_mode']%></span>

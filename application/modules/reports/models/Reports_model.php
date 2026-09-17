@@ -114,18 +114,18 @@ class Reports_model extends CI_Model {
         }
 
         // Fetch data
-        $this->db->select('sm.*');
+        $this->db->select('sm.*, (SELECT curr.currency_symbol FROM sales_details sd JOIN product_master p ON p.product_id = sd.product_id JOIN currency_master curr ON curr.currency_id = p.selling_currency_id WHERE sd.sales_id = sm.sales_id LIMIT 1) as currency_symbol', FALSE);
         $data = $this->db->get()->result_array();
 
         // Prepare rows for DataTables
         $rows = [];
         foreach ($data as $row) {
             $rows[] = [
-                date('d M Y', strtotime($row['sales_date'])),
+                defaultDateFormat($row['sales_date']),
                 $row['customer_name'] ? htmlspecialchars($row['customer_name']) : 'Walk-in Customer',
                 $row['customer_phone_number'] ? htmlspecialchars($row['customer_phone_number']) : '-',
                 $row['payment_mode'] ? htmlspecialchars($row['payment_mode']) : 'Cash',
-                number_format($row['total_amount'], 2)
+                ($row['currency_symbol'] ? $row['currency_symbol'] . ' ' : '') . number_format($row['total_amount'], 2)
             ];
         }
         return [
@@ -145,7 +145,7 @@ class Reports_model extends CI_Model {
      * Get Sales Report (simple list for AJAX table)
      */
     public function get_sales_report($from_date = '', $to_date = '') {
-        $this->db->select('sm.sales_id, sm.bill_no, sm.sales_date, sm.customer_name, sm.customer_phone_number, sm.payment_mode, sm.total_amount, sm.payment_status');
+        $this->db->select('sm.sales_id, sm.bill_no, sm.sales_date, sm.customer_name, sm.customer_phone_number, sm.payment_mode, sm.total_amount, sm.payment_status, (SELECT curr.currency_symbol FROM sales_details sd JOIN product_master p ON p.product_id = sd.product_id JOIN currency_master curr ON curr.currency_id = p.selling_currency_id WHERE sd.sales_id = sm.sales_id LIMIT 1) as currency_symbol', FALSE);
         $this->db->from('sales_master sm');
 
         if (!empty($from_date)) {
@@ -259,18 +259,18 @@ class Reports_model extends CI_Model {
         }
 
         // Fetch data
-        $this->db->select('pm.*, s.supplier_name');
+        $this->db->select('pm.*, s.supplier_name, (SELECT curr.currency_symbol FROM purchase_details pd JOIN product_master p ON p.product_id = pd.product_id JOIN currency_master curr ON curr.currency_id = p.purchase_currency_id WHERE pd.purchase_id = pm.purchase_id LIMIT 1) as currency_symbol', FALSE);
         $data = $this->db->get()->result_array();
 
         // Prepare rows for DataTables
         $rows = [];
         foreach ($data as $row) {
             $rows[] = [
-                date('d M Y', strtotime($row['purchase_date'])),
+                defaultDateFormat($row['purchase_date']),
                 $row['supplier_name'] ? htmlspecialchars($row['supplier_name']) : '-',
                 isset($row['contact_number']) && $row['contact_number'] ? htmlspecialchars($row['contact_number']) : '-',
                 'Cash',
-                number_format($row['total_amount'], 2)
+                ($row['currency_symbol'] ? $row['currency_symbol'] . ' ' : '') . number_format($row['total_amount'], 2)
             ];
         }
 
@@ -291,7 +291,7 @@ class Reports_model extends CI_Model {
      * Get Purchase Report (simple list for AJAX table)
      */
     public function get_purchase_report($from_date = '', $to_date = '') {
-        $this->db->select('pm.purchase_id, pm.bill_no, pm.purchase_date, pm.total_amount, pm.payment_status, s.supplier_name');
+        $this->db->select('pm.purchase_id, pm.bill_no, pm.purchase_date, pm.total_amount, pm.payment_status, s.supplier_name, (SELECT curr.currency_symbol FROM purchase_details pd JOIN product_master p ON p.product_id = pd.product_id JOIN currency_master curr ON curr.currency_id = p.purchase_currency_id WHERE pd.purchase_id = pm.purchase_id LIMIT 1) as currency_symbol', FALSE);
         $this->db->from('purchase_master pm');
         $this->db->join('supplier_master s', 'pm.supplier_id = s.supplier_id', 'left');
 
@@ -370,7 +370,8 @@ class Reports_model extends CI_Model {
         $this->db->limit($limit, $start);
 
         // Fetch data
-        $this->db->select('p.product_code, p.product_name, c.category_name, b.brand_name, p.qty, p.purchase_price');
+        $this->db->select('p.product_code, p.product_name, c.category_name, b.brand_name, p.qty, p.purchase_price, curr.currency_symbol');
+        $this->db->join('currency_master curr', 'curr.currency_id = p.purchase_currency_id', 'left');
         $this->db->from('product_master p');
         $this->db->join('categories c', 'p.category_id = c.category_id', 'left');
         $this->db->join('brands b', 'p.brand_id = b.brand_id', 'left');
@@ -388,8 +389,8 @@ class Reports_model extends CI_Model {
                 $row['category_name'],
                 $row['brand_name'],
                 $row['qty'],
-                number_format($row['purchase_price'], 2),
-                number_format($totalValue, 2)
+                ($row['currency_symbol'] ? $row['currency_symbol'] . ' ' : '') . number_format($row['purchase_price'], 2),
+                ($row['currency_symbol'] ? $row['currency_symbol'] . ' ' : '') . number_format($totalValue, 2)
             ];
         }
 
@@ -402,7 +403,8 @@ class Reports_model extends CI_Model {
     }
 
     public function get_stock_valuation_report() {
-        $this->db->select('p.*, p.name as product_name, c.category_name, b.brand_name, (p.qty * p.purchase_price) as valuation');
+        $this->db->select('p.*, p.name as product_name, c.category_name, b.brand_name, (p.qty * p.purchase_price) as valuation, curr.currency_symbol');
+        $this->db->join('currency_master curr', 'curr.currency_id = p.purchase_currency_id', 'left');
         $this->db->from('product_master p');
         $this->db->join('categories c', 'p.category_id = c.category_id', 'left');
         $this->db->join('brands b', 'p.brand_id = b.brand_id', 'left');
@@ -488,6 +490,7 @@ class Reports_model extends CI_Model {
         ];
 
         $this->db->from('product_activity_logs pal');
+        $this->db->join('product_master p', 'pal.product_id = p.product_id', 'left');
 
         if (!empty($from_date)) {
             $this->db->where('DATE(pal.created_at) >=', $from_date);
@@ -541,7 +544,7 @@ class Reports_model extends CI_Model {
             $this->db->limit($length, $start);
         }
 
-        $this->db->select('pal.*');
+        $this->db->select('pal.*, COALESCE(NULLIF(pal.product_name, ""), p.name) as display_product_name');
         $query = $this->db->get();
         $logs = $query ? $query->result_array() : [];
 
@@ -551,40 +554,40 @@ class Reports_model extends CI_Model {
             $action_badge = '';
             switch ($log['action_type']) {
                 case 'created':
-                    $action_badge = '<span class="badge bg-label-success"><i class="bx bx-plus-circle me-1"></i> Created</span>';
+                    $action_badge = '<span class="badge text-success"><i class="bx bx-plus-circle me-1"></i> Created</span>';
                     break;
                 case 'updated':
-                    $action_badge = '<span class="badge bg-label-warning"><i class="bx bx-edit me-1"></i> Updated</span>';
+                    $action_badge = '<span class="badge text-warning"><i class="bx bx-edit me-1"></i> Updated</span>';
                     break;
                 case 'stock_added':
-                    $action_badge = '<span class="badge bg-label-info"><i class="bx bx-import me-1"></i> Stock In</span>';
+                    $action_badge = '<span class="badge text-info"><i class="bx bx-import me-1"></i> Stock In</span>';
                     break;
                 case 'stock_removed':
-                    $action_badge = '<span class="badge bg-label-danger"><i class="bx bx-export me-1"></i> Stock Out</span>';
+                    $action_badge = '<span class="badge text-danger"><i class="bx bx-export me-1"></i> Stock Out</span>';
                     break;
                 case 'stock_adjusted':
-                    $action_badge = '<span class="badge bg-label-primary"><i class="bx bx-slider me-1"></i> Adjusted</span>';
+                    $action_badge = '<span class="badge text-primary"><i class="bx bx-slider me-1"></i> Adjusted</span>';
                     break;
                 case 'sale':
-                    $action_badge = '<span class="badge bg-label-success"><i class="bx bx-cart me-1"></i> Sale</span>';
+                    $action_badge = '<span class="badge text-success"><i class="bx bx-cart me-1"></i> Sale</span>';
                     break;
                 case 'sale_return':
-                    $action_badge = '<span class="badge bg-label-warning"><i class="bx bx-undo me-1"></i> Sale Return</span>';
+                    $action_badge = '<span class="badge text-warning"><i class="bx bx-undo me-1"></i> Sale Return</span>';
                     break;
                 case 'purchase':
-                    $action_badge = '<span class="badge bg-label-primary"><i class="bx bx-shopping-bag me-1"></i> Purchase</span>';
+                    $action_badge = '<span class="badge text-primary"><i class="bx bx-shopping-bag me-1"></i> Purchase</span>';
                     break;
                 case 'purchase_return':
-                    $action_badge = '<span class="badge bg-label-secondary"><i class="bx bx-revision me-1"></i> Purchase Return</span>';
+                    $action_badge = '<span class="badge text-secondary"><i class="bx bx-revision me-1"></i> Purchase Return</span>';
                     break;
                 case 'deleted':
-                    $action_badge = '<span class="badge bg-label-danger"><i class="bx bx-trash me-1"></i> Deleted</span>';
+                    $action_badge = '<span class="badge text-danger"><i class="bx bx-trash me-1"></i> Deleted</span>';
                     break;
                 case 'restored':
-                    $action_badge = '<span class="badge bg-label-info"><i class="bx bx-refresh me-1"></i> Restored</span>';
+                    $action_badge = '<span class="badge text-info"><i class="bx bx-refresh me-1"></i> Restored</span>';
                     break;
                 default:
-                    $action_badge = '<span class="badge bg-label-secondary">' . htmlspecialchars($log['action_type']) . '</span>';
+                    $action_badge = '<span class="badge text-secondary">' . htmlspecialchars($log['action_type']) . '</span>';
             }
 
             $qty = (float)$log['qty_change'];
@@ -596,7 +599,7 @@ class Reports_model extends CI_Model {
             }
 
             $price = (float)$log['price_change'];
-            $price_display = ($price != 0) ? 'Ê[' . number_format(abs($price), 2) : '-;';
+            $price_display = ($price != 0) ? (($price > 0 ? '+' : '-') . number_format(abs($price), 2)) : '-';
 
             $old_json = htmlspecialchars(json_encode(json_decode($log['old_values'] ?? '[]')), ENT_QUOTES, 'UTF-8');
             $new_json = htmlspecialchars(json_encode(json_decode($log['new_values'] ?? '[]')), ENT_QUOTES, 'UTF-8');
@@ -604,7 +607,7 @@ class Reports_model extends CI_Model {
 
             $action_btn = '<button type="button" class="btn btn-sm btn-icon btn-outline-primary view-log-details" '
                 . 'data-id="' . $log['id'] . '" '
-                . 'data-title="' . htmlspecialchars($log['product_name']) . ' - ' . ucfirst($log['action_type']) . '" '
+                . 'data-title="' . htmlspecialchars(!empty($log['product_name']) ? $log['product_name'] : ($log['display_product_name'] ?? 'N/A')) . ' - ' . ucfirst($log['action_type']) . '" '
                 . 'data-old="' . $old_json . '" '
                 . 'data-new="' . $new_json . '" '
                 . 'data-remarks="' . $remarks_safe . '" '
@@ -613,14 +616,14 @@ class Reports_model extends CI_Model {
 
             $rows[] = [
                 'sr_no'        => $i++,
-                'created_at'   => '<span class="fw-medium">' . date('d M Y', strtotime($log['created_at'])) . '</span><br><small class="text-muted">' . date('h:i A', strtotime($log['created_at'])) . '</small>',
-                'product_name' => '<span class="fw-bold text-heading">' . htmlspecialchars($log['product_name']) . '</span>',
+                'created_at'   => '<span class="fw-medium">' . getDefaultDateTime($log['created_at']) . '</span>',
+                'product_name' => '<span class="fw-bold text-heading">' . htmlspecialchars(!empty($log['product_name']) ? $log['product_name'] : ($log['display_product_name'] ?? 'N/A')) . '</span>',
                 'action_type'  => $action_badge,
                 'qty_change'   => $qty_display,
                 'price_change' => $price_display,
-                'old_values' => !empty($log['old_values']) ? '<span class="badge bg-label-secondary">' . htmlspecialchars($log['old_values']) . '</span>' : '-',
+                'changes_values' => !empty($log['old_values']) ? '<span class="badge text-secondary">' . htmlspecialchars($log['old_values']) . '</span>' : '-',
                 'user_name'    => '<span class="fw-medium">' . htmlspecialchars($log['user_name'] ?? 'System Admin') . '</span>',
-                'actions'      => $action_btn
+                'remarks'        => !empty($log['remarks']) ? htmlspecialchars($log['remarks']) : '-'
             ];
         }
 
@@ -658,30 +661,30 @@ class Reports_model extends CI_Model {
         $logs = $query ? $query->result_array() : [];
 
         $total = count($logs);
-        $stock_in = 0;
-        $stock_out = 0;
-        $updates = 0;
+        $created_edited = 0;
+        $stock_movements = 0;
+        $deletions = 0;
 
         foreach ($logs as $l) {
-            if (in_array($l['action_type'], array('stock_added', 'purchase', 'sale_return', 'created', 'restored'))) {
-                $stock_in++;
-            } elseif (in_array($l['action_type'], array('stock_removed', 'sale', 'purchase_return', 'deleted'))) {
-                $stock_out++;
-            }
-            if ($l['action_type'] === 'updated' || $l['price_change'] != 0) {
-                $updates++;
+            $act = strtolower($l['action_type']);
+            if (in_array($act, ['added', 'created', 'edited', 'updated'])) {
+                $created_edited++;
+            } elseif (in_array($act, ['stock_added', 'stock_removed', 'stock_adjusted', 'sale', 'sale_return', 'purchase', 'purchase_return'])) {
+                $stock_movements++;
+            } elseif (in_array($act, ['deleted', 'restored'])) {
+                $deletions++;
             }
         }
 
-        return array(
-            'total_activities'   => $total,
-            'stock_in_events'    => $stock_in,
-            'stock_out_events'   => $stock_out,
-            'price_detail_edits' => $updates
-        );
+        return [
+            'total_logs'             => $total,
+            'created_edited_count'   => $created_edited,
+            'stock_movements_count'  => $stock_movements,
+            'deletions_count'        => $deletions
+        ];
     }
 
-    public function get_all_products_list() {
+public function get_all_products_list() {
         $this->db->select('product_id as id, name as product_name, product_code');
         $this->db->from('product_master');
         $this->db->where('is_delete', '0');

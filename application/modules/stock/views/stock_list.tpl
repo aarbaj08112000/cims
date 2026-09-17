@@ -27,7 +27,7 @@
         <button type="button" id="export-pdf" class="cat-btn cat-btn-outline-red" title="Export PDF">
           <i class="ti ti-file-type-pdf"></i> Export PDF
         </button>
-        <button type="button" class="cat-btn cat-btn-primary text-white" data-bs-toggle="modal" data-bs-target="#manualAdjustmentModal" title="Manual Adjustment">
+        <button type="button" class="cat-btn cat-btn-primary text-white" data-bs-toggle="offcanvas" data-bs-target="#manualAdjustmentOffcanvas" aria-controls="manualAdjustmentOffcanvas" title="Manual Adjustment">
           <i class="ti ti-adjustments"></i> Manual Adjustment
         </button>
       </div>
@@ -85,7 +85,7 @@
                             <a class="dropdown-item adjust-stock-btn" href="javascript:void(0);" data-id="<%$val['product_id']%>">
                                 <i class="ti ti-adjustments me-1"></i> Adjust Stock
                             </a>
-                            <a class="dropdown-item view-stock-ledger" href="javascript:void(0);" data-id="<%$val['product_id']%>">
+                            <a class="dropdown-item view-stock-ledger" href="<%base_url('stock/stock_ledger/')%><%$val['product_id']|encode_id%>">
                                 <i class="ti ti-history me-1"></i> View History
                             </a>
                         </div>
@@ -100,51 +100,75 @@
   </div>
 </div>
 
-<!-- Stock Ledger Modal -->
-<div class="modal fade" id="stockLedgerModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content" id="stock-ledger-content">
-      <!-- AJAX content -->
-    </div>
-  </div>
-</div>
 
-<!-- Manual Adjustment Modal -->
-<div class="modal fade" id="manualAdjustmentModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-primary py-3">
-        <h5 class="modal-title text-white">Manual Stock Adjustment</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+
+<!-- Manual Adjustment Offcanvas (Right Sidebar) -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="manualAdjustmentOffcanvas" aria-labelledby="manualAdjustmentOffcanvasLabel" style="width: 420px;">
+  <!-- Gradient Header -->
+  <div class="offcanvas-header border-bottom-0 py-4" style="background: linear-gradient(135deg, #4f46e5 0%, #2b3252 100%); position: relative;">
+    <div class="d-flex align-items-center gap-3">
+      <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 42px; height: 42px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);">
+        <i class="ti ti-adjustments text-white fs-4"></i>
       </div>
-      <div class="modal-body p-4">
-        <form id="stockAdjustmentForm" action="<%base_url('update_stock')%>" method="POST">
-            <div class="mb-3">
-                <label class="form-label">Product</label>
-                <select name="product_id" id="adjustment_product_id" class="form-control select2 required-input" data-placeholder="Choose Product">
-                    <option value=""></option>
-                    <%foreach from=$stock_levels item=val%>
-                        <option value="<%$val['product_id']%>" data-stock="<%$val['current_stock']%>"><%$val['name']%> (<%$val['product_code']%>)</option>
-                    <%/foreach%>
-                </select>
-                <div id="current_stock_display" class="mt-2 text-muted small" style="display: none;">
-                   Current / Old Stock: <span id="current_stock_val" class="fw-bold text-dark badge bg-label-secondary"></span>
-                </div>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Adjustment Quantity (Use positive to add, negative to subtract)</label>
-                <input type="number" name="qty" id="adjustment_qty" class="form-control required-input" step="1">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Remarks</label>
-                <textarea name="remarks" class="form-control required-input" rows="2" placeholder="Reason for adjustment..."></textarea>
-            </div>
-            <div class="text-end">
-                <button type="submit" class="btn btn-primary">Save Adjustment</button>
-            </div>
-        </form>
+      <div>
+        <h5 class="offcanvas-title mb-0 text-white fw-bold" id="manualAdjustmentOffcanvasLabel">Manual Stock Adjustment</h5>
+        <small class="text-white-50">Add or reduce stock directly</small>
       </div>
     </div>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"
+      style="background-color: rgba(255,255,255,0.1); border-radius: 50%; padding: 0.5rem; opacity: 1;"></button>
+  </div>
+
+  <!-- Body -->
+  <div class="offcanvas-body p-4">
+    <form id="stockAdjustmentForm" action="<%base_url('update_stock')%>" method="POST">
+
+      <!-- Product -->
+      <div class="mb-4">
+        <label class="form-label fw-semibold text-dark mb-2">Product <span class="text-danger">*</span></label>
+        <select name="product_id" id="adjustment_product_id" class="form-control select2 required-input" data-placeholder="Choose Product">
+          <option value=""></option>
+          <%foreach from=$stock_levels item=val%>
+            <option value="<%$val['product_id']%>" data-stock="<%$val['current_stock']%>"><%$val['name']%> (<%$val['product_code']%>)</option>
+          <%/foreach%>
+        </select>
+        <div id="current_stock_display" class="mt-2 text-muted small" style="display: none;">
+          Current / Old Stock: <span id="current_stock_val" class="fw-bold text-dark badge bg-label-secondary"></span>
+        </div>
+      </div>
+
+      <!-- Quantity -->
+      <div class="mb-4">
+        <label class="form-label fw-semibold text-dark mb-2">Adjustment Quantity <span class="text-danger">*</span></label>
+        <div class="input-group input-group-merge">
+          <span class="input-group-text"><i class="ti ti-math-symbols"></i></span>
+          <input type="number" name="qty" id="adjustment_qty" class="form-control required-input" step="1" placeholder="Use positive to add, negative to subtract">
+        </div>
+        <div class="form-text mt-1 text-muted">
+          <i class="ti ti-info-circle me-1"></i> E.g.
+          <span class="text-success fw-medium">+5</span> to add stock,
+          <span class="text-danger fw-medium">-3</span> to reduce stock.
+        </div>
+      </div>
+
+      <!-- Remarks -->
+      <div class="mb-4">
+        <label class="form-label fw-semibold text-dark mb-2">Remarks <span class="text-danger">*</span></label>
+        <div class="input-group input-group-merge">
+          <span class="input-group-text align-items-start pt-2"><i class="ti ti-notes"></i></span>
+          <textarea name="remarks" class="form-control required-input" rows="3" placeholder="Reason for adjustment (e.g. damaged, found extra)..."></textarea>
+        </div>
+      </div>
+
+      <!-- Actions pinned at bottom -->
+      <div class="d-flex gap-3 mt-4 pt-3 border-top">
+        <button type="button" class="btn btn-label-secondary flex-fill fw-medium" data-bs-dismiss="offcanvas">Cancel</button>
+        <button type="submit" class="btn btn-primary flex-fill fw-medium shadow-sm">
+          <i class="ti ti-device-floppy me-2"></i>Save Adjustment
+        </button>
+      </div>
+
+    </form>
   </div>
 </div>
 

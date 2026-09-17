@@ -55,9 +55,9 @@
               <td class="fw-medium text-dark"><%$val['return_no'] %></td>
               <td><%$val['original_bill_no'] %></td>
               <td><%$val['supplier_name'] %></td>
-              <td><%$val['return_date']|date_format:'%d-%m-%Y' %></td>
-              <td class="fw-bold text-danger">₹<%$val['total_return_amount']|number_format:2 %></td>
-              <td><%$val['added_date']|date_format:'%d-%m-%Y %H:%M' %></td>
+              <td><%$val['return_date']|defaultDateFormat%></td>
+              <td class="fw-bold text-danger"><%$val['currency_symbol']|default:''%> <%$val['total_return_amount']|number_format:2 %></td>
+              <td><%$val['added_date']|getDefaultDateTime%></td>
               <td class="text-center cat-col-action">
                 <div class="d-flex align-items-center justify-content-center">
                   <a href="<%$base_url%>purchase_return_details/<%$val['return_id']|encode_id%>" title="View Details">

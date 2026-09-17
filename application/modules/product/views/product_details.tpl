@@ -295,9 +295,9 @@
           <!-- Price -->
           <div class="d-flex align-items-flex-end gap-3 mb-4 flex-wrap">
             <div>
-              <div class="pd-price">₹<%$products[0]['price']|default:0|number_format:2%></div>
+              <div class="pd-price"><%$products[0]['selling_currency_symbol']%> <%$products[0]['price']|default:0|number_format:2%></div>
               <%if $products[0]['actual_price'] && $products[0]['actual_price'] != $products[0]['price']%>
-              <div class="pd-price-sub">MRP ₹<%$products[0]['actual_price']|number_format:2%></div>
+              <div class="pd-price-sub">MRP <%$products[0]['selling_currency_symbol']%> <%$products[0]['actual_price']|number_format:2%></div>
               <%/if%>
             </div>
             <%if $products[0]['discount'] && $products[0]['discount'] > 0%>
@@ -320,7 +320,7 @@
             <div class="pd-stat-box">
               <div class="pd-stat-icon">🏷️</div>
               <div class="pd-stat-label">Purchase Price</div>
-              <div class="pd-stat-value">₹<%$products[0]['purchase_price']|default:0|number_format:2%></div>
+              <div class="pd-stat-value"><%$products[0]['purchase_currency_symbol']%> <%$products[0]['purchase_price']|default:0|number_format:2%></div>
             </div>
           </div>
         </div>

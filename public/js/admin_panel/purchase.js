@@ -36,10 +36,12 @@ const purchasePage = {
         $(document).on("change", ".product-select", function () {
             let row = $(this).closest("tr");
             let price = $(this).find(":selected").data("price") || 0;
-            row.find(".price-input").val(price);
+            let symbol = $(this).find(":selected").data("currency") || "";
+            row.find(".price-input").val(price.toLocaleString("en-IN", {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+            row.find(".currency-symbol").text(symbol);
             
             if ($(this).val() !== "") {
-                let currentQty = parseFloat(row.find(".qty-input").val()) || 0;
+                let currentQty = parseFloat(String(row.find('.qty-input').val()).replace(/,/g, '')) || 0;
                 if (currentQty <= 0) {
                     row.find(".qty-input").val(1).removeClass("is-invalid");
                     row.find(".qty-input").closest(".form-group, td").find("label.error").remove();
@@ -53,7 +55,7 @@ const purchasePage = {
             let row = $(this).closest("tr");
             let qtyInput = row.find(".qty-input");
             let qtyVal = qtyInput.val();
-            let qty = parseFloat(qtyVal) || 0;
+            let qty = parseFloat(String(qtyVal).replace(/,/g, '')) || 0;
 
             if (qty <= 0 && qtyVal !== "") {
                 toaster("warning", "Quantity cannot be 0 or negative!");
@@ -81,7 +83,7 @@ const purchasePage = {
 
             let zeroQty = false;
             $("#" + id + " .qty-input").each(function () {
-                let qty = parseFloat($(this).val()) || 0;
+                let qty = parseFloat(String($(this).val()).replace(/,/g, '')) || 0;
                 if (qty <= 0) {
                     zeroQty = true;
                     $(this).addClass("is-invalid");
@@ -129,20 +131,20 @@ const purchasePage = {
     });
     },
     calculateRowTotal: function (row) {
-        let qty = parseFloat(row.find(".qty-input").val()) || 0;
-        let price = parseFloat(row.find(".price-input").val()) || 0;
+        let qty = parseFloat(String(row.find('.qty-input').val()).replace(/,/g, '')) || 0;
+        let price = parseFloat(String(row.find('.price-input').val()).replace(/,/g, '')) || 0;
         let total = qty * price;
-        row.find(".total-input").val(total.toFixed(2));
+        row.find(".total-input").val(total.toLocaleString("en-IN", {minimumFractionDigits: 2, maximumFractionDigits: 2}));
         this.calculateGrandTotal();
     },
     calculateGrandTotal: function() {
         let grandTotal = 0;
         $(".total-input").each(function () {
-            grandTotal += parseFloat($(this).val()) || 0;
+            grandTotal += parseFloat(String($(this).val()).replace(/,/g, '')) || 0;
         });
         $("#grand_total").val(grandTotal.toFixed(2));
         if ($("#grand_total_display").length) {
-            $("#grand_total_display").text(grandTotal.toFixed(2));
+            $("#grand_total_display").text(grandTotal.toLocaleString("en-IN", {minimumFractionDigits: 2, maximumFractionDigits: 2}));
         }
     },
     formValidate: function (form_id) {

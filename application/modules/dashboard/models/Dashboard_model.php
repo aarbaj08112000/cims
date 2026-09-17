@@ -150,7 +150,7 @@ class Dashboard_model extends CI_Model {
         $final_trend = [];
         foreach ($dates as $date => $sales) {
             $final_trend[] = [
-                's_date' => $date,
+                's_date' => defaultDateFormat($date),
                 'daily_sales' => $sales
             ];
         }
@@ -162,7 +162,7 @@ class Dashboard_model extends CI_Model {
      * Get Recent Sales
      */
     public function get_recent_sales($limit = 5) {
-        $this->db->select('s.*, c.full_name as customer_name');
+        $this->db->select('s.*, c.full_name as customer_name, (SELECT curr.currency_symbol FROM sales_details sd JOIN product_master p ON p.product_id = sd.product_id JOIN currency_master curr ON curr.currency_id = p.selling_currency_id WHERE sd.sales_id = s.sales_id LIMIT 1) as currency_symbol', FALSE);
         $this->db->from('sales_master s');
         $this->db->join('customer_master c', 's.customer_id = c.customer_id', 'left');
         $this->db->order_by('s.sales_date', 'DESC');
@@ -199,9 +199,10 @@ class Dashboard_model extends CI_Model {
      * Get Top Selling Products
      */
     public function get_top_selling_products($limit = 5) {
-        $this->db->select('pm.name as product_name, pm.product_code, SUM(sd.qty) as total_qty, SUM(sd.total_amount) as total_amount');
+        $this->db->select('pm.name as product_name, pm.product_code, SUM(sd.qty) as total_qty, SUM(sd.total_amount) as total_amount, curr.currency_symbol');
         $this->db->from('sales_details sd');
         $this->db->join('product_master pm', 'sd.product_id = pm.product_id', 'left');
+        $this->db->join('currency_master curr', 'curr.currency_id = pm.selling_currency_id', 'left');
         $this->db->group_by('pm.product_id');
         $this->db->order_by('total_qty', 'DESC');
         $this->db->limit($limit);

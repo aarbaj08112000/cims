@@ -35,13 +35,15 @@ const salesPage = {
             let row = $(this).closest("tr");
             let option = $(this).find("option:selected");
             let price = option.data("price") || 0;
+            let symbol = option.data("currency") || "";
+            row.find(".currency-symbol").text(symbol);
             let stock = option.data("stock") || 0;
 
-            row.find(".price-input").val(price);
+            row.find(".price-input").val(price.toLocaleString("en-IN", {minimumFractionDigits: 2, maximumFractionDigits: 2}));
             row.find(".stock-display").val(stock);
             
             if($(this).val() != "") {
-                if(parseFloat(row.find(".qty-input").val()) <= 0 || row.find(".qty-input").val() == "") {
+                if(parseFloat(String(row.find('.qty-input').val()).replace(/,/g, '')) <= 0 || row.find(".qty-input").val() == "") {
                     row.find(".qty-input").val(1);
                     row.find(".qty-input").removeClass("is-invalid");
                 }
@@ -97,7 +99,7 @@ const salesPage = {
             // Qty and Stock Check
             $(".qty-input").each(function () {
                 let row = $(this).closest("tr");
-                let qty = parseFloat($(this).val()) || 0;
+                let qty = parseFloat(String($(this).val()).replace(/,/g, '')) || 0;
                 let stock = parseFloat(row.find(".stock-display").val()) || 0;
                 if (qty <= 0) {
                     toaster("error", "Quantity must be greater than 0 for all items.");
@@ -143,19 +145,19 @@ const salesPage = {
     });
     },
     calculateRowTotal: function (row) {
-        let qty = parseFloat(row.find(".qty-input").val()) || 0;
-        let price = parseFloat(row.find(".price-input").val()) || 0;
+        let qty = parseFloat(String(row.find('.qty-input').val()).replace(/,/g, '')) || 0;
+        let price = parseFloat(String(row.find('.price-input').val()).replace(/,/g, '')) || 0;
         let total = qty * price;
-        row.find(".total-input").val(total.toFixed(2));
+        row.find(".total-input").val(total.toLocaleString("en-IN", {minimumFractionDigits: 2, maximumFractionDigits: 2}));
         this.calculateGrandTotal();
     },
     calculateGrandTotal: function() {
         let subTotal = 0;
         $(".total-input").each(function () {
-            subTotal += parseFloat($(this).val()) || 0;
+            subTotal += parseFloat(String($(this).val()).replace(/,/g, '')) || 0;
         });
         
-        let discount = parseFloat($("#discount").val()) || 0;
+        let discount = parseFloat(String($('#discount').val()).replace(/,/g, '')) || 0;
         
         // Ensure discount doesn't exceed subTotal
         if (discount > subTotal) {
@@ -168,10 +170,10 @@ const salesPage = {
         $("#sub_total").val(subTotal.toFixed(2));
         $("#grand_total").val(grandTotal.toFixed(2));
         if ($("#sub_total_display").length) {
-            $("#sub_total_display").text(subTotal.toFixed(2));
+            $("#sub_total_display").text(subTotal.toLocaleString("en-IN", {minimumFractionDigits: 2, maximumFractionDigits: 2}));
         }
         if ($("#grand_total_display").length) {
-            $("#grand_total_display").text(grandTotal.toFixed(2));
+            $("#grand_total_display").text(grandTotal.toLocaleString("en-IN", {minimumFractionDigits: 2, maximumFractionDigits: 2}));
         }
     }
 };

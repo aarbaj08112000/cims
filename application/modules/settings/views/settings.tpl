@@ -47,6 +47,7 @@
                                             </div>
                                             <small class="text-muted"><%$settings['company_name']['description']%></small>
                                         </div>
+
                                     </div>
 
                                     <div class="row mb-4">

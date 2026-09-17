@@ -16,28 +16,14 @@ const stockPage = {
     bindEvents: function () {
         let that = this;
 
-        // View Ledger
-        $(document).on("click", ".view-stock-ledger", function () {
-            let product_id = $(this).data("id");
-            $.ajax({
-                type: "POST",
-                url: base_url + "stock_ledger_ajax",
-                data: { product_id: product_id },
-                dataType: "json",
-                success: function (response) {
-                    if (response.success == 1) {
-                        $("#stock-ledger-content").html(response.html);
-                        $("#stockLedgerModal").modal("show");
-                    }
-                }
-            });
-        });
+        // View Ledger - now handled by direct link
 
         // Adjust Stock from row
         $(document).on("click", ".adjust-stock-btn", function () {
             let product_id = $(this).data("id");
             $("#adjustment_product_id").val(product_id).trigger("change");
-            $("#manualAdjustmentModal").modal("show");
+            var offcanvas = new bootstrap.Offcanvas(document.getElementById("manualAdjustmentOffcanvas"));
+            offcanvas.show();
         });
 
         // Show current/old stock when product is selected

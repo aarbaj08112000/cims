@@ -15,6 +15,27 @@ class Stock extends MY_Controller {
         $this->smarty->loadView('stock_list.tpl', $data, 'Yes', 'Yes');
     }
 
+
+    public function stock_ledger($param = '') {
+        $data['base_url'] = base_url();
+        $param = !empty($param) ? $param : $this->uri->segment(2);
+        $product_id = decode_id($param);
+        
+        if (empty($product_id)) {
+            redirect('stock');
+        }
+
+        $data['ledger'] = $this->Stock_model->get_stock_ledger($product_id);
+        $product_data = $this->Product_model->get_products_details($product_id);
+        $data['product'] = !empty($product_data) ? $product_data[0] : [];
+        
+        if (empty($data['product'])) {
+            redirect('stock');
+        }
+
+        $this->smarty->loadView('stock_ledger_page.tpl', $data, 'Yes', 'Yes');
+    }
+
     public function stock_ledger_ajax() {
         $product_id = $this->input->post('product_id');
         $data['ledger'] = $this->Stock_model->get_stock_ledger($product_id);

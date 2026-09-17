@@ -127,7 +127,7 @@ div:where(.swal2-icon) .swal2-icon-content {
              </li>
 
              <!-- Master Management -->
-             <li class="menu-item <%if stripos($current_uri, 'category') !== false || stripos($current_uri, 'brand') !== false || stripos($current_uri, 'attribute') !== false || stripos($current_uri, 'unit_master') !== false || stripos($current_uri, 'product') !== false%>active open<%/if%>">
+             <li class="menu-item <%if stripos($current_uri, 'category') !== false || stripos($current_uri, 'brand') !== false || stripos($current_uri, 'attribute') !== false || stripos($current_uri, 'unit_master') !== false || (stripos($current_uri, 'product') !== false && strpos($current_uri, 'product_log_report') === false)%>active open<%/if%>">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                    <i class="menu-icon tf-icons bx bx-data"></i>
                    <div data-i18n="Master Management">Master Management</div>
@@ -157,7 +157,7 @@ div:where(.swal2-icon) .swal2-icon-content {
                          <div data-i18n="Attribute">Units</div>
                       </a>
                    </li>
-                   <li class="menu-item <%if stripos($current_uri, 'product') !== false%>active<%/if%>">
+                   <li class="menu-item <%if (stripos($current_uri, 'product') !== false && strpos($current_uri, 'product_log_report') === false)%>active<%/if%>">
                       <a href="product" class="menu-link">
                          <i class="menu-icon tf-icons bx bx-cube hide"></i>
                          <div data-i18n="Product">Product</div>
@@ -185,7 +185,7 @@ div:where(.swal2-icon) .swal2-icon-content {
              *%>
 
              <!-- Purchase Management -->
-             <li class="menu-item <%if strpos($current_uri, 'purchase') !== false%>active open<%/if%>">
+             <li class="menu-item <%if strpos($current_uri, 'purchase') !== false && strpos($current_uri, 'purchase_report') === false%>active open<%/if%>">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                    <i class="menu-icon tf-icons bx bx-cart-alt"></i>
                    <div data-i18n="Purchase Management">Purchase Management</div>
@@ -210,7 +210,7 @@ div:where(.swal2-icon) .swal2-icon-content {
              </li>
 
              <!-- Sales Management -->
-             <li class="menu-item <%if strpos($current_uri, 'sales') !== false%>active open<%/if%>">
+             <li class="menu-item <%if strpos($current_uri, 'sales') !== false && strpos($current_uri, 'sales_report') === false%>active open<%/if%>">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                    <i class="menu-icon tf-icons bx bx-trending-up"></i>
                    <div data-i18n="Sales Management">Sales Management</div>
@@ -243,7 +243,7 @@ div:where(.swal2-icon) .swal2-icon-content {
              </li>
 
              <!-- Stock Management -->
-             <li class="menu-item <%if strpos($current_uri, 'stock') !== false%>active<%/if%>">
+             <li class="menu-item <%if strpos($current_uri, 'stock') !== false && strpos($current_uri, 'stock_valuation_report') === false && strpos($current_uri, 'stock_adjustment_report') === false%>active<%/if%>">
                 <a href="stock" class="menu-link">
                    <i class="menu-icon tf-icons bx bx-package"></i>
                    <div data-i18n="Stock Management">Stock Management</div>
@@ -251,7 +251,7 @@ div:where(.swal2-icon) .swal2-icon-content {
              </li>
 
              <!-- Reports -->
-             <li class="menu-item <%if strpos($current_uri, 'reports') !== false || strpos($current_uri, 'sales_report') !== false || strpos($current_uri, 'purchase_report') !== false || strpos($current_uri, 'stock_valuation_report') !== false || strpos($current_uri, 'stock_adjustment_report') !== false%>active open<%/if%>">
+             <li class="menu-item <%if strpos($current_uri, 'reports') !== false || strpos($current_uri, 'product_log_report') !== false || strpos($current_uri, 'sales_report') !== false || strpos($current_uri, 'purchase_report') !== false || strpos($current_uri, 'stock_valuation_report') !== false || strpos($current_uri, 'stock_adjustment_report') !== false%>active open<%/if%>">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                    <i class="menu-icon tf-icons bx bx-bar-chart-alt-2"></i>
                    <div data-i18n="Reports">Reports</div>

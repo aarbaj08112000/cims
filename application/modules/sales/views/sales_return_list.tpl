@@ -53,8 +53,8 @@
               <td class="fw-medium text-dark"><%$return.return_no%></td>
               <td><%$return.original_bill_no%></td>
               <td><%$return.customer_name|default:'Walk-in'%></td>
-              <td><%$return.return_date|date_format:"%d-%m-%Y"%></td>
-              <td class="fw-bold text-danger"><%$settings.company_currency.value|default:'₹'%><%$return.total_return_amount|number_format:2%></td>
+              <td><%$return.return_date|defaultDateFormat%></td>
+              <td class="fw-bold text-danger"><%$return.currency_symbol|default:''%> <%$return.total_return_amount|number_format:2%></td>
               <td class="text-center cat-col-action">
                 <div class="d-flex align-items-center justify-content-center">
                   <a href="<%$base_url%>sales_return_details/<%$return.return_id|encode_id%>" title="View Details">

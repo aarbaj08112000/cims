@@ -148,7 +148,7 @@
                             </div>
                             <div>
                                 <h6 class="text-muted fw-semibold mb-1" style="font-size: 0.75rem; letter-spacing: 0.5px; text-transform: uppercase;">Sales Grand Total</h6>
-                                <h3 class="text-dark fw-bold mb-0" id="card-sales-total" style="font-size: 1.8rem; letter-spacing: -0.5px;">₹<%$current_sales_total|number_format:2%></h3>
+                                <h3 class="text-dark fw-bold mb-0" id="card-sales-total" style="font-size: 1.8rem; letter-spacing: -0.5px;"><%$current_sales_total|number_format:2%></h3>
                             </div>
                         </div>
                         <div class="text-end">
@@ -179,7 +179,7 @@
                             </div>
                             <div>
                                 <h6 class="text-muted fw-semibold mb-1" style="font-size: 0.75rem; letter-spacing: 0.5px; text-transform: uppercase;">Purchase Grand Total</h6>
-                                <h3 class="text-dark fw-bold mb-0" id="card-purchase-total" style="font-size: 1.8rem; letter-spacing: -0.5px;">₹<%$current_purchase_total|number_format:2%></h3>
+                                <h3 class="text-dark fw-bold mb-0" id="card-purchase-total" style="font-size: 1.8rem; letter-spacing: -0.5px;"><%$current_purchase_total|number_format:2%></h3>
                             </div>
                         </div>
                         <div class="text-end">
@@ -210,7 +210,7 @@
                             </div>
                             <div>
                                 <h6 class="text-muted fw-semibold mb-1" style="font-size: 0.75rem; letter-spacing: 0.5px; text-transform: uppercase;">Inventory Valuation</h6>
-                                <h3 class="text-dark fw-bold mb-0" id="card-inventory-total" style="font-size: 1.8rem; letter-spacing: -0.5px;">₹<%$stats['total_valuation']|number_format:2%></h3>
+                                <h3 class="text-dark fw-bold mb-0" id="card-inventory-total" style="font-size: 1.8rem; letter-spacing: -0.5px;"><%$stats['total_valuation']|number_format:2%></h3>
                             </div>
                         </div>
                         <div class="text-end">

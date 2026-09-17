@@ -157,14 +157,14 @@ $(document).ready(function () {
                         <input type="hidden" name="product_id[]" value="${product.product_id}">
                     </td>
                     <td data-label="Price" class="text-center">
-                        ₹${parseFloat(product.price).toFixed(2)}
+                        ${product.currency_symbol ? product.currency_symbol + ' ' : ''}${parseFloat(product.price).toFixed(2)}
                         <input type="hidden" name="price[]" class="row-price" value="${product.price}">
                     </td>
                     <td data-label="Qty" class="text-center">
                         <input type="number" name="qty[]" class="form-control qty-input mx-auto" value="1" min="1">
                     </td>
                     <td data-label="Total" class="text-end fw-bold row-total-display">
-                        ₹${parseFloat(product.price).toFixed(2)}
+                        ${product.currency_symbol ? product.currency_symbol + ' ' : ''}${parseFloat(product.price).toFixed(2)}
                         <input type="hidden" name="total[]" class="row-total-val" value="${product.price}">
                     </td>
                     <td data-label="Action" class="text-center">
@@ -185,7 +185,7 @@ $(document).ready(function () {
         var price = parseFloat(row.find('.row-price').val()) || 0;
         var qty = parseInt(row.find('.qty-input').val()) || 0;
         var total = price * qty;
-        row.find('.row-total-display').text('₹' + total.toFixed(2));
+        row.find('.row-total-display').text(total.toFixed(2));
         row.find('.row-total-val').val(total.toFixed(2));
     }
 
@@ -204,7 +204,7 @@ $(document).ready(function () {
             totalItems += rowQty;
             
             // Sync the row's total display and hidden value just in case
-            $(this).find('.row-total-display').text('₹' + rowTotal.toFixed(2));
+            $(this).find('.row-total-display').text(rowTotal.toFixed(2));
             $(this).find('.row-total-val').val(rowTotal.toFixed(2));
         });
 
@@ -220,9 +220,9 @@ $(document).ready(function () {
         if (grandTotal < 0) grandTotal = 0;
 
         $('#total_items_count').text(totalItems);
-        $('#subtotal_display').text('₹' + subtotal.toFixed(2));
-        $('#tax_display').text('₹' + taxAmount.toFixed(2));
-        $('#grand_total_display').text('₹' + grandTotal.toFixed(2));
+        $('#subtotal_display').text(subtotal.toFixed(2));
+        $('#tax_display').text(taxAmount.toFixed(2));
+        $('#grand_total_display').text(grandTotal.toFixed(2));
         
         // Update label to reflect percentage
         if (taxEnabled) {
@@ -240,7 +240,7 @@ $(document).ready(function () {
         var received = parseFloat($('#received_amount_input').val()) || 0;
         var change = received - grandTotal;
         if (change < 0) change = 0;
-        $('#change_display').text('₹' + change.toFixed(2));
+        $('#change_display').text(change.toFixed(2));
     }
 
     // Helper: AJAX Save POS Bill
@@ -266,12 +266,12 @@ $(document).ready(function () {
             qty: $('input[name="qty[]"]').map(function(){ return $(this).val(); }).get(),
             price: $('input[name="price[]"]').map(function(){ return $(this).val(); }).get(),
             total: $('input[name="total[]"]').map(function(){ return $(this).val(); }).get(),
-            subtotal: parseFloat($('#subtotal_display').text().replace('₹', '')),
-            tax_amount: parseFloat($('#tax_display').text().replace('₹', '')),
+            subtotal: parseFloat($('#subtotal_display').text()),
+            tax_amount: parseFloat($('#tax_display').text()),
             discount: parseFloat($('#discount_input').val()) || 0,
-            grand_total: parseFloat($('#grand_total_display').text().replace('₹', '')),
+            grand_total: parseFloat($('#grand_total_display').text()),
             received_amount: parseFloat($('#received_amount_input').val()) || 0,
-            change_amount: parseFloat($('#change_display').text().replace('₹', ''))
+            change_amount: parseFloat($('#change_display').text())
         };
 
         var btn = $('#save_pos_bill_btn');
@@ -321,7 +321,7 @@ $(document).ready(function () {
                 data: { 
                     sales_id: salesId,
                     received_amount: $('#received_amount_input').val(),
-                    change_amount: $('#change_display').text().replace('₹', '')
+                    change_amount: $('#change_display').text()
                 },
                 dataType: "json",
                 success: function (response) {
