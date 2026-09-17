@@ -60,8 +60,8 @@
               <td><%$item.category_name|default:'-'%></td>
               <td><%$item.brand_name|default:'-'%></td>
               <td class="text-center"><span class="cat-badge cat-badge-active"><%$item.qty%></span></td>
-              <td><%$item.purchase_price|number_format:2%></td>
-              <td class="fw-bold"><%$item_value|number_format:2%></td>
+              <td><%$item.currency_symbol|default:''%> <%$item.purchase_price|number_format:2%></td>
+              <td class="fw-bold"><%$item.currency_symbol|default:''%> <%$item_value|number_format:2%></td>
             </tr>
             <%assign var="grand_total" value=$grand_total+$item_value%>
             <%/foreach%>

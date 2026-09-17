@@ -37,6 +37,7 @@ class Product extends MY_Controller
         $data['categories'] = $this->Categories_model->get_categories();
         $data['brands'] = $this->Brand_model->get_brands();
         $data['master_attributes'] = $this->Product_model->get_all_attributes();
+        $data['currencies'] = $this->Product_model->get_active_currencies();
         
         $this->load->model('settings/Settings_model');
         $settings_raw = $this->Settings_model->get_all_settings();
@@ -100,7 +101,9 @@ class Product extends MY_Controller
             'unit' => $this->input->post("unit"),
             'alert_qty' => $this->input->post("alert_qty"),
             'qty' => $this->input->post("qty"),
+            'purchase_currency_id' => $this->input->post("purchase_currency_id"),
             'purchase_price' => $this->input->post("purchase_price"),
+            'selling_currency_id' => $this->input->post("selling_currency_id"),
             'actual_price' => $this->input->post("actual_price"),
             'discount' => $this->input->post("discount"),
             'price' => $this->input->post("price"),
@@ -313,7 +316,9 @@ class Product extends MY_Controller
             'unit' => $this->input->post("unit"),
             'alert_qty' => $this->input->post("alert_qty"),
             'qty' => $this->input->post("qty"),
+            'purchase_currency_id' => $this->input->post("purchase_currency_id"),
             'purchase_price' => $this->input->post("purchase_price"),
+            'selling_currency_id' => $this->input->post("selling_currency_id"),
             'actual_price' => $this->input->post("actual_price"),
             'discount' => $this->input->post("discount"),
             'price' => $this->input->post("price"),
@@ -818,18 +823,24 @@ class Product extends MY_Controller
                     <li><a class="dropdown-item" href="' . base_url('update_product/') . encode_id($row['product_id']) . '"><i class="ti ti-pencil me-1"></i> Edit</a></li>
                     <li><a class="dropdown-item update_stock" href="javascript:void(0);" data-id="' . $row['product_id'] . '"><i class="ti ti-box me-1"></i> Update Stock</a></li>
                     <li><a class="dropdown-item regenerate_barcode" href="javascript:void(0);" data-id="' . $row['product_id'] . '"><i class="ti ti-refresh me-1"></i> Regenerate Barcode</a></li>
-                    <li><a class="dropdown-item print_barcode" href="javascript:void(0);" data-id="' . $row['product_id'] . '"><i class="ti ti-printer me-1"></i> Print</a></li>
+                    <li><a class="dropdown-item print_barcode text-body" href="javascript:void(0);" data-id="' . $row['product_id'] . '"><i class="ti ti-printer me-1" style="color: inherit !important; background: none !important; box-shadow: none !important; width: auto; height: auto;"></i> Print</a></li>
                     <li><a class="dropdown-item text-danger delete_data" href="javascript:void(0);" data-id="' . $row['product_id'] . '"><i class="ti ti-trash me-1"></i> Delete</a></li>
                 </ul>
             </div>';
+
+            $price_formatted = !empty($row['price']) ? number_format((float)$row['price'], 2) : '0.00';
+            $purchase_price_formatted = !empty($row['purchase_price']) ? number_format((float)$row['purchase_price'], 2) : '0.00';
+            
+            $selling_symbol = !empty($row['selling_currency_symbol']) ? $row['selling_currency_symbol'] . ' ' : '';
+            $purchase_symbol = !empty($row['purchase_currency_symbol']) ? $row['purchase_currency_symbol'] . ' ' : '';
 
             $data[] = array(
                 $image_html,
                 $barcode_html,
                 '<a href="' . base_url('product_details/' . encode_id($row['product_id'])) . '" style="font-weight:600; color:#7367f0; text-decoration:none;" onmouseover="this.style.textDecoration=\'underline\'" onmouseout="this.style.textDecoration=\'none\'">' . htmlspecialchars($row['name']) . '</a>',
                 $desc_html,
-                $row['price'],
-                $row['purchase_price'],
+                $selling_symbol . $price_formatted,
+                $purchase_symbol . $purchase_price_formatted,
                 $row['unit'],
                 $row['qty'],
                 $status_html,

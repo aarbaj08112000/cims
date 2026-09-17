@@ -30,7 +30,7 @@ class Purchase_model extends CI_Model {
     }
 
     public function get_purchases() {
-        $this->db->select('pm.*, sm.supplier_name');
+        $this->db->select('pm.*, sm.supplier_name, (SELECT curr.currency_symbol FROM purchase_details pd JOIN product_master p ON p.product_id = pd.product_id JOIN currency_master curr ON curr.currency_id = p.purchase_currency_id WHERE pd.purchase_id = pm.purchase_id LIMIT 1) as currency_symbol', FALSE);
         $this->db->from('purchase_master pm');
         $this->db->join('supplier_master sm', 'pm.supplier_id = sm.supplier_id', 'left');
         $this->db->order_by('pm.purchase_id', 'DESC');
@@ -39,7 +39,7 @@ class Purchase_model extends CI_Model {
     }
 
     public function get_purchase_master($purchase_id) {
-        $this->db->select('pm.*, sm.supplier_name, sm.phone, sm.email, sm.address, sm.gst_number');
+        $this->db->select('pm.*, sm.supplier_name, sm.phone, sm.email, sm.address, sm.gst_number, (SELECT curr.currency_symbol FROM purchase_details pd JOIN product_master p ON p.product_id = pd.product_id JOIN currency_master curr ON curr.currency_id = p.purchase_currency_id WHERE pd.purchase_id = pm.purchase_id LIMIT 1) as currency_symbol', FALSE);
         $this->db->from('purchase_master pm');
         $this->db->join('supplier_master sm', 'pm.supplier_id = sm.supplier_id', 'left');
         $this->db->where('pm.purchase_id', $purchase_id);
@@ -48,9 +48,10 @@ class Purchase_model extends CI_Model {
     }
 
     public function get_purchase_items($purchase_id) {
-        $this->db->select('pd.*, pm.name as product_name, pm.product_code, b.brand_name');
+        $this->db->select('pd.*, pm.name as product_name, pm.product_code, b.brand_name, curr.currency_symbol');
         $this->db->from('purchase_details pd');
         $this->db->join('product_master pm', 'pd.product_id = pm.product_id', 'left');
+        $this->db->join('currency_master curr', 'curr.currency_id = pm.purchase_currency_id', 'left');
         $this->db->join('brands b', 'pm.brand_id = b.brand_id', 'left');
         $this->db->where('pd.purchase_id', $purchase_id);
         $query = $this->db->get();

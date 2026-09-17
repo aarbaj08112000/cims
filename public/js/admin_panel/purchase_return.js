@@ -209,7 +209,7 @@ const purchaseReturnPage = {
                                 let supplier = response.purchase.supplier_name || 'Walk-in';
                                 $("#billSupplier").text(supplier);
                                 $("#billDate").text(response.purchase.purchase_date);
-                                $("#billAmount").text("₹" + parseFloat(response.purchase.payable_amount || 0).toFixed(2));
+                                $("#billAmount").text(parseFloat(response.purchase.payable_amount || 0).toLocaleString("en-IN", {minimumFractionDigits: 2}));
                                 $("#billItems").text(response.items.length);
                                 $("#billInfoPanel").fadeIn(300);
                             }
@@ -336,7 +336,7 @@ const purchaseReturnPage = {
                     <input type="text" name="return_qty[]" class="form-control return-qty-input onlyNumericInput text-center" value="0">
                 </td>
                 <td class="text-end">
-                    ₹${parseFloat(item.purchase_price).toFixed(2)}
+                    ${item.currency_symbol || ''} ${parseFloat(item.purchase_price).toLocaleString("en-IN", {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                     <input type="hidden" name="price[]" class="price-text" value="${item.purchase_price}">
                 </td>
                 <td class="text-end">
@@ -372,7 +372,7 @@ const purchaseReturnPage = {
         let returningCount = 0;
         
         $(".row-total-input").each(function () {
-            grandTotal += parseFloat($(this).val()) || 0;
+            grandTotal += parseFloat(String($(this).val()).replace(/,/g, '')) || 0;
         });
         
         $(".return-qty-input").each(function () {
@@ -380,7 +380,7 @@ const purchaseReturnPage = {
             if (val > 0) returningCount++;
         });
         
-        $("#grand_total_display").text("₹" + grandTotal.toFixed(2));
+        $("#grand_total_display").text(grandTotal.toLocaleString("en-IN", {minimumFractionDigits: 2}));
         $("#total_return_amount").val(grandTotal.toFixed(2));
         $("#returningCount").text(returningCount);
     }

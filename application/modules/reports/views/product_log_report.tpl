@@ -20,11 +20,17 @@
         </div>
       </div>
       <div class="cat-page-header-right">
+        <button id="btn-open-filter" class="cat-btn cat-btn-primary" data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas" aria-controls="filterOffcanvas" title="Filters">
+          <i class="ti ti-filter"></i>
+        </button>
         <button id="btn-export-excel" class="cat-btn cat-btn-outline">
           <i class="ti ti-file-spreadsheet"></i> Export Excel
         </button>
         <button id="btn-export-pdf" class="cat-btn cat-btn-outline-red">
           <i class="ti ti-file-type-pdf"></i> Export PDF
+        </button>
+        <button type="button" class="cat-btn cat-btn-outline" onclick="window.location.href='<%$base_url%>product_log_report'" title="Refresh">
+          <i class="ti ti-refresh"></i>
         </button>
       </div>
     </div>
@@ -77,64 +83,75 @@
       </div>
     </div>
 
-    <!-- Filter Card -->
-    <div class="card border-0 shadow-sm mb-4" style="border-radius:12px;">
-      <div class="card-body p-3">
-        <form id="filterForm" class="row g-3 align-items-end">
-          <div class="col-md-3">
-            <label class="form-label fw-semibold text-muted" style="font-size:0.78rem; text-transform:uppercase; letter-spacing:.5px;">Product</label>
-            <select name="product_id" id="filter_product_id" class="form-select select2">
-              <option value="">All Products</option>
-              <%foreach from=$products item=sel_prod%>
-                <option value="<%$sel_prod.id%>" <%if $product_id == $sel_prod.id%>selected<%/if%>>
-                  <%$sel_prod.product_name%> (<%$sel_prod.product_code%>)
-                </option>
-              <%/foreach%>
-            </select>
+    <!-- Right Side Offcanvas Filter Sidebar -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="filterOffcanvas" aria-labelledby="filterOffcanvasLabel" style="width: 380px;">
+      <div class="offcanvas-header border-bottom px-4 py-3">
+        <h5 class="offcanvas-title fw-bold text-dark d-flex align-items-center gap-2" id="filterOffcanvasLabel">
+          <i class="ti ti-adjustments-horizontal text-primary"></i> Filter Options
+        </h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body p-4">
+        <form id="filterForm" action="javascript:void(0);" class="d-flex flex-column h-100">
+          <div class="flex-grow-1">
+            <div class="mb-3">
+              <label class="form-label fw-semibold text-muted" style="font-size:0.78rem; text-transform:uppercase; letter-spacing:.5px;">Product</label>
+              <select name="product_id" id="filter_product_id" class="form-select select2">
+                <option value="">All Products</option>
+                <%foreach from=$products item=sel_prod%>
+                  <option value="<%$sel_prod.id%>" <%if $product_id == $sel_prod.id%>selected<%/if%>>
+                    <%$sel_prod.product_name%> (<%$sel_prod.product_code%>)
+                  </option>
+                <%/foreach%>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold text-muted" style="font-size:0.78rem; text-transform:uppercase; letter-spacing:.5px;">Action Type</label>
+              <select name="action_type" id="filter_action_type" class="form-select select2">
+                <option value="">All Actions</option>
+                <option value="ADDED" <%if $action_type == "ADDED"%>selected<%/if%>>Product Added</option>
+                <option value="EDITED" <%if $action_type == "EDITED"%>selected<%/if%>>Product Edited</option>
+                <option value="STOCK_ADDED" <%if $action_type == "STOCK_ADDED"%>selected<%/if%>>Stock Added</option>
+                <option value="STOCK_REMOVED" <%if $action_type == "STOCK_REMOVED"%>selected<%/if%>>Stock Removed</option>
+                <option value="STOCK_ADJUSTED" <%if $action_type == "STOCK_ADJUSTED"%>selected<%/if%>>Stock Adjusted</option>
+                <option value="SALE" <%if $action_type == "SALE"%>selected<%/if%>>Sale / Outflow</option>
+                <option value="PURCHASE" <%if $action_type == "PURCHASE"%>selected<%/if%>>Purchase / Inflow</option>
+                <option value="DELETED" <%if $action_type == "DELETED"%>selected<%/if%>>Deleted</option>
+                <option value="RESTORED" <%if $action_type == "RESTORED"%>selected<%/if%>>Restored</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold text-muted" style="font-size:0.78rem; text-transform:uppercase; letter-spacing:.5px;">User / Staff</label>
+              <select name="created_by" id="filter_created_by" class="form-select select2">
+                <option value="">All Staff</option>
+                <%foreach from=$users item=sel_user%>
+                  <option value="<%$sel_user.id%>" <%if $created_by == $sel_user.id%>selected<%/if%>>
+                    <%$sel_user.first_name%> <%$sel_user.last_name%>
+                  </option>
+                <%/foreach%>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold text-muted" style="font-size:0.78rem; text-transform:uppercase; letter-spacing:.5px;">Date Range</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light"><i class="ti ti-calendar"></i></span>
+                <input type="text" id="date_range_picker" class="form-control" placeholder="Select Date Range">
+              </div>
+              <input type="hidden" name="from_date" id="filter_from_date" value="<%$from_date%>">
+              <input type="hidden" name="to_date" id="filter_to_date" value="<%$to_date%>">
+            </div>
           </div>
-          <div class="col-md-2">
-            <label class="form-label fw-semibold text-muted" style="font-size:0.78rem; text-transform:uppercase; letter-spacing:.5px;">Action Type</label>
-            <select name="action_type" id="filter_action_type" class="form-select select2">
-              <option value="">All Actions</option>
-              <option value="ADDED" <%if $action_type == "ADDED"%>selected<%/if%>>Product Added</option>
-              <option value="EDITED" <%if $action_type == "EDITED"%>selected<%/if%>>Product Edited</option>
-              <option value="STOCK_ADDED" <%if $action_type == "STOCK_ADDED"%>selected<%/if%>>Stock Added</option>
-              <option value="STOCK_REMOVED" <%if $action_type == "STOCK_REMOVED"%>selected<%/if%>>Stock Removed</option>
-              <option value="STOCK_ADJUSTED" <%if $action_type == "STOCK_ADJUSTED"%>selected<%/if%>>Stock Adjusted</option>
-              <option value="SALE" <%if $action_type == "SALE"%>selected<%/if%>>Sale / Outflow</option>
-              <option value="PURCHASE" <%if $action_type == "PURCHASE"%>selected<%/if%>>Purchase / Inflow</option>
-              <option value="DELETED" <%if $action_type == "DELETED"%>selected<%/if%>>Deleted</option>
-              <option value="RESTORED" <%if $action_type == "RESTORED"%>selected<%/if%>>Restored</option>
-            </select>
-          </div>
-          <div class="col-md-2">
-            <label class="form-label fw-semibold text-muted" style="font-size:0.78rem; text-transform:uppercase; letter-spacing:.5px;">User / Staff</label>
-            <select name="created_by" id="filter_created_by" class="form-select select2">
-              <option value="">All Staff</option>
-              <%foreach from=$users item=sel_user%>
-                <option value="<%$sel_user.id%>" <%if $created_by == $sel_user.id%>selected<%/if%>>
-                  <%$sel_user.first_name%> <%$sel_user.last_name%>
-                </option>
-              <%/foreach%>
-            </select>
-          </div>
-          <div class="col-md-2">
-            <label class="form-label fw-semibold text-muted" style="font-size:0.78rem; text-transform:uppercase; letter-spacing:.5px;">From Date</label>
-            <input type="date" name="from_date" id="filter_from_date" class="form-control" value="<%$from_date%>">
-          </div>
-          <div class="col-md-2">
-            <label class="form-label fw-semibold text-muted" style="font-size:0.78rem; text-transform:uppercase; letter-spacing:.5px;">To Date</label>
-            <input type="date" name="to_date" id="filter_to_date" class="form-control" value="<%$to_date%>">
-          </div>
-          <div class="col-md-1 d-flex gap-2">
-            <button type="submit" id="btn-apply-filter" class="cat-btn cat-btn-primary w-100">
-              <i class="ti ti-filter"></i> Filter
+          <div class="border-top pt-3 mt-3 d-flex gap-2">
+            <button type="button" id="btn-reset-filter" class="cat-btn cat-btn-outline w-50">
+              <i class="ti ti-rotate-2"></i> Reset
+            </button>
+            <button type="submit" id="btn-apply-filter" class="cat-btn cat-btn-primary w-50">
+              <i class="ti ti-filter"></i> Apply Filter
             </button>
           </div>
         </form>
       </div>
     </div>
-
     <!-- Table -->
     <div class="cat-table-card">
       <div class="p-3 table-responsive">
@@ -178,4 +195,4 @@
 <script type="text/javascript">
   var base_url = <%$base_url|@json_encode%>;
 </script>
-<script src="<%$base_url%>public/js/admin_panel/product_log_report.js?v=1"></script>
+<script src="<%$base_url%>public/js/admin_panel/product_log_report.js?v=4"></script>

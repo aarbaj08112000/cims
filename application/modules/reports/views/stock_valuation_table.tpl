@@ -19,8 +19,8 @@
                     </td>
                     <td><%$row['category_name']|default:'N/A'%></td>
                     <td><%$row['qty']%> <%$row['unit']%></td>
-                    <td class="text-end"><%$row['purchase_price']|number_format:2%></td>
-                    <td class="text-end"><%$row['valuation']|number_format:2%></td>
+                    <td class="text-end"><%$row['currency_symbol']|default:''%> <%$row['purchase_price']|number_format:2%></td>
+                    <td class="text-end"><%$row['currency_symbol']|default:''%> <%$row['valuation']|number_format:2%></td>
                 </tr>
             <%/foreach%>
         <%/if%>

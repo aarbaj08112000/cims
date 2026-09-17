@@ -20,11 +20,17 @@
         </div>
       </div>
       <div class="cat-page-header-right">
+        <button id="btn-open-filter" class="cat-btn cat-btn-primary" data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas" aria-controls="filterOffcanvas" title="Filters">
+          <i class="ti ti-filter"></i>
+        </button>
         <button id="btn-export-excel" class="cat-btn cat-btn-outline">
           <i class="ti ti-file-spreadsheet"></i> Export Excel
         </button>
         <button id="btn-export-pdf" class="cat-btn cat-btn-outline-red">
           <i class="ti ti-file-type-pdf"></i> Export PDF
+        </button>
+        <button type="button" class="cat-btn cat-btn-outline" onclick="window.location.href='<%$base_url%>stock_adjustment_report'" title="Refresh">
+          <i class="ti ti-refresh"></i>
         </button>
       </div>
     </div>
@@ -34,30 +40,43 @@
       <!-- Filled via JS after table loads -->
     </div>
 
-    <!-- Filter Card -->
-    <div class="card border-0 shadow-sm mb-4" style="border-radius:12px;">
-      <div class="card-body p-3">
-        <div class="row g-3 align-items-end">
-          <div class="col-md-3">
-            <label class="form-label fw-semibold text-muted" style="font-size:0.78rem; text-transform:uppercase; letter-spacing:.5px;">From Date</label>
-            <input type="date" id="adj-from-date" class="form-control" value="<%$from_date%>">
+    <!-- Right Side Offcanvas Filter Sidebar -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="filterOffcanvas" aria-labelledby="filterOffcanvasLabel" style="width: 380px;">
+      <div class="offcanvas-header border-bottom px-4 py-3">
+        <h5 class="offcanvas-title fw-bold text-dark d-flex align-items-center gap-2" id="filterOffcanvasLabel">
+          <i class="ti ti-adjustments-horizontal text-primary"></i> Filter Options
+        </h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body p-4">
+        <form id="filterForm" action="javascript:void(0);" class="d-flex flex-column h-100">
+          <div class="flex-grow-1">
+            <div class="mb-3">
+              <label class="form-label fw-semibold text-muted" style="font-size:0.78rem; text-transform:uppercase; letter-spacing:.5px;">Date Range</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light"><i class="ti ti-calendar"></i></span>
+                <input type="text" id="date_range_picker" class="form-control" placeholder="Select Date Range">
+              </div>
+              <input type="hidden" name="from_date" id="adj-from-date" value="<%$from_date%>">
+              <input type="hidden" name="to_date" id="adj-to-date" value="<%$to_date%>">
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold text-muted" style="font-size:0.78rem; text-transform:uppercase; letter-spacing:.5px;">Search</label>
+              <input type="text" id="adj-search" class="form-control" placeholder="Search product, user, remarks…">
+            </div>
           </div>
-          <div class="col-md-3">
-            <label class="form-label fw-semibold text-muted" style="font-size:0.78rem; text-transform:uppercase; letter-spacing:.5px;">To Date</label>
-            <input type="date" id="adj-to-date" class="form-control" value="<%$to_date%>">
-          </div>
-          <div class="col-md-4">
-            <label class="form-label fw-semibold text-muted" style="font-size:0.78rem; text-transform:uppercase; letter-spacing:.5px;">Search</label>
-            <input type="text" id="adj-search" class="form-control" placeholder="Search product, user, remarks…">
-          </div>
-          <div class="col-md-2">
-            <button id="btn-apply-filter" class="cat-btn cat-btn-primary w-100">
+          <div class="border-top pt-3 mt-3 d-flex gap-2">
+            <button type="button" id="btn-reset-filter" class="cat-btn cat-btn-outline w-50">
+              <i class="ti ti-rotate-2"></i> Reset
+            </button>
+            <button id="btn-apply-filter" class="cat-btn cat-btn-primary w-50">
               <i class="ti ti-filter"></i> Apply
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
+    
 
     <!-- Table -->
     <div class="cat-table-card">
@@ -90,4 +109,4 @@
 <script type="text/javascript">
   var base_url = <%$base_url|@json_encode%>;
 </script>
-<script src="<%$base_url%>public/js/admin_panel/stock_adjustment_report.js?v=2"></script>
+<script src="<%$base_url%>public/js/admin_panel/stock_adjustment_report.js?v=3"></script>

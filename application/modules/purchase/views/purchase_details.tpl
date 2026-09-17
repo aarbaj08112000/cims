@@ -370,7 +370,7 @@
           </div>
           <div>
             <div class="pd-stat-label">Total Amount</div>
-            <div class="pd-stat-value text-primary">₹ <%$purchase['total_amount']|number_format:2%></div>
+            <div class="pd-stat-value text-primary"><%$purchase['currency_symbol']|default:''%> <%$purchase['total_amount']|number_format:2%></div>
           </div>
         </div>
       </div>
@@ -474,7 +474,7 @@
               <div class="pd-info-icon"><i class="ti ti-currency-rupee"></i></div>
               <div class="pd-info-content">
                 <div class="pd-info-label">Total Amount</div>
-                <div class="pd-info-value" style="color: var(--pd-primary); font-size: 1.05rem;">₹ <%$purchase['total_amount']|number_format:2%></div>
+                <div class="pd-info-value" style="color: var(--pd-primary); font-size: 1.05rem;"><%$purchase['currency_symbol']|default:''%> <%$purchase['total_amount']|number_format:2%></div>
               </div>
             </div>
           </div>
@@ -561,7 +561,7 @@
               <div class="pd-info-icon purple"><i class="ti ti-currency-rupee"></i></div>
               <div class="pd-info-content">
                 <div class="pd-info-label">Purchase Value</div>
-                <div class="pd-info-value" style="color: var(--pd-primary); font-size: 1.05rem;">₹ <%$purchase['total_amount']|number_format:2%></div>
+                <div class="pd-info-value" style="color: var(--pd-primary); font-size: 1.05rem;"><%$purchase['currency_symbol']|default:''%> <%$purchase['total_amount']|number_format:2%></div>
               </div>
             </div>
             <div class="pd-info-row">
@@ -612,8 +612,8 @@
                 <div class="pd-product-code"><%$item['product_code']%></div>
               </td>
               <td class="text-center"><span class="pd-qty-badge"><%$item['qty']%></span></td>
-              <td class="text-end pd-price">₹ <%$item['purchase_price']|number_format:2%></td>
-              <td class="text-end pd-price">₹ <%$item['total_amount']|number_format:2%></td>
+              <td class="text-end pd-price"><%$item['currency_symbol']|default:''%> <%$item['purchase_price']|number_format:2%></td>
+              <td class="text-end pd-price"><%$item['currency_symbol']|default:''%> <%$item['total_amount']|number_format:2%></td>
             </tr>
             <%assign var='idx' value=$idx+1%>
             <%/foreach%>
@@ -622,7 +622,7 @@
       </div>
       <div class="pd-grand-total">
         <span class="pd-grand-total-label">Grand Total</span>
-        <span class="pd-grand-total-value">₹ <%$purchase['total_amount']|number_format:2%></span>
+        <span class="pd-grand-total-value"><%$purchase['currency_symbol']|default:''%> <%$purchase['total_amount']|number_format:2%></span>
       </div>
     </div>
 

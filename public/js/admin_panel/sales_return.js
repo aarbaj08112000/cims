@@ -62,7 +62,7 @@ const salesReturnPage = {
                                 let customer = response.sale.customer_mobile || response.sale.customer_phone_number || 'Walk-in';
                                 $("#billCustomer").text(customer);
                                 $("#billDate").text(response.sale.sales_date);
-                                $("#billAmount").text("₹" + parseFloat(response.sale.payable_amount || 0).toFixed(2));
+                                $("#billAmount").text(parseFloat(response.sale.payable_amount || 0).toLocaleString("en-IN", {minimumFractionDigits: 2}));
                                 $("#billItems").text(response.items.length);
                                 $("#billInfoPanel").fadeIn(300);
                             }
@@ -112,7 +112,7 @@ const salesReturnPage = {
 
             let price = parseFloat(row.find(".price-text").val()) || 0;
             let total = qty * price;
-            row.find(".row-total").val(total.toFixed(2));
+            row.find(".row-total").val(total.toLocaleString("en-IN", {minimumFractionDigits: 2, maximumFractionDigits: 2}));
             that.calculateGrandTotal();
         });
 
@@ -189,11 +189,11 @@ const salesReturnPage = {
                     <input type="text" name="return_qty[]" class="form-control return-qty onlyNumericInput text-center" value="0">
                 </td>
                 <td class="text-end">
-                    ₹${parseFloat(item.sale_price).toFixed(2)}
+                    ${item.currency_symbol || ''} ${parseFloat(item.sale_price).toLocaleString("en-IN", {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                     <input type="hidden" name="price[]" class="price-text" value="${item.sale_price}">
                 </td>
                 <td class="text-end">
-                    <input type="text" name="total[]" class="form-control row-total text-end bg-light fw-bold" value="0.00" readonly>
+                    <div class="input-group"><span class="input-group-text">${item.currency_symbol || ''}</span><input type="text" name="total[]" class="form-control row-total text-end bg-light fw-bold" value="0.00" readonly></div>
                 </td>
                 <td class="text-center">
                     <button type="button" class="text-danger bg-transparent border-0 fs-4 remove-return-row" title="Remove"><i class="ti ti-trash"></i></button>
@@ -225,7 +225,7 @@ const salesReturnPage = {
         let returningCount = 0;
         
         $(".row-total").each(function () {
-            grandTotal += parseFloat($(this).val()) || 0;
+            grandTotal += parseFloat(String($(this).val()).replace(/,/g, '')) || 0;
         });
         
         $(".return-qty").each(function () {
@@ -233,7 +233,7 @@ const salesReturnPage = {
             if (val > 0) returningCount++;
         });
         
-        $("#grand_total_display").text(grandTotal.toFixed(2));
+        $("#grand_total_display").text(grandTotal.toLocaleString("en-IN", {minimumFractionDigits: 2, maximumFractionDigits: 2}));
         $("#total_return_amount").val(grandTotal.toFixed(2));
         $("#returningCount").text(returningCount);
     },

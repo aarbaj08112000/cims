@@ -115,7 +115,14 @@
              <!-- Row 3 -->
             <div class="mb-3 col-md-4 col-12">
               <label class="form-label">Actual Price (Selling) <span class="text-danger">*</span></label>
-              <input type="text" step="0.01" name="actual_price" id="actual_price" class="form-control required-input onlyNumericInput" placeholder="Enter Actual Selling Price" value="<%if isset($products) %><%$products[0].actual_price%><%/if%>">
+              <div class="input-group">
+                <select name="selling_currency_id" class="form-select" style="max-width: 80px;">
+                  <%foreach from=$currencies item=c%>
+                    <option value="<%$c.currency_id%>" <%if isset($products) && $products[0].selling_currency_id == $c.currency_id%>selected<%/if%>><%$c.currency_symbol%></option>
+                  <%/foreach%>
+                </select>
+                <input type="text" step="0.01" name="actual_price" id="actual_price" class="form-control required-input onlyNumericInput" placeholder="Enter Actual Selling Price" value="<%if isset($products) %><%$products[0].actual_price%><%/if%>">
+              </div>
             </div>
 
             <div class="mb-3 col-md-4 col-12">
@@ -130,7 +137,14 @@
             
             <div class="mb-3 col-md-4 col-12">
               <label class="form-label">Purchase Price</label>
-              <input type="text" step="0.01" name="purchase_price" class="form-control onlyNumericInput" placeholder="Enter Purchase Price" value="<%if isset($products) %><%$products[0].purchase_price%><%/if%>">
+              <div class="input-group">
+                <select name="purchase_currency_id" class="form-select" style="max-width: 80px;">
+                  <%foreach from=$currencies item=c%>
+                    <option value="<%$c.currency_id%>" <%if isset($products) && $products[0].purchase_currency_id == $c.currency_id%>selected<%/if%>><%$c.currency_symbol%></option>
+                  <%/foreach%>
+                </select>
+                <input type="text" step="0.01" name="purchase_price" class="form-control onlyNumericInput" placeholder="Enter Purchase Price" value="<%if isset($products) %><%$products[0].purchase_price%><%/if%>">
+              </div>
             </div>
 
             <div class="mb-3 col-md-4 col-12">

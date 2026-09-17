@@ -54,8 +54,8 @@
            <tr>
               <td class="fw-medium text-dark"><a href="<%base_url('purchase_details/')%><%$val['purchase_id']|encode_id%>" class="text-primary text-decoration-none fw-bold"><%$val['bill_no'] %></a></td>
               <td><%$val['supplier_name']|default:'N/A' %></td>
-              <td><%$val['purchase_date']|date_format:'%d-%m-%Y' %></td>
-              <td class="fw-bold"><%$val['total_amount']|number_format:2 %></td>
+              <td><%$val['purchase_date']|defaultDateFormat%></td>
+              <td class="fw-bold"><%$val['currency_symbol']|default:''%> <%$val['total_amount']|number_format:2 %></td>
               <td class="cat-col-status">
                 <%if $val['status'] == 'Completed' %>
                   <span class="cat-badge cat-badge-active">Completed</span>
@@ -65,7 +65,7 @@
                   <span class="cat-badge cat-badge-inactive"><%$val['status']%></span>
                 <%/if %>
               </td>
-              <td><%$val['added_date']|date_format:'%d-%m-%Y %H:%M' %></td>
+              <td><%$val['added_date']|getDefaultDateTime%></td>
               <td class="text-center cat-col-action">
                 <div class="d-flex align-items-center justify-content-center">
                   <a href="<%base_url('purchase_details/')%><%$val['purchase_id']|encode_id%>" title="View Details">

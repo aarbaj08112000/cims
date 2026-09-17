@@ -13,10 +13,10 @@
             <%foreach from=$purchases item=row%>
                 <tr>
                     <td><%$row['bill_no']%></td>
-                    <td><%$row['purchase_date']|date_format:'%d-%m-%Y'%></td>
+                    <td><%$row['purchase_date']|defaultDateFormat%></td>
                     <td><%$row['supplier_name']|default:'N/A'%></td>
                     <td>Cash</td>
-                    <td class="text-end"><%$row['total_amount']|number_format:2%></td>
+                    <td class="text-end"><%$row['currency_symbol']|default:''%> <%$row['total_amount']|number_format:2%></td>
                 </tr>
             <%/foreach%>
         <%/if%>

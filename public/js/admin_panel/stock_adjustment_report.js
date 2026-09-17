@@ -1,4 +1,33 @@
 $(document).ready(function () {
+    if ($.fn.daterangepicker) {
+        var fromDate = $('#adj-from-date').val();
+        var toDate = $('#adj-to-date').val();
+        $('#date_range_picker').daterangepicker({
+            autoUpdateInput: false,
+            open: 'left',
+            dropdownParent: $('#filterOffcanvas'),
+            startDate: fromDate ? moment(fromDate, 'YYYY-MM-DD') : moment().startOf('month'),
+            endDate: toDate ? moment(toDate, 'YYYY-MM-DD') : moment().endOf('month'),
+            maxDate: moment(),
+            locale: {
+                format: 'YYYY-MM-DD',
+                cancelLabel: 'Clear'
+            }
+        });
+        if (fromDate && toDate) {
+            $('#date_range_picker').val(fromDate + ' ~ ' + toDate);
+        }
+        $('#date_range_picker').on('apply.daterangepicker', function(eve, picker) {
+            $(this).val(picker.startDate.format('YYYY-MM-DD') + ' ~ ' + picker.endDate.format('YYYY-MM-DD'));
+            $('#adj-from-date').val(picker.startDate.format('YYYY-MM-DD'));
+            $('#adj-to-date').val(picker.endDate.format('YYYY-MM-DD'));
+        });
+        $('#date_range_picker').on('cancel.daterangepicker', function(eve, picker) {
+            $(this).val('');
+            $('#adj-from-date, #adj-to-date, #date_range_picker').val('');
+        });
+    }
+
     loadAdjustmentReport();
 
     // Apply filter
@@ -303,3 +332,17 @@ function buildSummaryCards() {
 
     $('#adj-summary-cards').html(html);
 }
+
+
+$(document).on('click', '#btn-reset-filter', function() {
+    $('#adj-from-date, #adj-to-date, #adj-search').val('');
+    $('#btn-apply-filter').trigger('click');
+});
+
+$(document).on('click', '#btn-apply-filter', function() {
+    var el = document.getElementById('filterOffcanvas');
+    if (el && window.bootstrap) {
+        var instance = bootstrap.Offcanvas.getInstance(el) || new bootstrap.Offcanvas(el);
+        instance.hide();
+    }
+});

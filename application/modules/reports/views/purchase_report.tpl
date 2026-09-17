@@ -17,14 +17,17 @@
         </div>
       </div>
       <div class="cat-page-header-right">
+        <button id="btn-open-filter" class="cat-btn cat-btn-primary" data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas" aria-controls="filterOffcanvas" title="Filters">
+          <i class="ti ti-filter"></i>
+        </button>
         <button type="button" id="export-excel" class="cat-btn cat-btn-outline" title="Export Excel">
           <i class="ti ti-file-spreadsheet"></i> Export Excel
         </button>
         <button type="button" id="export-pdf" class="cat-btn cat-btn-outline-red" title="Export PDF">
           <i class="ti ti-file-type-pdf"></i> Export PDF
         </button>
-        <button type="button" class="cat-btn cat-btn-primary" onclick="window.location.href='<%$base_url%>purchase_report'" title="Refresh">
-          <i class="ti ti-refresh"></i> Refresh
+        <button type="button" class="cat-btn cat-btn-outline" onclick="window.location.href='<%$base_url%>purchase_report'" title="Refresh">
+          <i class="ti ti-refresh"></i>
         </button>
       </div>
     </div>
@@ -49,7 +52,7 @@
               </div>
               <div>
                   <div style="font-size:0.75rem; font-weight:600; color:var(--cat-light); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Total Amount</div>
-                  <div id="kpi-total-amount" style="font-size:1.6rem; font-weight:800; color:var(--cat-dark); line-height:1;">₹<%$summary.grand_total|number_format:0|default:'0'%></div>
+                  <div id="kpi-total-amount" style="font-size:1.6rem; font-weight:800; color:var(--cat-dark); line-height:1;"><%$summary.grand_total|number_format:0|default:'0'%></div>
               </div>
           </div>
       </div>
@@ -60,7 +63,7 @@
               </div>
               <div>
                   <div style="font-size:0.75rem; font-weight:600; color:var(--cat-light); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Cash Total</div>
-                  <div id="kpi-total-cash" style="font-size:1.6rem; font-weight:800; color:var(--cat-dark); line-height:1;">₹<%$summary.total_cash|number_format:0%></div>
+                  <div id="kpi-total-cash" style="font-size:1.6rem; font-weight:800; color:var(--cat-dark); line-height:1;"><%$summary.total_cash|number_format:0%></div>
               </div>
           </div>
       </div>
@@ -71,7 +74,7 @@
               </div>
               <div>
                   <div style="font-size:0.75rem; font-weight:600; color:var(--cat-light); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">UPI Total</div>
-                  <div id="kpi-total-upi" style="font-size:1.6rem; font-weight:800; color:var(--cat-dark); line-height:1;">₹<%$summary.total_upi|number_format:0%></div>
+                  <div id="kpi-total-upi" style="font-size:1.6rem; font-weight:800; color:var(--cat-dark); line-height:1;"><%$summary.total_upi|number_format:0%></div>
               </div>
           </div>
       </div>
@@ -82,38 +85,49 @@
               </div>
               <div>
                   <div style="font-size:0.75rem; font-weight:600; color:var(--cat-light); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Other Total</div>
-                  <div id="kpi-total-card" style="font-size:1.6rem; font-weight:800; color:var(--cat-dark); line-height:1;">₹<%$summary.total_card|number_format:0%></div>
+                  <div id="kpi-total-card" style="font-size:1.6rem; font-weight:800; color:var(--cat-dark); line-height:1;"><%$summary.total_card|number_format:0%></div>
               </div>
           </div>
       </div>
     </div>
 
-    <!-- Filter Card -->
-    <div class="card border-0 shadow-sm mb-4" style="border-radius:12px;">
-      <form method="POST" action="<%$base_url%>purchase_report" id="filter-form">
-      <div class="card-body p-3">
-        <div class="row g-3 align-items-end">
-          <div class="col-xl col-md-4 col-sm-6">
-            <label class="form-label fw-semibold text-muted" style="font-size:0.78rem; text-transform:uppercase; letter-spacing:.5px;">From Date</label>
-            <input type="date" name="from_date" class="form-control" value="<%$from_date%>">
+    <!-- Right Side Offcanvas Filter Sidebar -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="filterOffcanvas" aria-labelledby="filterOffcanvasLabel" style="width: 380px;">
+      <div class="offcanvas-header border-bottom px-4 py-3">
+        <h5 class="offcanvas-title fw-bold text-dark d-flex align-items-center gap-2" id="filterOffcanvasLabel">
+          <i class="ti ti-adjustments-horizontal text-primary"></i> Filter Options
+        </h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body p-4">
+        <form method="POST" action="<%$base_url%>purchase_report" id="filter-form" class="d-flex flex-column h-100">
+          <div class="flex-grow-1">
+            <div class="mb-3">
+              <label class="form-label fw-semibold text-muted" style="font-size:0.78rem; text-transform:uppercase; letter-spacing:.5px;">Date Range</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light"><i class="ti ti-calendar"></i></span>
+                <input type="text" id="date_range_picker" class="form-control" placeholder="Select Date Range">
+              </div>
+              <input type="hidden" name="from_date" id="filter_from_date" value="<%$from_date%>">
+              <input type="hidden" name="to_date" id="filter_to_date" value="<%$to_date%>">
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold text-muted" style="font-size:0.78rem; text-transform:uppercase; letter-spacing:.5px;">Search</label>
+              <input type="text" id="search-filter-input" class="form-control" placeholder="Search supplier, contact, mode ">
+            </div>
           </div>
-          <div class="col-xl col-md-4 col-sm-6">
-            <label class="form-label fw-semibold text-muted" style="font-size:0.78rem; text-transform:uppercase; letter-spacing:.5px;">To Date</label>
-            <input type="date" name="to_date" class="form-control" value="<%$to_date%>">
-          </div>
-          <div class="col-md-4">
-            <label class="form-label fw-semibold text-muted" style="font-size:0.78rem; text-transform:uppercase; letter-spacing:.5px;">Search</label>
-            <input type="text" id="search-filter-input" class="form-control" placeholder="Search supplier, contact, mode…">
-          </div>
-          <div class="col-md-2">
-            <button type="submit" class="cat-btn cat-btn-primary w-100">
+          <div class="border-top pt-3 mt-3 d-flex gap-2">
+            <button type="button" id="btn-reset-filter" class="cat-btn cat-btn-outline w-50">
+              <i class="ti ti-rotate-2"></i> Reset
+            </button>
+            <button type="submit" class="cat-btn cat-btn-primary w-50">
               <i class="ti ti-filter"></i> Apply
             </button>
           </div>
-        </div>
+        </form>
       </div>
-      </form>
     </div>
+    
 
     <!-- Purchase Report Table -->
     <div class="cat-table-card">
@@ -138,7 +152,7 @@
 <script type="text/javascript">
   var base_url = <%$base_url|@json_encode%>;
 </script>
-<script src="<%$base_url%>public/js/admin_panel/purchase_report.js?v=5"></script>
+<script src="<%$base_url%>public/js/admin_panel/purchase_report.js?v=6"></script>
 <style>
   @media print {
     .cat-btn, .cat-search-box, .cat-page-header-right, form, .sidebar, .navbar, .cat-breadcrumb { display: none !important; }

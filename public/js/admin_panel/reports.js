@@ -49,9 +49,9 @@ const reportsPage = {
             dataType: "json",
             success: function(response) {
                 if (response.success == 1) {
-                    $('#card-sales-total').text('₹' + response.sales_total);
-                    $('#card-purchase-total').text('₹' + response.purchase_total);
-                    $('#card-inventory-total').text('₹' + response.inventory_total);
+                    $('#card-sales-total').text(response.sales_total);
+                    $('#card-purchase-total').text(response.purchase_total);
+                    $('#card-inventory-total').text(response.inventory_total);
                 }
             }
         });
