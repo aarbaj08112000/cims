@@ -29,13 +29,13 @@
       <div class="cat-page-header-left">
         <div class="cat-page-icon"><i class="ti ti-box"></i></div>
         <div>
-          <h1 class="cat-page-title"><%if isset($products)%>Update Product<%else%>Add Product<%/if%></h1>
+          <h1 class="cat-page-title"><%if isset($products) && count($products) > 0%>Update Product<%else%>Add Product<%/if%></h1>
           <nav class="cat-breadcrumb">
             <a href="<%$base_url%>">Home</a>
             <i class="ti ti-chevron-right"></i>
             <span>Product</span>
             <i class="ti ti-chevron-right"></i>
-            <span><%if isset($products)%>Update Product<%else%>Add Product<%/if%></span>
+            <span><%if isset($products) && count($products) > 0%>Update Product<%else%>Add Product<%/if%></span>
           </nav>
         </div>
       </div>
