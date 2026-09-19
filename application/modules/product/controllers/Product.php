@@ -9,6 +9,7 @@ class Product extends MY_Controller
         $this->load->model('Product_model');
         $this->load->model('category/Categories_model');
         $this->load->model('brand/Brand_model');
+        $this->load->model('unit_master/Unit_master_model');
     }
     public function index()
     {
@@ -36,6 +37,7 @@ class Product extends MY_Controller
         }
         $data['categories'] = $this->Categories_model->get_categories();
         $data['brands'] = $this->Brand_model->get_brands();
+        $data['units'] = $this->Unit_master_model->get_units();
         $data['master_attributes'] = $this->Product_model->get_all_attributes();
         $data['currencies'] = $this->Product_model->get_active_currencies();
 

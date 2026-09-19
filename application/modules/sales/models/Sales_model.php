@@ -73,4 +73,20 @@ class Sales_model extends CI_Model
         $query = $this->db->get();
         return $query->row_array();
     }
+    
+    public function search_products($term)
+    {
+        $this->db->select('p.product_id, p.name, p.price, p.qty, p.line_bar_code, p.product_code, curr.currency_symbol');
+        $this->db->from('product_master p');
+        $this->db->join('currency_master curr', 'curr.currency_id = p.selling_currency_id', 'left');
+        $this->db->group_start();
+        $this->db->like('p.name', $term);
+        $this->db->or_like('p.product_code', $term);
+        $this->db->or_like('p.line_bar_code', $term);
+        $this->db->group_end();
+        $this->db->where('p.is_delete', '0');
+        $this->db->limit(20);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }

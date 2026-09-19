@@ -149,7 +149,7 @@
 
             <div class="mb-3 col-md-4 col-12">
               <label class="form-label">Tax Rate (%)</label>
-              <input type="text" step="0.01" name="tax_rate" class="form-control onlyNumericInput" placeholder="e.g. 5, 12, 18" value="<%if isset($products) %><%$products[0].tax_rate%><%else%><%$settings['pos_tax_percentage']['value']|default:'0'%><%/if%>" readonly tabindex="-1" style="background-color: #e9ecef; pointer-events: none;">
+              <input type="text" step="0.01" name="tax_rate" class="form-control onlyNumericInput" placeholder="e.g. 5, 12, 18" value="<%if isset($products) %><%$products[0].tax_rate%><%else%><%$settings['pos_tax_percentage']['value']|default:'0'%><%/if%>" >
             </div>
 
              <!-- Row 4 -->
