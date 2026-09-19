@@ -72,9 +72,51 @@ $(document).ready(function () {
         }
     });
 
+    // Restrict input to numeric & decimal only for Qty and Discount fields
+    $(document).on('input keypress', '.qty-input, #discount_input', function (e) {
+        if (e.type === 'keypress') {
+            var char = String.fromCharCode(e.which || e.keyCode);
+            if (!/[0-9.]/.test(char) && e.which !== 0 && e.which !== 8) {
+                e.preventDefault();
+                return false;
+            }
+            if (char === '.' && $(this).val().indexOf('.') !== -1) {
+                e.preventDefault();
+                return false;
+            }
+        } else if (e.type === 'input') {
+            var val = $(this).val();
+            var cleaned = val.replace(/[^0-9.]/g, '');
+            var parts = cleaned.split('.');
+            if (parts.length > 2) {
+                cleaned = parts[0] + '.' + parts.slice(1).join('');
+            }
+            if (val !== cleaned) {
+                $(this).val(cleaned);
+            }
+        }
+    });
+
     // 4. Quantity Change Event
     $(document).on('input', '.qty-input', function () {
         var row = $(this).closest('tr');
+        var qtyInput = $(this);
+        var qtyVal = qtyInput.val();
+        var qty = parseFloat(String(qtyVal).replace(/,/g, '')) || 0;
+
+        if (qty <= 0 && qtyVal !== '') {
+            toaster('warning', 'Quantity cannot be 0 or negative!');
+            qtyInput.addClass('is-invalid');
+            if (qtyInput.closest('.form-group, td').find('label.error').length == 0) {
+                qtyInput.after("<label class='error text-danger' style='font-size: 11px; display: block;'>Quantity must be > 0</label>");
+            } else {
+                qtyInput.closest('.form-group, td').find('label.error').text('Quantity must be > 0');
+            }
+        } else if (qty > 0) {
+            qtyInput.removeClass('is-invalid');
+            qtyInput.closest('.form-group, td').find('label.error').remove();
+        }
+
         updateRowTotal(row);
         calculateFinalTotal();
     });
@@ -90,6 +132,23 @@ $(document).ready(function () {
 
     // 6. Discount & Received Amount Change Event
     $('#discount_input').on('input', function () {
+        var discInput = $(this);
+        var discVal = discInput.val();
+        var disc = parseFloat(String(discVal).replace(/,/g, '')) || 0;
+
+        if (disc < 0 && discVal !== '') {
+            toaster('warning', 'Discount cannot be negative!');
+            discInput.addClass('is-invalid');
+            if (discInput.closest('.form-group, td, div').find('label.error').length == 0) {
+                discInput.after("<label class='error text-danger' style='font-size: 11px; display: block;'>Discount cannot be negative</label>");
+            } else {
+                discInput.closest('.form-group, td, div').find('label.error').text('Discount cannot be negative');
+            }
+        } else {
+            discInput.removeClass('is-invalid');
+            discInput.closest('.form-group, td, div').find('label.error').remove();
+        }
+
         calculateFinalTotal();
     });
 
@@ -161,7 +220,7 @@ $(document).ready(function () {
                         <input type="hidden" name="price[]" class="row-price" value="${product.price}">
                     </td>
                     <td data-label="Qty" class="text-center">
-                        <input type="number" name="qty[]" class="form-control qty-input mx-auto" value="1" min="1">
+                        <input type="text" name="qty[]" class="form-control qty-input mx-auto" value="1" min="1">
                     </td>
                     <td data-label="Total" class="text-end fw-bold row-total-display">
                         ${product.currency_symbol ? product.currency_symbol + ' ' : ''}${parseFloat(product.price).toFixed(2)}
@@ -247,6 +306,38 @@ $(document).ready(function () {
     function savePOSBill() {
         if ($('#pos_items_body tr[data-product-id]').length === 0) {
             toaster('error', 'Please add at least one item to the bill.');
+            return;
+        }
+
+        var zeroQty = false;
+        $('#pos_items_body .qty-input').each(function () {
+            var qty = parseFloat(String($(this).val()).replace(/,/g, '')) || 0;
+            if (qty <= 0) {
+                zeroQty = true;
+                $(this).addClass('is-invalid');
+                if ($(this).closest('.form-group, td').find('label.error').length == 0) {
+                    $(this).after("<label class='error text-danger' style='font-size: 11px; display: block;'>Quantity must be > 0</label>");
+                } else {
+                    $(this).closest('.form-group, td').find('label.error').text('Quantity must be > 0');
+                }
+            }
+        });
+
+        if (zeroQty) {
+            toaster('error', 'Quantity must be greater than 0 for all items.');
+            return;
+        }
+
+        var discountVal = $('#discount_input').val();
+        var discountAmt = parseFloat(String(discountVal).replace(/,/g, '')) || 0;
+        if (discountAmt < 0) {
+            toaster('error', 'Discount cannot be negative.');
+            $('#discount_input').addClass('is-invalid');
+            if ($('#discount_input').closest('.form-group, td, div').find('label.error').length == 0) {
+                $('#discount_input').after("<label class='error text-danger' style='font-size: 11px; display: block;'>Discount cannot be negative</label>");
+            } else {
+                $('#discount_input').closest('.form-group, td, div').find('label.error').text('Discount cannot be negative');
+            }
             return;
         }
 

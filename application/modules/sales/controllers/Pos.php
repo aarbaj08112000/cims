@@ -8,7 +8,7 @@ class Pos extends MY_Controller
     {
         parent::__construct();
         $this->load->model('Sales_model');
-        $this->load->model('customer/Customer_model');
+        
     }
 
     public function index()
@@ -20,7 +20,7 @@ class Pos extends MY_Controller
         }
 
         $data['base_url'] = base_url();
-        $data['customers'] = $this->Customer_model->get_customer();
+        
         // Generate a temporary bill number
         $data['bill_no'] = 'POS-' . time();
         $this->smarty->loadView('pos_billing.tpl', $data, 'Yes', 'Yes');

@@ -197,7 +197,7 @@ $("#add_attribute_btn").on("click", function () {
                 </select>
             </div>
             <div class="flex-fill">
-                <input type="text" name="attr_value[]" class="form-control select2" placeholder="e.g. 16GB, 256GB" style="border-color:#ddd;">
+                <input type="text" name="attr_value[]" class="form-control" placeholder="e.g. 16GB, 256GB" style="border-color:#ddd;">
             </div>
             <div class="flex-shrink-0">
                 <button type="button" class="remove-attr-btn d-flex align-items-center justify-content-center" title="Remove row"

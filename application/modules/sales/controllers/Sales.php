@@ -22,8 +22,9 @@ class Sales extends MY_Controller
     public function create_sale()
     {
         $data['base_url'] = base_url();
-        $data['customers'] = $this->Customer_model->get_customer();
-        $data['products'] = $this->Customer_model->get_products();
+        
+        $this->load->model('product/Product_model');
+        $data['products'] = $this->Product_model->get_products();
         $this->smarty->loadView('create_sale.tpl', $data, 'Yes', 'Yes');
     }
 
