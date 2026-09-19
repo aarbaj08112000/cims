@@ -181,8 +181,8 @@ const supplierPage = {
 
             language: {
                 processing:   '<div class="cat-processing"><i class="ti ti-loader-2 cat-spin"></i>&nbsp;Loading...</div>',
-                emptyTable:   '<div class="cat-empty">No suppliers found.</div>',
-                zeroRecords:  '<div class="cat-empty">No records match your search.</div>',
+                emptyTable:   '<div class="cat-empty text-center">No suppliers found.</div>',
+                zeroRecords:  '<div class="cat-empty text-center">No records match your search.</div>',
                 info:         'Showing _START_ to _END_ of _TOTAL_ entries',
                 infoEmpty:    'Showing 0 to 0 of 0 entries',
                 infoFiltered: '(filtered from _MAX_ total)',
@@ -206,6 +206,26 @@ const supplierPage = {
 
     formInitiate: function () {
         let that = this;
+
+        $(document).on("input change", ".required-input", function () {
+            var val = $(this).val();
+            var name = $(this).attr("name");
+            var type = $(this).attr("type");
+
+            if (val !== "" && val !== null) {
+                var isValid = true;
+                if (name === 'email' || type === 'email') {
+                    isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+                } else if (name === 'phone') {
+                    isValid = /^[0-9]{10,15}$/.test(val.replace(/[\s\-\+\(\)]/g, ""));
+                }
+                if (isValid) {
+                    $(this).removeClass("is-invalid");
+                    $(this).closest(".form-group").find("label.error").remove();
+                }
+            }
+        });
+
         $("#addSupplierForm, .update-supplier-form").submit(function (e) {
             e.preventDefault();
             var href = $(this).attr("action");
@@ -226,21 +246,39 @@ const supplierPage = {
         });
     },
 
-    formValidate: function (form_id = '') {
+    formValidate: function (form_id) {
+        form_id = form_id || '';
         let flag = false;
-        $("#" + form_id + " .required-input").each(function () {
+        let $form = $("#" + form_id);
+        $form.find(".form-group label.error").remove();
+        $form.find(".is-invalid").removeClass("is-invalid");
+
+        $form.find(".required-input").each(function () {
             var value = $(this).val();
-            if (value == '' || value == null) {
+            var name = $(this).attr("name");
+            var type = $(this).attr("type");
+            var label = $(this).closest(".form-group").find("label").text().replace("*", "").trim();
+
+            if (value === '' || value === null) {
                 flag = true;
                 $(this).addClass("is-invalid");
-                var label  = $(this).closest(".form-group").find("label").text().replace("*", "").trim();
-                if ($(this).closest(".form-group").find("label.error").length == 0) {
-                    var action = $(this).is("select") ? "select" : "enter";
-                    $(this).closest(".form-group").append("<label class='error text-danger' style='font-size: 12px;'>Please " + action + " " + label.toLowerCase() + "</label>");
+                var action = $(this).is("select") ? "select" : "enter";
+                $(this).closest(".form-group").append("<label class='error text-danger' style='font-size: 12px;'>Please " + action + " " + label.toLowerCase() + "</label>");
+            } else if (name === 'email' || type === 'email') {
+                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(value)) {
+                    flag = true;
+                    $(this).addClass("is-invalid");
+                    $(this).closest(".form-group").append("<label class='error text-danger' style='font-size: 12px;'>Please enter a valid email address</label>");
                 }
-            } else {
-                $(this).removeClass("is-invalid");
-                $(this).closest(".form-group").find("label.error").remove();
+            } else if (name === 'phone') {
+                var cleanPhone = value.replace(/[\s\-\+\(\)]/g, "");
+                var phoneRegex = /^[0-9]{10,15}$/;
+                if (!phoneRegex.test(cleanPhone)) {
+                    flag = true;
+                    $(this).addClass("is-invalid");
+                    $(this).closest(".form-group").append("<label class='error text-danger' style='font-size: 12px;'>Please enter a valid 10-digit phone number</label>");
+                }
             }
         });
         return flag;

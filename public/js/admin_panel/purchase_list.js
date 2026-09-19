@@ -187,8 +187,8 @@ const purchaseListPage = {
             pagingType: "full_numbers",
             language: {
                 processing: '<div class="cat-processing"><i class="ti ti-loader-2 cat-spin"></i>&nbsp;Loading...</div>',
-                emptyTable: '<div class="cat-empty">No purchases found.</div>',
-                zeroRecords: '<div class="cat-empty">No records match your search.</div>',
+                emptyTable: '<div class="cat-empty text-center">No purchases found.</div>',
+                zeroRecords: '<div class="cat-empty text-center">No records match your search.</div>',
                 info: 'Showing _START_ to _END_ of _TOTAL_ entries',
                 infoEmpty: 'Showing 0 to 0 of 0 entries',
                 infoFiltered: '(filtered from _MAX_ total)',

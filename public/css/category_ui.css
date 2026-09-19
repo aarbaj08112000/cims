@@ -460,7 +460,7 @@
 .cat-table-card>tbody>tr>td>.ti-edit:hover,
 .cat-table-card>tbody>tr>td>.ti-eye:hover {
   background: var(--cat-primary);
-  color: var(--cat-white);
+  color: var(--cat-white) !important;
   box-shadow: 0 3px 10px rgba(91, 95, 199, 0.3);
   transform: translateY(-1px);
 }
@@ -504,7 +504,7 @@
 .cat-table-card :not(.dropdown-menu)>i.ti-trash:hover,
 .cat-table-card>tbody>tr>td>.ti-trash:hover {
   background: var(--cat-danger);
-  color: var(--cat-white);
+  color: var(--cat-white) !important;
   box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
   transform: translateY(-1px);
 }
@@ -704,6 +704,7 @@
 
 /* Empty table */
 .cat-empty {
+  text-align: center;
   color: var(--cat-gray-500);
   font-size: 14px;
   padding: 8px 0;
@@ -933,4 +934,9 @@ body.grid-layout .cat-dt-footer {
   color: #ffffff;
   box-shadow: 0 3px 10px rgba(0, 207, 234, 0.3);
   transform: translateY(-1px);
+}
+
+td.dataTables_empty,
+.cat-table-card table.dataTable tbody td.dataTables_empty {
+  text-align: center !important;
 }
