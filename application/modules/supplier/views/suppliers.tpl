@@ -28,22 +28,20 @@
         <button type="button" id="export-pdf" class="cat-btn cat-btn-outline-red" title="Export PDF">
           <i class="ti ti-file-type-pdf"></i> Export PDF
         </button>
-        <button type="button" class="cat-btn cat-btn-primary" data-bs-toggle="modal" data-bs-target="#addSupplier" title="Add Supplier">
+        <button type="button" class="cat-btn cat-btn-primary" data-bs-toggle="offcanvas" data-bs-target="#addSupplier" title="Add Supplier">
           <i class="ti ti-plus"></i> Add Supplier
         </button>
       </div>
     </div>
 
-      <!-- Add Supplier Modal -->
-      <div class="modal fade" id="addSupplier" tabindex="-1" role="dialog" aria-labelledby="addSupplierLabel" aria-hidden="true">
-         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-            <div class="modal-content">
-               <div class="modal-header">
-                  <h5 class="modal-title" id="addSupplierLabel">Add New Supplier</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-               </div>
-               <form action="<%base_url('add_supplier')%>" method="POST" id="addSupplierForm" class="custom-form">
-               <div class="modal-body">
+      <!-- Add Supplier Offcanvas Sidebar -->
+      <div class="offcanvas offcanvas-end" tabindex="-1" id="addSupplier" aria-labelledby="addSupplierLabel" style="width: 480px; max-width: 90vw;">
+         <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title fw-bold" id="addSupplierLabel">Add New Supplier</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+         </div>
+         <form action="<%base_url('add_supplier')%>" method="POST" id="addSupplierForm" class="custom-form d-flex flex-column h-100">
+         <div class="offcanvas-body flex-grow-1 p-4">
                   <div class="row">
                     <div class="col-md-6 mb-3">
                       <div class="form-group">
@@ -53,22 +51,22 @@
                     </div>
                     <div class="col-md-6 mb-3">
                       <div class="form-group">
-                        <label for="contact_person">Contact Person</label>
-                        <input type="text" name="contact_person" placeholder="Enter Contact Person" class="form-control">
+                        <label for="contact_person">Contact Person<span class="text-danger">*</span></label>
+                        <input type="text" name="contact_person" placeholder="Enter Contact Person" class="form-control required-input">
                       </div>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-md-6 mb-3">
                       <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" name="email" placeholder="Enter Email" class="form-control">
+                        <label for="email">Email<span class="text-danger">*</span></label>
+                        <input type="email" name="email" placeholder="Enter Email" class="form-control required-input">
                       </div>
                     </div>
                     <div class="col-md-6 mb-3">
                       <div class="form-group">
-                        <label for="phone">Phone</label>
-                        <input type="text" name="phone" placeholder="Enter Phone Number" class="form-control">
+                        <label for="phone">Phone<span class="text-danger">*</span></label>
+                        <input type="text" name="phone" placeholder="Enter Phone Number" class="form-control required-input">
                       </div>
                     </div>
                   </div>
@@ -93,14 +91,12 @@
                     <label for="address">Address</label>
                     <textarea name="address" placeholder="Enter Address" class="form-control" rows="3"></textarea>
                   </div>
-               </div>
-               <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-primary">Save Supplier</button>
-               </div>
-               </form>
-            </div>
          </div>
+         <div class="offcanvas-footer border-top p-3 text-end">
+            <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="offcanvas">Close</button>
+            <button type="submit" class="btn btn-primary">Save Supplier</button>
+         </div>
+         </form>
       </div>
 
 
@@ -136,7 +132,7 @@
                   </td>
                   <td class="text-center cat-col-action">
                     <div class="d-flex align-items-center justify-content-center">
-                      <a href="javascript:void(0)" class="me-2" data-bs-toggle="modal" data-bs-target="#editSupplier<%$i %>" title="Edit">
+                      <a href="javascript:void(0)" class="me-2" data-bs-toggle="offcanvas" data-bs-target="#editSupplier<%$i %>" title="Edit">
                         <i class="ti ti-edit text-primary"></i>
                       </a>
                       <a href="javascript:void(0)" class="delete_supplier" data-id="<%$val['supplier_id']%>" title="Delete">
@@ -144,17 +140,16 @@
                       </a>
                     </div>
                     
-                    <!-- Edit Supplier Modal -->
-                    <div class="modal fade" id="editSupplier<%$i %>" tabindex="-1" role="dialog" aria-hidden="true">
-                      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h5 class="modal-title">Update Supplier</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <!-- Edit Supplier Offcanvas Sidebar -->
+                    <div class="offcanvas offcanvas-end" id="editSupplier<%$i %>" tabindex="-1" aria-hidden="true" style="width: 480px; max-width: 90vw;">
+                      
+                          <div class="offcanvas-header border-bottom">
+                            <h5 class="offcanvas-title fw-bold">Update Supplier</h5>
+                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                           </div>
-                          <form action="<%base_url('update_supplier')%>" method="POST" id="editSupplierForm<%$i %>" class="update-supplier-form custom-form">
+                          <form action="<%base_url('update_supplier')%>" method="POST" id="editSupplierForm<%$i %>" class="update-supplier-form custom-form d-flex flex-column h-100">
                             <input type="hidden" name="supplier_id" value="<%$val['supplier_id']%>">
-                            <div class="modal-body text-wrap">
+                            <div class="offcanvas-body flex-grow-1 p-4">
                               <div class="row">
                                 <div class="col-md-6 mb-3">
                                   <div class="form-group text-start">
@@ -164,22 +159,22 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                   <div class="form-group text-start">
-                                    <label>Contact Person</label>
-                                    <input type="text" name="contact_person" class="form-control" value="<%$val['contact_person'] %>">
+                                    <label>Contact Person<span class="text-danger">*</span></label>
+                                    <input type="text" name="contact_person" class="form-control required-input" value="<%$val['contact_person'] %>">
                                   </div>
                                 </div>
                               </div>
                               <div class="row">
                                 <div class="col-md-6 mb-3">
                                   <div class="form-group text-start">
-                                    <label>Email</label>
-                                    <input type="email" name="email" class="form-control" value="<%$val['email'] %>">
+                                    <label>Email<span class="text-danger">*</span></label>
+                                    <input type="email" name="email" class="form-control required-input" value="<%$val['email'] %>">
                                   </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                   <div class="form-group text-start">
-                                    <label>Phone</label>
-                                    <input type="text" name="phone" class="form-control" value="<%$val['phone'] %>">
+                                    <label>Phone<span class="text-danger">*</span></label>
+                                    <input type="text" name="phone" class="form-control required-input" value="<%$val['phone'] %>">
                                   </div>
                                 </div>
                               </div>
@@ -204,14 +199,11 @@
                                 <label>Address</label>
                                 <textarea name="address" class="form-control" rows="3"><%$val['address'] %></textarea>
                               </div>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                              <button type="submit" class="btn btn-primary">Update Supplier</button>
-                            </div>
-                          </form>
+                        <div class="offcanvas-footer border-top p-3 text-end">
+                          <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="offcanvas">Close</button>
+                          <button type="submit" class="btn btn-primary">Update Supplier</button>
                         </div>
-                      </div>
+                      </form>
                     </div>
                   </td>
                </tr>
