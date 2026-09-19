@@ -19,7 +19,7 @@
       <tr>
         <td><span class="cat-row-num"><%$idx%></span></td>
         <td>
-          <div class="fw-semibold text-dark" style="font-size:.88rem;"><%$row[\'added_date\']|getDefaultDateTime%></div>
+          <div class="fw-semibold text-dark" style="font-size:.88rem;"><%$row['added_date']|getDefaultDateTime%></div>
         </td>
         <td>
           <div class="fw-bold text-dark"><%$row['product_name']%></div>

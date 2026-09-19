@@ -44,7 +44,7 @@ class Dashboard_model extends CI_Model {
         $stats['total_categories'] = (int)$this->db->count_all_results('categories');
 
         // 7. Total Customers
-        $stats['total_customers'] = (int)$this->db->count_all_results('customer_master');
+        $stats['total_customers'] = 0;
 
         // 8. Total Suppliers
         $stats['total_suppliers'] = (int)$this->db->count_all_results('supplier_master');
@@ -164,7 +164,7 @@ class Dashboard_model extends CI_Model {
     public function get_recent_sales($limit = 5) {
         $this->db->select('s.*, c.full_name as customer_name, (SELECT curr.currency_symbol FROM sales_details sd JOIN product_master p ON p.product_id = sd.product_id JOIN currency_master curr ON curr.currency_id = p.selling_currency_id WHERE sd.sales_id = s.sales_id LIMIT 1) as currency_symbol', FALSE);
         $this->db->from('sales_master s');
-        $this->db->join('customer_master c', 's.customer_id = c.customer_id', 'left');
+        
         $this->db->order_by('s.sales_date', 'DESC');
         $this->db->limit($limit);
         return $this->db->get()->result_array();

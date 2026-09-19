@@ -114,7 +114,7 @@
                             <span class="text-muted fw-bold">Discount</span>
                             <div class="input-group w-60 shadow-sm">
                                 
-                                <input type="number" id="discount_input" class="form-control form-control-lg text-end fw-bold text-primary" value="0" style="font-size: 1.1rem;">
+                                <input type="text" id="discount_input" class="form-control form-control-lg text-end fw-bold text-primary" value="0" style="font-size: 1.1rem;">
                             </div>
                         </div>
                         <hr class="my-4">

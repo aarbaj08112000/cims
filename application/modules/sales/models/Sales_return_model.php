@@ -9,10 +9,10 @@ class Sales_return_model extends CI_Model {
     }
 
     public function get_sales_returns() {
-        $this->db->select('srm.*, sm.bill_no as original_bill_no, COALESCE(NULLIF(sm.customer_name,""), cm.full_name) as customer_name, (SELECT curr.currency_symbol FROM sales_return_details srd JOIN product_master p ON p.product_id = srd.product_id JOIN currency_master curr ON curr.currency_id = p.selling_currency_id WHERE srd.return_id = srm.return_id LIMIT 1) as currency_symbol', FALSE);
+        $this->db->select('srm.*, sm.bill_no as original_bill_no, sm.customer_name, (SELECT curr.currency_symbol FROM sales_return_details srd JOIN product_master p ON p.product_id = srd.product_id JOIN currency_master curr ON curr.currency_id = p.selling_currency_id WHERE srd.return_id = srm.return_id LIMIT 1) as currency_symbol', FALSE);
         $this->db->from('sales_return_master srm');
         $this->db->join('sales_master sm', 'srm.sales_id = sm.sales_id', 'left');
-        $this->db->join('customer_master cm', 'CONVERT(sm.customer_phone_number USING utf8mb4) = CONVERT(cm.mobile_number USING utf8mb4)', 'left', FALSE);
+        
         $this->db->order_by('srm.return_id', 'DESC');
         $query = $this->db->get();
         return $query->result_array();
@@ -40,10 +40,10 @@ class Sales_return_model extends CI_Model {
     }
 
     public function get_sales_return_master($return_id) {
-        $this->db->select('srm.*, sm.bill_no as original_bill_no, COALESCE(NULLIF(sm.customer_name,""), cm.full_name) as customer_name, cm.mobile_number, cm.address1, (SELECT curr.currency_symbol FROM sales_return_details srd JOIN product_master p ON p.product_id = srd.product_id JOIN currency_master curr ON curr.currency_id = p.selling_currency_id WHERE srd.return_id = srm.return_id LIMIT 1) as currency_symbol', FALSE);
+        $this->db->select('srm.*, sm.bill_no as original_bill_no, sm.customer_name, (SELECT curr.currency_symbol FROM sales_return_details srd JOIN product_master p ON p.product_id = srd.product_id JOIN currency_master curr ON curr.currency_id = p.selling_currency_id WHERE srd.return_id = srm.return_id LIMIT 1) as currency_symbol', FALSE);
         $this->db->from('sales_return_master srm');
         $this->db->join('sales_master sm', 'srm.sales_id = sm.sales_id', 'left');
-        $this->db->join('customer_master cm', 'CONVERT(sm.customer_phone_number USING utf8mb4) = CONVERT(cm.mobile_number USING utf8mb4)', 'left', FALSE);
+        
         $this->db->where('srm.return_id', $return_id);
         $query = $this->db->get();
         return $query->row_array();

@@ -33,9 +33,9 @@ class Sales_model extends CI_Model
 
     public function get_sales()
     {
-        $this->db->select('s.*, COALESCE(NULLIF(s.customer_name, ""), c.full_name) as customer_name, (SELECT curr.currency_symbol FROM sales_details sd JOIN product_master p ON p.product_id = sd.product_id JOIN currency_master curr ON curr.currency_id = p.selling_currency_id WHERE sd.sales_id = s.sales_id LIMIT 1) as currency_symbol', FALSE);
+        $this->db->select('s.*, s.customer_name, (SELECT curr.currency_symbol FROM sales_details sd JOIN product_master p ON p.product_id = sd.product_id JOIN currency_master curr ON curr.currency_id = p.selling_currency_id WHERE sd.sales_id = s.sales_id LIMIT 1) as currency_symbol', FALSE);
         $this->db->from('sales_master s');
-        $this->db->join('customer_master c', 'CONVERT(s.customer_phone_number USING utf8mb4) = CONVERT(c.mobile_number USING utf8mb4)', 'left', FALSE);
+        
         $this->db->order_by('s.sales_id', 'DESC');
         $query = $this->db->get();
         return $query->result_array();
@@ -43,9 +43,9 @@ class Sales_model extends CI_Model
 
     public function get_sale_master($sales_id)
     {
-        $this->db->select('s.*, COALESCE(NULLIF(s.customer_name, ""), c.full_name) as customer_name, (SELECT curr.currency_symbol FROM sales_details sd JOIN product_master p ON p.product_id = sd.product_id JOIN currency_master curr ON curr.currency_id = p.selling_currency_id WHERE sd.sales_id = s.sales_id LIMIT 1) as currency_symbol', FALSE);
+        $this->db->select('s.*, s.customer_name, (SELECT curr.currency_symbol FROM sales_details sd JOIN product_master p ON p.product_id = sd.product_id JOIN currency_master curr ON curr.currency_id = p.selling_currency_id WHERE sd.sales_id = s.sales_id LIMIT 1) as currency_symbol', FALSE);
         $this->db->from('sales_master s');
-        $this->db->join('customer_master c', 'CONVERT(s.customer_phone_number USING utf8mb4) = CONVERT(c.mobile_number USING utf8mb4)', 'left', FALSE);
+        
         $this->db->where('s.sales_id', $sales_id);
         $query = $this->db->get();
         return $query->row_array();

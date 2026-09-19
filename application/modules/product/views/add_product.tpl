@@ -165,11 +165,13 @@
 
             <div class="mb-3 col-md-4 col-12">
                <label class="form-label">Unit</label>
-               <select name="unit" class="form-control form-select">
-                   <option value="Piece" <%if isset($products) && $products[0].unit == 'Piece'%>selected<%/if%>>Piece</option>
-                   <option value="Meter" <%if isset($products) && $products[0].unit == 'Meter'%>selected<%/if%>>Meter</option>
-                   <option value="Kg" <%if isset($products) && $products[0].unit == 'Kg'%>selected<%/if%>>Kg</option>
-                   <option value="Box" <%if isset($products) && $products[0].unit == 'Box'%>selected<%/if%>>Box</option>
+               <select name="unit" class="form-control form-select select2">
+                   <option value="">Select Unit</option>
+                   <%if isset($units) && $units|@count > 0%>
+                       <%foreach from=$units item=unit_val%>
+                           <option value="<%$unit_val.unit_name%>" <%if isset($products) && $products[0].unit == $unit_val.unit_name%>selected<%/if%>><%$unit_val.unit_name%></option>
+                       <%/foreach%>
+                   <%/if%>
                </select>
             </div>
 
@@ -209,7 +211,7 @@
                                 <%foreach from=$product_attrs item=attr%>
                                 <div class="attribute-row d-flex align-items-center gap-3 mb-3 p-3 rounded-3" style="background:#f8f8ff; border:1px solid #ebe9fe;">
                                     <div class="flex-fill">
-                                        <select name="attr_name[]" class="form-select attr-name-select" style="border-color:#ddd;">
+                                        <select name="attr_name[]" class="form-select attr-name-select select2" style="border-color:#ddd;">
                                             <option value="">Select Attribute</option>
                                             <%if isset($master_attributes)%>
                                                 <%foreach from=$master_attributes item=ma%>
@@ -219,7 +221,7 @@
                                         </select>
                                     </div>
                                     <div class="flex-fill">
-                                        <input type="text" name="attr_value[]" class="form-control" placeholder="e.g. 16GB, 256GB" value="<%$attr.attr_value%>" style="border-color:#ddd;">
+                                        <input type="text" name="attr_value[]" class="form-control " placeholder="e.g. 16GB, 256GB" value="<%$attr.attr_value%>" style="border-color:#ddd;">
                                     </div>
                                     <div class="flex-shrink-0">
                                         <button type="button" class="remove-attr-btn d-flex align-items-center justify-content-center" title="Remove row"
@@ -232,7 +234,7 @@
                             <%else%>
                                 <div class="attribute-row d-flex align-items-center gap-3 mb-3 p-3 rounded-3" style="background:#f8f8ff; border:1px solid #ebe9fe;">
                                     <div class="flex-fill">
-                                        <select name="attr_name[]" class="form-select attr-name-select" style="border-color:#ddd;">
+                                        <select name="attr_name[]" class="form-select attr-name-select select2" style="border-color:#ddd;">
                                             <option value="">Select Attribute</option>
                                             <%if isset($master_attributes)%>
                                                 <%foreach from=$master_attributes item=ma%>
@@ -242,7 +244,7 @@
                                         </select>
                                     </div>
                                     <div class="flex-fill">
-                                        <input type="text" name="attr_value[]" class="form-control" placeholder="e.g. 16GB, 256GB" style="border-color:#ddd;">
+                                        <input type="text" name="attr_value[]" class="form-control " placeholder="e.g. 16GB, 256GB" style="border-color:#ddd;">
                                     </div>
                                     <div class="flex-shrink-0">
                                         <button type="button" class="remove-attr-btn d-flex align-items-center justify-content-center" title="Remove row"
