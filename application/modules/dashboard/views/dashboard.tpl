@@ -524,6 +524,17 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+    function hasNoData(arr) {
+        if (!arr || !arr.length) return true;
+        return arr.every(function(v) { return !v || Number(v) === 0; });
+    }
+    function showNoDataMsg(elId, height) {
+        const el = document.querySelector("#" + elId);
+        if (el) {
+            el.style.minHeight = height + "px";
+            el.innerHTML = '<div class="d-flex flex-column align-items-center justify-content-center h-100 py-5"><i class="ti ti-database-off text-muted mb-2" style="font-size: 2.5rem;"></i><span class="fw-semibold text-muted">No data Found</span></div>';
+        }
+    }
         // Data from PHP
         const mLabels = <%if isset($monthly_sales_labels)%><%$monthly_sales_labels|@json_encode%><%else%>[]<%/if%>;
         const mSales = <%if isset($monthly_sales_values)%><%$monthly_sales_values|@json_encode%><%else%>[]<%/if%>;
@@ -649,8 +660,12 @@
                 }
             }
         };
+        if (hasNoData(mSales) && hasNoData(mOrders)) {
+        showNoDataMsg("salesOrdersChart", 350);
+    } else {
         var salesOrdersChart = new ApexCharts(document.querySelector("#salesOrdersChart"), salesOrdersOptions);
         salesOrdersChart.render();
+    }
 
         // 2. Category Pie Chart
         var catPieOptions = {
@@ -695,8 +710,12 @@
                 }
             }
         };
+        if (hasNoData(catValues)) {
+        showNoDataMsg("categoryPieChart", 300);
+    } else {
         var categoryPieChart = new ApexCharts(document.querySelector("#categoryPieChart"), catPieOptions);
         categoryPieChart.render();
+    }
 
         // 3. Sales Trend Area Chart
         var trendOptions = {
@@ -762,8 +781,12 @@
                 }
             }
         };
+        if (hasNoData(trendValues)) {
+        showNoDataMsg("salesTrendChart", 200);
+    } else {
         var salesTrendChart = new ApexCharts(document.querySelector("#salesTrendChart"), trendOptions);
         salesTrendChart.render();
+    }
     });
 </script>
 

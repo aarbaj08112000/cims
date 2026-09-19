@@ -398,7 +398,6 @@ div:where(.swal2-icon) .swal2-icon-content {
                         </div>
                         <div class="profile-info text-start d-none d-md-flex flex-column justify-content-center" style="white-space: nowrap;">
                            <span class="profile-name fw-bold text-dark" style="line-height: 1.2;"><%$session_data['user_name']%></span>
-                           <em class="text-muted" style="font-size: 11px; line-height: 1.2;"><%$session_data['role']%></em>
                         </div>
                         <i class="las la-angle-down fs-5 ms-1 text-dark"></i>
                      </a>
@@ -406,7 +405,6 @@ div:where(.swal2-icon) .swal2-icon-content {
                         <div data-rr-ui-dropdown-item="" class=" ">
                            <div class="d-block d-md-none px-3 py-2 border-bottom mb-2 text-center">
                               <h6 class="mb-0 fw-bold text-dark"><%$session_data['user_name']%></h6>
-                              <small class="text-muted"><%$session_data['role']%></small>
                            </div>
                            <ul class="top-menu ps-0 mb-0">
                               <li class="top-child-menu">
