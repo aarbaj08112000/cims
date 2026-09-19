@@ -1,3 +1,4 @@
+
 <%assign var='units' value=[] %>
 <%assign var='groups_arr' value=[] %>
 <link rel="stylesheet" href="<%$base_url%>public/css/category_ui.css" />
@@ -22,7 +23,7 @@
             <i class="ti ti-search"></i>
             <input type="text" id="search-filter-input" placeholder="Filter Search" />
          </div>
-         <button type="button" class="cat-btn cat-btn-primary" data-bs-toggle="modal" data-bs-target="#addPromo">
+         <button type="button" class="cat-btn cat-btn-primary" id="btn-add-user">
             <i class="ti ti-plus"></i> Add User
          </button>
          <div class="dropdown grid-drop-down">
@@ -54,70 +55,61 @@
             <div class="row">
                
                <div class="col-lg-12">
-                  <!-- Modal -->
-                  <div class="modal fade" id="addPromo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                     <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                           <div class="modal-header">
-                              <h5 class="modal-title" id="exampleModalLabel">Add EPR Users</h5>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                              </button>
+                                    <!-- User Form Offcanvas Sidebar -->
+                  <div class="offcanvas offcanvas-end" tabindex="-1" id="userOffcanvas" aria-labelledby="userOffcanvasLabel">
+                     <div class="offcanvas-header border-bottom">
+                        <h5 id="userOffcanvasLabel" class="offcanvas-title">Add User</h5>
+                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                     </div>
+                     <form action="<%base_url('user/user/addUsersData') %>" method="POST" enctype="multipart/form-data" id="userForm">
+                        <div class="offcanvas-body flex-grow-1">
+                           <input type="hidden" name="user_id" id="user_id" value="">
+                           <div class="form-group mb-3">
+                              <label for="user_name">User Full Name<span class="text-danger">*</span></label>
+                              <input required type="text" name="user_name" id="user_name" placeholder="Enter Full Name" class="form-control" value="" autocomplete="new-password">
                            </div>
-                           <form action="<%base_url('user/user/addUsersData') %>" method="POST" enctype="multipart/form-data" id="addTransporterForm">
-                              <div class="modal-body text-start">
-                                <div class="row">
-
-                                 <div class="form-group mb-3">
-                                    <label for="on click url">User Full Name<span class="text-danger">*</span></label>
-                                    <input required type="text" name="user_name" placeholder="Enter Full Name" class="form-control" value="" id="">
+                           <div class="form-group mb-3">
+                              <label for="user_email">User Email<span class="text-danger">*</span></label>
+                              <input required type="email" name="user_email" id="user_email" placeholder="Enter Email" class="form-control" value="" autocomplete="new-password">
+                           </div>
+                           <div class="form-group mb-3" id="password_container">
+                              <label for="user_password">User Password<span class="text-danger">*</span></label>
+                              <input required type="password" name="user_password" id="user_password" placeholder="Enter Password" class="form-control" value="" autocomplete="new-password">
+                           </div>
+                           <div class="form-group mb-3">
+                              <label for="user_role">User Role<span class="text-danger">*</span></label>
+                              <select name="user_role" id="user_role" class="form-control select2">
+                                 <option value="">Select Role</option>
+                                 <%foreach from=$groups item='group' %>
+                                 <option value="<%$group['group_master_id']%>"><%$group['group_name']%></option>
+                                 <%/foreach%>
+                              </select>
+                           </div>
+                           <div class="form-group mb-3 unit-box d-none">
+                              <label>Unit<span class="text-danger">*</span></label>
+                              <div class="row">
+                                 <%foreach from=$client item='client_val' %>
+                                 <div class="col-4">
+                                    <input type="checkbox" class="check-box " name="client[]" value="<%$client_val['id']%>">
+                                    <label class="ms-1"><%$client_val['client_unit']%></label>
                                  </div>
-                                 <div class="form-group mb-3">
-                                    <label for="on click url">User Email<span class="text-danger">*</span></label>
-                                    <input required type="email" name="user_email" placeholder="Enter Email" class="form-control" value="" id="">
-                                 </div>
-                                 <div class="form-group mb-3">
-                                    <label for="on click url">User Password<span class="text-danger">*</span></label>
-                                    <input required type="password" name="user_password" placeholder="Enter Password" class="form-control" value="" id="">
-                                 </div>
-                                 <div class="form-group mb-3">
-                                    <label for="on click url">User Role<span class="text-danger">*</span></label>
-                                    <select name="user_role" class="form-control select2" id="">
-                                       <option value="Admin">Admin</option>
-                                       <option value="Purchase">Purchase</option>
-                                       <option value="Approver">Approver</option>
-                                       <option value="inward_stores">inward stores </option>
-                                       <option value="stores">stores </option>
-                                       <option value="production">production</option>
-                                       <option value="FG_stores">FG stores</option>
-                                       <option value="Marketing">Marketing</option>
-                                       <option value="Development">Development</option>
-                                       <option value="Quality">Quality</option>
-                                       <option value="Inward_Quality">Inward Quality</option>
-                                       <option value="Sales">Sales</option>
-                                    </select>
-                                 </div>
-                                 <div class="form-group mb-3 d-none">
-                                    <label for="on click url">Unit<span class="text-danger">*</span></label>
-                                    <div class="row">
-                                       <%foreach from=$client item='client_val' %>
-                                       <div class="col-4">
-                                          <input type="checkbox" class="check-box " name="client[]" value="<%$client_val['id']%>">
-                                          <label for="client" class="ms-1"><%$client_val['client_unit']%></label>
-                                       </div>
-                                       <%/foreach%>
-                                    </div>
-                                 </div>
-                                 </div>
-                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Save changes</button>
-                                </div>
+                                 <%/foreach%>
                               </div>
-                           </form>
                            </div>
+                           <div class="form-group mb-3 d-none" id="status_container">
+                              <label for="user_status" class="w-100">Status<span class="text-danger">*</span></label>
+                              <select name="status" id="user_status" class="form-control">
+                                 <option value="Active">Active</option>
+                                 <option value="Inactive">Inactive</option>
+                                 <option value="Block">Block</option>
+                              </select>
                            </div>
                         </div>
-                     </div>
+                        <div class="offcanvas-footer border-top p-3 text-end">
+                           <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="offcanvas">Cancel</button>
+                           <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                     </form>
                   </div>
 
                   <div class="cat-table-card w-100">
@@ -144,10 +136,10 @@
                                  <td><%$u['user_name'] %></td>
                                  <td><%$u['user_email'] %></td>
                                  <td><%$u['user_password'] %></td>
-                                 <td><%$u['user_role'] %></td>
+                                 <td><%$u['group_name'] %></td>
                                  <td><%$u['status'] %></td>
                                  <td>
-                                    <a data-bs-toggle="modal" data-bs-target="#updatePromo<%$i%>"><i class="ti ti-edit"></i></a>
+                                    <a href="javascript:void(0)" class="edit-user-btn" data-id="<%$u['id']%>" data-name="<%$u['user_name']%>" data-email="<%$u['user_email']%>" data-role="<%$u['user_role']%>" data-status="<%$u['status']%>"><i class="ti ti-edit"></i></a>
 
                                  </td>
                               </tr>
@@ -170,87 +162,7 @@
        <!-- /.content -->
     </div>
 
-   <%if (true) %>
-   <%assign var='i' value=1 %>
-   <%foreach from=$user_info item=u %>
-   <%assign var='units' value=explode(",",$u['unit_ids']|default:"")%>
-   <%assign var='groups_arr' value=explode(",",$u['groups']|default:"")%>
-   <div class="modal fade" id="updatePromo<%$i%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog  modal-dialog-centered" role="document">
-         <div class="modal-content">
-            <div class="modal-header">
-               <h5 class="modal-title" id="exampleModalLabel">Update EPR Users</h5>
-               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-               </button>
-            </div>
-            <form action="<%base_url('user/user/updateUsersData') %>" method="POST" enctype="multipart/form-data" id="update_users_data<%$i%>" class="update_users_data update_users_data<%$i%> custom-form">
-               <div class="modal-body">
-                 <div class="row">
-                    <div class="form-group">
-                       <input type="hidden" name="user_id" value="<%$u['id']%>">
-                    </div>
-                    <div class="form-group">
-                       <label for="on click url">User Full Name<span class="text-danger">*</span></label> 
-                       <input  type="text" name="user_name" placeholder="Enter Full Name" class="form-control required-input" value="<%$u['user_name'] %>">
-                    </div>
-                    <div class="form-group">
-                       <label for="on click url">User Email<span class="text-danger">*</span></label> 
-                       <input  type="email" name="user_email" placeholder="Enter Email" class="form-control required-input" value="<%$u['user_email'] %>" disabled>
-                    </div>
-                    <!-- <div class="form-group">
-                       <label for="on click url">User Password<span class="text-danger">*</span></label>
-                       <input required type="password" name="user_password" placeholder="Enter Password" class="form-control" value="" id="">
-                       </div> -->
-                    <div class="form-group">
-                       <label for="on click url">Select Role<span class="text-danger">*</span></label> 
-                       <select name="user_role" class="form-control select2 required-input"  disabled>
-                          <option value="Admin">Admin</option>
-                          <option value="Purchase">Purchase</option>
-                          <option value="Approver">Approver</option>
-                          <option value="inward_stores">inward stores </option>
-                          <option value="stores">stores </option>
-                          <option value="production">production</option>
-                          <option value="FG_stores">FG stores</option>
-                          <option value="Marketing">Marketing</option>
-                          <option value="Development">Development</option>
-                          <option value="Quality">Quality</option>
-                          <option value="Inward_Quality">Inward Quality</option>
-                          <option value="Sales">Sales</option>
-                       </select>
-                    </div>
-                    <div class="form-group unit-box d-none">
-                       <label for="on click url">Unit<span class="text-danger">*</span></label>
-                       <div class="row">
-                          <%foreach from=$client item='client_val' %>
-                          <div class="col-4">
-                             <input type="checkbox" class="check-box required-input" name="client[]" value="<%$client_val['id'] %>" <%if in_array($client_val['id'],$units)%>checked<%/if%>>
-                             <label for="client" class="ms-1"><%$client_val['client_unit']%></label>
-                          </div>
-                          <%/foreach%>
-                       </div>
-                    </div>
-                   </div>
-                    <div class="form-group" >
-                       <label for="on click url" class="w-100">Status<span class="text-danger">*</span> </label>
-                       <select name="status" class="form-control select2-multiple required-input"  >
-                          <option value="Active" <%if $u['status'] eq 'Active'%>selected<%/if%>>Active</option>
-                          <option value="Inactive" <%if $u['status'] eq 'Inactive'%>selected<%/if%>>Inactive</option>
-                          <option value="Block" <%if $u['status'] eq 'Block'%>selected<%/if%>>Block</option>
-                       </select>
-                    </div>
-                   </div>
-                    <div class="modal-footer">
-                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                       <button type="submit" class="btn btn-primary">Save changes</button>
-            </form>
-            </div>
-            </div>
-         </div>
-      </div>
-   </div>
-   <%assign var='i' value=$i+1 %>
-   <%/foreach%>
-   <%/if%>
+   
    <div class="modal fade" id="accessGroups" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
          <div class="modal-content">
@@ -330,4 +242,4 @@
    var no_data_message = <%$no_data_message|@json_encode%>;
    var module_name = "User";
 </script>
-<script src="<%$base_url%>public/js/admin/user_list.js?v=9"></script>
+<script src="<%$base_url%>public/js/admin/user_list.js?v=11"></script>

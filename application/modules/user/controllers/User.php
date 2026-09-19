@@ -11,6 +11,7 @@ class User extends MY_Controller {
 	{
 		$data['client'] = $this->User_model->getClientData();
         $data['groups'] = $this->User_model->getGroupData();
+        $data['groups'] = $this->User_model->getGroupData();
 		$data['user_info'] = $this->User_model->getUserData();
 		$data['no_data_message'] = NoDataFoundMessage("user");
 		$this->smarty->loadView('user_details.tpl', $data,'Yes','Yes');
@@ -22,7 +23,7 @@ class User extends MY_Controller {
 		$success = 1;
         $client_arr  = $this->input->post("client");
         
-        if(is_valid_array($client_arr)){
+        if(true){
     		$data = array(
     			'user_name' => $this->input->post('user_name'),
     			'user_email' => $this->input->post('user_email'),
@@ -30,12 +31,17 @@ class User extends MY_Controller {
     			'user_role' => $this->input->post('user_role'),
     			'added_date' => date("Y-m-d H:i:s"),
     			'added_by' => $this->session->userdata('user_id'),
-                'unit_ids' => implode(",", $client_arr),
+                'unit_ids' => is_valid_array($client_arr) ? implode(",", $client_arr) : "",
                 "deleted"=>0
     		);
 
     		$inser_query = $this->User_model->insertUser($data);
-    		if ($inser_query) {
+            if ($inser_query) {
+                // Log activity
+                $this->Activity_model->log_activity('USER_CREATE', [
+                    'reference_id' => $inser_query,
+                    'user_name' => $data['user_name']
+                ]);
     			if ($inser_query) {
     				// echo "<script>alert('User  Added Successfully');document.location='erp_users'</script>";
     				$msg = 'User Added Successfully.';
@@ -49,9 +55,6 @@ class User extends MY_Controller {
     			$msg = 'Error occer while inserting data.';
     			$success = 0;
     		}
-        }else if(!is_valid_array($client_arr)){
-            $msg = 'Please select unit.';
-            $success = 0;
         }
 		$ret_arr['msg'] = $msg;
 		$ret_arr['success'] = $success;
@@ -64,10 +67,10 @@ class User extends MY_Controller {
         $success = 1;
         $client_arr  = $this->input->post("client");
         $status = $this->input->post('status');
-        if(is_valid_array($client_arr)){
+        if(true){
             $data = array(
                 'user_name' => $this->input->post('user_name'),
-                'unit_ids' => implode(",", $client_arr),
+                'unit_ids' => is_valid_array($client_arr) ? implode(",", $client_arr) : "",
                 'status' => $status
             );
             if($status != "Block"){
@@ -88,11 +91,8 @@ class User extends MY_Controller {
                 $msg = 'Error occer while updateing data.';
                 $success = 0;
             }
-        }else if(!is_valid_array($client_arr)){
-            $msg = 'Please select unit.';
-            $success = 0;
         }
-        $ret_arr['messages'] = $msg;
+        $ret_arr['msg'] = $msg;
         $ret_arr['success'] = $success;
         echo json_encode($ret_arr);
     }
@@ -283,5 +283,68 @@ class User extends MY_Controller {
 	}
 	
 	
-}
 
+
+        public function activity_logs()
+    {
+        $data["base_url"] = base_url();
+        $this->smarty->loadView("activity_logs.tpl", $data, "Yes", "Yes");
+    }
+
+        public function get_activity_logs_ajax()
+    {
+        $draw = intval($this->input->post("draw"));
+        $row = intval($this->input->post("start"));
+        $rowperpage = intval($this->input->post("length"));
+        
+        $search = $this->input->post("search");
+        $searchValue = isset($search["value"]) ? $search["value"] : "";
+
+        $this->db->select("*");
+        $this->db->from("activity_logs");
+        
+        if($searchValue != ""){
+            $this->db->group_start();
+            $this->db->like("user_name", $searchValue);
+            $this->db->or_like("module_name", $searchValue);
+            $this->db->or_like("action", $searchValue);
+            $this->db->or_like("description", $searchValue);
+            $this->db->or_like("ip_address", $searchValue);
+            $this->db->group_end();
+        }
+        
+        $totalRecordwithFilter = $this->db->count_all_results("", FALSE);
+        
+        $this->db->order_by("log_id", "desc");
+        
+        if ($rowperpage != -1) {
+            $this->db->limit($rowperpage, $row);
+        }
+        
+        $records = $this->db->get()->result();
+        $totalRecords = $this->db->count_all("activity_logs");
+        
+        $data = array();
+        
+        foreach($records as $record){
+            $data[] = array(
+                $record->log_id,
+                getDefaultDateTime($record->created_at),
+                $record->user_name,
+                $record->module_name,
+                $record->action . " " . $record->description,
+                $record->ip_address
+            ); 
+        }
+
+        $response = array(
+            "draw" => $draw,
+            "recordsTotal" => $totalRecords,
+            "recordsFiltered" => $totalRecordwithFilter,
+            "data" => $data
+        );
+
+        echo json_encode($response);
+    }
+
+}

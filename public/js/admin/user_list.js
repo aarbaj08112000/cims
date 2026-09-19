@@ -247,8 +247,53 @@ const user_app = {
         }, 200);
     },
     formInit: function () {
+                $("#btn-add-user").on("click", function () {
+            $("#userOffcanvasLabel").text("Add User");
+            $("#userForm").attr("action", (base_url || "/cims/") + (!base_url || base_url.endsWith("/") ? "" : "/") + "user/user/addUsersData");
+            $("#user_id").val("");
+            $("#user_name").val("");
+            $("#user_email").val("").prop("disabled", false);
+            $("#user_password").val("");
+            $("#password_container").removeClass("d-none");
+            $("#user_password").prop("required", true);
+            $("#user_role").val("").prop("disabled", false);
+            $("#status_container").addClass("d-none");
+
+            var userOffcanvas = bootstrap.Offcanvas.getOrCreateInstance(document.getElementById("userOffcanvas"));
+            userOffcanvas.show();
+        });
+
+        $(document).on("click", ".edit-user-btn", function (e) {
+            e.preventDefault();
+            try {
+                var id = $(this).attr("data-id");
+                var name = $(this).attr("data-name");
+                var email = $(this).attr("data-email");
+                var role = $(this).attr("data-role");
+                var status = $(this).attr("data-status");
+                
+                $("#userOffcanvasLabel").text("Edit User");
+                $("#userForm").attr("action", (base_url || "/cims/") + (!base_url || base_url.endsWith("/") ? "" : "/") + "user/user/updateUsersData");
+                $("#user_id").val(id);
+                $("#user_name").val(name);
+                $("#user_email").val(email).prop("disabled", false);
+                $("#password_container").addClass("d-none");
+                $("#user_password").prop("required", false);
+                
+                $("#user_role").val(role).prop("disabled", false).trigger("change");
+                $("#user_status").val(status).trigger("change");
+                $("#status_container").removeClass("d-none");
+                
+                var userOffcanvas = bootstrap.Offcanvas.getOrCreateInstance(document.getElementById("userOffcanvas"));
+                userOffcanvas.show();
+            } catch (err) {
+                console.error("Error opening edit offcanvas: ", err);
+                alert("Error: " + err.message);
+            }
+        });
+        
         let that = this;
-        $("#addTransporterForm").validate({
+        $("#userForm").validate({
             rules: {
                 user_name: {
                     required: true,
@@ -309,7 +354,7 @@ const user_app = {
                             if (res['success'] == 1) {
                                 toaster("success", res['msg']);
                                 setTimeout(() => {
-                                    $('#addPromo').modal('hide');
+                                    bootstrap.Offcanvas.getInstance(document.getElementById('userOffcanvas'))?.hide();
                                     // Optionally, refresh the table or perform other actions
                                     window.location.reload();
                                 }, 1000);
@@ -324,44 +369,6 @@ const user_app = {
                     }
                 });
             }
-        });
-
-        $(".update_users_data").submit(function (e) {
-            e.preventDefault();
-            var href = $(this).attr("action");
-            var id = $(this).attr("id");
-            let flag = that.formValidate(id);
-            if (flag) {
-                return;
-            }
-
-            var formData = new FormData($('.' + id)[0]);
-
-            $.ajax({
-                type: "POST",
-                url: href,
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    var responseObject = JSON.parse(response);
-                    var msg = responseObject.messages;
-                    var success = responseObject.success;
-                    if (success == 1) {
-                        toaster("success", msg);
-                        $(this).parents(".modal").modal("hide")
-                        setTimeout(function () {
-                            window.location.reload();
-                        }, 2000);
-
-                    } else {
-                        toaster("error", msg);
-                    }
-                },
-                error: function (error) {
-                    console.error("Error:", error);
-                },
-            });
         });
 
         $(".page-access-btn").on("click", function () {

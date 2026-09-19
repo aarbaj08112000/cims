@@ -4,7 +4,7 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <!-- Include Tokenfield JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-tokenfield/dist/bootstrap-tokenfield.min.js"></script>
-    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.3/tinymce.min.js" referrerpolicy="origin"></script>
 
 <style>
 .tox .tox-notification--warning{
@@ -85,7 +85,7 @@
             <!-- Row 2 -->
             <div class="mb-3 col-md-4 col-12">
                 <label class="form-label">Category <span class="text-danger">*</span></label>
-                <select name="category_id" class="form-control required-input form-select">
+                <select name="category_id" class="form-control required-input form-select select2">
                     <option value="">Select Category</option>
                     <%if isset($categories)%>
                         <%foreach from=$categories item=c%>
@@ -97,7 +97,7 @@
 
             <div class="mb-3 col-md-4 col-12">
                 <label class="form-label">Brand <span class="text-danger">*</span></label>
-                 <select name="brand_id" class="form-control required-input form-select">
+                 <select name="brand_id" class="form-control required-input form-select select2">
                     <option value="">Select Brand</option>
                     <%if isset($brands)%>
                         <%foreach from=$brands item=b%>
@@ -426,4 +426,4 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script src="<%$base_url%>public/plugin/editor/editor.js"></script>
    
-    <script src="<%$base_url%>public/js/admin_panel/add_product.js"></script>
+    <script src="<%$base_url%>public/js/admin_panel/add_product.js?v=1789815629"></script>

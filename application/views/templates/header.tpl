@@ -45,7 +45,7 @@
       <!-- Vendors CSS -->
       <link rel="stylesheet" href="<%$base_url%>public/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
       <link rel="stylesheet" href="<%$base_url%>public/assets/vendor/libs/apex-charts/apex-charts.css" />
-      <link rel="stylesheet" href="<%$base_url%>public/css/common.css" />
+      <link rel="stylesheet" href="<%$base_url%>public/css/common.css?v=2" />
       <link rel="stylesheet" href="<%$base_url%>public/css/admin_modern.css" />
       <!-- Page CSS -->
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -291,15 +291,20 @@ div:where(.swal2-icon) .swal2-icon-content {
              </li>
 
              <!-- User Management -->
-             <li class="menu-item <%if strpos($current_uri, 'user_list') !== false || strpos($current_uri, 'group_master') !== false%>active open<%/if%>">
+             <li class="menu-item <%if strpos($current_uri, 'user_list') !== false || strpos($current_uri, 'group_master') !== false || strpos($current_uri, 'activity_logs') !== false%>active open<%/if%>">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                    <i class="menu-icon tf-icons bx bx-user-circle"></i>
                    <div data-i18n="User Management">User Management</div>
                 </a>
                 <ul class="menu-sub">
                    <li class="menu-item <%if strpos($current_uri, 'user_list') !== false%>active<%/if%>">
-                      <a href="user_list" class="menu-link">
+                      <a href="<%$base_url%>user_list" class="menu-link">
                          <div data-i18n="User">User</div>
+                      </a>
+                   </li>
+                   <li class="menu-item <%if strpos($current_uri, 'activity_logs') !== false%>active<%/if%>">
+                      <a href="<%$base_url%>activity_logs" class="menu-link">
+                         <div data-i18n="User Activity Log">User Activity Log</div>
                       </a>
                    </li>
                   <!--  <li class="menu-item <%if strpos($current_uri, 'group_master') !== false%>active<%/if%>">

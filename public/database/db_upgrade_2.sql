@@ -31,3 +31,15 @@ ADD COLUMN `selling_currency_id` INT NULL DEFAULT NULL AFTER `price`;
 -- Set default currency (1 = INR) for all existing products
 UPDATE `product_master` 
 SET `purchase_currency_id` = 1, `selling_currency_id` = 1;
+
+-- User Activity Log Table
+CREATE TABLE IF NOT EXISTS `activity_logs` (
+  `log_id` INT AUTO_INCREMENT PRIMARY KEY,
+  `user_id` INT NOT NULL,
+  `user_name` VARCHAR(150) NOT NULL,
+  `module_name` VARCHAR(100) NOT NULL,
+  `action` VARCHAR(100) NOT NULL,
+  `description` TEXT,
+  `ip_address` VARCHAR(45),
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
