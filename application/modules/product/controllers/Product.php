@@ -38,7 +38,7 @@ class Product extends MY_Controller
         $data['brands'] = $this->Brand_model->get_brands();
         $data['master_attributes'] = $this->Product_model->get_all_attributes();
         $data['currencies'] = $this->Product_model->get_active_currencies();
-        
+
         $this->load->model('settings/Settings_model');
         $settings_raw = $this->Settings_model->get_all_settings();
         $settings = [];
@@ -46,7 +46,7 @@ class Product extends MY_Controller
             $settings[$setting['name']] = $setting;
         }
         $data['settings'] = $settings;
-        
+        // pr($data, 1);
         $this->smarty->loadView('add_product.tpl', $data, 'Yes', 'Yes');
     }
 
@@ -146,12 +146,12 @@ class Product extends MY_Controller
                 $files = $_FILES['multi_images'];
                 $file_count = count($files['name']);
                 $primary_image = '';
-                
+
                 for ($i = 0; $i < $file_count; $i++) {
                     if ($files['error'][$i] == 0) {
                         $tmp_name = $files['tmp_name'][$i];
-                        $name = time() . '_' . rand(100,999) . '_' . preg_replace("/[^a-zA-Z0-9.]/", "", $files['name'][$i]);
-                        
+                        $name = time() . '_' . rand(100, 999) . '_' . preg_replace("/[^a-zA-Z0-9.]/", "", $files['name'][$i]);
+
                         // First image is primary
                         if ($i === 0) {
                             $dest = $image_dir . '/' . $name;
@@ -172,7 +172,7 @@ class Product extends MY_Controller
                         }
                     }
                 }
-                
+
                 if (!empty($primary_image)) {
                     $this->Product_model->update_product(['image' => $primary_image], $product_id);
                 }
@@ -211,15 +211,15 @@ class Product extends MY_Controller
             $this->barcode_gen->generate($barcode_text, $barcode_file);
 
             log_product_activity([
-            'product_id'   => $product_id,
-            'product_name' => $name,
-            'action_type'  => 'created',
-            'qty_change'   => floatval($qty),
-            'price_change' => floatval($price),
-            'remarks'      => 'New product added with stock ' . $qty . ' and sale price ₹' . $price,
-            'new_values'   => ['name' => $name, 'price' => $price, 'purchase_price' => $purchase_price, 'qty' => $qty, 'unit' => $unit]
-        ]);
-        $ret_arr['msg'] = 'Product added successfully.';
+                'product_id' => $product_id,
+                'product_name' => $name,
+                'action_type' => 'created',
+                'qty_change' => floatval($qty),
+                'price_change' => floatval($price),
+                'remarks' => 'New product added with stock ' . $qty . ' and sale price ₹' . $price,
+                'new_values' => ['name' => $name, 'price' => $price, 'purchase_price' => $purchase_price, 'qty' => $qty, 'unit' => $unit]
+            ]);
+            $ret_arr['msg'] = 'Product added successfully.';
             $ret_arr['product_id'] = encode_id($product_id);
         } else {
             $ret_arr['msg'] = 'Error occurred while adding the Product.';
@@ -338,17 +338,17 @@ class Product extends MY_Controller
             mkdir($gallery_dir, 0777, true);
         }
         chmod($gallery_dir, 0777);
-        
+
         if (!empty($_FILES['multi_images']['name'][0])) {
             $images_to_save = [];
             $files = $_FILES['multi_images'];
             $file_count = count($files['name']);
-            
+
             for ($i = 0; $i < $file_count; $i++) {
                 if ($files['error'][$i] == 0) {
                     $tmp_name = $files['tmp_name'][$i];
-                    $name = time() . '_' . rand(100,999) . '_' . preg_replace("/[^a-zA-Z0-9.]/", "", $files['name'][$i]);
-                    
+                    $name = time() . '_' . rand(100, 999) . '_' . preg_replace("/[^a-zA-Z0-9.]/", "", $files['name'][$i]);
+
                     // If no primary image exists, make the first new image the primary
                     if (empty($image_path)) {
                         $dest = $image_dir . '/' . $name;
@@ -374,7 +374,7 @@ class Product extends MY_Controller
                 $this->Product_model->save_product_images($product_id, $images_to_save);
             }
         }
-        
+
         // Re-check: If primary was removed and no new image was uploaded, promote the first gallery image
         if (empty($image_path)) {
             $first_gallery = $this->db->where('product_id', $product_id)->order_by('sort_order', 'ASC')->limit(1)->get('product_images')->row_array();
@@ -494,17 +494,17 @@ class Product extends MY_Controller
             mkdir($gallery_dir, 0777, true);
         }
         chmod($gallery_dir, 0777);
-        
+
         if (!empty($_FILES['multi_images']['name'][0])) {
             $images_to_save = [];
             $files = $_FILES['multi_images'];
             $file_count = count($files['name']);
-            
+
             for ($i = 0; $i < $file_count; $i++) {
                 if ($files['error'][$i] == 0) {
                     $tmp_name = $files['tmp_name'][$i];
-                    $name = time() . '_' . rand(100,999) . '_' . preg_replace("/[^a-zA-Z0-9.]/", "", $files['name'][$i]);
-                    
+                    $name = time() . '_' . rand(100, 999) . '_' . preg_replace("/[^a-zA-Z0-9.]/", "", $files['name'][$i]);
+
                     // If no primary image exists, make the first new image the primary
                     if (empty($image_path)) {
                         $dest = $image_dir . '/' . $name;
@@ -530,7 +530,7 @@ class Product extends MY_Controller
                 $this->Product_model->save_product_images($product_id, $images_to_save);
             }
         }
-        
+
         // Re-check: If primary was removed and no new image was uploaded, promote the first gallery image
         if (empty($image_path)) {
             $first_gallery = $this->db->where('product_id', $product_id)->order_by('sort_order', 'ASC')->limit(1)->get('product_images')->row_array();
@@ -828,9 +828,9 @@ class Product extends MY_Controller
                 </ul>
             </div>';
 
-            $price_formatted = !empty($row['price']) ? number_format((float)$row['price'], 2) : '0.00';
-            $purchase_price_formatted = !empty($row['purchase_price']) ? number_format((float)$row['purchase_price'], 2) : '0.00';
-            
+            $price_formatted = !empty($row['price']) ? number_format((float) $row['price'], 2) : '0.00';
+            $purchase_price_formatted = !empty($row['purchase_price']) ? number_format((float) $row['purchase_price'], 2) : '0.00';
+
             $selling_symbol = !empty($row['selling_currency_symbol']) ? $row['selling_currency_symbol'] . ' ' : '';
             $purchase_symbol = !empty($row['purchase_currency_symbol']) ? $row['purchase_currency_symbol'] . ' ' : '';
 

@@ -11,6 +11,9 @@ $route['logout'] = 'auth/login/logout';
 /* admin */
 $route['sitemap'] = 'auth/login/site_map';
 $route['user_list'] = 'user/user/user_list';
+$route['activity_logs'] = 'user/user/activity_logs';
+$route['get_activity_logs_ajax'] = 'user/user/get_activity_logs_ajax';
+
 $route['group_master'] = 'user/user/groupMaster';
 $route['group_menu'] = 'user/user/groupMenu';
 

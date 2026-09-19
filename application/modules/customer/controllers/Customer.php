@@ -4,6 +4,7 @@ class Customer extends MY_Controller {
 	public function __construct() {
         parent::__construct();
         $this->load->model('Customer_model');
+		$this->load->model('Activity_model');
     }
 	public function index() {
 		$data['base_url'] = base_url();

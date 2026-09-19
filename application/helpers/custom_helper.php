@@ -187,4 +187,33 @@ function decode_id($str) {
     $decoded = base64_decode(strtr($str, '-_', '+/'));
     return is_numeric($decoded) ? (int)$decoded : 0;
 }
-?>
+
+if (!function_exists('log_activity')) {
+    function log_activity($module_name, $action, $description = '')
+    {
+        $CI =& get_instance();
+        
+        $user_id = $CI->session->userdata('user_id');
+        $user_name = $CI->session->userdata('user_name') ? $CI->session->userdata('user_name') : $CI->session->userdata('name');
+        
+        if (empty($user_id)) {
+            $user_id = 0;
+            $user_name = 'System / Guest';
+        }
+
+        $ip_address = $CI->input->ip_address();
+
+        $data = array(
+            'user_id' => $user_id,
+            'user_name' => $user_name,
+            'module_name' => $module_name,
+            'action' => $action,
+            'description' => $description,
+            'ip_address' => $ip_address,
+            'created_at' => date('Y-m-d H:i:s')
+        );
+
+        $CI->db->insert('activity_logs', $data);
+        return $CI->db->insert_id();
+    }
+}

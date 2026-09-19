@@ -95,6 +95,14 @@ body.modern-login-body {
     letter-spacing: 0.05em;
 }
 
+.form-group .error {
+    display: block;
+    font-size: 12px !important;
+    color: red !important;
+    margin-bottom: 0.4rem;
+    text-transform: capitalize !important;
+}
+
 .input-group-modern {
     position: relative;
     display: flex;

@@ -67,6 +67,7 @@ class Login extends MY_Controller {
 			}else{
 					$redirect_url = "dashboard";
 			}
+			log_activity('System', 'User Login', 'User successfully logged into the system.');
 			$success = 1;
 			$messages = "User Login successfully";
 			
@@ -81,7 +82,8 @@ class Login extends MY_Controller {
 		$username = $this->input->post('username');
 		$result = $this->Login_model->get_user_exist_check($username);	
 		if(is_valid_array($result)){
-	        $success = 1;
+	        log_activity('System', 'User Login', 'User successfully logged into the system.');
+			$success = 1;
 			$messages = "Password sent successfully";
 			$user_id = $result['id'];
 			$email_data = [
@@ -110,7 +112,8 @@ class Login extends MY_Controller {
 	    $success = 0;
 		$messages = "Password not reset";
 	    if($result > 0){
-	    	$success = 1;
+	    	log_activity('System', 'User Login', 'User successfully logged into the system.');
+			$success = 1;
 			$messages = "Password reset successful!";
 	    }
 	    $return_arr['redirect_url'] = "login";

@@ -1,17 +1,29 @@
 $(document).ready(function () {
+    $(".form-select").not("[name*='currency']").each(function() {
+      var placeholderText = $(this).find('option:first').text() || "Select an option";
+      $(this).select2({
+          width: "100%",
+          placeholder: placeholderText,
+          allowClear: false
+      });
+  });
+
+  // Revalidate select2 on change
+  $(".form-select").on("change", function() {
+      $(this).valid();
+  });
    var mode = $("#mode").val();
   $("#product_form").validate({
-    rules: {
+    ignore: "input[type=hidden], .select2-input, .select2-focusser",
+      rules: {
+      category_id: { required: true },
+      brand_id: { required: true },
+      purchase_price: { required: true, number: true, min: 0.01 },
       name: {
         required: true,
         minlength: 2
       },
       actual_price: {
-        required: true,
-        number: true,
-        min: 0.01
-      },
-      price: {
         required: true,
         number: true,
         min: 0.01
@@ -27,6 +39,9 @@ $(document).ready(function () {
       }
     },
     messages: {
+      category_id: { required: "Please select a category" },
+      brand_id: { required: "Please select a brand" },
+      purchase_price: { required: "Please enter the purchase price" },
       name: {
         required: "Please enter product name",
         minlength: "Name must be at least 2 characters"
@@ -36,11 +51,7 @@ $(document).ready(function () {
         number: "Enter a valid number",
         min: "Price must be greater than 0"
       },
-      price: {
-        required: "Please enter the product price",
-        number: "Enter a valid number",
-        min: "Price must be greater than 0"
-      },
+      
       description: {
         required: "Please enter a description",
         minlength: "Description must be at least 5 characters"
@@ -53,19 +64,29 @@ $(document).ready(function () {
     validClass: "is-valid",
     errorElement: "div",
     errorPlacement: function (error, element) {
-      error.addClass("invalid-feedback");
-      if (element.prop("type") === "file") {
-        error.insertAfter(element);
-      } else {
-        error.insertAfter(element);
-      }
+        error.addClass("invalid-feedback");
+        if (element.hasClass("select2-hidden-accessible") || element.siblings(".select2-container").length > 0) {
+            error.insertAfter(element.siblings(".select2-container").last());
+        } else if (element.parent(".input-group").length > 0) {
+            error.insertAfter(element.parent(".input-group"));
+        } else if (element.prop("type") === "file") {
+            error.insertAfter(element);
+        } else {
+            error.insertAfter(element);
+        }
     },
     highlight: function (element) {
-      $(element).addClass("is-invalid").removeClass("is-valid");
-    },
-    unhighlight: function (element) {
-      $(element).removeClass("is-invalid").addClass("is-valid");
-    },
+        $(element).addClass("is-invalid").removeClass("is-valid");
+        if ($(element).hasClass("select2-hidden-accessible") || $(element).hasClass("form-select")) {
+            $(element).siblings(".select2-container").last().find(".select2-selection").addClass("border-danger").removeClass("border-success");
+        }
+      },
+      unhighlight: function (element) {
+        $(element).removeClass("is-invalid").addClass("is-valid");
+        if ($(element).hasClass("select2-hidden-accessible") || $(element).hasClass("form-select")) {
+            $(element).siblings(".select2-container").last().find(".select2-selection").removeClass("border-danger").addClass("border-success");
+        }
+      },
     submitHandler: function (form) {
      var formData = new FormData(form);
       var product_id = $("#product_id").val();

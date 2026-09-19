@@ -6,16 +6,13 @@ class User_model extends CI_Model {
     public function __construct() {
         parent::__construct();
     }
-	public function getClientData(){
-        $this->db->select('u.*');
-        $this->db->from('client as u');
-        $result_obj = $this->db->get();
-        $ret_data = is_object($result_obj) ? $result_obj->result_array() : [];
-        return $ret_data;
+	public function getClientData() {
+        return [];
     }
     public function getUserData(){
-        $this->db->select('u.*');
+        $this->db->select('u.*, g.group_name');
         $this->db->from('userinfo as u');
+        $this->db->join('group_master as g', 'u.user_role = g.group_master_id', 'left');
         $result_obj = $this->db->get();
         $ret_data = is_object($result_obj) ? $result_obj->result_array() : [];
         return $ret_data;

@@ -26,10 +26,16 @@ const grid = {
 					for (var i = 0; i < row_data.length; i++) {
 						var row_details = row_data[i]._aData;
 
-						// Extract the modal target from the Action column HTML (col 5)
+						// Extract data attributes from the action anchor tag (col 5)
 						var actionHtml  = row_details[5] || '';
-						var modalMatch  = actionHtml.match(/data-bs-target="(#updatePromo\d+)"/);
-						var modalTarget = modalMatch ? modalMatch[1] : '';
+						var parser      = new DOMParser();
+						var actionDoc   = parser.parseFromString(actionHtml, 'text/html');
+						var editAnchor  = actionDoc.querySelector('.edit-user-btn');
+						var dataId      = editAnchor ? (editAnchor.getAttribute('data-id')     || '') : '';
+						var dataName    = editAnchor ? (editAnchor.getAttribute('data-name')   || '') : '';
+						var dataEmail   = editAnchor ? (editAnchor.getAttribute('data-email')  || '') : '';
+						var dataRole    = editAnchor ? (editAnchor.getAttribute('data-role')   || '') : '';
+						var dataStatus  = editAnchor ? (editAnchor.getAttribute('data-status') || '') : '';
 
 						var isActive    = (row_details[4] || '').trim() === 'Active';
 						var statusClass = isActive ? 'cat-badge-active' : 'cat-badge-inactive';
@@ -55,30 +61,18 @@ const grid = {
 						  onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 10px 30px rgba(0,0,0,0.12)';"
 						  onmouseout="this.style.transform='';this.style.boxShadow='0 2px 20px rgba(0,0,0,0.06)';">
 
-						    <!-- Colour bar -->
 						    <div style="height:5px;background:linear-gradient(90deg,${color},${color}88);"></div>
 
-						    <!-- Avatar + Name -->
 						    <div style="padding:20px 20px 14px;display:flex;align-items:center;gap:14px;">
-						      <div style="
-						        width:52px;height:52px;border-radius:50%;flex-shrink:0;
-						        background:${color}18;color:${color};
-						        border:2px solid ${color}44;
-						        display:flex;align-items:center;justify-content:center;
-						        font-size:1.3rem;font-weight:800;
-						      ">${initials}</div>
+						      <div style="width:52px;height:52px;border-radius:50%;flex-shrink:0;background:${color}18;color:${color};border:2px solid ${color}44;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:800;">${initials}</div>
 						      <div style="flex:1;min-width:0;">
-						        <div style="font-size:.93rem;font-weight:700;color:#1e293b;
-						          white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${name}">${name}</div>
-						        <div style="font-size:.76rem;color:#8490a7;
-						          white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;" title="${email}">${email}</div>
+						        <div style="font-size:.93rem;font-weight:700;color:#1e293b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${name}">${name}</div>
+						        <div style="font-size:.76rem;color:#8490a7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;" title="${email}">${email}</div>
 						      </div>
 						    </div>
 
-						    <!-- Divider -->
 						    <div style="height:1px;background:#f1f3f9;margin:0 18px;"></div>
 
-						    <!-- Info rows -->
 						    <div style="padding:12px 18px 0;">
 						      <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f8f9fc;">
 						        <span style="font-size:.7rem;font-weight:700;color:#8490a7;text-transform:uppercase;letter-spacing:.5px;width:60px;flex-shrink:0;">Role</span>
@@ -86,17 +80,18 @@ const grid = {
 						      </div>
 						      <div style="display:flex;align-items:center;gap:8px;padding:5px 0;">
 						        <span style="font-size:.7rem;font-weight:700;color:#8490a7;text-transform:uppercase;letter-spacing:.5px;width:60px;flex-shrink:0;">Status</span>
-						        <span class="cat-badge ${statusClass}" style="padding:3px 10px;font-size:.71rem;">
-						          <span class="cat-badge-dot"></span>${statusText}
-						        </span>
+						        <span class="cat-badge ${statusClass}" style="padding:3px 10px;font-size:.71rem;"><span class="cat-badge-dot"></span>${statusText}</span>
 						      </div>
 						    </div>
 
-						    <!-- Footer -->
 						    <div style="padding:12px 18px 16px;display:flex;justify-content:flex-end;">
-						      <button class="cat-btn cat-btn-primary"
+						      <button class="cat-btn cat-btn-primary edit-user-btn"
 						        style="height:32px;padding:0 14px;font-size:.8rem;"
-						        ${modalTarget ? 'data-bs-toggle="modal" data-bs-target="'+modalTarget+'"' : ''}>
+						        data-id="${dataId}"
+						        data-name="${dataName}"
+						        data-email="${dataEmail}"
+						        data-role="${dataRole}"
+						        data-status="${dataStatus}">
 						        <i class="ti ti-edit" style="font-size:.9rem;"></i> Edit
 						      </button>
 						    </div>
@@ -104,7 +99,6 @@ const grid = {
 						  </div>
 						</div>`;
 						grid_html += row_html;
-
 					}
 				} else {
 					grid_html += that.noDataFound(no_data_message);
