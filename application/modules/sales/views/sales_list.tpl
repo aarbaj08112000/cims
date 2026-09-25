@@ -44,6 +44,7 @@
               <th>Mobile No</th>
               <th>Sales Date</th>
               <th class="text-end">Total Amount</th>
+              <th class="text-end">Tax Amount</th>
               <th class="text-end">Discount</th>
               <th class="text-end">Grand Total</th>
               <th class="text-center">Payment Mode</th>
@@ -59,6 +60,11 @@
               <td><%$val['customer_phone_number']|default:'-'%></td>
               <td><%$val['sales_date']|defaultDateFormat%></td>
               <td class="text-end"><%$val['currency_symbol']%> <%$val['total_amount']|number_format:2 %></td>
+              <%assign var='tax_val' value=$val['tax_amount']|default:0%>
+              <%if $tax_val == 0 && ($val['payable_amount'] - $val['total_amount'] + $val['discount_amount']) > 0.001%>
+                  <%assign var='tax_val' value=($val['payable_amount'] - $val['total_amount'] + $val['discount_amount'])%>
+              <%/if%>
+              <td class="text-end text-primary"><%$val['currency_symbol']%> <%$tax_val|number_format:2 %></td>
               <td class="text-end text-danger"><%$val['currency_symbol']%> <%$val['discount_amount']|number_format:2 %></td>
               <td class="fw-bold text-green text-end"><%$val['currency_symbol']%> <%$val['payable_amount']|number_format:2 %></td>
               <td class="cat-col-status text-center">

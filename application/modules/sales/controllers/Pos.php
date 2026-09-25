@@ -70,6 +70,20 @@ class Pos extends MY_Controller
         $prices = $this->input->post('price');
         $item_totals = $this->input->post('total');
         $subtotal = $this->input->post('subtotal');
+        $tax_amount = $this->input->post('tax_amount') !== null ? (float) $this->input->post('tax_amount') : 0;
+        if ($tax_amount == 0) {
+            $this->load->model('settings/Settings_model');
+            $settings_list = $this->Settings_model->get_all_settings();
+            $settings = [];
+            foreach ($settings_list as $s) {
+                $settings[$s['name']] = $s;
+            }
+            $tax_enabled = (isset($settings['pos_tax_enabled']) && $settings['pos_tax_enabled']['value'] === 'Yes');
+            $tax_perc = isset($settings['pos_tax_percentage']) ? (float)$settings['pos_tax_percentage']['value'] : 0;
+            if ($tax_enabled && $tax_perc > 0) {
+                $tax_amount = (float)$subtotal * ($tax_perc / 100);
+            }
+        }
         $grand_total = $this->input->post('grand_total');
 
         if (empty(trim((string) $customer_name))) {
@@ -92,6 +106,7 @@ class Pos extends MY_Controller
             'bill_no' => $bill_no,
             'sales_date' => $sales_date,
             'total_amount' => $subtotal,
+            'tax_amount' => $tax_amount,
             'payable_amount' => $grand_total,
             'paid_amount' => $grand_total,
             'payment_status' => 'Paid',

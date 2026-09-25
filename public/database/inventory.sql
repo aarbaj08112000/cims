@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Sep 13, 2026 at 01:18 AM
+-- Generation Time: Sep 25, 2026 at 09:38 PM
 -- Server version: 8.0.46-0ubuntu0.22.04.4
 -- PHP Version: 8.1.2-1ubuntu2.26
 
@@ -24,6 +24,91 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `activity_logs`
+--
+
+CREATE TABLE `activity_logs` (
+  `log_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `user_name` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `module_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `action` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `activity_logs`
+--
+
+INSERT INTO `activity_logs` (`log_id`, `user_id`, `user_name`, `module_name`, `action`, `description`, `ip_address`, `created_at`) VALUES
+(1, 2, 'Admin', 'System', 'User Login', 'User successfully logged into the system.', '::1', '2026-09-17 20:08:41'),
+(2, 2, 'Admin', 'System', 'User Login', 'User successfully logged into the system.', '::1', '2026-09-19 13:35:26'),
+(3, 2, 'Admin', 'System', 'User Login', 'User successfully logged into the system.', '::1', '2026-09-19 13:52:18'),
+(4, 2, 'Admin', 'System', 'User Login', 'User successfully logged into the system.', '::1', '2026-09-19 18:11:59'),
+(5, 2, 'Admin', 'System', 'User Login', 'User successfully logged into the system.', '::1', '2026-09-19 19:00:03'),
+(6, 2, 'Admin', 'System', 'User Login', 'User successfully logged into the system.', '::1', '2026-09-22 12:34:40'),
+(7, 2, 'Admin', 'System', 'User Login', 'User successfully logged into the system.', '::1', '2026-09-25 21:35:58');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `activity_log_new`
+--
+
+CREATE TABLE `activity_log_new` (
+  `id` bigint NOT NULL,
+  `activity_code` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `module` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `action` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `reference_id` int DEFAULT NULL,
+  `reference_no` varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `message` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `old_data` longtext COLLATE utf8mb4_unicode_ci,
+  `new_data` longtext COLLATE utf8mb4_unicode_ci,
+  `user_id` int NOT NULL,
+  `user_name` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `company_id` int DEFAULT NULL,
+  `branch_id` int DEFAULT NULL,
+  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_agent` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `activity_master`
+--
+
+CREATE TABLE `activity_master` (
+  `id` int NOT NULL,
+  `activity_code` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `activity_name` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `module` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `action` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `message_template` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `status` enum('Active','Inactive') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Active',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `activity_master`
+--
+
+INSERT INTO `activity_master` (`id`, `activity_code`, `activity_name`, `module`, `action`, `message_template`, `description`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'USER_CREATE', 'Create User', 'User', 'Create', 'User {user_name} was created by {session_user_name}.', 'Logged when a new user is created.', 'Active', '2026-09-19 10:15:45', '2026-09-19 10:15:45'),
+(2, 'USER_UPDATE', 'Update User', 'User', 'Update', 'User {user_name} was updated by {session_user_name}.', 'Logged when a user is updated.', 'Active', '2026-09-19 10:15:45', '2026-09-19 10:15:45'),
+(3, 'CUSTOMER_CREATE', 'Create Customer', 'Customer', 'Create', 'Customer {customer_name} was created by {session_user_name}.', 'Logged when a new customer is created.', 'Active', '2026-09-19 10:15:45', '2026-09-19 10:15:45'),
+(4, 'CUSTOMER_UPDATE', 'Update Customer', 'Customer', 'Update', 'Customer {customer_name} was updated by {session_user_name}.', 'Logged when a customer is updated.', 'Active', '2026-09-19 10:15:45', '2026-09-19 10:15:45'),
+(5, 'SALES_ORDER_CREATE', 'Create Sales Order', 'Sales', 'Create', 'Sales Order {reference_no} was created for {customer_name} by {session_user_name}.', 'Logged when a sales order is created.', 'Active', '2026-09-19 10:15:45', '2026-09-19 10:15:45');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `attributes`
 --
 
@@ -38,6 +123,13 @@ CREATE TABLE `attributes` (
   `updated_date` datetime DEFAULT NULL,
   `updated_by` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `attributes`
+--
+
+INSERT INTO `attributes` (`attribute_id`, `attribute_name`, `attribute_code`, `status`, `is_delete`, `added_date`, `added_by`, `updated_date`, `updated_by`) VALUES
+(1, 'Color', 'ATT-202609131', 'Active', 0, '2026-09-13 02:03:25', 2, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -69,7 +161,8 @@ INSERT INTO `brands` (`brand_id`, `brand_name`, `brand_code`, `status`, `is_dele
 (5, 'Pantaloons', NULL, 'Active', 0, '2026-02-13 12:35:39', NULL, NULL, NULL),
 (6, 'Tesla', NULL, 'Active', 0, '2026-06-01 15:19:16', 2, NULL, NULL),
 (7, 'Brand1', NULL, 'Active', 0, '2026-08-30 10:59:07', 2, NULL, NULL),
-(8, 'Apple', NULL, 'Active', 0, '2026-08-30 11:30:35', 2, '2026-09-10 15:08:55', 2);
+(8, 'Apple', NULL, 'Active', 0, '2026-08-30 11:30:35', 2, '2026-09-10 15:08:55', 2),
+(9, 'Crafty', 'BRD-202609138', 'Active', 0, '2026-09-13 01:43:50', 2, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -104,67 +197,12 @@ INSERT INTO `categories` (`category_id`, `category_name`, `category_code`, `pare
 (7, 'Keychain1', NULL, 0, 'Inactive', 0, '2026-06-02 13:21:02', 2, '2026-06-02 13:58:23', 2),
 (8, 'Festive', NULL, 0, 'Active', 0, '2026-06-02 14:08:06', 2, NULL, NULL),
 (9, 'Food', NULL, 0, 'Active', 0, '2026-08-30 10:58:15', 2, '2026-08-30 10:58:52', 2),
-(10, 'Electronic', NULL, 0, 'Active', 0, '2026-08-30 11:30:26', 2, '2026-09-09 14:04:35', 2);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `client`
---
-
-CREATE TABLE `client` (
-  `id` int NOT NULL,
-  `client_unit` varchar(50) DEFAULT NULL,
-  `client_name` varchar(50) NOT NULL,
-  `contact_person` varchar(30) NOT NULL,
-  `pan_no` varchar(20) NOT NULL,
-  `billing_address` varchar(255) DEFAULT NULL,
-  `shifting_address` varchar(255) NOT NULL,
-  `phone_no` varchar(50) NOT NULL,
-  `gst_number` varchar(50) NOT NULL,
-  `created_id` int DEFAULT NULL,
-  `date` varchar(10) DEFAULT NULL,
-  `time` varchar(10) DEFAULT NULL,
-  `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `deleted` int DEFAULT '0',
-  `state` varchar(20) NOT NULL,
-  `state_no` varchar(200) NOT NULL,
-  `bank_details` text NOT NULL,
-  `address1` varchar(100) NOT NULL,
-  `location` varchar(50) NOT NULL,
-  `pin` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Dumping data for table `client`
---
-
-INSERT INTO `client` (`id`, `client_unit`, `client_name`, `contact_person`, `pan_no`, `billing_address`, `shifting_address`, `phone_no`, `gst_number`, `created_id`, `date`, `time`, `timestamp`, `deleted`, `state`, `state_no`, `bank_details`, `address1`, `location`, `pin`) VALUES
-(1, 'Talegaon Unit', 'TEST TECHNOPLAST', 'MR. Suresh Kamat', 'BIZPB5715', 'S.no. 123/4, Near PCMC water tank, Whalekarwadi Road, Pimple Goan, Pune-411111  Email: xxxxaaa@yahoo.com   PH: 1234567890', 'Gat no.5648, House no 133, near Hotel, Pimple Road, Pune-411111', '1111111110', '11ABCDE2222FGHI', 3, '03-04-2024', '10:58:33', '2024-02-09 08:27:30', 0, 'MAHARASHTRA', '27', 'ICICI BANK - Ac.No. 1111', 'xxxxx, xxxxxxxxxxx, xxxxxxxxxxxxxxxxxxxxxxx', 'Chinchwad', '411111'),
-(2, 'Akurdi Unit', 'TEST TECHNOPLAST', 'MR. Suresh Kamat', 'BIZPB5715', 'S.no. 123/4, Near PCMC water tank, Whalekarwadi Road, Pimple Goan, Pune-411111  Email: xxxxaaa@yahoo.com   PH: 1234567890', 'Gat no.5648, House no 133, near Hotel, Pimple Road, Pune-411111', '1111111110', '11ABCDE2222FGHI', 3, '21-04-2024', '06:53:03', '2024-02-09 10:29:41', 0, 'Maharashtra', '27', 'ICICI BANK 1111', 'xxxxx, xxxxxxxxxxx, xxxxxxxxxxxxxxxxxxxxxxx', 'Chinchwad', '411111');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `color_master`
---
-
-CREATE TABLE `color_master` (
-  `color_id` int NOT NULL,
-  `color_name` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Dumping data for table `color_master`
---
-
-INSERT INTO `color_master` (`color_id`, `color_name`) VALUES
-(1, 'Red'),
-(2, 'Blue'),
-(3, 'Black'),
-(4, 'White'),
-(5, 'Green'),
-(6, 'Yellow');
+(10, 'Electronic', NULL, 0, 'Active', 0, '2026-08-30 11:30:26', 2, '2026-09-09 14:04:35', 2),
+(11, 'Mobile', 'CAT-7461', 0, 'Active', 0, '2026-09-13 01:34:48', 2, NULL, NULL),
+(12, 'Phone', 'CAT-1820', 0, 'Active', 0, '2026-09-13 01:35:00', 2, NULL, NULL),
+(13, 'Keychain55', 'CAT-011', 0, 'Active', 0, '2026-09-13 01:37:00', 2, NULL, NULL),
+(14, 'Jackets ', 'CAT-012', 0, 'Active', 0, '2026-09-13 01:37:35', 2, NULL, NULL),
+(15, 'Keychain13', 'CAT-5262', 0, 'Active', 0, '2026-09-13 01:38:21', 2, '2026-09-19 15:49:33', 2);
 
 -- --------------------------------------------------------
 
@@ -237,8 +275,38 @@ INSERT INTO `config_setting` (`id`, `name`, `title`, `value`, `description`, `ty
 (18, 'password_link_expiry', 'Password Link Expiry', '10', 'Password Link Expiry In Minutes', 'input', 0),
 (19, 'email_notification_enable', 'Email Notification Enable', 'Yes', 'Email Notification Enable', 'input', 0),
 (20, 'pos_tax_enabled', 'Enable POS Tax', 'Yes', 'Enable or disable tax on POS bills', 'input', 0),
-(21, 'pos_tax_percentage', 'POS Tax Percentage', '1', 'Tax percentage to apply on POS bills', 'input', 0),
+(21, 'pos_tax_percentage', 'POS Tax Percentage', '2.5', 'Tax percentage to apply on POS bills', 'input', 0),
 (22, 'pos_receipt_print_type', 'POS Receipt Print Type', 'PDF', 'Set to PDF for direct PDF print popup, or HTML for the standard receipt style', 'check_box', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `currency_master`
+--
+
+CREATE TABLE `currency_master` (
+  `currency_id` int NOT NULL,
+  `currency_name` varchar(100) NOT NULL,
+  `currency_code` varchar(10) NOT NULL,
+  `currency_symbol` varchar(10) NOT NULL,
+  `status` enum('Active','Inactive') DEFAULT 'Active',
+  `added_by` int DEFAULT NULL,
+  `added_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_by` int DEFAULT NULL,
+  `updated_date` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `currency_master`
+--
+
+INSERT INTO `currency_master` (`currency_id`, `currency_name`, `currency_code`, `currency_symbol`, `status`, `added_by`, `added_date`, `updated_by`, `updated_date`) VALUES
+(1, 'Indian Rupee', 'INR', '₹', 'Active', NULL, '2026-09-17 14:04:04', NULL, NULL),
+(2, 'US Dollar', 'USD', '$', 'Active', NULL, '2026-09-17 14:04:04', NULL, NULL),
+(3, 'Euro', 'EUR', '€', 'Active', NULL, '2026-09-17 14:04:04', NULL, NULL),
+(4, 'British Pound', 'GBP', '£', 'Active', NULL, '2026-09-17 14:04:04', NULL, NULL),
+(5, 'Japanese Yen', 'JPY', '¥', 'Active', NULL, '2026-09-17 14:04:04', NULL, NULL),
+(6, 'Australian Dollar', 'AUD', 'A$', 'Active', NULL, '2026-09-17 14:04:04', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -422,12 +490,7 @@ CREATE TABLE `group_master` (
 
 INSERT INTO `group_master` (`group_master_id`, `group_name`, `group_code`, `status`) VALUES
 (1, 'Admin', 'Admin', 'Active'),
-(2, 'AROM', 'AROM', 'Active'),
-(5, 'Purchase', 'purchase', 'Active'),
-(6, 'Sales', 'sales', 'Active'),
-(7, 'Quality', 'quality', 'Active'),
-(13, 'Super Admin', 'super_admin', 'Active'),
-(14, 'Super Admin2', 'super_adminw', 'Active');
+(2, 'Super Admin', 'super_admin', 'Active');
 
 -- --------------------------------------------------------
 
@@ -455,29 +518,6 @@ INSERT INTO `group_rights` (`group_rights_id`, `group_master_id`, `menu_master_i
 (26, 1, 1, 'No', 'No', 'No', 'Yes', 'No', 'No'),
 (27, 1, 2, 'Yes', 'No', 'Yes', 'No', 'No', 'No'),
 (28, 1, 3, 'Yes', 'No', 'Yes', 'No', 'No', 'Yes');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `material_master`
---
-
-CREATE TABLE `material_master` (
-  `material_id` int NOT NULL,
-  `material_name` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Dumping data for table `material_master`
---
-
-INSERT INTO `material_master` (`material_id`, `material_name`) VALUES
-(1, 'Cotton'),
-(2, 'Denim'),
-(3, 'Silk'),
-(4, 'Polyester'),
-(5, 'Rayon'),
-(6, 'Linen');
 
 -- --------------------------------------------------------
 
@@ -525,6 +565,91 @@ INSERT INTO `menu_master` (`menu_master_id`, `menu_category_id`, `diaplay_name`,
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `product_activity_logs`
+--
+
+CREATE TABLE `product_activity_logs` (
+  `id` int NOT NULL,
+  `product_id` int DEFAULT NULL,
+  `product_name` varchar(255) NOT NULL,
+  `action_type` enum('created','updated','stock_added','stock_removed','stock_adjusted','sale','sale_return','purchase','purchase_return','deleted','restored') NOT NULL DEFAULT 'updated',
+  `old_values` longtext,
+  `new_values` longtext,
+  `qty_change` decimal(10,2) DEFAULT '0.00',
+  `price_change` decimal(10,2) DEFAULT '0.00',
+  `reference_no` varchar(100) DEFAULT NULL,
+  `remarks` text,
+  `created_by` int DEFAULT NULL,
+  `user_name` varchar(150) DEFAULT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `product_activity_logs`
+--
+
+INSERT INTO `product_activity_logs` (`id`, `product_id`, `product_name`, `action_type`, `old_values`, `new_values`, `qty_change`, `price_change`, `reference_no`, `remarks`, `created_by`, `user_name`, `ip_address`, `created_at`) VALUES
+(1, 1, 'Sample Product', 'created', NULL, NULL, '10.00', '150.00', 'PROD-001', 'Initial product creation log', 1, 'Admin', '127.0.0.1', '2026-09-16 14:06:04'),
+(2, 4, '', 'purchase', NULL, NULL, '0.00', '600.00', 'INV-4130', 'Stock added via Purchase Bill #INV-4130', 2, 'Admin', '::1', '2026-09-16 23:12:13'),
+(3, 1, '', 'sale', NULL, NULL, '-1.00', '999.00', 'INV-1933', 'Sold in Invoice #INV-1933 to Aarav Patel', 2, 'Admin', '::1', '2026-09-16 23:25:11'),
+(4, 3, '', 'purchase', NULL, NULL, '0.00', '600.00', 'ABS7485', 'Stock added via Purchase Bill #ABS7485', 2, 'Admin', '::1', '2026-09-16 23:32:31'),
+(7, 2, '', 'purchase', NULL, NULL, '0.00', '0.00', '', 'Stock added via Purchase Bill #', 2, 'Admin', '::1', '2026-09-16 23:36:49'),
+(9, 4, '', 'purchase', NULL, NULL, '1.00', '600.00', 'ABS7485', 'Stock added via Purchase Bill #ABS7485', 2, 'Admin', '::1', '2026-09-16 23:46:38'),
+(10, 2, '', 'sale', NULL, NULL, '-1.00', '1049.00', 'INV-1028', 'Sold in Invoice #INV-1028 to Aarav Patel', 2, 'Admin', '::1', '2026-09-16 23:47:59'),
+(11, 1, '', 'sale', NULL, NULL, '-1.00', '999.00', 'INV-3234', 'Sold in Invoice #INV-3234 to Nitesh', 17, 'arom', '::1', '2026-09-17 14:50:47'),
+(12, 3, '', 'purchase', NULL, NULL, '1.00', '600.00', 'ABS7485', 'Stock added via Purchase Bill #ABS7485', 17, 'arom', '::1', '2026-09-17 14:55:24'),
+(13, 1, '', 'sale', NULL, NULL, '-1.00', '999.00', 'INV-9424', 'Sold in Invoice #INV-9424 to Aarav Patel', 2, 'Admin', '::1', '2026-09-19 15:53:32');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_attributes`
+--
+
+CREATE TABLE `product_attributes` (
+  `attr_id` int NOT NULL,
+  `product_id` int NOT NULL,
+  `attr_name` varchar(255) NOT NULL,
+  `attr_value` varchar(255) NOT NULL,
+  `sort_order` int DEFAULT '0',
+  `added_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `product_attributes`
+--
+
+INSERT INTO `product_attributes` (`attr_id`, `product_id`, `attr_name`, `attr_value`, `sort_order`, `added_date`) VALUES
+(2, 18, 'Color', 'Pink', 0, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_images`
+--
+
+CREATE TABLE `product_images` (
+  `image_id` int NOT NULL,
+  `product_id` int NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `is_primary` tinyint(1) DEFAULT '0',
+  `sort_order` int DEFAULT '0',
+  `added_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `product_images`
+--
+
+INSERT INTO `product_images` (`image_id`, `product_id`, `image`, `is_primary`, `sort_order`, `added_date`) VALUES
+(2, 18, '1789324870_257_61xoq5p6L.ACUY1100.jpg', 0, 2, '2026-09-14 00:11:10'),
+(3, 18, '1789324870_363_91zeRsJ5OqL.ACUF10001000QL80.jpg', 0, 3, '2026-09-14 00:11:10'),
+(4, 16, '1789475255_332_360F3973439246WlXOaMVHNKkhMs2l8AHJ5e9MQ03YiBU.jpg', 0, 1, '2026-09-15 17:57:35');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `product_master`
 --
 
@@ -540,9 +665,11 @@ CREATE TABLE `product_master` (
   `alert_qty` int DEFAULT '0',
   `qty` int DEFAULT '0',
   `purchase_price` decimal(10,2) DEFAULT '0.00',
+  `purchase_currency_id` int DEFAULT NULL,
   `actual_price` decimal(10,2) DEFAULT '0.00',
   `discount` decimal(5,2) DEFAULT '0.00',
   `price` decimal(10,2) NOT NULL,
+  `selling_currency_id` int DEFAULT NULL,
   `tax_rate` decimal(5,2) DEFAULT '0.00',
   `description` text,
   `image` varchar(255) DEFAULT NULL,
@@ -561,23 +688,25 @@ CREATE TABLE `product_master` (
 -- Dumping data for table `product_master`
 --
 
-INSERT INTO `product_master` (`product_id`, `product_code`, `line_bar_code`, `name`, `category_id`, `brand_id`, `hsn_code`, `unit`, `alert_qty`, `qty`, `purchase_price`, `actual_price`, `discount`, `price`, `tax_rate`, `description`, `image`, `size`, `color`, `material`, `added_date`, `added_by`, `updated_date`, `updated_by`, `status`, `is_delete`) VALUES
-(1, 'MSH-BL-M', '8901234567890', 'Men\'s Formal Shirt', 1, 1, '6205', 'Piece', 10, 91, '400.00', '999.00', '0.00', '999.00', '5.00', 'Cotton formal shirt for men', 'b9fdda782294d749117005751d362a30.jpg', 'M', 'Blue', 'Cotton', '2025-05-25 10:00:00', 1, '2026-02-13 14:27:43', 2, 'Active', '0'),
-(2, 'MSH-BL-L', '8901234567891', 'Men\'s Formal Shirt', 1, 1, '6205', 'Piece', 10, 89, '400.00', '1049.00', '0.00', '1049.00', '5.00', 'Cotton formal shirt for men', 'shirt_blue_l.jpg', 'L', 'Blue', 'Cotton', '2025-05-25 10:00:00', 1, NULL, NULL, 'Active', '0'),
-(3, 'MJE-BK-32', '8901234567892', 'Men\'s Slim Fit Jeans', 1, 2, '6203', 'Piece', 5, 87, '600.00', '1499.00', '0.00', '1499.00', '12.00', 'Black slim fit denim jeans', 'jeans_black_32.jpg', '32', 'Black', 'Denim', '2025-05-25 10:05:00', 1, NULL, NULL, 'Active', '0'),
-(4, 'MJE-BK-34', '8901234567893', 'Men\'s Slim Fit Jeans', 1, 2, '6203', 'Piece', 5, 40, '600.00', '1499.00', '0.00', '1499.00', '12.00', 'Black slim fit denim jeans', '6bc18672f260b5a82883c63701e97039.jpg', '34', 'Black', 'Denim', '2025-05-25 10:05:00', 1, '2026-08-25 13:52:01', 2, 'Active', '0'),
-(5, 'WKU-RD-S', '8901234567894', 'Women\'s Cotton Kurti', 2, 1, '6204', 'Piece', 8, 57, '250.00', '599.00', '0.00', '599.00', '5.00', 'Traditional red cotton kurti', 'kurti_red_s.jpg', 'S', 'Red', 'Cotton', '2025-05-25 10:10:00', 1, NULL, NULL, 'Active', '0'),
-(6, 'WKU-RD-M', '8901234567895', 'Women\'s Cotton Kurti', 2, 1, '6204', 'Piece', 8, 54, '250.00', '599.00', '0.00', '599.00', '5.00', 'Traditional red cotton kurti', 'kurti_red_m.jpg', 'M', 'Red', 'Cotton', '2025-05-25 10:10:00', 1, NULL, NULL, 'Active', '0'),
-(7, 'MTS-WH-M', '8901234567896', 'Men\'s Polo T-Shirt', 1, 2, '6109', 'Piece', 15, 120, '200.00', '499.00', '0.00', '499.00', '5.00', 'White polo t-shirt', 'tshirt_white_m.jpg', 'M', 'White', 'Cotton Blend', '2025-05-25 10:15:00', 1, NULL, NULL, 'Active', '0'),
-(8, 'WDR-PK-L', '8901234567897', 'Women\'s Floral Dress', 2, 2, '6204', 'Piece', 5, 29, '500.00', '1299.00', '0.00', '1299.00', '12.00', 'Pink floral summer dress', 'dress_pink_l.jpg', 'L', 'Pink', 'Rayon', '2025-05-25 10:20:00', 1, NULL, NULL, 'Active', '0'),
-(9, 'KTS-YL-4', '8901234567898', 'Kid\'s Cartoon T-Shirt', 3, 1, '6109', 'Piece', 10, 25, '150.00', '349.00', '0.00', '349.00', '5.00', 'Yellow t-shirt with cartoon print', 'kid_tshirt_yellow.jpg', '4Y', 'Yellow', 'Cotton', '2025-05-25 10:25:00', 1, NULL, NULL, 'Active', '0'),
-(10, 'MSP-GR-40', '8901234567899', 'Men\'s Sports Track Pant', 1, 2, '6103', 'Piece', 8, 23, '350.00', '799.00', '0.00', '799.00', '12.00', 'Grey sports track pant', 'trackpant_grey.jpg', '40', 'Grey', 'Polyester', '2025-05-25 10:30:00', 1, NULL, NULL, 'Active', '0'),
-(11, 'PRD-1770972630', '1770972630785', 'Shirt', 2, 2, '87089900', 'Meter', 10, 4, '400.00', '400.00', '0.00', '400.00', '5.00', 'Shirt', '6c1364f279e52cd74aa8599f50d2a108.png', 'M', 'Blue', 'Cotton', '2026-02-13 14:20:30', 2, NULL, NULL, 'Active', '0'),
-(12, 'PRD-1770972658', '1770972658401', 'Shirt', 2, 2, '87089900', 'Meter', 10, 93, '400.00', '400.00', '0.00', '400.00', '5.00', 'Shirt', '0053fc7155b1d22deb004fa42caca3db.webp', 'M', 'Blue', 'Cotton', '2026-02-13 14:20:58', 2, '2026-09-01 14:10:44', 2, 'Active', '0'),
-(13, 'PRD-1770972672', '1770972672274', 'Shirt', 2, 2, '87089900', 'Meter', 10, 4, '400.00', '400.00', '0.00', '400.00', '5.00', 'Shirt', '4887b134ef1be4f4a12bb0d44db38e2b.png', 'M', 'Blue', 'Cotton', '2026-02-13 14:21:12', 2, NULL, NULL, 'Active', '0'),
-(14, 'PRD-1770972756', '1770972756827', 'Shirt', 2, 2, '87089900', 'Meter', 10, 4, '400.00', '400.00', '0.00', '400.00', '5.00', 'Shirt', 'e40d332aa26e9298207b1ff384edff4c.png', 'M', 'Blue', 'Cotton', '2026-02-13 14:22:36', 2, '2026-02-13 14:27:24', 2, 'Active', '0'),
-(15, 'PRD-1787407614', '1787407614602', 'Tables', 1, 2, '84779000', 'Meter', 1, 10, '700.00', '300.00', '0.00', '300.00', '0.00', 'ajsdvhsaj', '9ddea82f903ebb1968464ead6a9480f4.png', '123', 'Green', 'Cotton', '2026-08-22 19:36:54', 2, NULL, NULL, 'Active', '0'),
-(16, 'PRD-1788069818', '1788069818659', 'Iphone 17 Pro', 10, 8, '84779000', 'Piece', 20, 206, '8000.00', '10000.00', '0.00', '10000.00', '0.00', 'Iphone 17 Pro', '8d83276687f8d650127f77641a67d230.webp', '', 'Red', 'Metal', '2026-08-30 11:33:38', 2, '2026-09-12 00:12:21', 2, 'Active', '0');
+INSERT INTO `product_master` (`product_id`, `product_code`, `line_bar_code`, `name`, `category_id`, `brand_id`, `hsn_code`, `unit`, `alert_qty`, `qty`, `purchase_price`, `purchase_currency_id`, `actual_price`, `discount`, `price`, `selling_currency_id`, `tax_rate`, `description`, `image`, `size`, `color`, `material`, `added_date`, `added_by`, `updated_date`, `updated_by`, `status`, `is_delete`) VALUES
+(1, 'MSH-BL-M', '8901234567890', 'Men\'s Formal Shirt', 1, 1, '6205', 'Piece', 10, 85, '400.00', 1, '999.00', '0.00', '999.00', 1, '5.00', 'Cotton formal shirt for men', 'b9fdda782294d749117005751d362a30.jpg', 'M', 'Blue', 'Cotton', '2025-05-25 10:00:00', 1, '2026-02-13 14:27:43', 2, 'Active', '0'),
+(2, 'MSH-BL-L', '8901234567891', 'Men\'s Formal Shirt', 1, 1, '6205', 'Piece', 10, 90, '400.00', 1, '1049.00', '0.00', '1049.00', 1, '5.00', 'Cotton formal shirt for men', 'shirt_blue_l.jpg', 'L', 'Blue', 'Cotton', '2025-05-25 10:00:00', 1, NULL, NULL, 'Active', '0'),
+(3, 'MJE-BK-32', '8901234567892', 'Men\'s Slim Fit Jeans', 1, 2, '6203', 'Piece', 5, 88, '600.00', 1, '1499.00', '0.00', '1499.00', 1, '12.00', 'Black slim fit denim jeans', 'jeans_black_32.jpg', '32', 'Black', 'Denim', '2025-05-25 10:05:00', 1, NULL, NULL, 'Active', '0'),
+(4, 'MJE-BK-34', '8901234567893', 'Men\'s Slim Fit Jeans', 1, 2, '6203', 'Piece', 5, 40, '600.00', 1, '1499.00', '0.00', '1499.00', 1, '12.00', 'Black slim fit denim jeans', '6bc18672f260b5a82883c63701e97039.jpg', '34', 'Black', 'Denim', '2025-05-25 10:05:00', 1, '2026-08-25 13:52:01', 2, 'Active', '0'),
+(5, 'WKU-RD-S', '8901234567894', 'Women\'s Cotton Kurti', 2, 1, '6204', 'Piece', 8, 57, '250.00', 1, '599.00', '0.00', '599.00', 1, '5.00', 'Traditional red cotton kurti', 'kurti_red_s.jpg', 'S', 'Red', 'Cotton', '2025-05-25 10:10:00', 1, NULL, NULL, 'Active', '0'),
+(6, 'WKU-RD-M', '8901234567895', 'Women\'s Cotton Kurti', 2, 1, '6204', 'Piece', 8, 54, '250.00', 1, '599.00', '0.00', '599.00', 1, '5.00', 'Traditional red cotton kurti', 'kurti_red_m.jpg', 'M', 'Red', 'Cotton', '2025-05-25 10:10:00', 1, NULL, NULL, 'Active', '0'),
+(7, 'MTS-WH-M', '8901234567896', 'Men\'s Polo T-Shirt', 1, 2, '6109', 'Piece', 15, 120, '200.00', 1, '499.00', '0.00', '499.00', 1, '5.00', 'White polo t-shirt', 'tshirt_white_m.jpg', 'M', 'White', 'Cotton Blend', '2025-05-25 10:15:00', 1, NULL, NULL, 'Active', '0'),
+(8, 'WDR-PK-L', '8901234567897', 'Women\'s Floral Dress', 2, 2, '6204', 'Piece', 5, 28, '500.00', 1, '1299.00', '0.00', '1299.00', 1, '12.00', 'Pink floral summer dress', 'dress_pink_l.jpg', 'L', 'Pink', 'Rayon', '2025-05-25 10:20:00', 1, NULL, NULL, 'Active', '0'),
+(9, 'KTS-YL-4', '8901234567898', 'Kid\'s Cartoon T-Shirt', 3, 1, '6109', 'Piece', 10, 25, '150.00', 1, '349.00', '0.00', '349.00', 1, '5.00', 'Yellow t-shirt with cartoon print', 'kid_tshirt_yellow.jpg', '4Y', 'Yellow', 'Cotton', '2025-05-25 10:25:00', 1, NULL, NULL, 'Active', '0'),
+(10, 'MSP-GR-40', '8901234567899', 'Men\'s Sports Track Pant', 1, 2, '6103', 'Piece', 8, 23, '350.00', 1, '799.00', '0.00', '799.00', 1, '12.00', 'Grey sports track pant', 'trackpant_grey.jpg', '40', 'Grey', 'Polyester', '2025-05-25 10:30:00', 1, NULL, NULL, 'Active', '0'),
+(11, 'PRD-1770972630', '1770972630785', 'Shirt', 2, 2, '87089900', 'Meter', 10, 4, '400.00', 1, '400.00', '0.00', '400.00', 1, '5.00', 'Shirt', '6c1364f279e52cd74aa8599f50d2a108.png', 'M', 'Blue', 'Cotton', '2026-02-13 14:20:30', 2, NULL, NULL, 'Active', '0'),
+(12, 'PRD-1770972658', '1770972658401', 'Shirt', 2, 2, '87089900', 'Meter', 10, 93, '400.00', 1, '400.00', '0.00', '400.00', 1, '5.00', 'Shirt', '0053fc7155b1d22deb004fa42caca3db.webp', 'M', 'Blue', 'Cotton', '2026-02-13 14:20:58', 2, '2026-09-01 14:10:44', 2, 'Active', '0'),
+(13, 'PRD-1770972672', '1770972672274', 'Shirt', 2, 2, '87089900', 'Meter', 10, 4, '400.00', 1, '400.00', '0.00', '400.00', 1, '5.00', 'Shirt', '4887b134ef1be4f4a12bb0d44db38e2b.png', 'M', 'Blue', 'Cotton', '2026-02-13 14:21:12', 2, NULL, NULL, 'Active', '0'),
+(14, 'PRD-1770972756', '1770972756827', 'Shirt', 2, 2, '87089900', 'Meter', 10, 4, '400.00', 1, '400.00', '0.00', '400.00', 1, '5.00', 'Shirt', 'e40d332aa26e9298207b1ff384edff4c.png', 'M', 'Blue', 'Cotton', '2026-02-13 14:22:36', 2, '2026-02-13 14:27:24', 2, 'Active', '0'),
+(15, 'PRD-1787407614', '1787407614602', 'Tables', 1, 2, '84779000', 'Meter', 1, 10, '700.00', 1, '300.00', '0.00', '300.00', 1, '0.00', 'ajsdvhsaj', '9ddea82f903ebb1968464ead6a9480f4.png', '123', 'Green', 'Cotton', '2026-08-22 19:36:54', 2, NULL, NULL, 'Active', '0'),
+(16, 'PRD-1788069818', '1788069818659', 'Iphone 17 Pro', 10, 8, '84779000', 'Piece', 20, 206, '8000.00', 1, '10000.00', '0.00', '10000.00', 1, '0.00', 'Iphone 17 Pro', '1789475255_363_91zeRsJ5OqL.ACUF10001000QL80.jpg', NULL, NULL, NULL, '2026-08-30 11:33:38', 2, '2026-09-15 17:57:35', 2, 'Active', '0'),
+(17, 'PRD-1789322723', '1789322723832', 'Electronic', 3, 4, '87089900', 'Piece', 5, 102, '8000.00', 1, '10000.00', '0.00', '10000.00', 1, '0.00', 'Testing', NULL, NULL, NULL, NULL, '2026-09-13 23:35:23', 2, '2026-09-17 14:09:41', 2, 'Active', '0'),
+(18, 'PRD-1789324156', '1789324156559', 'Rose Keychainss', 13, 5, '6203', 'Piece', 10, 500, '7000.00', 1, '7845.00', '2.00', '7688.10', 1, '0.00', 'Focus on benefits: Explain how the product improves the buyer\'s life rather than just listing dry specifications.Know your audience: Address the specific problems, goals, and pain points of your target buyers.Keep it skimmable: Use short sentences, clear paragraphs, and bullet points so readers can find key facts fast.', '1789324870_580_37.jpg', NULL, NULL, NULL, '2026-09-13 23:59:16', 2, '2026-09-14 00:11:57', 2, 'Active', '0');
 
 -- --------------------------------------------------------
 
@@ -606,7 +735,16 @@ INSERT INTO `purchase_details` (`purchase_detail_id`, `purchase_id`, `product_id
 (4, 4, 16, 1, '7000.00', '0.00', '7000.00'),
 (5, 5, 2, 1, '400.00', '0.00', '400.00'),
 (6, 6, 2, 1, '400.00', '0.00', '400.00'),
-(7, 6, 2, 1, '400.00', '0.00', '400.00');
+(7, 6, 2, 1, '400.00', '0.00', '400.00'),
+(8, 7, 2, 3, '400.00', '0.00', '1200.00'),
+(9, 8, 4, 0, '600.00', '0.00', '0.00'),
+(10, 9, 3, 0, '600.00', '0.00', '0.00'),
+(11, 10, 0, 1, '0.00', '0.00', '0.00'),
+(12, 11, 0, 1, '0.00', '0.00', '0.00'),
+(13, 12, 2, 0, '0.00', '0.00', '0.00'),
+(14, 13, 0, 1, '0.00', '0.00', '0.00'),
+(15, 14, 4, 1, '600.00', '0.00', '600.00'),
+(16, 15, 3, 1, '600.00', '0.00', '600.00');
 
 -- --------------------------------------------------------
 
@@ -637,7 +775,16 @@ INSERT INTO `purchase_master` (`purchase_id`, `supplier_id`, `bill_no`, `purchas
 (3, 3, 'BN00001', '2026-08-30', '800000.00', '0.00', 'Unpaid', 'Completed', '2026-08-30 11:45:20', 2),
 (4, 3, 'BN00001', '2026-08-30', '7000.00', '0.00', 'Unpaid', 'Completed', '2026-08-30 15:03:04', 2),
 (5, 3, 'ABS7485', '2026-09-12', '400.00', '0.00', 'Unpaid', 'Completed', '2026-09-12 01:06:53', 2),
-(6, 3, 'ABS7485', '2026-09-12', '800.00', '0.00', 'Unpaid', 'Completed', '2026-09-12 11:35:30', 2);
+(6, 3, 'ABS7485', '2026-09-12', '800.00', '0.00', 'Unpaid', 'Completed', '2026-09-12 11:35:30', 2),
+(7, 2, 'INV-4130', '2026-09-13', '1200.00', '0.00', 'Unpaid', 'Completed', '2026-09-13 15:42:34', 2),
+(8, 3, 'INV-4130', '2026-09-16', '0.00', '0.00', 'Unpaid', 'Completed', '2026-09-16 23:12:13', 2),
+(9, 3, 'ABS7485', '2026-09-16', '0.00', '0.00', 'Unpaid', 'Completed', '2026-09-16 23:32:31', 2),
+(10, 0, '', '2026-09-16', '0.00', '0.00', 'Unpaid', 'Completed', '2026-09-16 23:35:55', 2),
+(11, 0, '', '2026-09-16', '0.00', '0.00', 'Unpaid', 'Completed', '2026-09-16 23:36:32', 2),
+(12, 3, '', '2026-09-16', '0.00', '0.00', 'Unpaid', 'Completed', '2026-09-16 23:36:49', 2),
+(13, 0, '', '2026-09-16', '0.00', '0.00', 'Unpaid', 'Completed', '2026-09-16 23:41:29', 2),
+(14, 3, 'ABS7485', '2026-09-16', '600.00', '0.00', 'Unpaid', 'Completed', '2026-09-16 23:46:38', 2),
+(15, 3, 'ABS7485', '2026-09-17', '600.00', '0.00', 'Unpaid', 'Completed', '2026-09-17 14:55:24', 17);
 
 -- --------------------------------------------------------
 
@@ -660,7 +807,8 @@ CREATE TABLE `purchase_return_details` (
 
 INSERT INTO `purchase_return_details` (`return_detail_id`, `return_id`, `product_id`, `qty`, `purchase_price`, `total_amount`) VALUES
 (1, 1, 3, 5, '600.00', '3000.00'),
-(2, 2, 16, 50, '8000.00', '400000.00');
+(2, 2, 16, 50, '8000.00', '400000.00'),
+(3, 3, 2, 1, '400.00', '400.00');
 
 -- --------------------------------------------------------
 
@@ -685,7 +833,8 @@ CREATE TABLE `purchase_return_master` (
 
 INSERT INTO `purchase_return_master` (`return_id`, `purchase_id`, `return_no`, `return_date`, `total_return_amount`, `remarks`, `added_date`, `added_by`) VALUES
 (1, 1, 'RET-3894', '2026-02-16', '3000.00', '', '2026-02-16 14:10:32', 17),
-(2, 3, 'RET-7824', '2026-08-30', '400000.00', 'Extra qty', '2026-08-30 11:49:50', 2);
+(2, 3, 'RET-7824', '2026-08-30', '400000.00', 'Extra qty', '2026-08-30 11:49:50', 2),
+(3, 6, 'RET-3236', '2026-09-13', '400.00', '', '2026-09-13 22:53:00', 2);
 
 -- --------------------------------------------------------
 
@@ -744,7 +893,14 @@ INSERT INTO `sales_details` (`sales_detail_id`, `sales_id`, `product_id`, `qty`,
 (38, 33, 15, 1, '300.00', '300.00'),
 (39, 34, 16, 2, '10000.00', '20000.00'),
 (40, 35, 1, 1, '999.00', '999.00'),
-(41, 35, 2, 1, '1049.00', '1049.00');
+(41, 35, 2, 1, '1049.00', '1049.00'),
+(42, 36, 1, 4, '999.00', '3996.00'),
+(43, 36, 4, 1, '1499.00', '1499.00'),
+(44, 36, 8, 1, '1299.00', '1299.00'),
+(45, 37, 1, 1, '999.00', '999.00'),
+(46, 38, 2, 1, '1049.00', '1049.00'),
+(52, 44, 1, 1, '999.00', '999.00'),
+(53, 45, 1, 1, '999.00', '999.00');
 
 -- --------------------------------------------------------
 
@@ -806,7 +962,12 @@ INSERT INTO `sales_master` (`sales_id`, `customer_id`, `customer_phone_number`, 
 (32, NULL, '8485835691', 'Aarbaj', 'POS-1788031819', '2026-08-30', '1499.00', '0.00', '0.00', '1513.99', '1513.99', 'Paid', 'UPI', '2026-08-30 01:00:44', 2),
 (33, NULL, '8485835691', 'Aarbaj', 'POS-1788070138', '2026-08-30', '40300.00', '0.00', '0.00', '40703.00', '40703.00', 'Paid', 'Card', '2026-08-30 11:41:26', 2),
 (34, NULL, '8495838282', 'Gayatri ', 'POS-1788071227', '2026-08-30', '20000.00', '0.00', '0.00', '20200.00', '20200.00', 'Paid', 'Card', '2026-08-30 11:58:27', 2),
-(35, NULL, '9874563210', 'Aarav Patel', 'INV-8476', '2026-09-12', '2048.00', '0.00', '0.00', '2048.00', '2048.00', 'Paid', 'Cash', '2026-09-12 01:05:16', 2);
+(35, NULL, '9874563210', 'Aarav Patel', 'INV-8476', '2026-09-12', '2048.00', '0.00', '0.00', '2048.00', '2048.00', 'Paid', 'Cash', '2026-09-12 01:05:16', 2),
+(36, NULL, '9874563210', 'Gayu Hedau', 'INV-6974', '2026-09-13', '6794.00', '0.00', '0.00', '6794.00', '6794.00', 'Paid', 'Cash', '2026-09-13 16:07:18', 2),
+(37, NULL, '9874563210', 'Aarav Patel', 'INV-1933', '2026-09-16', '999.00', '0.00', '0.00', '999.00', '999.00', 'Paid', 'Cash', '2026-09-16 23:25:11', 2),
+(38, NULL, '9874563210', 'Aarav Patel', 'INV-1028', '2026-09-16', '1049.00', '0.00', '50.00', '999.00', '999.00', 'Paid', 'Cash', '2026-09-16 23:47:59', 2),
+(44, NULL, '9874563210', 'Nitesh', 'INV-3234', '2026-09-17', '999.00', '0.00', '0.00', '999.00', '999.00', 'Paid', 'Cash', '2026-09-17 14:50:47', 17),
+(45, NULL, '9874563210', 'Aarav Patel', 'INV-9424', '2026-09-19', '999.00', '0.00', '0.00', '999.00', '999.00', 'Paid', 'Cash', '2026-09-19 15:53:32', 2);
 
 -- --------------------------------------------------------
 
@@ -830,7 +991,8 @@ CREATE TABLE `sales_return_details` (
 INSERT INTO `sales_return_details` (`return_detail_id`, `return_id`, `product_id`, `qty`, `sale_price`, `total_amount`) VALUES
 (1, 1, 3, 1, '480.00', '480.00'),
 (2, 2, 4, 1, '1499.00', '1499.00'),
-(3, 3, 15, 1, '300.00', '300.00');
+(3, 3, 15, 1, '300.00', '300.00'),
+(4, 4, 1, 1, '999.00', '999.00');
 
 -- --------------------------------------------------------
 
@@ -856,32 +1018,8 @@ CREATE TABLE `sales_return_master` (
 INSERT INTO `sales_return_master` (`return_id`, `sales_id`, `return_no`, `return_date`, `total_return_amount`, `remarks`, `added_date`, `added_by`) VALUES
 (1, 1, 'RET-1771232608', '2026-02-17', '480.00', 'Remarks', '2026-02-16 14:33:57', 17),
 (2, 14, 'SR-1780304144', '2026-06-01', '1499.00', '', '2026-06-01 14:25:44', 2),
-(3, 33, 'SR-1788070939', '2026-08-30', '300.00', 'Damage', '2026-08-30 11:52:19', 2);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `size_master`
---
-
-CREATE TABLE `size_master` (
-  `size_id` int NOT NULL,
-  `size_name` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Dumping data for table `size_master`
---
-
-INSERT INTO `size_master` (`size_id`, `size_name`) VALUES
-(1, 'S'),
-(2, 'M'),
-(3, 'L'),
-(4, 'XL'),
-(5, 'XXL'),
-(6, '32'),
-(7, '34'),
-(8, '36');
+(3, 33, 'SR-1788070939', '2026-08-30', '300.00', 'Damage', '2026-08-30 11:52:19', 2),
+(4, 35, 'SR-1789319503', '2026-09-13', '999.00', '', '2026-09-13 22:41:43', 2);
 
 -- --------------------------------------------------------
 
@@ -959,7 +1097,27 @@ INSERT INTO `stock_master` (`stock_id`, `product_id`, `qty`, `previous_qty`, `ne
 (55, 2, -1, 87, 86, 'Sale Bill No: INV-8476', 2, '2026-09-12 01:05:16'),
 (56, 2, 1, 86, 87, 'Purchase Bill No: ABS7485', 2, '2026-09-12 01:06:53'),
 (57, 2, 1, 87, 88, 'Purchase Bill No: ABS7485', 2, '2026-09-12 11:35:30'),
-(58, 2, 1, 88, 89, 'Purchase Bill No: ABS7485', 2, '2026-09-12 11:35:30');
+(58, 2, 1, 88, 89, 'Purchase Bill No: ABS7485', 2, '2026-09-12 11:35:30'),
+(59, 2, 3, 89, 92, 'Purchase Bill No: INV-4130', 2, '2026-09-13 15:42:34'),
+(60, 1, -4, 91, 87, 'Sale Bill No: INV-6974', 2, '2026-09-13 16:07:18'),
+(61, 4, -1, 40, 39, 'Sale Bill No: INV-6974', 2, '2026-09-13 16:07:18'),
+(62, 8, -1, 29, 28, 'Sale Bill No: INV-6974', 2, '2026-09-13 16:07:18'),
+(63, 1, 1, 87, 88, 'Sales Return ID: 4 (Against Bill: SR-1789319503)', 2, '2026-09-13 22:41:43'),
+(64, 2, -1, 92, 91, 'Purchase Return No: RET-3236 (Original Bill: 6)', 2, '2026-09-13 22:53:00'),
+(65, 17, 52, 40, 92, '', 2, '2026-09-16 14:24:11'),
+(66, 4, 0, 39, 39, 'Purchase Bill No: INV-4130', 2, '2026-09-16 23:12:13'),
+(67, 1, -1, 88, 87, 'Sale Bill No: INV-1933', 2, '2026-09-16 23:25:11'),
+(68, 3, 0, 87, 87, 'Purchase Bill No: ABS7485', 2, '2026-09-16 23:32:31'),
+(69, 0, 1, 0, 1, 'Purchase Bill No: ', 2, '2026-09-16 23:35:55'),
+(70, 0, 1, 0, 1, 'Purchase Bill No: ', 2, '2026-09-16 23:36:32'),
+(71, 2, 0, 91, 91, 'Purchase Bill No: ', 2, '2026-09-16 23:36:49'),
+(72, 0, 1, 0, 1, 'Purchase Bill No: ', 2, '2026-09-16 23:41:29'),
+(73, 4, 1, 39, 40, 'Purchase Bill No: ABS7485', 2, '2026-09-16 23:46:38'),
+(74, 2, -1, 91, 90, 'Sale Bill No: INV-1028', 2, '2026-09-16 23:47:59'),
+(75, 17, 10, 92, 102, '10 qty update', 2, '2026-09-17 12:33:26'),
+(76, 1, -1, 87, 86, 'Sale Bill No: INV-3234', 17, '2026-09-17 14:50:47'),
+(77, 3, 1, 87, 88, 'Purchase Bill No: ABS7485', 17, '2026-09-17 14:55:24'),
+(78, 1, -1, 86, 85, 'Sale Bill No: INV-9424', 2, '2026-09-19 15:53:32');
 
 -- --------------------------------------------------------
 
@@ -988,7 +1146,7 @@ CREATE TABLE `supplier_master` (
 INSERT INTO `supplier_master` (`supplier_id`, `supplier_name`, `contact_person`, `email`, `phone`, `address`, `gst_number`, `status`, `is_delete`, `added_date`, `added_by`) VALUES
 (1, 'Vardan Textiles', 'Rajesh Kumar', 'vardan@textiles.com', '9890012345', NULL, '27AAACV1234R1Z1', 'Active', 0, '2026-02-16 08:23:17', NULL),
 (2, 'Everest Cloths', 'Sunita Sharma', 'sales@everest.com', '9890054321', '', '27BBBCV4321S1Z2', 'Active', 0, '2026-02-16 08:23:17', NULL),
-(3, 'Abhishek Treder', 'Rehan Mulla', 'rehan1@yopmail.com', '8485835691', 'Pattan kodoli', 'GST0000000090912133', 'Active', 0, '2026-08-30 11:44:28', 2);
+(3, 'Abhishek Treder', 'Rehan Mulla', 'rehan1@yopmail.com', '8485835691', 'Pattan kodoli, Kolhapur', 'GST0000000090912133', 'Active', 0, '2026-08-30 11:44:28', 2);
 
 -- --------------------------------------------------------
 
@@ -998,18 +1156,26 @@ INSERT INTO `supplier_master` (`supplier_id`, `supplier_name`, `contact_person`,
 
 CREATE TABLE `unit_master` (
   `unit_id` int NOT NULL,
-  `unit_name` varchar(50) NOT NULL
+  `unit_name` varchar(50) NOT NULL,
+  `unit_code` varchar(100) DEFAULT NULL,
+  `status` enum('Active','Inactive') NOT NULL DEFAULT 'Active',
+  `is_delete` tinyint(1) NOT NULL DEFAULT '0',
+  `added_date` datetime DEFAULT NULL,
+  `added_by` int DEFAULT NULL,
+  `updated_date` datetime DEFAULT NULL,
+  `updated_by` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Dumping data for table `unit_master`
 --
 
-INSERT INTO `unit_master` (`unit_id`, `unit_name`) VALUES
-(1, 'Pieces'),
-(2, 'Meters'),
-(3, 'Sets'),
-(4, 'Rolls');
+INSERT INTO `unit_master` (`unit_id`, `unit_name`, `unit_code`, `status`, `is_delete`, `added_date`, `added_by`, `updated_date`, `updated_by`) VALUES
+(1, 'Pieces', NULL, 'Active', 1, NULL, NULL, '2026-09-17 20:09:08', 2),
+(2, 'Meters', NULL, 'Active', 0, NULL, NULL, NULL, NULL),
+(3, 'Sets', NULL, 'Active', 0, NULL, NULL, NULL, NULL),
+(4, 'Rolls', NULL, 'Active', 0, NULL, NULL, '2026-09-14 23:23:36', 2),
+(5, 'Kg', 'UNT-202609145', 'Active', 0, '2026-09-14 23:23:48', 2, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1020,7 +1186,7 @@ INSERT INTO `unit_master` (`unit_id`, `unit_name`) VALUES
 CREATE TABLE `userinfo` (
   `id` int NOT NULL,
   `user_email` text,
-  `user_role` text,
+  `user_role` int DEFAULT NULL,
   `user_name` varchar(255) DEFAULT NULL,
   `user_password` text,
   `added_date` datetime DEFAULT NULL,
@@ -1037,36 +1203,37 @@ CREATE TABLE `userinfo` (
 --
 
 INSERT INTO `userinfo` (`id`, `user_email`, `user_role`, `user_name`, `user_password`, `added_date`, `added_by`, `deleted`, `unit_ids`, `groups`, `login_attempt`, `status`) VALUES
-(1, 'codecrafterinfotech@gmail.com', 'Admin', 'Code Crafter', 'Test@123', '2024-11-19 12:41:29', 3, NULL, '1,2', '1', 0, 'Active'),
-(2, 'admin@gmail.com', 'Admin', 'Admin', 'Test@123', '2024-11-19 12:42:40', 3, '0', '1,2', '1', 0, 'Active');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `users`
---
-
-CREATE TABLE `users` (
-  `id` bigint UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(5, 'Salman', 'salman@gmail.com', NULL, '$2y$12$fs7BtR3u9LWaPJQ4OzKuEOIBddsTZPjw4NBC3W1xu4c7zqlsUeB4y', NULL, '2025-03-12 04:16:29', '2025-03-12 04:16:29');
+(1, 'codecrafterinfotech@gmail.com', 2, 'Code Crafter', 'Test@123', '2024-11-19 12:41:29', 3, NULL, '', '1', 0, 'Active'),
+(2, 'admin@gmail.com', 1, 'Admin', 'Test@123', '2024-11-19 12:42:40', 3, '0', '', '1', 0, 'Active');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `activity_logs`
+--
+ALTER TABLE `activity_logs`
+  ADD PRIMARY KEY (`log_id`);
+
+--
+-- Indexes for table `activity_log_new`
+--
+ALTER TABLE `activity_log_new`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_activity_code` (`activity_code`),
+  ADD KEY `idx_module` (`module`),
+  ADD KEY `idx_reference_id` (`reference_id`),
+  ADD KEY `idx_reference_no` (`reference_no`),
+  ADD KEY `idx_user_id` (`user_id`),
+  ADD KEY `idx_created_at` (`created_at`);
+
+--
+-- Indexes for table `activity_master`
+--
+ALTER TABLE `activity_master`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `idx_activity_code` (`activity_code`);
 
 --
 -- Indexes for table `attributes`
@@ -1087,18 +1254,6 @@ ALTER TABLE `categories`
   ADD PRIMARY KEY (`category_id`);
 
 --
--- Indexes for table `client`
---
-ALTER TABLE `client`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `color_master`
---
-ALTER TABLE `color_master`
-  ADD PRIMARY KEY (`color_id`);
-
---
 -- Indexes for table `company_master`
 --
 ALTER TABLE `company_master`
@@ -1110,6 +1265,12 @@ ALTER TABLE `company_master`
 --
 ALTER TABLE `config_setting`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `currency_master`
+--
+ALTER TABLE `currency_master`
+  ADD PRIMARY KEY (`currency_id`);
 
 --
 -- Indexes for table `customer_master`
@@ -1155,12 +1316,6 @@ ALTER TABLE `group_rights`
   ADD PRIMARY KEY (`group_rights_id`);
 
 --
--- Indexes for table `material_master`
---
-ALTER TABLE `material_master`
-  ADD PRIMARY KEY (`material_id`);
-
---
 -- Indexes for table `menu_category`
 --
 ALTER TABLE `menu_category`
@@ -1171,6 +1326,30 @@ ALTER TABLE `menu_category`
 --
 ALTER TABLE `menu_master`
   ADD PRIMARY KEY (`menu_master_id`);
+
+--
+-- Indexes for table `product_activity_logs`
+--
+ALTER TABLE `product_activity_logs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_product_id` (`product_id`),
+  ADD KEY `idx_action_type` (`action_type`),
+  ADD KEY `idx_created_by` (`created_by`),
+  ADD KEY `idx_created_at` (`created_at`);
+
+--
+-- Indexes for table `product_attributes`
+--
+ALTER TABLE `product_attributes`
+  ADD PRIMARY KEY (`attr_id`),
+  ADD KEY `fk_pa_product_id` (`product_id`);
+
+--
+-- Indexes for table `product_images`
+--
+ALTER TABLE `product_images`
+  ADD PRIMARY KEY (`image_id`),
+  ADD KEY `fk_pi_product_id` (`product_id`);
 
 --
 -- Indexes for table `product_master`
@@ -1230,12 +1409,6 @@ ALTER TABLE `sales_return_master`
   ADD PRIMARY KEY (`return_id`);
 
 --
--- Indexes for table `size_master`
---
-ALTER TABLE `size_master`
-  ADD PRIMARY KEY (`size_id`);
-
---
 -- Indexes for table `stock_master`
 --
 ALTER TABLE `stock_master`
@@ -1260,45 +1433,44 @@ ALTER TABLE `userinfo`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `users_email_unique` (`email`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `activity_logs`
+--
+ALTER TABLE `activity_logs`
+  MODIFY `log_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `activity_log_new`
+--
+ALTER TABLE `activity_log_new`
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `activity_master`
+--
+ALTER TABLE `activity_master`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `attributes`
 --
 ALTER TABLE `attributes`
-  MODIFY `attribute_id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `attribute_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `brands`
 --
 ALTER TABLE `brands`
-  MODIFY `brand_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `brand_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `category_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- AUTO_INCREMENT for table `client`
---
-ALTER TABLE `client`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `color_master`
---
-ALTER TABLE `color_master`
-  MODIFY `color_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `category_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `company_master`
@@ -1310,7 +1482,13 @@ ALTER TABLE `company_master`
 -- AUTO_INCREMENT for table `config_setting`
 --
 ALTER TABLE `config_setting`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+
+--
+-- AUTO_INCREMENT for table `currency_master`
+--
+ALTER TABLE `currency_master`
+  MODIFY `currency_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `customer_master`
@@ -1355,12 +1533,6 @@ ALTER TABLE `group_rights`
   MODIFY `group_rights_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
--- AUTO_INCREMENT for table `material_master`
---
-ALTER TABLE `material_master`
-  MODIFY `material_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
 -- AUTO_INCREMENT for table `menu_category`
 --
 ALTER TABLE `menu_category`
@@ -1373,70 +1545,82 @@ ALTER TABLE `menu_master`
   MODIFY `menu_master_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `product_activity_logs`
+--
+ALTER TABLE `product_activity_logs`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT for table `product_attributes`
+--
+ALTER TABLE `product_attributes`
+  MODIFY `attr_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `product_images`
+--
+ALTER TABLE `product_images`
+  MODIFY `image_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `product_master`
 --
 ALTER TABLE `product_master`
-  MODIFY `product_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `product_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `purchase_details`
 --
 ALTER TABLE `purchase_details`
-  MODIFY `purchase_detail_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `purchase_detail_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `purchase_master`
 --
 ALTER TABLE `purchase_master`
-  MODIFY `purchase_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `purchase_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `purchase_return_details`
 --
 ALTER TABLE `purchase_return_details`
-  MODIFY `return_detail_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `return_detail_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `purchase_return_master`
 --
 ALTER TABLE `purchase_return_master`
-  MODIFY `return_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `return_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `sales_details`
 --
 ALTER TABLE `sales_details`
-  MODIFY `sales_detail_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `sales_detail_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `sales_master`
 --
 ALTER TABLE `sales_master`
-  MODIFY `sales_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `sales_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `sales_return_details`
 --
 ALTER TABLE `sales_return_details`
-  MODIFY `return_detail_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `return_detail_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `sales_return_master`
 --
 ALTER TABLE `sales_return_master`
-  MODIFY `return_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `size_master`
---
-ALTER TABLE `size_master`
-  MODIFY `size_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `return_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `stock_master`
 --
 ALTER TABLE `stock_master`
-  MODIFY `stock_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `stock_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 
 --
 -- AUTO_INCREMENT for table `supplier_master`
@@ -1448,7 +1632,7 @@ ALTER TABLE `supplier_master`
 -- AUTO_INCREMENT for table `unit_master`
 --
 ALTER TABLE `unit_master`
-  MODIFY `unit_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `unit_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `userinfo`
@@ -1457,10 +1641,26 @@ ALTER TABLE `userinfo`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `users`
+-- Constraints for dumped tables
 --
-ALTER TABLE `users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- Constraints for table `product_activity_logs`
+--
+ALTER TABLE `product_activity_logs`
+  ADD CONSTRAINT `fk_pal_product_id` FOREIGN KEY (`product_id`) REFERENCES `product_master` (`product_id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `product_attributes`
+--
+ALTER TABLE `product_attributes`
+  ADD CONSTRAINT `fk_pa_product_id` FOREIGN KEY (`product_id`) REFERENCES `product_master` (`product_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `product_images`
+--
+ALTER TABLE `product_images`
+  ADD CONSTRAINT `fk_pi_product_id` FOREIGN KEY (`product_id`) REFERENCES `product_master` (`product_id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

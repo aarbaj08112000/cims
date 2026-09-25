@@ -240,6 +240,19 @@
                 <div class="pd-info-value" style="color: var(--pd-primary);"><%$sale['currency_symbol']|default:''%> <%$sale['total_amount']|number_format:2%></div>
               </div>
             </div>
+            <%assign var='tax_val' value=$sale['tax_amount']|default:0%>
+            <%if $tax_val == 0 && ($sale['payable_amount'] - $sale['total_amount'] + $sale['discount_amount']) > 0.001%>
+                <%assign var='tax_val' value=($sale['payable_amount'] - $sale['total_amount'] + $sale['discount_amount'])%>
+            <%/if%>
+            <%if $tax_val > 0%>
+            <div class="pd-info-row">
+              <div class="pd-info-icon blue"><i class="ti ti-receipt-tax"></i></div>
+              <div class="pd-info-content">
+                <div class="pd-info-label">Tax Amount</div>
+                <div class="pd-info-value" style="color: var(--pd-primary);">+ <%$sale['currency_symbol']|default:''%> <%$tax_val|number_format:2%></div>
+              </div>
+            </div>
+            <%/if%>
             <div class="pd-info-row">
               <div class="pd-info-icon red"><i class="ti ti-discount"></i></div>
               <div class="pd-info-content">
@@ -375,15 +388,34 @@
           </tbody>
         </table>
       </div>
-      <%if $sale['discount_amount'] > 0%>
+      <%assign var='tax_val' value=$sale['tax_amount']|default:0%>
+      <%if $tax_val == 0 && ($sale['payable_amount'] - $sale['total_amount'] + $sale['discount_amount']) > 0.001%>
+          <%assign var='tax_val' value=($sale['payable_amount'] - $sale['total_amount'] + $sale['discount_amount'])%>
+      <%/if%>
+      <%if $sale['discount_amount'] > 0 || $tax_val > 0%>
       <div class="pd-discount-row">
         <span class="label">Subtotal</span>
         <span class="value" style="color:var(--pd-gray-700);"><%$sale['currency_symbol']|default:''%> <%$sale['total_amount']|number_format:2%></span>
       </div>
+      <%if $tax_val > 0%>
+      <%assign var='tax_perc' value=0%>
+      <%if $sale['total_amount'] > 0%>
+          <%assign var='tax_perc' value=(($tax_val / $sale['total_amount']) * 100)|string_format:"%.2f"%>
+      <%/if%>
+      <%if $tax_perc == 0 || $tax_perc == '0.00'%>
+          <%assign var='tax_perc' value=$settings['pos_tax_percentage']['value']|default:'2.5'%>
+      <%/if%>
+      <div class="pd-discount-row">
+        <span class="label">Tax (<%$tax_perc%>%)</span>
+        <span class="value" style="color:var(--pd-primary);">+ <%$sale['currency_symbol']|default:''%> <%$tax_val|number_format:2%></span>
+      </div>
+      <%/if%>
+      <%if $sale['discount_amount'] > 0%>
       <div class="pd-discount-row">
         <span class="label">Discount</span>
         <span class="value">- <%$sale['currency_symbol']|default:''%> <%$sale['discount_amount']|number_format:2%></span>
       </div>
+      <%/if%>
       <%/if%>
       <div class="pd-grand-total">
         <span class="pd-grand-total-label">Grand Total</span>

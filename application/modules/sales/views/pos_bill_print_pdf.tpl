@@ -72,10 +72,24 @@
                     <span style="font-size:15px;">SUBTOTAL</span>
                     <span class="fw-bold" style="font-size:14px;"><span class="rupees_block">₹</span> <%$sale.total_amount|number_format:2%></span>
                 </div>
-                <%if $settings['pos_tax_enabled']['value']|default:'Yes' == 'Yes'%>
+                <%assign var='tax_val' value=$sale.tax_amount|default:0%>
+                <%if $tax_val == 0 && ($sale.payable_amount - $sale.total_amount + $sale.discount_amount) > 0.001%>
+                    <%assign var='tax_val' value=($sale.payable_amount - $sale.total_amount + $sale.discount_amount)%>
+                <%/if%>
+                <%if $tax_val == 0 && $settings['pos_tax_enabled']['value']|default:'Yes' == 'Yes'%>
+                    <%assign var='tax_val' value=($sale.total_amount * ($settings['pos_tax_percentage']['value']|default:'2.5' / 100))%>
+                <%/if%>
+                <%if $tax_val > 0%>
+                <%assign var='tax_perc' value=0%>
+                <%if $sale.total_amount > 0%>
+                    <%assign var='tax_perc' value=(($tax_val / $sale.total_amount) * 100)|string_format:"%.2f"%>
+                <%/if%>
+                <%if $tax_perc == 0 || $tax_perc == '0.00'%>
+                    <%assign var='tax_perc' value=$settings['pos_tax_percentage']['value']|default:'2.5'%>
+                <%/if%>
                 <div class="summary-line" style="margin-top:10px;font-size:6.82px;">
-                    <span style="font-size:15px;">GST (<%$settings['pos_tax_percentage']['value']|default:'2.5'%>%)</span>
-                    <span style="font-size:14px;"><span class="rupees_block">₹</span> <%($sale.total_amount * ($settings['pos_tax_percentage']['value']|default:'2.5' / 100))|number_format:2%></span>
+                    <span style="font-size:15px;">Tax (<%$tax_perc%>%)</span>
+                    <span style="font-size:14px;"><span class="rupees_block">₹</span> <%$tax_val|number_format:2%></span>
                 </div>
                 <%/if%>
                 <div class="net-payable-box my-3 p-2 rounded" style="<%if $is_pdf|default:false%>padding:10px;<%/if%>">
