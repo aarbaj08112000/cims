@@ -36,7 +36,7 @@
     .metric-card-premium {
         background: #fff;
         border-radius: var(--cat-radius, 12px);
-        padding: 1.25rem;
+        padding: 1.25rem 1.5rem;
         border: 1px solid var(--cat-border, rgba(115, 103, 240, 0.05));
         box-shadow: var(--card-shadow);
         transition: all 0.3s ease;
@@ -44,25 +44,26 @@
         overflow: hidden;
         height: 100%;
         display: flex;
-        flex-direction: column;
-        justify-content: space-between;
+        flex-direction: row;
+        align-items: center;
+        gap: 1.25rem;
     }
 
     .metric-card-premium:hover {
-        transform: translateY(-8px);
+        transform: translateY(-4px);
         box-shadow: var(--card-shadow-hover);
         border-color: rgba(115, 103, 240, 0.2);
     }
 
     .metric-icon-box {
-        width: 48px;
-        height: 48px;
+        width: 52px;
+        height: 52px;
         border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-bottom: 1rem;
-        font-size: 1.4rem;
+        flex-shrink: 0;
+        font-size: 1.5rem;
         transition: transform 0.3s ease;
     }
 
@@ -290,7 +291,7 @@
     <!-- 6 Summary Cards Row -->
     <div class="row g-4 mb-4">
         <!-- Total Sales -->
-        <div class="col-xl-2 col-lg-4 col-md-6">
+        <div class="col-xl col-lg-4 col-md-6">
             <div class="metric-card-premium">
                 <div class="metric-icon-box icon-blue">
                     <i class="ti ti-currency-dollar"></i>
@@ -302,7 +303,7 @@
             </div>
         </div>
         <!-- Total Orders -->
-        <div class="col-xl-2 col-lg-4 col-md-6">
+        <div class="col-xl col-lg-4 col-md-6">
             <div class="metric-card-premium">
                 <div class="metric-icon-box icon-indigo">
                     <i class="ti ti-shopping-cart"></i>
@@ -314,7 +315,7 @@
             </div>
         </div>
         <!-- Total Stock -->
-        <div class="col-xl-2 col-lg-4 col-md-6">
+        <div class="col-xl col-lg-4 col-md-6">
             <div class="metric-card-premium">
                 <div class="metric-icon-box icon-green">
                     <i class="ti ti-box"></i>
@@ -326,7 +327,7 @@
             </div>
         </div>
         <!-- Total Categories -->
-        <div class="col-xl-2 col-lg-4 col-md-6">
+        <div class="col-xl col-lg-4 col-md-6">
             <div class="metric-card-premium">
                 <div class="metric-icon-box icon-orange">
                     <i class="ti ti-category"></i>
@@ -338,7 +339,7 @@
             </div>
         </div>
         <!-- Low Stock -->
-        <div class="col-xl-2 col-lg-4 col-md-6">
+        <div class="col-xl col-lg-4 col-md-6">
             <div class="metric-card-premium">
                 <div class="metric-icon-box icon-red">
                     <i class="ti ti-alert-triangle"></i>
@@ -346,18 +347,6 @@
                 <div class="metric-info">
                     <h3 class="text-danger"><%$stats.low_stock_count|default:0%></h3>
                     <span>Low Stock</span>
-                </div>
-            </div>
-        </div>
-         <!-- Total Customers -->
-         <div class="col-xl-2 col-lg-4 col-md-6">
-            <div class="metric-card-premium">
-                <div class="metric-icon-box icon-cyan">
-                    <i class="ti ti-user-check"></i>
-                </div>
-                <div class="metric-info">
-                    <h3><%$stats.total_customers|default:0%></h3>
-                    <span>Customers</span>
                 </div>
             </div>
         </div>
