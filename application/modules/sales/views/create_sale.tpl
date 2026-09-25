@@ -247,6 +247,9 @@
     </div>
 
     <form id="salesForm" action="<%$base_url%>save_sale" method="POST">
+      <!-- Tax Configuration -->
+      <input type="hidden" id="pos_tax_enabled" value="<%$settings['pos_tax_enabled']['value']|default:'Yes'%>" />
+      <input type="hidden" id="pos_tax_percentage" value="<%$settings['pos_tax_percentage']['value']|default:'2.5'%>" />
       <!-- Master Form Card -->
       <div class="cat-card mb-4 card p-4">
         <div class="cat-card-header d-flex justify-content-between align-items-center border-bottom pb-3 mb-3">
@@ -341,6 +344,7 @@
             </table>
             <!-- Hidden inputs for form submission -->
             <input type="hidden" name="sub_total" id="sub_total" value="0">
+            <input type="hidden" name="tax_amount" id="tax_amount" value="0">
             <input type="hidden" name="grand_total" id="grand_total" value="0">
           </div>
 
@@ -352,6 +356,11 @@
                 <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
                   <span class="text-muted fw-500" style="font-size:14px;">Subtotal</span>
                   <span class="fw-bold" id="sub_total_display" style="font-size:15px;">0.00</span>
+                </div>
+                <!-- Tax row -->
+                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                  <span class="text-muted fw-500" id="tax_label" style="font-size:14px;">Tax (<%if $settings['pos_tax_enabled']['value']|default:'Yes' == 'Yes'%><%$settings['pos_tax_percentage']['value']|default:'2.5'%><%else%>0<%/if%>%)</span>
+                  <span class="fw-bold" id="tax_display" style="font-size:15px;">0.00</span>
                 </div>
                 <!-- Discount row -->
                 <div class="d-flex justify-content-between align-items-center py-2 border-bottom gap-3">

@@ -1,20 +1,47 @@
-<div class="container-xxl flex-grow-1 container-p-y">
+<link rel="stylesheet" href="<%$base_url%>public/css/category_ui.css" />
+
+<div class="content-wrapper">
+  <div class="container-xxl flex-grow-1 container-p-y">
     <!-- Tax Configuration -->
     <input type="hidden" id="pos_tax_enabled" value="<%$settings['pos_tax_enabled']['value']|default:'Yes'%>">
     <input type="hidden" id="pos_tax_percentage" value="<%$settings['pos_tax_percentage']['value']|default:'2.5'%>">
     <input type="hidden" id="pos_receipt_print_type" value="<%$settings['pos_receipt_print_type']['value']|default:'PDF'%>">
 
+    <!-- Page Header -->
+    <div class="cat-page-header mb-4">
+      <div class="cat-page-header-left d-flex align-items-center">
+        <div class="cat-page-icon me-3">
+          <i class="ti ti-shopping-cart fs-3" style="color: var(--cat-primary);"></i>
+        </div>
+        <div>
+          <h1 class="cat-page-title mb-1">POS Billing</h1>
+          <nav class="cat-breadcrumb">
+            <a href="<%$base_url%>">Home</a>
+            <i class="ti ti-chevron-right mx-1"></i>
+            <a href="<%$base_url%>sales_list">Sales History</a>
+            <i class="ti ti-chevron-right mx-1"></i>
+            <span>POS</span>
+          </nav>
+        </div>
+      </div>
+      <div class="cat-page-header-right d-flex align-items-center">
+        <span class="sale-info-badge py-2 px-3 fs-6">
+          <i class="ti ti-receipt me-1"></i> Bill No: <span id="bill_no_display"><%$bill_no%></span>
+        </span>
+      </div>
+    </div>
+
     <div class="row g-4">
         <!-- Left Side: Product Scanning and Table -->
         <div class="col-lg-8">
-            <div class="card shadow-sm border-0 h-100">
+            <div class="card shadow-sm border-0 h-100" style="border-radius: var(--cat-radius);">
                 <div class="card-header bg-white border-bottom py-3">
                     <div class="row align-items-center">
                         <div class="col-md-6">
-                            <h5 class="mb-0"><i class="ti ti-shopping-cart me-2 text-primary"></i>POS Billing</h5>
+                            <h5 class="mb-0 fw-bold" style="color: var(--cat-gray-900);"><i class="ti ti-packages me-2" style="color: var(--cat-primary);"></i>Products & Billing</h5>
                         </div>
                         <div class="col-md-6 text-md-end mt-2 mt-md-0">
-                            <span class="badge bg-label-info py-2 px-3">Bill No: <span id="bill_no_display"><%$bill_no%></span></span>
+                            <span class="badge py-2 px-3" style="background: var(--cat-primary-light); color: var(--cat-primary); font-weight: 600;">Bill No: <span id="bill_no_display_card"><%$bill_no%></span></span>
                         </div>
                     </div>
                 </div>
@@ -23,7 +50,7 @@
                     <div class="row mb-4 g-3">
                         <div class="col-md-6">
                             <div class="input-group input-group-merge shadow-none border rounded">
-                                <span class="input-group-text border-0 bg-transparent"><i class="ti ti-scan text-primary"></i></span>
+                                <span class="input-group-text border-0 bg-transparent"><i class="ti ti-scan" style="color: var(--cat-primary);"></i></span>
                                 <input type="text" id="barcode_scan" class="form-control border-0 bg-transparent" placeholder="Scan Barcode Here..." autofocus>
                                 <button class="btn btn-outline-primary border-0 border-start" type="button" id="start_mobile_scan" title="Scan with Camera">
                                     <i class="ti ti-camera"></i>
@@ -43,7 +70,7 @@
                     <!-- Items Table -->
                     <div class="table-responsive" style="min-height: 400px;">
                         <table class="table table-hover border-top" id="pos_table">
-                            <thead class="bg-light">
+                            <thead>
                                 <tr>
                                     <th width="50%">Product</th>
                                     <th width="15%" class="text-center">Price</th>
@@ -70,9 +97,9 @@
 
         <!-- Right Side: Order Summary and Payment -->
         <div class="col-lg-4">
-            <div class="card shadow-sm border-0 mb-4">
-                <div class="card-header bg-primary py-3">
-                    <h5 class="mb-0 text-white"><i class="ti ti-user me-2"></i>Customer Details</h5>
+            <div class="card shadow-sm border-0 mb-4" style="border-radius: var(--cat-radius); overflow: hidden;">
+                <div class="card-header py-3" style="background: linear-gradient(135deg, var(--cat-primary) 0%, var(--cat-primary-hover) 100%);">
+                    <h5 class="mb-0 text-white fw-bold"><i class="ti ti-user me-2"></i>Customer Details</h5>
                 </div>
                 <div class="card-body p-4">
                     <div class="mb-3">
@@ -92,9 +119,9 @@
                 </div>
             </div>
 
-            <div class="card shadow-sm border-0 border-top border-primary border-3">
+            <div class="card shadow-sm border-0" style="border-radius: var(--cat-radius); border-top: 3px solid var(--cat-primary) !important; overflow: hidden;">
                 <div class="card-header bg-white py-3 border-bottom">
-                    <h5 class="mb-0">Order Summary</h5>
+                    <h5 class="mb-0 fw-bold" style="color: var(--cat-gray-900);"><i class="ti ti-calculator me-2" style="color: var(--cat-primary);"></i>Order Summary</h5>
                 </div>
                 <div class="card-body p-4">
                     <div class="summary-details">
@@ -113,7 +140,6 @@
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <span class="text-muted fw-bold">Discount</span>
                             <div class="input-group w-60 shadow-sm">
-                                
                                 <input type="text" id="discount_input" class="form-control form-control-lg text-end fw-bold text-primary" value="0" style="font-size: 1.1rem;">
                             </div>
                         </div>
@@ -126,7 +152,6 @@
                         <div class="d-none justify-content-between align-items-center mb-4">
                             <span class="text-muted fw-bold">Received Amount</span>
                             <div class="input-group w-60 shadow-sm">
-                                
                                 <input type="number" id="received_amount_input" class="form-control form-control-lg text-end fw-bold text-success" value="0" style="font-size: 1.1rem;">
                             </div>
                         </div>
@@ -156,9 +181,9 @@
                         </div>
                     </div>
 
-                    <button class="btn btn-primary w-100 py-3 shadow-sm mt-2" id="save_pos_bill_btn">
+                    <button class="cat-btn cat-btn-primary w-100 py-3 shadow-sm mt-2" id="save_pos_bill_btn" style="height: 50px; font-size: 1.05rem; font-weight: 600;">
                         <i class="ti ti-device-floppy me-2 fs-5"></i>
-                        <span class="fs-5">Pay & Complete Order</span>
+                        <span>Pay & Complete Order</span>
                     </button>
                     <div class="text-center mt-3">
                         <small class="text-muted"><kbd>F2</kbd> keyboard shortcut to save</small>
@@ -167,6 +192,7 @@
             </div>
         </div>
     </div>
+  </div>
 </div>
 
 <!-- Receipt Modal -->
@@ -183,18 +209,71 @@
     </div>
 </div>
 
-<!-- Styles for POS -->
+<!-- Styles for POS Theme Alignment -->
 <style>
-.input-group-merge.border:focus-within {
-    border-color: #7367f0 !important;
-    box-shadow: 0 0 0 0.1rem rgba(115, 103, 240, 0.1) !important;
+/* Sales form badge matching theme */
+.sale-info-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12.5px;
+    font-weight: 500;
+    background: var(--cat-primary-light);
+    color: var(--cat-primary);
 }
+
+.text-primary {
+    color: var(--cat-primary) !important;
+}
+
+.bg-primary {
+    background-color: var(--cat-primary) !important;
+}
+
+.btn-primary {
+    background-color: var(--cat-primary) !important;
+    border-color: var(--cat-primary) !important;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background-color: var(--cat-primary-hover) !important;
+    border-color: var(--cat-primary-hover) !important;
+}
+
+.btn-outline-primary {
+    color: var(--cat-primary) !important;
+    border-color: var(--cat-primary) !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--cat-primary) !important;
+    border-color: var(--cat-primary) !important;
+    color: #fff !important;
+}
+
+.payment-modes .btn-check:checked + .btn-outline-primary {
+    background-color: var(--cat-primary) !important;
+    border-color: var(--cat-primary) !important;
+    color: #fff !important;
+}
+
+.input-group-merge.border:focus-within {
+    border-color: var(--cat-primary) !important;
+    box-shadow: 0 0 0 0.15rem rgba(91, 95, 199, 0.15) !important;
+}
+
 #pos_table thead th {
+    background-color: var(--cat-primary-light) !important;
+    color: var(--cat-primary) !important;
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     font-weight: 600;
+    padding: 12px 16px;
 }
+
 .payment-modes .btn {
     border-width: 1.5px;
 }

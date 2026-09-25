@@ -156,21 +156,40 @@ const salesPage = {
         $(".total-input").each(function () {
             subTotal += parseFloat(String($(this).val()).replace(/,/g, '')) || 0;
         });
+
+        // Dynamic tax calculation from settings (same as POS)
+        let taxEnabled = $('#pos_tax_enabled').val() === 'Yes';
+        let taxPercentage = parseFloat($('#pos_tax_percentage').val()) || 0;
+        let taxRate = taxEnabled ? (taxPercentage / 100) : 0;
+        let taxAmount = subTotal * taxRate;
         
         let discount = parseFloat(String($('#discount').val()).replace(/,/g, '')) || 0;
         
-        // Ensure discount doesn't exceed subTotal
-        if (discount > subTotal) {
-            discount = subTotal;
+        // Ensure discount doesn't exceed (subTotal + taxAmount)
+        if (discount > (subTotal + taxAmount)) {
+            discount = subTotal + taxAmount;
             $("#discount").val(discount.toFixed(2));
         }
 
-        let grandTotal = subTotal - discount;
+        let grandTotal = (subTotal + taxAmount) - discount;
+        if (grandTotal < 0) grandTotal = 0;
         
         $("#sub_total").val(subTotal.toFixed(2));
+        $("#tax_amount").val(taxAmount.toFixed(2));
         $("#grand_total").val(grandTotal.toFixed(2));
+
         if ($("#sub_total_display").length) {
             $("#sub_total_display").text(subTotal.toLocaleString("en-IN", {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+        }
+        if ($("#tax_display").length) {
+            $("#tax_display").text(taxAmount.toLocaleString("en-IN", {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+        }
+        if ($("#tax_label").length) {
+            if (taxEnabled) {
+                $("#tax_label").text('Tax (' + taxPercentage + '%)');
+            } else {
+                $("#tax_label").text('Tax (0%)');
+            }
         }
         if ($("#grand_total_display").length) {
             $("#grand_total_display").text(grandTotal.toLocaleString("en-IN", {minimumFractionDigits: 2, maximumFractionDigits: 2}));

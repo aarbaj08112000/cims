@@ -237,6 +237,23 @@
                             <td class="text-muted fw-bold">Subtotal</td>
                             <td class="text-end fw-bold">₹<%$sale['total_amount']|number_format:2%></td>
                         </tr>
+                        <%assign var='tax_val' value=$sale['tax_amount']|default:0%>
+                        <%if $tax_val == 0 && ($sale['payable_amount'] - $sale['total_amount'] + $sale['discount_amount']) > 0.001%>
+                            <%assign var='tax_val' value=($sale['payable_amount'] - $sale['total_amount'] + $sale['discount_amount'])%>
+                        <%/if%>
+                        <%if $tax_val > 0%>
+                        <%assign var='tax_perc' value=0%>
+                        <%if $sale['total_amount'] > 0%>
+                            <%assign var='tax_perc' value=(($tax_val / $sale['total_amount']) * 100)|string_format:"%.2f"%>
+                        <%/if%>
+                        <%if $tax_perc == 0 || $tax_perc == '0.00'%>
+                            <%assign var='tax_perc' value=$settings['pos_tax_percentage']['value']|default:'2.5'%>
+                        <%/if%>
+                        <tr>
+                            <td class="text-muted fw-bold" style="padding-top:10px;">Tax (<%$tax_perc%>%)</td>
+                            <td class="text-end fw-bold" style="padding-top:10px;">+ ₹<%$tax_val|number_format:2%></td>
+                        </tr>
+                        <%/if%>
                         <%if $sale['discount_amount'] > 0%>
                         <tr>
                             <td class="text-muted fw-bold" style="color:#ef4444; padding-top:10px;">Discount</td>

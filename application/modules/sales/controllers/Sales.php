@@ -16,12 +16,22 @@ class Sales extends MY_Controller
     {
         $data['sales'] = $this->Sales_model->get_sales();
         $data['base_url'] = base_url();
+        $this->load->model('settings/Settings_model');
+        $settings = $this->Settings_model->get_all_settings();
+        foreach ($settings as $setting) {
+            $data['settings'][$setting['name']] = $setting;
+        }
         $this->smarty->loadView('sales_list.tpl', $data, 'Yes', 'Yes');
     }
 
     public function create_sale()
     {
         $data['base_url'] = base_url();
+        $this->load->model('settings/Settings_model');
+        $settings = $this->Settings_model->get_all_settings();
+        foreach ($settings as $setting) {
+            $data['settings'][$setting['name']] = $setting;
+        }
         
         $this->load->model('product/Product_model');
         $data['products'] = $this->Product_model->get_products();
@@ -53,10 +63,24 @@ class Sales extends MY_Controller
         $total_amount = array_sum($item_totals);
         $discount = $this->input->post('discount') ? (float) $this->input->post('discount') : 0;
 
-        $payable_amount = $total_amount - $discount;
+        $tax_amount = $this->input->post('tax_amount') !== null ? (float) $this->input->post('tax_amount') : 0;
+        if ($tax_amount == 0 && $this->input->post('tax_amount') === null) {
+            $this->load->model('settings/Settings_model');
+            $settings_list = $this->Settings_model->get_all_settings();
+            $settings = [];
+            foreach ($settings_list as $s) {
+                $settings[$s['name']] = $s;
+            }
+            $tax_enabled = (isset($settings['pos_tax_enabled']) && $settings['pos_tax_enabled']['value'] === 'Yes');
+            $tax_perc = isset($settings['pos_tax_percentage']) ? (float)$settings['pos_tax_percentage']['value'] : 0;
+            if ($tax_enabled && $tax_perc > 0) {
+                $tax_amount = $total_amount * ($tax_perc / 100);
+            }
+        }
+        $payable_amount = ($total_amount + $tax_amount) - $discount;
         if ($payable_amount < 0) {
             $payable_amount = 0;
-            $discount = $total_amount;
+            $iscount = $total_amount + $tax_amount;
         }
 
         $master_data = [
@@ -65,6 +89,7 @@ class Sales extends MY_Controller
             'bill_no' => $bill_no,
             'sales_date' => $sales_date,
             'total_amount' => $total_amount,
+            'tax_amount' => $tax_amount,
             'discount_amount' => $discount,
             'payable_amount' => $payable_amount,
             'paid_amount' => $payable_amount,
@@ -126,6 +151,11 @@ class Sales extends MY_Controller
         }
         $data['totalQty'] = $totalQty;
         $data['base_url'] = base_url();
+        $this->load->model('settings/Settings_model');
+        $settings = $this->Settings_model->get_all_settings();
+        foreach ($settings as $setting) {
+            $data['settings'][$setting['name']] = $setting;
+        }
 
         $this->smarty->loadView('sales_details.tpl', $data, 'Yes', 'Yes');
     }
@@ -183,6 +213,11 @@ class Sales extends MY_Controller
         $data['sale'] = $this->Sales_model->get_sale_master($sales_id);
         $data['items'] = $this->Sales_model->get_sale_items($sales_id);
         $data['base_url'] = base_url();
+        $this->load->model('settings/Settings_model');
+        $settings = $this->Settings_model->get_all_settings();
+        foreach ($settings as $setting) {
+            $data['settings'][$setting['name']] = $setting;
+        }
 
         $data['company_name'] = !empty($comp_master['company_name']) ? $comp_master['company_name'] : 'Your Company';
 

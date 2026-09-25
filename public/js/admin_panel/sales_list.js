@@ -19,7 +19,7 @@ const salesListPage = {
                     className: "d-none",
                     filename: sales_file_name,
                     title: "Sales History",
-                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7] },
+                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8] },
                     customize: function (xlsx) {
                         var sheet = xlsx.xl.worksheets['sheet1.xml'];
                         var styles = xlsx.xl['styles.xml'];
@@ -67,12 +67,12 @@ const salesListPage = {
                         rows.eq(1).find('c').attr('s', headerStyleId);
                         rows.each(function (i) { if (i >= 2) { $(this).find('c').attr('s', dataStyleId); } });
 
-                        $('sheetData', sheet).after('<mergeCells count="1"><mergeCell ref="A1:H1"/></mergeCells>');
+                        $('sheetData', sheet).after('<mergeCells count="1"><mergeCell ref="A1:I1"/></mergeCells>');
                         rows.eq(0).attr({ ht: '28', customHeight: '1' });
                         rows.eq(1).attr({ ht: '20', customHeight: '1' });
 
                         $('cols', sheet).remove();
-                        $('sheetData', sheet).before('<cols><col min="1" max="1" width="15" customWidth="1"/><col min="2" max="2" width="25" customWidth="1"/><col min="3" max="3" width="15" customWidth="1"/><col min="4" max="4" width="15" customWidth="1"/><col min="5" max="5" width="15" customWidth="1"/><col min="6" max="6" width="15" customWidth="1"/><col min="7" max="7" width="15" customWidth="1"/><col min="8" max="8" width="15" customWidth="1"/></cols>');
+                        $('sheetData', sheet).before('<cols><col min="1" max="1" width="15" customWidth="1"/><col min="2" max="2" width="25" customWidth="1"/><col min="3" max="3" width="15" customWidth="1"/><col min="4" max="4" width="15" customWidth="1"/><col min="5" max="5" width="15" customWidth="1"/><col min="6" max="6" width="15" customWidth="1"/><col min="7" max="7" width="15" customWidth="1"/><col min="8" max="8" width="15" customWidth="1"/><col min="9" max="9" width="15" customWidth="1"/></cols>');
                     }
                 },
                 {
@@ -80,7 +80,7 @@ const salesListPage = {
                     className: "d-none",
                     filename: sales_file_name,
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
                     },
                     title: sales_pdf_title,
                     customize: function (doc) {
