@@ -71,6 +71,14 @@
                   <a href="<%base_url('purchase_details/')%><%$val['purchase_id']|encode_id%>" title="View Details">
                     <i class="ti ti-eye edit-part"></i>
                   </a>
+                  <%if $val['added_date']|date_format:"%Y-%m-%d" == $smarty.now|date_format:"%Y-%m-%d"%>
+                  <a href="<%base_url('update_purchase/')%><%$val['purchase_id']|encode_id%>" title="Edit Purchase" class="ms-2">
+                    <i class="ti ti-edit"></i>
+                  </a>
+                  <a href="javascript:void(0)" onclick="deletePurchase('<%$val['purchase_id']|encode_id%>')" title="Delete Purchase" class="ms-2">
+                    <i class="ti ti-trash"></i>
+                  </a>
+                  <%/if%>
                 </div>
               </td>
            </tr>
@@ -87,4 +95,4 @@
 <script type="text/javascript">
   var base_url = <%$base_url|@json_encode%>;
 </script>
-<script src="<%$base_url%>public/js/admin_panel/purchase_list.js?v=6"></script>
+<script src="<%$base_url%>public/js/admin_panel/purchase_list.js?v=7"></script>

@@ -1,4 +1,24 @@
 <link rel="stylesheet" href="<%$base_url%>public/css/category_ui.css" />
+<style>
+  table.dataTable tbody tr.row-out-of-stock, 
+  table.dataTable tbody tr.row-out-of-stock > td,
+  .table > tbody > tr.row-out-of-stock > td,
+  .table-striped > tbody > tr.row-out-of-stock:nth-of-type(odd) > td,
+  .table-hover > tbody > tr.row-out-of-stock:hover > td {
+      background-color: #ffe6e6 !important;
+      box-shadow: inset 0 0 0 9999px transparent !important;
+  }
+  
+  table.dataTable tbody tr.row-low-stock, 
+  table.dataTable tbody tr.row-low-stock > td,
+  .table > tbody > tr.row-low-stock > td,
+  .table-striped > tbody > tr.row-low-stock:nth-of-type(odd) > td,
+  .table-hover > tbody > tr.row-low-stock:hover > td {
+      background-color: #fff4e6 !important;
+      box-shadow: inset 0 0 0 9999px transparent !important;
+  }
+</style>
+
 <div class="content-wrapper">
   <div class="container-xxl flex-grow-1 container-p-y">
     <!-- Page Header -->
@@ -53,7 +73,7 @@
             <tbody>
             <%if ($stock_levels) %>
               <%foreach from=$stock_levels item=val %>
-               <tr>
+               <tr class="<%if $val['current_stock'] <= 0%>row-out-of-stock<%elseif $val['current_stock'] <= $val['alert_qty']%>row-low-stock<%/if%>">
                   <td>
                     <span class="d-block fw-bold"><%$val['name']%></span>
                     <small class="text-muted"><%$val['product_code']%></small>

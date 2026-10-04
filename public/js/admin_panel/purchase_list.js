@@ -183,7 +183,7 @@ const purchaseListPage = {
                 },
             ],
             searching: true,
-            order: [[5, "desc"]], // Sort by Added Date by default
+            order: [[0, "desc"]], // Sort by Added Date by default
             pagingType: "full_numbers",
             language: {
                 processing: '<div class="cat-processing"><i class="ti ti-loader-2 cat-spin"></i>&nbsp;Loading...</div>',
@@ -217,5 +217,28 @@ const purchaseListPage = {
 
 
 
+    }
+}
+
+function deletePurchase(encoded_id) {
+    if (confirm("Are you sure you want to delete this purchase? This will revert the stock quantities.")) {
+        $.ajax({
+            url: base_url + "purchase/delete_purchase_action",
+            type: "POST",
+            data: { purchase_id: encoded_id },
+            dataType: "json",
+            success: function(res) {
+                if (res.success) {
+                    if (typeof toaster !== 'undefined') toaster("success", res.msg);
+                    setTimeout(function(){ window.location.reload(); }, 1500);
+                } else {
+                    if (typeof toaster !== 'undefined') toaster("error", res.msg);
+                    else alert(res.msg);
+                }
+            },
+            error: function() {
+                alert("An error occurred while deleting.");
+            }
+        });
     }
 }

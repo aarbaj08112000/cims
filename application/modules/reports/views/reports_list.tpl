@@ -31,7 +31,7 @@
     </div>
 
     <!-- Stats Row -->
-    <div class="d-flex align-items-center mb-4">
+    <div class="d-flex align-items-center mb-4 hide">
         <div class="rounded p-2 me-3" style="background-color: rgba(115, 103, 240, 0.1); color: #7367f0; display: inline-flex;">
             <i class="ti ti-chart-bar fs-4"></i>
         </div>

@@ -64,7 +64,7 @@
           <i class="ti ti-shopping-cart-plus fs-3 text-primary"></i>
         </div>
         <div>
-          <h1 class="cat-page-title mb-1">Create Purchase Bill</h1>
+          <h1 class="cat-page-title mb-1"><%if isset($purchase)%>Update Purchase Bill<%else%>Create Purchase Bill<%/if%></h1>
           <nav class="cat-breadcrumb">
             <a href="<%$base_url%>">Home</a>
             <i class="ti ti-chevron-right mx-1"></i>
@@ -82,11 +82,12 @@
     </div>
 
     <form id="purchaseForm" action="<%base_url('save_purchase')%>" method="POST">
+      <input type="hidden" name="purchase_id" value="<%if isset($purchase)%><%$purchase['purchase_id']|encode_id%><%/if%>">
       <!-- Bill Information Card -->
       <div class="cat-card mb-4 card p-4">
         <div class="cat-card-header d-flex justify-content-between align-items-center border-bottom pb-3 mb-3">
           <h5 class="mb-0 fw-bold"><i class="ti ti-file-info me-2 text-primary fs-4"></i> Bill Information</h5>
-          <span class="sale-info-badge"><i class="ti ti-shopping-cart-plus"></i> New Purchase</span>
+          <span class="sale-info-badge"><i class="ti ti-shopping-cart-plus"></i> <%if isset($purchase)%>Update Purchase<%else%>New Purchase<%/if%></span>
         </div>
         <div class="cat-card-body">
           <div class="row g-3">
@@ -95,17 +96,17 @@
               <select name="supplier_id" class="form-control select2 required-input">
                 <option value="">Select Supplier</option>
                 <%foreach from=$suppliers item=val%>
-                  <option value="<%$val['supplier_id']%>"><%$val['supplier_name']%></option>
+                  <option value="<%$val['supplier_id']%>" <%if isset($purchase) && $purchase['supplier_id'] == $val['supplier_id']%>selected<%/if%>><%$val['supplier_name']%></option>
                 <%/foreach%>
               </select>
             </div>
             <div class="col-md-4">
               <label class="form-label">Bill Number <span class="text-danger">*</span></label>
-              <input type="text" name="bill_no" class="form-control required-input" placeholder="Enter Bill No">
+              <input type="text" name="bill_no" class="form-control required-input" placeholder="Enter Bill No" value="<%if isset($purchase)%><%$purchase['bill_no']%><%/if%>">
             </div>
             <div class="col-md-4">
               <label class="form-label">Purchase Date <span class="text-danger">*</span></label>
-              <input type="date" name="purchase_date" class="form-control required-input" value="<%$smarty.now|date_format:'%Y-%m-%d'%>">
+              <input type="date" name="purchase_date" class="form-control required-input" value="<%if isset($purchase)%><%$purchase['purchase_date']%><%else%><%$smarty.now|date_format:'%Y-%m-%d'%><%/if%>">
             </div>
           </div>
         </div>
@@ -132,6 +133,38 @@
                 </tr>
               </thead>
               <tbody>
+              <%if isset($items) && $items|@count > 0%>
+                <%foreach from=$items item=item%>
+                <tr>
+                  <td>
+                    <select name="product_id[]" class="form-control select2 product-select required-input">
+                      <option value="">Choose Product</option>
+                      <%foreach from=$products item=p%>
+                        <option value="<%$p['product_id']%>" data-price="<%$p['purchase_price']%>" data-currency="<%$p['purchase_currency_symbol']%>" <%if $item['product_id'] == $p['product_id']%>selected<%/if%>><%$p['name']%> <%if $p['brand_name']%>- <%$p['brand_name']%><%/if%> (<%$p['product_code']%>)</option>
+                      <%/foreach%>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="text" name="qty[]" class="form-control qty-input required-input onlyNumericInput" value="<%$item['qty']%>">
+                  </td>
+                  <td>
+                    <div class="input-group">
+                      <span class="input-group-text currency-symbol"><%$item['currency_symbol']%></span>
+                      <input type="text" name="price[]" class="form-control price-input required-input onlyNumericInput" value="<%$item['purchase_price']%>">
+                    </div>
+                  </td>
+                  <td>
+                    <div class="input-group">
+                      <span class="input-group-text currency-symbol"><%$item['currency_symbol']%></span>
+                      <input type="text" name="total[]" class="form-control bg-light text-end fw-bold total-input" readonly value="<%$item['total_amount']%>">
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <button type="button" class="btn-icon-danger remove-row" title="Remove"><i class="ti ti-trash"></i></button>
+                  </td>
+                </tr>
+                <%/foreach%>
+              <%else%>
                 <tr>
                   <td>
                     <select name="product_id[]" class="form-control select2 product-select required-input">
@@ -160,6 +193,7 @@
                     <button type="button" class="btn-icon-danger remove-row" title="Remove"><i class="ti ti-trash"></i></button>
                   </td>
                 </tr>
+              <%/if%>
               </tbody>
             </table>
             <!-- Hidden input for form submission -->

@@ -22,7 +22,9 @@ class Pos extends MY_Controller
         $data['base_url'] = base_url();
         
         // Generate a temporary bill number
-        $data['bill_no'] = 'POS-' . time();
+        $max_id = $this->db->select_max('sales_id')->get('sales_master')->row()->sales_id;
+        $next_id = $max_id + 1;
+        $data['bill_no'] = 'POS-' . date('Ymd') . sprintf('%03d', $next_id);
         $this->smarty->loadView('pos_billing.tpl', $data, 'Yes', 'Yes');
     }
 
@@ -61,7 +63,9 @@ class Pos extends MY_Controller
 
         $customer_name = $this->input->post('customer_name');
         $customer_mobile = $this->input->post('customer_mobile');
-        $bill_no = $this->input->post('bill_no');
+        $max_id = $this->db->select_max('sales_id')->get('sales_master')->row()->sales_id;
+        $next_id = $max_id + 1;
+        $bill_no = 'POS-' . date('Ymd') . sprintf('%03d', $next_id);
         $sales_date = date('Y-m-d');
         $payment_mode = $this->input->post('payment_mode');
 

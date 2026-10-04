@@ -180,8 +180,8 @@ class Reports extends MY_Controller {
 
     public function get_monthly_summary_ajax() {
         $month = $this->input->post('month') ?: date('Y-m');
-        $from_date = $month . '-01';
-        $to_date = date('Y-m-t', strtotime($from_date));
+        $from_date = $month . '-01 00:00:00';
+        $to_date = date('Y-m-t', strtotime($month . '-01')) . ' 23:59:59';
         
         $sales = $this->Reports_model->get_sales_summary($from_date, $to_date);
         $purchases = $this->Reports_model->get_purchase_summary($from_date, $to_date);

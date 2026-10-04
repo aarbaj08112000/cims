@@ -17,11 +17,40 @@ class Purchase extends MY_Controller {
         $this->smarty->loadView('purchase_list.tpl', $data, 'Yes', 'Yes'); // Assuming a list view exists later
     }
 
-    public function create_purchase() {
+    public function create_purchase($param = '') {
         $data['base_url'] = base_url();
         $data['suppliers'] = $this->Supplier_model->get_suppliers();
         $data['products'] = $this->Product_model->get_products();
+        
+        $purchase_id = decode_id($param);
+        if (!empty($purchase_id)) {
+            $data['purchase'] = $this->Purchase_model->get_purchase_master($purchase_id);
+            $data['items'] = $this->Purchase_model->get_purchase_items($purchase_id);
+            if(empty($data['purchase'])) {
+                redirect('purchase_list');
+            }
+        }
+        
         $this->smarty->loadView('create_purchase.tpl', $data, 'Yes', 'Yes');
+    }
+
+    public function delete_purchase_action() {
+        $purchase_id = decode_id($this->input->post('purchase_id'));
+        if (empty($purchase_id)) {
+            echo json_encode(['success' => 0, 'msg' => 'Invalid Purchase ID']);
+            return;
+        }
+        $master = $this->Purchase_model->get_purchase_master($purchase_id);
+        if ($master && date('Y-m-d') == date('Y-m-d', strtotime($master['added_date']))) {
+            $deleted = $this->Purchase_model->delete_purchase($purchase_id);
+            if ($deleted) {
+                echo json_encode(['success' => 1, 'msg' => 'Purchase deleted successfully and stock reverted.']);
+            } else {
+                echo json_encode(['success' => 0, 'msg' => 'Failed to delete purchase.']);
+            }
+        } else {
+            echo json_encode(['success' => 0, 'msg' => 'Cannot delete past purchases.']);
+        }
     }
 
     public function save_purchase() {
@@ -64,7 +93,9 @@ class Purchase extends MY_Controller {
             ];
         }
 
-        $purchase_id = $this->Purchase_model->save_purchase($master_data, $details_data);
+        
+        $purchase_id_post = decode_id($this->input->post('purchase_id'));
+        $purchase_id = $this->Purchase_model->save_purchase($master_data, $details_data, $purchase_id_post);
 
         if ($purchase_id) {
             foreach ($details_data as $detail) {

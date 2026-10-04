@@ -197,7 +197,7 @@
         </div>
       </div>
       <div class="cat-page-header-right">
-        <a href="<%$base_url%>update_product/<%$products[0]['product_id']%>" class="cat-btn cat-btn-primary text-white">
+        <a href="<%$base_url%>update_product/<%encode_id($products[0]['product_id'])%>" class="cat-btn cat-btn-primary text-white">
           <i class="ti ti-edit"></i> Edit Product
         </a>
         <a href="<%$base_url%>product" class="cat-btn cat-btn-outline">

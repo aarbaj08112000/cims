@@ -22,18 +22,18 @@ class Unit_master extends MY_Controller
 
 	public function add_unit()
 	{
-		$unit_count = $this->Unit_master_model->count_all();
 		$ret_arr = [];
 		$msg = '';
 		$success = 1;
 		$data = array(
 			'unit_name'  => $this->input->post("unit_name"),
-			'unit_code'  => 'UNT-' . date("Ymd") . ($unit_count + 1),
 			'added_date' => date("Y-m-d H:i:s"),
 			'added_by'   => $this->session->userdata('user_id'),
 		);
 		$insert_query = $this->Unit_master_model->add_unit($data);
 		if ($insert_query > 0) {
+			$unit_code = 'UNT-' . date("Ymd") . str_pad($insert_query, 3, '0', STR_PAD_LEFT);
+			$this->Unit_master_model->update_unit(['unit_code' => $unit_code], $insert_query);
 			$msg = 'Unit added successfully.';
 		} else if ($insert_query == -1) {
 			$msg = 'Unit already exists.';

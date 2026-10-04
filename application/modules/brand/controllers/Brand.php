@@ -26,15 +26,15 @@ class Brand extends MY_Controller
 		$ret_arr = [];
 		$msg = '';
 		$success = 1;
-		$brand_count = count($this->Brand_model->get_brands());
 		$data = array(
 			'brand_name' => $this->input->post("brand_name"),
-			'brand_code' => 'BRD-' . date("Ymd") . $brand_count + 1,
 			'added_date' => date("Y-m-d H:i:s"),
 			'added_by' => $this->session->userdata('user_id'),
 		);
 		$insert_query = $this->Brand_model->add_brand($data);
 		if ($insert_query > 0) {
+			$brand_code = 'BRD-' . date("Ymd") . str_pad($insert_query, 3, '0', STR_PAD_LEFT);
+			$this->Brand_model->update_brands(['brand_code' => $brand_code], $insert_query);
 			$msg = 'Brand added successfully.';
 		} else if ($insert_query == -1) {
 			$msg = 'Brand already exists.';
