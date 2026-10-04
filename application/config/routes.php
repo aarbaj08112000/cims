@@ -139,6 +139,7 @@ $route['get_purchase_report_ajax'] = 'reports/Reports/get_purchase_report_ajax';
 $route['get_stock_valuation_ajax'] = 'reports/Reports/get_stock_valuation_ajax';
 $route['stock_adjustment_report'] = 'reports/Reports/stock_adjustment_report';
 $route['get_stock_adjustment_ajax'] = 'reports/Reports/get_stock_adjustment_ajax';
+$route['get_monthly_summary_ajax'] = 'reports/Reports/get_monthly_summary_ajax';
 
 
 // Settings Routes
@@ -152,3 +153,5 @@ $route['translate_uri_dashes'] = FALSE;
 $route['product_log_report'] = 'reports/Reports/product_log_report';
 $route['reports/get_product_logs_ajax'] = 'reports/Reports/get_product_logs_ajax';
 $route['reports/get_product_log_stats_ajax'] = 'reports/Reports/get_product_log_stats_ajax';
+
+$route['purchase_return/print_pdf/(:any)'] = 'purchase/purchase_return/print_pdf/$1';

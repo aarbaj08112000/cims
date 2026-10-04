@@ -23,18 +23,18 @@ class Attributes extends MY_Controller
 
 	public function add_attribute()
 	{
-		$attribute_count = count($this->Attribute_model->get_attributes());
 		$ret_arr = [];
 		$msg = '';
 		$success = 1;
 		$data = array(
 			'attribute_name' => $this->input->post("attribute_name"),
-			'attribute_code' => 'ATT-' . date("Ymd") . ($attribute_count + 1),
 			'added_date' => date("Y-m-d H:i:s"),
 			'added_by' => $this->session->userdata('user_id'),
 		);
 		$insert_query = $this->Attribute_model->add_attribute($data);
 		if ($insert_query > 0) {
+			$attribute_code = 'ATT-' . date("Ymd") . str_pad($insert_query, 3, '0', STR_PAD_LEFT);
+			$this->Attribute_model->update_attributes(['attribute_code' => $attribute_code], $insert_query);
 			$msg = 'Attribute added successfully.';
 		} else if ($insert_query == -1) {
 			$msg = 'Attribute already exists.';

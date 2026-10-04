@@ -165,3 +165,4 @@ const purchasePage = {
         return flag;
     }
 };
+$(document).ready(function() { calculateTotal(); });

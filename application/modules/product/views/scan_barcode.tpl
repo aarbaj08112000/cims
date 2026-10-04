@@ -248,7 +248,7 @@
                         $('#p_image').attr('src', base_url + 'public/assets/images/no_image.jpg');
                     }
 
-                    $('#p_link').attr('href', base_url + 'product/product_details/' + p.product_id);
+                    $('#p_link').attr('href', base_url + 'product_details/' + p.encoded_id);
 
                     // Hide scanner, show details
                     $('#reader').slideUp(300);

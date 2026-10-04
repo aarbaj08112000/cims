@@ -61,7 +61,6 @@ class Category extends MY_Controller
 		$category_id = $this->input->post("category_id");
 		$data = array(
 			'category_name' => $this->input->post("category_name"),
-			'category_code' => 'CAT-' . mt_rand(1000, 9999),
 			'parent_category_id' => $this->input->post("parent_category_id"),
 			'updated_date' => date("Y-m-d H:i:s"),
 			'updated_by' => $this->session->userdata('user_id'),

@@ -56,7 +56,7 @@
             <div class="card-body p-4">
               <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
                 <div class="rounded-2 d-flex align-items-center justify-content-center me-3" style="width:38px;height:38px;background:linear-gradient(135deg,#7367f0,#9e95f5);">
-                  <i class="ti ti-info-square text-white" style="font-size:18px;"></i>
+                  <i class="ti ti-box text-white" style="font-size:18px;"></i>
                 </div>
                 <div>
                   <h6 class="mb-0 fw-bold" style="color:#3d3d3d;">Product Information</h6>
@@ -126,6 +126,11 @@
             </div>
 
             <div class="mb-3 col-md-4 col-12">
+              <label class="form-label">Tax Rate (%)</label>
+              <input type="text" step="0.01" name="tax_rate" id="tax_rate" class="form-control onlyNumericInput" placeholder="e.g. 5, 12, 18" value="<%if isset($products) %><%$products[0].tax_rate%><%else%><%$settings['pos_tax_percentage']['value']|default:'0'%><%/if%>" >
+            </div>
+
+            <div class="mb-3 col-md-4 col-12">
               <label class="form-label">Discount (%)</label>
               <input type="text" step="0.01" name="discount" id="discount" class="form-control onlyNumericInput" placeholder="Enter Discount Percentage" value="<%if isset($products) %><%$products[0].discount%><%/if%>">
             </div>
@@ -145,11 +150,6 @@
                 </select>
                 <input type="text" step="0.01" name="purchase_price" class="form-control onlyNumericInput" placeholder="Enter Purchase Price" value="<%if isset($products) %><%$products[0].purchase_price%><%/if%>">
               </div>
-            </div>
-
-            <div class="mb-3 col-md-4 col-12">
-              <label class="form-label">Tax Rate (%)</label>
-              <input type="text" step="0.01" name="tax_rate" class="form-control onlyNumericInput" placeholder="e.g. 5, 12, 18" value="<%if isset($products) %><%$products[0].tax_rate%><%else%><%$settings['pos_tax_percentage']['value']|default:'0'%><%/if%>" >
             </div>
 
              <!-- Row 4 -->
@@ -215,7 +215,7 @@
                                             <option value="">Select Attribute</option>
                                             <%if isset($master_attributes)%>
                                                 <%foreach from=$master_attributes item=ma%>
-                                                    <option value="<%$ma.attribute_name%>" <%if $attr.attr_name == $ma.attribute_name%>selected<%/if%>><%$ma.attribute_name%></option>
+                                                    <option value="<%$ma.attribute_name%>" <%if $attr.attr_name|trim == $ma.attribute_name|trim%>selected="selected"<%/if%>><%$ma.attribute_name%></option>
                                                 <%/foreach%>
                                             <%/if%>
                                         </select>

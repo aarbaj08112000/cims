@@ -8,7 +8,57 @@ class Purchase_model extends CI_Model {
         $this->load->model('product/Product_model');
     }
 
-    public function save_purchase($master_data, $details_data) {
+    public function save_purchase($master_data, $details_data, $purchase_id = null) {
+        $this->db->trans_start();
+
+        if ($purchase_id) {
+            $old_items = $this->get_purchase_items($purchase_id);
+            foreach ($old_items as $old) {
+                $remarks = "Reverted Purchase Bill No: " . $master_data['bill_no'];
+                $this->Product_model->update_stock($old['product_id'], -$old['qty'], $master_data['added_by'], $remarks);
+            }
+            $this->db->where('purchase_id', $purchase_id);
+            $this->db->delete('purchase_details');
+
+            $this->db->where('purchase_id', $purchase_id);
+            $this->db->update('purchase_master', $master_data);
+        } else {
+            $this->db->insert('purchase_master', $master_data);
+            $purchase_id = $this->db->insert_id();
+        }
+
+        foreach ($details_data as $row) {
+            $row['purchase_id'] = $purchase_id;
+            $this->db->insert('purchase_details', $row);
+
+            $remarks = "Purchase Bill No: " . $master_data['bill_no'];
+            $this->Product_model->update_stock($row['product_id'], $row['qty'], $master_data['added_by'], $remarks);
+        }
+
+        $this->db->trans_complete();
+        return $this->db->trans_status() ? $purchase_id : false;
+    }
+
+    public function delete_purchase($purchase_id) {
+        $this->db->trans_start();
+        $master = $this->get_purchase_master($purchase_id);
+        if ($master) {
+            $old_items = $this->get_purchase_items($purchase_id);
+            foreach ($old_items as $old) {
+                $remarks = "Deleted Purchase Bill No: " . $master['bill_no'];
+                $this->Product_model->update_stock($old['product_id'], -$old['qty'], $this->session->userdata('user_id'), $remarks);
+            }
+            $this->db->where('purchase_id', $purchase_id);
+            $this->db->delete('purchase_details');
+
+            $this->db->where('purchase_id', $purchase_id);
+            $this->db->delete('purchase_master');
+        }
+        $this->db->trans_complete();
+        return $this->db->trans_status();
+    }
+
+    public function save_purchase_old($master_data, $details_data) {
         $this->db->trans_start();
 
         // 1. Insert into purchase_master

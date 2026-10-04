@@ -209,7 +209,7 @@ const purchaseReturnPage = {
                                 let supplier = response.purchase.supplier_name || 'Walk-in';
                                 $("#billSupplier").text(supplier);
                                 $("#billDate").text(response.purchase.purchase_date);
-                                $("#billAmount").text(parseFloat(response.purchase.payable_amount || 0).toLocaleString("en-IN", {minimumFractionDigits: 2}));
+                                $("#billAmount").text(parseFloat(response.purchase.total_amount || 0).toLocaleString("en-IN", {minimumFractionDigits: 2}));
                                 $("#billItems").text(response.items.length);
                                 $("#billInfoPanel").fadeIn(300);
                             }

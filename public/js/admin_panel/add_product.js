@@ -131,20 +131,30 @@ $(document).ready(function () {
   function calculateSellingPrice() {
     var actualPrice = parseFloat($('#actual_price').val()) || 0;
     var discount = parseFloat($('#discount').val()) || 0;
+    var taxRate = parseFloat($('#tax_rate').val()) || 0;
+    
     var sellingPrice = actualPrice;
 
-    if (discount > 0 && actualPrice > 0) {
-      sellingPrice = actualPrice - (actualPrice * discount / 100);
-    }
-
     if (actualPrice > 0) {
+      // Apply discount
+      var priceAfterDiscount = actualPrice;
+      if (discount > 0) {
+        priceAfterDiscount = actualPrice - (actualPrice * discount / 100);
+      }
+      // Apply tax
+      if (taxRate > 0) {
+        sellingPrice = priceAfterDiscount + (priceAfterDiscount * taxRate / 100);
+      } else {
+        sellingPrice = priceAfterDiscount;
+      }
+      
       $('#price').val(sellingPrice.toFixed(2));
     } else {
       $('#price').val('');
     }
   }
 
-  $('#actual_price, #discount').on('input', function () {
+  $('#actual_price, #discount, #tax_rate').on('input', function () {
     calculateSellingPrice();
   });
 });
@@ -206,7 +216,16 @@ $("#add_attribute_btn").on("click", function () {
                 </button>
             </div>
         </div>`;
-  $("#attributes_container").append(row);
+  var $row = $(row);
+  $("#attributes_container").append($row);
+  
+  // Initialize select2 on the newly added select
+  $row.find('.select2').select2({
+    width: "100%",
+    placeholder: "Select Attribute",
+    allowClear: false
+  });
+  
   updateAttributeDropdowns();
 });
 

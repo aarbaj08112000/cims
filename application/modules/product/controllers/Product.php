@@ -741,6 +741,7 @@ class Product extends MY_Controller
                 $ret_arr['success'] = 1;
                 $ret_arr['data'] = $product_data;
                 $ret_arr['data']['barcode_url'] = base_url() . "public/uploads/product/bar_code/" . $product_data['product_id'] . "/" . $product_data['line_bar_code'] . ".png";
+                $ret_arr['data']['encoded_id'] = encode_id($product_data['product_id']);
                 $ret_arr['msg'] = 'Product found.';
             } else {
                 $ret_arr['msg'] = 'Product not found for the given barcode.';
