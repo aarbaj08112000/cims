@@ -57,14 +57,16 @@ class Sales_return extends MY_Controller {
         $ret_arr = ['success' => 1, 'msg' => ''];
         
         $sales_id = $this->input->post('sales_id');
-        $return_no = 'SR-' . time();
+        $max_id = $this->db->select_max('return_id')->get('sales_return_master')->row()->return_id;
+        $next_id = $max_id + 1;
+        $return_no = 'RET-' . date('Ymd') . sprintf('%03d', $next_id);
         $return_date = $this->input->post('return_date');
         $remarks = $this->input->post('remarks');
         
         $products = $this->input->post('product_id');
-        $qtys = $this->input->post('return_qty') ? $this->input->post('return_qty') : $this->input->post('qty');
-        $prices = $this->input->post('price');
-        $item_totals = $this->input->post('total');
+        $qtys = str_replace(',', '', $this->input->post('return_qty')) ? str_replace(',', '', $this->input->post('return_qty')) : str_replace(',', '', $this->input->post('qty'));
+        $prices = str_replace(',', '', $this->input->post('price'));
+        $item_totals = str_replace(',', '', $this->input->post('total'));
 
         if (empty($products)) {
             $ret_arr['success'] = 0;
@@ -139,5 +141,63 @@ class Sales_return extends MY_Controller {
         
         $html = $this->smarty->fetch('sales_return_details_modal.tpl', $data);
         echo json_encode(['success' => 1, 'html' => $html]);
+    }
+
+    private function _get_logo_base64($logo_path)
+    {
+        if (empty($logo_path))
+            return '';
+        $abs = FCPATH . ltrim($logo_path, '/');
+        if (file_exists($abs)) {
+            $mime = mime_content_type($abs);
+            return 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($abs));
+        }
+        return '';
+    }
+
+    public function print_pdf($return_id = '') {
+        $return_id = decode_id($return_id);
+        if (empty($return_id)) {
+            show_404();
+            return;
+        }
+
+        $data['return'] = $this->Sales_return_model->get_sales_return_master($return_id);
+        if (empty($data['return'])) {
+            show_404();
+            return;
+        }
+
+        $data['items'] = $this->Sales_return_model->get_sales_return_items($return_id);
+        $this->load->model('company/Company_model');
+        $comp_master = $this->Company_model->get_company();
+        
+        $data['company_name'] = !empty($comp_master['company_name']) ? $comp_master['company_name'] : 'Your Company';
+
+        $address_parts = [];
+        if (!empty($comp_master['address'])) $address_parts[] = $comp_master['address'];
+        if (!empty($comp_master['city'])) $address_parts[] = $comp_master['city'];
+        if (!empty($comp_master['state'])) $address_parts[] = $comp_master['state'] . (!empty($comp_master['pincode']) ? ' - ' . $comp_master['pincode'] : '');
+        $data['company_address'] = implode(', ', $address_parts);
+
+        $data['company_gst'] = !empty($comp_master['gst_number']) ? $comp_master['gst_number'] : '';
+
+        $logo_path = !empty($comp_master['company_logo']) ? 'public/uploads/company/' . $comp_master['company_logo'] : '';
+        $data['logo_base64'] = $this->_get_logo_base64($logo_path);
+
+        $data['base_url'] = base_url();
+
+        $html = $this->smarty->loadView('sales_return_print_pdf.tpl', $data, 'No', 'No', TRUE);
+
+        $this->load->library('Pdf');
+        $pdf = new Pdf();
+        $options = $pdf->getOptions();
+        $pdf->setOptions($options);
+        $pdf->loadHtml($html);
+        $pdf->setPaper('A4', 'portrait');
+        $pdf->render();
+        
+        $attachment = $this->input->get('download') ? 1 : 0;
+        $pdf->stream('Sales_Return_' . $data['return']['return_no'] . '.pdf', ['Attachment' => $attachment]);
     }
 }

@@ -332,7 +332,7 @@ class User extends MY_Controller {
                 getDefaultDateTime($record->created_at),
                 $record->user_name,
                 $record->module_name,
-                $record->action . " " . $record->description,
+                "<span class='fw-bold text-dark'>" . $record->action . "</span><br><span class='text-muted' style='font-size:0.85rem;'>" . $record->description . "</span>",
                 $record->ip_address
             ); 
         }

@@ -613,7 +613,7 @@
               </td>
               <td class="text-center"><span class="pd-qty-badge"><%$item['qty']%></span></td>
               <td class="text-end pd-price"><%$item['currency_symbol']|default:''%> <%$item['purchase_price']|number_format:2%></td>
-              <td class="text-end pd-price"><%$item['currency_symbol']|default:''%> <%$item['total_amount']|number_format:2%></td>
+              <td class="text-end pd-price"><%$item['currency_symbol']|default:''%> <%($item['qty'] * $item['purchase_price'])|number_format:2%></td>
             </tr>
             <%assign var='idx' value=$idx+1%>
             <%/foreach%>

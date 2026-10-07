@@ -46,9 +46,9 @@ class Purchase_return extends MY_Controller {
         $remarks = $this->input->post('remarks');
         
         $products = $this->input->post('product_id');
-        $qtys = $this->input->post('return_qty');
-        $prices = $this->input->post('price');
-        $item_totals = $this->input->post('total');
+        $qtys = str_replace(',', '', $this->input->post('return_qty'));
+        $prices = str_replace(',', '', $this->input->post('price'));
+        $item_totals = str_replace(',', '', $this->input->post('total'));
 
         if (empty($products)) {
             $ret_arr['success'] = 0;

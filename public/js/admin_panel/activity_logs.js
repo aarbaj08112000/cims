@@ -75,12 +75,12 @@ const activityLogsPage = {
       order: [[0, "desc"]],
 
       columns: [
-        { data: 0, className: "cat-col-name" },
-        { data: 1 },
-        { data: 2 },
-        { data: 3 },
-        { data: 4 },
-        { data: 5 }
+        { data: 0, width: "5%" },
+        { data: 1, width: "15%" },
+        { data: 2, width: "15%" },
+        { data: 3, width: "15%" },
+        { data: 4, width: "35%" },
+        { data: 5, width: "15%" }
       ],
 
       language: {
@@ -111,7 +111,7 @@ const activityLogsPage = {
         }
       },
       initComplete: function () {
-        this.api().columns.adjust();
+        // this.api().columns.adjust();
       }
     });
 

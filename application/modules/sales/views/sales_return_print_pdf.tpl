@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Purchase Bill - <%$purchase['bill_no']%></title>
+    <title>Sales Return - <%$return['return_no']%></title>
     <style>
         body {
             font-family: 'Helvetica', sans-serif;
@@ -155,7 +155,7 @@
                 </table>
             </td>
             <td width="40%" style="text-align: right; vertical-align: top;">
-                <div class="invoice-title" style="font-size: 32px; font-weight: bold; color: #111827;">PURCHASE BILL</div>
+                <div class="invoice-title" style="font-size: 32px; font-weight: bold; color: #111827;">SALES RETURN</div>
             </td>
         </tr>
     </table>
@@ -164,11 +164,11 @@
         <tr>
             <td width="33%" style="padding:10px;">
                 <div class="label">BILL DETAILS</div>
-                <div class="value text-primary">#<%$purchase['bill_no']%></div>
+                <div class="value text-primary">#<%$return['return_no']%></div>
             </td>
             <td width="33%" class="text-center" style="padding:10px;">
                 <div class="label">DATE</div>
-                <div class="value"><%$purchase['purchase_date']|date_format:'%d/%m/%Y'%></div>
+                <div class="value"><%$return['return_date']|date_format:'%d/%m/%Y'%></div>
             </td>
             <td width="33%" class="text-end" style="padding:10px;">
                 <div class="label">COMPANY GST</div>
@@ -179,15 +179,15 @@
 
     <div class="party-box">
         <div class="label text-primary">SUPPLIER INFO</div>
-        <div class="value"><%$purchase['supplier_name']%></div>
-        <%if $purchase['phone']|default:'' != ''%>
-            <div style="font-size: 13px; color: #6b7280; margin-top: 3px;"><%$purchase['phone']%></div>
+        <div class="value"><%$return['customer_name']%></div>
+        <%if $return['customer_phone_number']|default:'' != ''%>
+            <div style="font-size: 13px; color: #6b7280; margin-top: 3px;"><%$return['customer_phone_number']%></div>
         <%/if%>
-        <%if $purchase['email']|default:'' != ''%>
-            <div style="font-size: 13px; color: #6b7280; margin-top: 3px;"><%$purchase['email']%></div>
+        <%if $return['customer_email']|default:'' != ''%>
+            <div style="font-size: 13px; color: #6b7280; margin-top: 3px;"><%$return['customer_email']%></div>
         <%/if%>
-        <%if $purchase['gst_number']|default:'' != ''%>
-            <div style="font-size: 13px; color: #6b7280; margin-top: 3px;">GST: <%$purchase['gst_number']%></div>
+        <%if $return['gst_number']|default:'' != ''%>
+            <div style="font-size: 13px; color: #6b7280; margin-top: 3px;">GST: <%$return['gst_number']%></div>
         <%/if%>
     </div>
 
@@ -212,8 +212,8 @@
                     <%if $item['product_code']%><div style="font-size: 11px; color: #6b7280; margin-top: 4px;">Code: <%$item['product_code']%></div><%/if%>
                 </td>
                 <td class="text-center"><%$item['qty']%></td>
-                <td class="text-end">₹<%$item['purchase_price']|number_format:2%></td>
-                <td class="text-end fw-bold text-primary">₹<%($item['qty'] * $item['purchase_price'])|number_format:2%></td>
+                <td class="text-end">₹<%$item['sale_price']|number_format:2%></td>
+                <td class="text-end fw-bold text-primary">₹<%($item['qty'] * $item['sale_price'])|number_format:2%></td>
             </tr>
             <%assign var="sn" value=$sn+1%>
             <%assign var="totalQty" value=$totalQty+$item['qty']%>
@@ -223,14 +223,14 @@
 
     <div class="remarks-box">
         <div class="label">REMARKS</div>
-        <p style="margin: 0;">Purchase order verified and processed.</p>
+        <p style="margin: 0;">Sales return verified and processed.</p>
     </div>
 
     <table>
         <tr>
             <td width="48%" style="vertical-align: top;">
                 <div style="border: 1px solid #f3f4f6; padding: 15px; margin-bottom: 15px;">
-                    <div class="label text-primary">PURCHASE SUMMARY</div>
+                    <div class="label text-primary">SALES SUMMARY</div>
                     <div style="margin-bottom: 5px;"><span class="text-muted" style="display:inline-block; width:100px;">Total Items:</span> <strong><%$items|@count%></strong></div>
                     <div><span class="text-muted" style="display:inline-block; width:100px;">Total Quantity:</span> <strong><%$totalQty%></strong></div>
                 </div>
@@ -247,7 +247,7 @@
                     <table style="width: 100%; margin-top: 0px;">
                         <tr>
                             <td class="grand-total-label">Grand Total</td>
-                            <td class="grand-total-val">₹<%$purchase['total_amount']|number_format:2%></td>
+                            <td class="grand-total-val">₹<%$return['total_return_amount']|number_format:2%></td>
                         </tr>
                     </table>
                 </div>

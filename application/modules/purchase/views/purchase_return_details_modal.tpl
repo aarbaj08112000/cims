@@ -62,7 +62,7 @@
                             </td>
                             <td class="text-center align-middle"><span class="badge bg-label-secondary px-2"><%$item['qty']%></span></td>
                             <td class="text-end align-middle">₹<%$item['purchase_price']|number_format:2%></td>
-                            <td class="text-end align-middle fw-medium">₹<%$item['total_amount']|number_format:2%></td>
+                            <td class="text-end align-middle fw-medium">₹<%($item['qty'] * $item['purchase_price'])|number_format:2%></td>
                         </tr>
                     <%/foreach%>
                 </tbody>

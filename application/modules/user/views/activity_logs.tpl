@@ -34,7 +34,7 @@
 
     <!-- Table Card -->
     <div class="cat-table-card">
-      <div class="table-responsive"><table class="table table-hover mb-0 w-100" id="activity_logs_table">
+      <div class="table-responsive"><table class="table table-hover mb-0 w-100" id="activity_logs_table" style="table-layout: fixed; word-wrap: break-word;">
         <thead>
           <tr>
             <th width="5%">ID</th>
@@ -55,5 +55,5 @@
   <script type="text/javascript">
     var base_url = <%$base_url|@json_encode%>;
   </script>
-  <script src="<%base_url()%>public/js/admin_panel/activity_logs.js?v=1789814160"></script>
+  <script src="<%base_url()%>public/js/admin_panel/activity_logs.js?v=1791369265"></script>
 </div>

@@ -70,11 +70,11 @@ class Pos extends MY_Controller
         $payment_mode = $this->input->post('payment_mode');
 
         $products = $this->input->post('product_id');
-        $qtys = $this->input->post('qty');
-        $prices = $this->input->post('price');
-        $item_totals = $this->input->post('total');
-        $subtotal = $this->input->post('subtotal');
-        $tax_amount = $this->input->post('tax_amount') !== null ? (float) $this->input->post('tax_amount') : 0;
+        $qtys = str_replace(',', '', $this->input->post('qty'));
+        $prices = str_replace(',', '', $this->input->post('price'));
+        $item_totals = str_replace(',', '', $this->input->post('total'));
+        $subtotal = str_replace(',', '', $this->input->post('subtotal'));
+        $tax_amount = str_replace(',', '', $this->input->post('tax_amount')) !== null ? (float) str_replace(',', '', $this->input->post('tax_amount')) : 0;
         if ($tax_amount == 0) {
             $this->load->model('settings/Settings_model');
             $settings_list = $this->Settings_model->get_all_settings();

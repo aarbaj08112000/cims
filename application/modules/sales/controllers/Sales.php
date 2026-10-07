@@ -44,14 +44,16 @@ class Sales extends MY_Controller
 
         $customer_mobile = $this->input->post('customer_mobile');
         $customer_name = $this->input->post('customer_name');
-        $bill_no = $this->input->post('bill_no');
+        $max_id = $this->db->select_max('sales_id')->get('sales_master')->row()->sales_id;
+        $next_id = $max_id + 1;
+        $bill_no = 'INV-' . date('Ymd') . sprintf('%03d', $next_id);
         $sales_date = $this->input->post('sales_date');
         $payment_mode = $this->input->post('payment_mode');
 
         $products = $this->input->post('product_id');
-        $qtys = $this->input->post('qty');
-        $prices = $this->input->post('price');
-        $item_totals = $this->input->post('total');
+        $qtys = str_replace(',', '', $this->input->post('qty'));
+        $prices = str_replace(',', '', $this->input->post('price'));
+        $item_totals = str_replace(',', '', $this->input->post('total'));
 
         if (empty($products)) {
             $ret_arr['success'] = 0;
@@ -61,10 +63,10 @@ class Sales extends MY_Controller
         }
 
         $total_amount = array_sum($item_totals);
-        $discount = $this->input->post('discount') ? (float) $this->input->post('discount') : 0;
+        $discount = str_replace(',', '', $this->input->post('discount')) ? (float) str_replace(',', '', $this->input->post('discount')) : 0;
 
-        $tax_amount = $this->input->post('tax_amount') !== null ? (float) $this->input->post('tax_amount') : 0;
-        if ($tax_amount == 0 && $this->input->post('tax_amount') === null) {
+        $tax_amount = str_replace(',', '', $this->input->post('tax_amount')) !== null ? (float) str_replace(',', '', $this->input->post('tax_amount')) : 0;
+        if ($tax_amount == 0 && str_replace(',', '', $this->input->post('tax_amount')) === null) {
             $this->load->model('settings/Settings_model');
             $settings_list = $this->Settings_model->get_all_settings();
             $settings = [];

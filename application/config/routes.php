@@ -84,6 +84,7 @@ $route['update_supplier'] = 'supplier/supplier/update_supplier';
 $route['delete_supplier'] = 'supplier/supplier/delete_supplier';
 
 $route['create_purchase'] = 'purchase/purchase/create_purchase';
+$route['update_purchase/(:any)'] = 'purchase/purchase/create_purchase/$1';
 $route['save_purchase'] = 'purchase/purchase/save_purchase';
 $route['purchase_list'] = 'purchase/purchase/index';
 $route['purchase_details/(:any)'] = 'purchase/purchase/purchase_details/$1';
@@ -116,6 +117,7 @@ $route['pos_get_product'] = 'sales/Pos/get_product_ajax';
 
 // Sales Return Routes
 $route['sales_return'] = 'sales/Sales_return/index';
+$route['sales_return/print_pdf/(:any)'] = 'sales/Sales_return/print_pdf/$1';
 $route['sales_return_list'] = 'sales/Sales_return/index';
 $route['create_sales_return'] = 'sales/Sales_return/create_sales_return';
 $route['create_sales_return/(:num)'] = 'sales/Sales_return/create_sales_return/$1';
