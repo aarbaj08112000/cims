@@ -213,7 +213,7 @@
                 </td>
                 <td class="text-center"><%$item['qty']%></td>
                 <td class="text-end">₹<%$item['purchase_price']|number_format:2%></td>
-                <td class="text-end fw-bold text-primary">₹<%$item['total_amount']|number_format:2%></td>
+                <td class="text-end fw-bold text-primary">₹<%($item['qty'] * $item['purchase_price'])|number_format:2%></td>
             </tr>
             <%assign var="sn" value=$sn+1%>
             <%assign var="totalQty" value=$totalQty+$item['qty']%>

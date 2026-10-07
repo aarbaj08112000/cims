@@ -266,10 +266,7 @@
               <label class="form-label">Customer Name <span class="text-danger">*</span></label>
               <input type="text" name="customer_name" id="customer_name" class="form-control required-input" placeholder="Enter Customer Name">
             </div>
-            <div class="col-md-3">
-              <label class="form-label">Bill Number <span class="text-danger">*</span></label>
-              <input type="text" name="bill_no" class="form-control required-input" value="INV-<%rand(1000,9999)%>">
-            </div>
+            
             <div class="col-md-3">
               <label class="form-label">Sales Date <span class="text-danger">*</span></label>
               <input type="date" name="sales_date" class="form-control required-input" value="<%$smarty.now|date_format:'%Y-%m-%d'%>">

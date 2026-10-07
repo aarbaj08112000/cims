@@ -154,7 +154,7 @@
         </div>
         <div class="cat-card-body">
           <div class="row g-3">
-            <div class="col-md-4">
+            <div class="col-md-6">
               <label class="form-label">Original Sales Bill <span class="text-danger">*</span></label>
               <select name="sales_id" id="sales_id" class="form-control select2 required-input">
                 <option value="">Select Bill No</option>
@@ -163,11 +163,8 @@
                 <%/foreach%>
               </select>
             </div>
-            <div class="col-md-4">
-              <label class="form-label">Return Number <span class="text-danger">*</span></label>
-              <input type="text" name="return_no" class="form-control required-input bg-light" value="SR-<%rand(1000,9999)%>" readonly>
-            </div>
-            <div class="col-md-4">
+            
+            <div class="col-md-6">
               <label class="form-label">Return Date <span class="text-danger">*</span></label>
               <input type="date" name="return_date" class="form-control required-input" value="<%$smarty.now|date_format:'%Y-%m-%d'%>">
             </div>

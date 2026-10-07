@@ -165,4 +165,8 @@ const purchasePage = {
         return flag;
     }
 };
-$(document).ready(function() { calculateTotal(); });
+$(document).ready(function() { 
+    $(".qty-input").each(function() {
+        purchasePage.calculateRowTotal($(this).closest("tr"));
+    });
+});

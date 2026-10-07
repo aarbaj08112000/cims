@@ -156,7 +156,7 @@
                   <td>
                     <div class="input-group">
                       <span class="input-group-text currency-symbol"><%$item['currency_symbol']%></span>
-                      <input type="text" name="total[]" class="form-control bg-light text-end fw-bold total-input" readonly value="<%$item['total_amount']%>">
+                      <input type="text" name="total[]" class="form-control bg-light text-end fw-bold total-input" readonly value="<%($item['qty'] * $item['purchase_price'])%>">
                     </div>
                   </td>
                   <td class="text-center">

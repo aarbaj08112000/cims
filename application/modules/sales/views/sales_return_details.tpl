@@ -156,9 +156,12 @@
         </div>
       </div>
       <div class="cat-page-header-right">
-        
-        
-        
+        <button onclick="window.open('<%$base_url%>sales_return/print_pdf/<%$return['return_id']|encode_id%>', '_blank')" class="cat-btn cat-btn-primary">
+          <i class="ti ti-printer"></i> Print Return
+        </button>
+        <button onclick="window.location.href='<%$base_url%>sales_return/print_pdf/<%$return['return_id']|encode_id%>?download=1'" class="cat-btn cat-btn-outline-primary" style="background-color: #0d6efd; color: white; border-color: #0d6efd; margin-left: 8px; margin-right: 8px;">
+          <i class="ti ti-download"></i> Download Return
+        </button>
         <a href="<%$base_url%>sales_return_list" class="cat-btn cat-btn-outline">
           <i class="ti ti-arrow-left"></i> Back to List
         </a>

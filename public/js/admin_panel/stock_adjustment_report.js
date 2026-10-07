@@ -319,14 +319,14 @@ function buildSummaryCards() {
         '  <div class="adj-summary-card">' +
         '    <div class="adj-summary-icon" style="background:#e8f8f0;color:#27ae60;"><i class="ti ti-arrow-up fs-4"></i></div>' +
         '    <div><div style="font-size:.72rem;font-weight:600;color:#8490a7;text-transform:uppercase;letter-spacing:.5px;">Total Added Qty</div>' +
-        '    <div style="font-size:1.5rem;font-weight:800;color:#27ae60;">+' + totalAdded + '</div></div>' +
+        '    <div style="font-size:1.5rem;font-weight:800;color:#27ae60;">' + totalAdded + '</div></div>' +
         '  </div>' +
         '</div>' +
         '<div class="col-xl-4 col-md-6">' +
         '  <div class="adj-summary-card">' +
         '    <div class="adj-summary-icon" style="background:#fdecea;color:#e74c3c;"><i class="ti ti-arrow-down fs-4"></i></div>' +
         '    <div><div style="font-size:.72rem;font-weight:600;color:#8490a7;text-transform:uppercase;letter-spacing:.5px;">Total Reduced Qty</div>' +
-        '    <div style="font-size:1.5rem;font-weight:800;color:#e74c3c;">-' + totalRemoved + '</div></div>' +
+        '    <div style="font-size:1.5rem;font-weight:800;color:#e74c3c;">' + totalRemoved + '</div></div>' +
         '  </div>' +
         '</div>';
 

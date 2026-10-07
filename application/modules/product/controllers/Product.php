@@ -824,7 +824,7 @@ class Product extends MY_Controller
                 <ul class="dropdown-menu dropdown-menu-end" style="">
                     <li><a class="dropdown-item" href="' . base_url('product_details/') . encode_id($row['product_id']) . '"><i class="ti ti-eye me-1"></i> View Details</a></li>
                     <li><a class="dropdown-item" href="' . base_url('update_product/') . encode_id($row['product_id']) . '"><i class="ti ti-pencil me-1"></i> Edit</a></li>
-                    <li><a class="dropdown-item update_stock" href="javascript:void(0);" data-id="' . $row['product_id'] . '"><i class="ti ti-box me-1"></i> Update Stock</a></li>
+                    <li class="d-none"><a class="dropdown-item update_stock" href="javascript:void(0);" data-id="' . $row['product_id'] . '"><i class="ti ti-box me-1"></i> Update Stock</a></li>
                     <li><a class="dropdown-item regenerate_barcode" href="javascript:void(0);" data-id="' . $row['product_id'] . '"><i class="ti ti-refresh me-1"></i> Regenerate Barcode</a></li>
                     <li><a class="dropdown-item print_barcode text-body" href="javascript:void(0);" data-id="' . $row['product_id'] . '"><i class="ti ti-printer me-1" style="color: inherit !important; background: none !important; box-shadow: none !important; width: auto; height: auto;"></i> Print</a></li>
                     <li><a class="dropdown-item text-danger delete_data" href="javascript:void(0);" data-id="' . $row['product_id'] . '"><i class="ti ti-trash me-1"></i> Delete</a></li>
